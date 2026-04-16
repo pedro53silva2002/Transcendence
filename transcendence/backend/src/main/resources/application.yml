@@ -1,0 +1,36 @@
+server:
+  port: ${BACKEND_PORT:8080}
+
+spring:
+
+  datasource:
+    url: jdbc:postgresql://postgres-db:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      # 'validate' → Hibernate checks that entity fields match DB columns (Flyway owns the schema)
+      # Never use 'create' or 'update' in production — Flyway handles all DDL
+      ddl-auto: validate
+    show-sql: false   # Set to true locally for SQL query debugging
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration # Where migration SQL files live
+    baseline-on-migrate: true         # Safe to run even if DB already has tables
+
+  application:
+    name: transcendence-backend
+
+# Logging levels — adjust per environment
+logging:
+  level:
+    root: INFO
+    com.transcendence: DEBUG          # Verbose logs for our own code
+    org.springframework.security: INFO

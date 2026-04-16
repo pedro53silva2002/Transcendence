@@ -13,6 +13,11 @@ services:
       - frontend
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build: 
@@ -22,7 +27,15 @@ services:
     expose:
       - "${BACKEND_PORT}"
     environment:
-      # add later
+      BACKEND_PORT: "${BACKEND_PORT}"
+      POSTGRES_URL: "jdbc:postgresql://postgres-db:${POSTGRES_PORT}/${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      REDIS_HOST: "redis-cache"
+      REDIS_PORT: "${REDIS_PORT}"
+      MINIO_ENDPOINT: "minio-storage:${MINIO_PORT}"
+      MINIO_ACCESS_KEY: "${MINIO_ROOT_USER}"
+      MINIO_SECRET_KEY: "${MINIO_ROOT_PASSWORD}"
     depends_on:
       postgres:
         condition: service_healthy
