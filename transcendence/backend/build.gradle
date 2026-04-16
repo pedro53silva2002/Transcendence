@@ -1,49 +1,54 @@
+// Build Plugins: Spring Boot plugin for executable JAR, dependency management for version alignment
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
+// Project Metadata: Group ID (reverse domain), version, and source compatibility
 group = 'com.transcendence'
 version = '1.0.0'
 sourceCompatibility = '21'
 
+// Java Compiler Config: Ensures all code compiles and runs on Java 21 LTS (long-term support)
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
 }
 
+// Artifact Repositories: Maven Central provides all open-source Java libraries (Spring, PostgreSQL, Redis, etc.)
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    // Spring Boot Web & Data
+    // REST API & ORM: Enables web endpoints and Java object-to-SQL mapping via JPA/Hibernate
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     
-    // Database Migration
-    implementation 'org.flywaydb:flyway-core'
-    implementation 'org.flywaydb:flyway-database-postgresql'
+    // Database Migrations: Version-controlled SQL schema changes (V1__init.sql, V2__add_users.sql, etc.)
+    implementation 'org.flywaydb:flyway-core:10.8.1'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.8.1'
 
-    // PostgreSQL Driver
+    // PostgreSQL Driver: JDBC connector for Java to communicate with PostgreSQL database
     runtimeOnly 'org.postgresql:postgresql:42.7.1'
     
-    // Redis
+    // Session & Cache Storage: Redis stores user sessions, chat cache, rate limiting, and real-time activity data
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'redis.clients:jedis'
 
-    // MinIO for file uploads
+    // File Storage: MinIO (S3-compatible) stores user uploads like travel photos, chat attachments, and profile pictures
     implementation 'io.minio:minio:8.5.7'
 
-    // Security (needed for travel planning app with user groups)
+    // Authentication & Authorization: Spring Security handles login, JWT tokens, password encryption, and access control
     implementation 'org.springframework.boot:spring-boot-starter-security'
     
-    // Lombok (optional, for cleaner entities)
+    // Code Generation: Lombok auto-generates getters, setters, constructors, and logger fields to reduce boilerplate
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     
-    // Testing
+    // Testing Framework: JUnit 5 with Mockito and AssertJ for unit tests
+    // Don't know if we need this, but it's good to have for testing service and repository layers
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

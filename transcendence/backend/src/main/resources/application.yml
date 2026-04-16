@@ -2,13 +2,18 @@ server:
   port: ${BACKEND_PORT:8080}
 
 spring:
-
   datasource:
-    url: jdbc:postgresql://postgres-db:${POSTGRES_PORT}/${POSTGRES_DB}
+    url: jdbc:postgresql://postgres-db:5432/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
-  
+    hikari: #connection pool settings
+      maximum-pool-size: 10 #max simultaneous DB connections
+      minimum-idle: 5       #min idle connections in pool
+      # Instead of creating a new database connection for every request (slow), Hikari maintains a pool of reusable connections
+      # When your app needs to query the database, it grabs an available connection from the pool
+      # After the query finishes, the connection goes back to the pool for reuse
+      # If all 10 are busy, requests wait until one becomes available
   jpa:
     hibernate:
       # 'validate' → Hibernate checks that entity fields match DB columns (Flyway owns the schema)
@@ -19,7 +24,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-
+        jdbc:
+          batch_size: 20 # Insert/update 20 rows at once for better performance
+          fetch_size: 50 # Fetch 50 rows per database trip
   flyway:
     enabled: true
     locations: classpath:db/migration # Where migration SQL files live
