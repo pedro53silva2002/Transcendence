@@ -3,7 +3,7 @@
 
 <img width="1181" height="846" alt="image" src="https://github.com/user-attachments/assets/9e11d7db-e97e-4cdd-a989-ce5a3325af0e" />
 
-
+```
 Project Architecture
 
 transcendence/
@@ -35,3 +35,4 @@ transcendence/
 └── frontend/
     ├── Dockerfile
     └── src/                            # code logic in typescript, angular, tailwindcss
+```
