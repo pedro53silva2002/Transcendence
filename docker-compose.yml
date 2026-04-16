@@ -38,12 +38,14 @@ services:
       context: ./frontend
     container_name: frontend
     expose:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+      #may have to change later
+      - "${FRONTEND_PORT}"
     environment:
       # add later
     networks:
       - app-network
 
+  #Database of the project
   postgres:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
@@ -64,6 +66,7 @@ services:
     networks:
       - app-network
 
+  #Will be used to store session and/or cache
   redis:
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -81,6 +84,7 @@ services:
     networks:
       - app-network
 
+  #Object storage for the project, used to store user uploaded files
   minio:
     image: minio/minio:latest
     container_name: minio-storage
