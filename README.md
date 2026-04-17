@@ -36,3 +36,69 @@ transcendence/
     ├── Dockerfile
     └── src/                            # code logic in typescript, angular, tailwindcss
 ```
+
+Useful Docker commands
+```
+# Stop and remove all containers, networks (keeps volumes/data)
+docker compose down
+
+# Start all services in the background
+docker compose up -d
+
+# Restart everything (stop + start)
+docker compose restart
+
+# View logs from all services
+docker compose logs -f
+
+# View logs from specific service
+docker compose logs -f backend
+
+# Rebuild and start (useful after code changes)
+docker compose up -d --build
+
+# Lists all containers and show their status
+docker compose ps
+
+# Stop everything (keeps containers, just stops them)
+docker compose stop
+
+# Start stopped containers
+docker compose start
+
+# Remove everything including volumes (WARNING: deletes data!)
+docker compose down -v
+```
+
+Most common practices
+```
+# Services already built, just start them
+docker compose up -d
+
+# After code changes:
+docker compose up -d --build
+
+# Check if it's working:
+docker compose logs -f backend
+
+# Quick restart without rebuilding
+docker compose restart
+
+# Stop everything:
+docker compose down
+```
+
+To restart just the backend
+```
+docker compose restart backend
+```
+
+Postgresql databases commands
+```
+\l              # List databases
+\dt             # List tables in current database
+\du             # List users/roles
+\d table_name   # Describe a table structure
+\q              # Quit psql
+\c databa_name  # Connects to a different database (shortcut after psql -U <user> -d <database>)             
+```
