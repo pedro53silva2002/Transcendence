@@ -1,4 +1,4 @@
-package com.transcendence.config;
+package transcendence.backend.common.services.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
