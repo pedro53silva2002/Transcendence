@@ -83,7 +83,15 @@ services:
     expose:
       - "${MINIO_PORT}"
       - "${MINIO_CONSOLE_PORT}"
-    command: ["server", "/data", "--console-address", ":${MINIO_CONSOLE_PORT}", "--address", ":${MINIO_PORT}"]
+    command:
+      [
+        "server",
+        "/data",
+        "--console-address",
+        ":${MINIO_CONSOLE_PORT}",
+        "--address",
+        ":${MINIO_PORT}",
+      ]
     environment:
       MINIO_ROOT_USER: "${MINIO_ROOT_USER}"
       MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD}"
