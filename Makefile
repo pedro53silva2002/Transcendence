@@ -29,4 +29,10 @@ logs-%:
 ps:
 	docker compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) ps
 
-.PHONY: all build up down clean fclean re logs ps
+test:
+	@if [ ! -f backend/gradle/wrapper/gradle-wrapper.jar ]; then \
+		cd backend && gradle wrapper; \
+	fi
+	cd backend && ./gradlew test
+
+.PHONY: all build up down clean fclean re logs ps test
