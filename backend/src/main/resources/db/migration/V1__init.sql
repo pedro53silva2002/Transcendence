@@ -84,7 +84,7 @@ CREATE TABLE "travel"."trips" (
     "name" TEXT NOT NULL,
     "description" TEXT,
     "location" TEXT,
-    "country_id" INT NOT NULL,
+    "country_id" INT[] NOT NULL,
     "start_date" DATE NOT NULL,
     "end_date" DATE NOT NULL,
     "budget" NUMERIC(10, 2),
