@@ -43,6 +43,8 @@ dependencies {
     // Authentication & Authorization: Spring Security handles login, JWT tokens, password encryption, and access control
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+
     // Code Generation: Lombok auto-generates getters, setters, constructors, and logger fields to reduce boilerplate
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
