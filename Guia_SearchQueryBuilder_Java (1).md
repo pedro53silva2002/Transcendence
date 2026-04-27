@@ -488,13 +488,13 @@ public class SearchQueryBuilder {
         // int paramIndex = 0;
 
         // --- Etapa 1+2: WHERE ---
-        // buildWhereClause(payload.getFilters(), where, params, paramIndex)
+        // build WhereClause(payload.getFilters(), where, params, paramIndex)
 
         // --- Etapa 3: ORDER BY ---
-        // String orderBy = buildOrderByClause(payload.getSort())
+        // String orderBy = build OrderByClause(payload.getSort())
 
         // --- Etapa 4: Keyset pagination ---
-        // if (cursor != null) appendKeysetCondition(cursor, sorts, where, params)
+        // if (cursor != null) append KeysetCondition(cursor, sorts, where, params)
 
         // --- Etapa 5: LIMIT ---
         // int limit = Math.min(payload.getPagination().getSize(), 100)
@@ -512,16 +512,21 @@ public class SearchQueryBuilder {
      * Gera o fragmento SQL para um filtro individual.
      * 
      * Recebe o operador e devolve o SQL correspondente:
-     *   EQ       → "coluna = :paramName"
-     *   NEQ      → "coluna <> :paramName"
-     *   GT/AFTER → "coluna > :paramName"
-     *   GTE      → "coluna >= :paramName"
-     *   LT/BEFORE→ "coluna < :paramName"
-     *   LTE      → "coluna <= :paramName"
-     *   CONTAINS → "coluna ILIKE :paramName"
-     *   IS_NULL  → "coluna IS NULL"
-     *   IS_NOT_NULL → "coluna IS NOT NULL"
-     *   IN       → "coluna = ANY(:paramName)"
+     *   EQ           → "coluna = :paramName"
+     *   NEQ          → "coluna <> :paramName"
+     *   GT/AFTER     → "coluna > :paramName"
+     *   GTE          → "coluna >= :paramName"
+     *   LT/BEFORE    → "coluna < :paramName"
+     *   LTE          → "coluna <= :paramName"
+     *   BETWEEN      → "coluna BETWEEN :paramName_start AND :paramName_end"
+     *   CONTAINS     → "coluna ILIKE '%' || :paramName || '%'"
+     *   STARTS_WITH  → "coluna ILIKE :paramName || '%'"
+     *   ENDS_WITH    → "coluna ILIKE '%' || :paramName"
+     *   IS_NULL      → "coluna IS NULL"
+     *   IS_NOT_NULL  → "coluna IS NOT NULL"
+     *   IN           → "coluna = ANY(:paramName)"
+     *   NOT_IN       → "coluna <> ALL(:paramName)"
+     * 
      * 
      * @param column    Coluna SQL (do FieldMapping)
      * @param operator  Operador do filtro

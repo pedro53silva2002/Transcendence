@@ -1,12 +1,17 @@
 package transcendence.backend.common.search;
 
 /**
- * Representa o mapeamento de um campo para construção de consultas dinâmicas.
- * Cada campo possui um nome de coluna, um tipo de dado, e indica se é filtrável e/ou ordenável.
+ * A Java record is a concise way to define an immutable data carrier.
+ * Instead of creating a full class with fields, constructor, getters,
+ * equals, hashCode, and toString, a record generates all of that automatically.
+ *
+ * This record represents the mapping of a field in a data model,
+ * including its column name, type, and whether it supports filtering
+ * and sorting operations.
  */
 public record FieldMapping(
     String column,
-    class<?> type,
+    Class<?> type,
     boolean filterable,
     boolean sortable
 ) {}
