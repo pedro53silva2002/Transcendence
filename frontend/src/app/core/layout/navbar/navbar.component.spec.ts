@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConfirmationPopUp } from './confirmation-pop-up';
+import { NavbarComponent } from './navbar.component';
 
-describe('ConfirmationPopUp', () => {
-  let component: ConfirmationPopUp;
-  let fixture: ComponentFixture<ConfirmationPopUp>;
+describe('NavbarComponent', () => {
+  let component: NavbarComponent;
+  let fixture: ComponentFixture<NavbarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmationPopUp],
+      imports: [NavbarComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ConfirmationPopUp);
+    fixture = TestBed.createComponent(NavbarComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

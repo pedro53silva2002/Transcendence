@@ -6,15 +6,15 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
   selector: 'app-confirmation-pop-up',
 //   standalone: true,
   imports: [MatDialogModule, MatButtonModule],
-  templateUrl: './confirmation-pop-up.html',
-  styleUrl: './confirmation-pop-up.css',
+  templateUrl: './confirmation-pop-up.component.html',
+  styleUrl: './confirmation-pop-up.component.css',
 })
-export class ConfirmationPopUp {
+export class ConfirmationPopUpComponent {
 	
 	//onde as coisas são preparadas assim que surge o pop-up
 	constructor(
 		//serve para o pop-up se fechar a si próprio
-		public dialogRef: MatDialogRef<ConfirmationPopUp>,
+		public dialogRef: MatDialogRef<ConfirmationPopUpComponent>,
 		//onde injetamos a informação título e mensagem
 		@Inject(MAT_DIALOG_DATA) public data: { title: string; message: string }
 	) {}

@@ -6,6 +6,18 @@
     <title>Document</title>
 </head>
 <body>
-    <button mat-flat-button (click)="openPopUp()" color="primary">Material Button</button>
+    <app-navbar></app-navbar>
+
+    <div class="main-container">
+        <button mat-flat-button (click)="openPopUp()" color="primary">
+            Material Button
+        </button>
+        
+        <app-button variant="primary">
+            App Button
+        </app-button>
+    </div>
+
+<router-outlet></router-outlet>
 </body>
 </html>
