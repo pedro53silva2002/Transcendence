@@ -2,18 +2,17 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.5'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 // Project Metadata: Group ID (reverse domain), version, and source compatibility
 group = 'com.transcendence'
 version = '1.0.0'
-sourceCompatibility = '21'
 
-// Java Compiler Config: Ensures all code compiles and runs on Java 21 LTS (long-term support)
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 // Artifact Repositories: Maven Central provides all open-source Java libraries (Spring, PostgreSQL, Redis, etc.)
@@ -46,8 +45,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 
     // Code Generation: Lombok auto-generates getters, setters, constructors, and logger fields to reduce boilerplate
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
     // Testing Framework: JUnit 5 with Mockito and AssertJ for unit tests
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
