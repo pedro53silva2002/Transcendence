@@ -8,18 +8,11 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - backend
-      # - frontend
     networks:
       - app-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://backend:5024/api/health"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
 
   backend:
-    build: 
+    build:
       context: ./backend
     container_name: backend-server
     restart: unless-stopped
@@ -27,14 +20,13 @@ services:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     environment:
       BACKEND_PORT: "${BACKEND_PORT}"
-      POSTGRES_PORT: "${POSTGRES_PORT}"
+      POSTGRES_HOST: "postgres-db"
       POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_URL: "jdbc:postgresql://postgres-db:5432/${POSTGRES_DB}"
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       REDIS_HOST: "redis-cache"
       REDIS_PORT: "${REDIS_PORT}"
-      MINIO_ENDPOINT: "minio-storage:${MINIO_PORT}"
+      MINIO_ENDPOINT: "http://minio-storage:${MINIO_PORT}"
       MINIO_ACCESS_KEY: "${MINIO_ROOT_USER}"
       MINIO_SECRET_KEY: "${MINIO_ROOT_PASSWORD}"
     depends_on:
@@ -46,14 +38,7 @@ services:
         condition: service_started
     networks:
       - app-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${BACKEND_PORT}/api/health"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 90s
 
-  #Database of the project
   postgres:
     image: postgres:16
     container_name: postgres-db
@@ -74,13 +59,7 @@ services:
       timeout: 5s
       retries: 5
 
-  #Will be used to store session and/or cache
   redis:
-    healthcheck:
-      test: ["CMD", "redis-cli", "-p", "${REDIS_PORT}", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     image: redis:7
     container_name: redis-cache
     restart: unless-stopped
@@ -91,8 +70,12 @@ services:
       - redis-data:/data
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "${REDIS_PORT}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  #Object storage for the project, used to store user uploaded files
   minio:
     image: minio/minio:latest
     container_name: minio-storage
@@ -108,18 +91,6 @@ services:
       - minio-data:/data
     networks:
       - app-network
-  
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #   container_name: frontend
-  #   expose:
-  #     #may have to change later
-  #     - "${FRONTEND_PORT}"
-  #   environment:
-  #     # add later
-  #   networks:
-  #     - app-network
 
 volumes:
   postgres-data:
