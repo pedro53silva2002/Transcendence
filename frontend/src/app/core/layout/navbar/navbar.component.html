@@ -1,0 +1,22 @@
+<nav>
+  <div class="nav-bar">
+    <button routerLinkActive="active-link" routerLink="/profile" class="btn" matButton="outlined">Profile</button>
+    <button routerLinkActive="active-link" routerLink="/plan-a-trip" class="btn" matButton="outlined">Plan A Trip</button>
+	<button routerLinkActive="active-link" routerLink="/my-trip" class="btn" matButton="outlined">My Trips</button>
+    <button routerLinkActive="active-link" routerLink="/friends" class="btn" matButton="outlined">Friends</button>
+    <button routerLinkActive="active-link" routerLink="/my-expenses" class="btn" matButton="outlined">My Expenses</button>
+	<mat-form-field appearance="outline" class="search">
+		<mat-icon matPrefix>search</mat-icon>
+		<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users"/>
+		<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel">
+			@for (user of filteredUsers; track user) {
+				<mat-option [value]="user">
+					<div>
+						<span>{{user}}</span>
+					</div>
+				</mat-option>
+			}
+		</mat-autocomplete>
+	</mat-form-field>
+</div>
+</nav>
