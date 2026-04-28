@@ -5,22 +5,27 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Base64;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Builder class for constructing SQL search queries based on provided field mappings and search criteria.
  * It generates the SQL string, query parameters, and limit for pagination using cursor-based pagination.
- * 
+ *
  * Features:
  * - Dynamic filter validation and SQL clause generation
  * - Type-safe parameter conversion
  * - Cursor-based keyset pagination for efficient large datasets
- * - Support for multiple sort fields with tiebreaker
+ * - Support for multiple sort fields with tiebreaker (avoids duplicate id tiebreaker)
  * - ILIKE escaping for LIKE/CONTAINS operations
+ * - Null-safe build(): handles null payload and null page
  */
 public class SearchQueryBuilder {
+
     private final String tableName;
     private final String baseQuery;
     private final Map<String, FieldMapping> allowedFields = new LinkedHashMap<>();
@@ -33,18 +38,19 @@ public class SearchQueryBuilder {
         this.baseQuery = baseQuery;
     }
 
-    // Configuration Methods
-
     /**
      * Registers a field that can be filtered and/or sorted.
-     * @param name logical field name (used in SearchPayload)
-     * @param column database column name
-     * @param type Java type for conversion (String, Integer, LocalDate, etc.)
+     *
+     * @param name       logical field name (used in SearchPayload)
+     * @param column     database column name (e.g., "u.username")
+     * @param type       Java type for value conversion (String, Integer, LocalDate, etc.)
      * @param filterable whether this field can be used in filters
-     * @param sortable whether this field can be used for sorting
+     * @param sortable   whether this field can be used for sorting
      * @return this builder for chaining
+     * @throws IllegalArgumentException if the field name is already registered
      */
-    public SearchQueryBuilder field(String name, String column, Class<?> type, boolean filterable, boolean sortable) {
+    public SearchQueryBuilder field(String name, String column, Class<?> type,
+                                    boolean filterable, boolean sortable) {
         if (allowedFields.containsKey(name)) {
             throw new IllegalArgumentException("Field already defined: " + name);
         }
@@ -53,339 +59,398 @@ public class SearchQueryBuilder {
     }
 
     /**
-     * Adds a fixed WHERE condition that is always applied to the query.
-     * @param sql SQL fragment (e.g., "status = :status")
-     * @param paramName parameter name for the value, null if no parameter
-     * @param value parameter value, null if not needed
+     * Adds a fixed WHERE condition that is always applied to the query,
+     * regardless of the SearchPayload (e.g., tenant isolation, soft-delete filter).
+     *
+     * @param sql       SQL fragment (e.g., "u.deleted_at IS NULL")
+     * @param paramName named parameter key, or null if the condition has no parameter
+     * @param value     parameter value, or null if paramName is null
      * @return this builder for chaining
      */
     public SearchQueryBuilder fixedCondition(String sql, String paramName, Object value) {
         fixedConditions.add(sql);
-        if (paramName != null)
+        if (paramName != null) {
             fixedParameters.put(paramName, value);
+        }
         return this;
     }
 
     /**
-     * Builds a complete SearchResult from a SearchPayload.
-     * 
-     * @param payload contains filters, sort criteria, and pagination info
+     * Builds the complete SearchResult from a SearchPayload.
+     *
+     * Internal steps:
+     * 1. Null-safe defaults for payload and page
+     * 2. Validate and translate filters into WHERE clauses
+     * 3. Build ORDER BY (with safe tiebreaker — only adds id if not already present)
+     * 4. Apply keyset pagination clause if cursor is present
+     * 5. Apply LIMIT (pageSize + 1 to detect next page)
+     * 6. Return SearchResult with SQL, params, and limit
+     *
+     * @param payload the SearchPayload from the frontend (may be null)
      * @return SearchResult with SQL, parameters, and limit
-     * @throws IllegalArgumentException if filter field is not filterable or sort field is not sortable
+     * @throws IllegalArgumentException if a filter or sort field is unknown/not allowed
      */
     public SearchResult build(SearchPayload payload) {
+        SearchPayload effectivePayload = (payload == null) ? new SearchPayload() : payload;
+        CursorPageRequest page = (effectivePayload.getPage() == null)
+                ? new CursorPageRequest() : effectivePayload.getPage();
+
         Map<String, Object> params = new HashMap<>(fixedParameters);
         List<String> whereClauses = new ArrayList<>(fixedConditions);
-        
-        // Process filters
-        if (payload.getFilters() != null && !payload.getFilters().isEmpty()) {
-            for (FilterCriteria filter : payload.getFilters()) {
-                String filterClause = buildAndValidateFilterClause(filter, params);
-                whereClauses.add(filterClause);
+
+        if (effectivePayload.getFilters() != null && !effectivePayload.getFilters().isEmpty()) {
+            for (FilterCriteria filter : effectivePayload.getFilters()) {
+                whereClauses.add(buildAndValidateFilterClause(filter, params));
             }
         }
-        
-        // Build WHERE clause
-        String whereClause = whereClauses.isEmpty() 
-            ? "" 
-            : " WHERE " + String.join(" AND ", whereClauses);
-        
-        // Process sorts (keyset pagination)
-        String orderByClause = "";
-        int limit = payload.getPage().getPageSize() + 1; // +1 to detect if there are more records
-        
-        if (payload.getSort() != null && !payload.getSort().isEmpty()) {
-            orderByClause = buildOrderByClause(payload.getSort());
-            
-            // Add keyset clause if cursor exists
-            if (payload.getPage().getEncodedCursor() != null) {
-                String keysetClause = buildKeysetClause(
-                    decodeCursor(payload.getPage().getEncodedCursor()),
-                    payload.getSort(),
-                    params
-                );
-                whereClause = whereClause.isEmpty() 
-                    ? " WHERE " + keysetClause 
-                    : whereClause + " AND " + keysetClause;
-            }
-        } else {
-            // Default sort by primary key if none specified
+
+        List<SortCriteria> sorts = effectivePayload.getSort();
+        String orderByClause;
+        if (sorts != null && !sorts.isEmpty()) {
+            orderByClause = buildOrderByClause(sorts);
+        }
+        else {
             orderByClause = " ORDER BY id ASC";
+            sorts = List.of(new SortCriteria("id", SortDirection.ASC));
         }
-        
-        // Construct final SQL
-        String sql = baseQuery + whereClause + orderByClause + " LIMIT " + limit;
-        
-        return new SearchResult(sql, params, limit);
+
+        if (page.getEncodedCursor() != null && !page.getEncodedCursor().isBlank()) {
+            CursorData cursor = decodeCursor(page.getEncodedCursor());
+            String keysetClause = buildKeysetClause(cursor, sorts, params);
+            if (!"1=1".equals(keysetClause)) {
+                whereClauses.add(keysetClause);
+            }
+        }
+
+        String whereClause = whereClauses.isEmpty() ? "" : " WHERE " + String.join(" AND ", whereClauses);
+
+        int requestedSize = page.getPageSize() <= 0 ? 20 : page.getPageSize();
+        int size = Math.min(requestedSize, 100);
+        int sqlLimit = size + 1;
+
+        String sql = baseQuery + whereClause + orderByClause + " LIMIT " + sqlLimit;
+        return new SearchResult(sql, params, sqlLimit);
     }
 
     /**
-     * Builds and validates a single filter clause, converting the field name to column name
-     * and generating the appropriate SQL based on the operator.
-     * 
-     * @param filter the filter criteria with column (field name), operator, and value(s)
-     * @param params parameter map to accumulate named parameters
-     * @return SQL fragment for this filter (e.g., "username ILIKE :username_filter_0")
-     * @throws IllegalArgumentException if field doesn't exist or isn't filterable
+     * Validates a FilterCriteria against the allowedFields map and builds the SQL clause.
+     *
+     * @param filter the filter to validate and translate
+     * @param params parameter accumulator
+     * @return SQL fragment (e.g., "u.username ILIKE :u_username_param")
+     * @throws IllegalArgumentException if filter is null, field is unknown, or field is not filterable
      */
     private String buildAndValidateFilterClause(FilterCriteria filter, Map<String, Object> params) {
+        if (filter == null) {
+            throw new IllegalArgumentException("Filter cannot be null");
+        }
         String fieldName = filter.getColumn();
-        
-        if (!allowedFields.containsKey(fieldName)) {
+        if (fieldName == null || fieldName.isBlank()) {
+            throw new IllegalArgumentException("Filter field cannot be empty");
+        }
+
+        FieldMapping mapping = allowedFields.get(fieldName);
+        if (mapping == null) {
             throw new IllegalArgumentException("Unknown field: " + fieldName);
         }
-        
-        FieldMapping mapping = allowedFields.get(fieldName);
         if (!mapping.filterable()) {
             throw new IllegalArgumentException("Field not filterable: " + fieldName);
         }
-        
-        String column = mapping.column();
-        FilterOperator operator = filter.getOperator();
-        Object value = filter.getValue();
-        Object valueTo = filter.getValueTo();
-        
-        return buildFilterClause(column, operator, value, valueTo, mapping.type(), params);
+        if (filter.getOperator() == null) {
+            throw new IllegalArgumentException("Filter operator cannot be null for field: " + fieldName);
+        }
+
+        return buildFilterClause(
+            mapping.column(),
+            filter.getOperator(),
+            filter.getValue(),
+            filter.getValueTo(),
+            mapping.type(),
+            params
+        );
     }
 
     /**
-     * Generates SQL fragment for a filter condition based on operator.
-     * 
-     * @param column database column name
-     * @param operator filter operator (EQ, CONTAINS, BETWEEN, etc.)
-     * @param value primary value
-     * @param valueTo secondary value (for BETWEEN)
-     * @param targetType target type for conversion
-     * @param params parameter map
-     * @return SQL fragment (e.g., "username ILIKE :username_0")
+     * Generates the SQL fragment for a single filter condition.
+     *
+     * Operators:
+     * - EQ / NEQ / GT / GTE / LT / LTE: standard comparisons
+     * - AFTER / BEFORE: semantic aliases for GT / LT (useful for date fields)
+     * - BETWEEN: inclusive range, requires valueTo
+     * - CONTAINS / STARTS_WITH / ENDS_WITH: ILIKE with escape
+     * - IS_NULL / IS_NOT_NULL: no parameter needed
+     * - IN / NOT_IN: list comparison via ANY / ALL
+     *
+     * @param column     database column name
+     * @param operator   filter operator
+     * @param value      primary value
+     * @param valueTo    secondary value (BETWEEN only)
+     * @param targetType Java type for conversion
+     * @param params     parameter accumulator
+     * @return SQL fragment (e.g., "u.created_at BETWEEN :u_created_at_param AND :u_created_at_to_param")
      */
-    private String buildFilterClause(String column, FilterOperator operator, Object value, 
+    private String buildFilterClause(String column, FilterOperator operator, Object value,
                                      Object valueTo, Class<?> targetType, Map<String, Object> params) {
         String paramName = generateParamName(column, params);
-        
+
         return switch (operator) {
             case EQ -> {
-                Object converted = convertValue(value, targetType);
-                params.put(paramName, converted);
+                params.put(paramName, convertValue(value, targetType));
                 yield column + " = :" + paramName;
             }
             case NEQ -> {
-                Object converted = convertValue(value, targetType);
-                params.put(paramName, converted);
+                params.put(paramName, convertValue(value, targetType));
                 yield column + " <> :" + paramName;
             }
             case GT -> {
-                Object converted = convertValue(value, targetType);
-                params.put(paramName, converted);
+                params.put(paramName, convertValue(value, targetType));
                 yield column + " > :" + paramName;
             }
             case GTE -> {
-                Object converted = convertValue(value, targetType);
-                params.put(paramName, converted);
+                params.put(paramName, convertValue(value, targetType));
                 yield column + " >= :" + paramName;
             }
             case LT -> {
-                Object converted = convertValue(value, targetType);
-                params.put(paramName, converted);
+                params.put(paramName, convertValue(value, targetType));
                 yield column + " < :" + paramName;
             }
             case LTE -> {
-                Object converted = convertValue(value, targetType);
-                params.put(paramName, converted);
+                params.put(paramName, convertValue(value, targetType));
                 yield column + " <= :" + paramName;
             }
-            case BEFORE -> {
-                Object converted = convertValue(value, targetType);
-                params.put(paramName, converted);
-                yield column + " < :" + paramName;
-            }
             case AFTER -> {
-                Object converted = convertValue(value, targetType);
-                params.put(paramName, converted);
+                params.put(paramName, convertValue(value, targetType));
                 yield column + " > :" + paramName;
             }
+            case BEFORE -> {
+                params.put(paramName, convertValue(value, targetType));
+                yield column + " < :" + paramName;
+            }
             case BETWEEN -> {
-                Object convertedFrom = convertValue(value, targetType);
-                Object convertedTo = convertValue(valueTo, targetType);
+                if (valueTo == null) {
+                    throw new IllegalArgumentException("BETWEEN requires valueTo for column: " + column);
+                }
                 String paramNameTo = generateParamName(column + "_to", params);
-                params.put(paramName, convertedFrom);
-                params.put(paramNameTo, convertedTo);
+                params.put(paramName, convertValue(value, targetType));
+                params.put(paramNameTo, convertValue(valueTo, targetType));
                 yield column + " BETWEEN :" + paramName + " AND :" + paramNameTo;
             }
             case CONTAINS -> {
-                String escaped = escapeForLike(String.valueOf(value));
-                params.put(paramName, "%" + escaped + "%");
-                yield column + " ILIKE :" + paramName;
+                params.put(paramName, "%" + escapeForLike(String.valueOf(value)) + "%");
+                yield column + " ILIKE :" + paramName + " ESCAPE '\\\\'";
             }
             case STARTS_WITH -> {
-                String escaped = escapeForLike(String.valueOf(value));
-                params.put(paramName, escaped + "%");
-                yield column + " ILIKE :" + paramName;
+                params.put(paramName, escapeForLike(String.valueOf(value)) + "%");
+                yield column + " ILIKE :" + paramName + " ESCAPE '\\\\'";
             }
             case ENDS_WITH -> {
-                String escaped = escapeForLike(String.valueOf(value));
-                params.put(paramName, "%" + escaped);
-                yield column + " ILIKE :" + paramName;
+                params.put(paramName, "%" + escapeForLike(String.valueOf(value)));
+                yield column + " ILIKE :" + paramName + " ESCAPE '\\\\'";
             }
             case IS_NULL -> column + " IS NULL";
             case IS_NOT_NULL -> column + " IS NOT NULL";
             case IN -> {
-                params.put(paramName, value);
+                params.put(paramName, normalizeToCollection(value, column, operator));
                 yield column + " = ANY(:" + paramName + ")";
             }
             case NOT_IN -> {
-                params.put(paramName, value);
+                params.put(paramName, normalizeToCollection(value, column, operator));
                 yield column + " <> ALL(:" + paramName + ")";
             }
         };
     }
 
     /**
-     * Builds the ORDER BY clause from sort criteria, adding id as a tiebreaker.
-     * 
-     * @param sorts list of sort criteria
-     * @return SQL ORDER BY clause (e.g., " ORDER BY username ASC, id ASC")
-     * @throws IllegalArgumentException if a sort field doesn't exist or isn't sortable
+     * Normalizes a value to a List for use with IN / NOT_IN operators.
+     *
+     * @param value    must be a List or array
+     * @param column   column name (for error messages)
+     * @param operator operator (for error messages)
+     * @return List of values
+     * @throws IllegalArgumentException if value is null or not a list/array
+     */
+    private Object normalizeToCollection(Object value, String column, FilterOperator operator) {
+        if (value == null) {
+            throw new IllegalArgumentException(
+                    operator + " requires a non-null collection for column: " + column);
+        }
+        if (value instanceof List<?> list) {
+            return list;
+        }
+        if (value.getClass().isArray()) {
+            int length = java.lang.reflect.Array.getLength(value);
+            List<Object> list = new ArrayList<>(length);
+            for (int i = 0; i < length; i++) {
+                list.add(java.lang.reflect.Array.get(value, i));
+            }
+            return list;
+        }
+        throw new IllegalArgumentException(
+                operator + " requires a list/array for column: " + column);
+    }
+
+    /**
+     * Builds the ORDER BY clause from the provided sort criteria.
+     * Always appends "id ASC" as a tiebreaker — but only if id is not already present.
+     *
+     * @param sorts list of sort criteria (must not be null or empty)
+     * @return SQL ORDER BY clause (e.g., " ORDER BY u.username ASC, id ASC")
+     * @throws IllegalArgumentException if a sort field is unknown or not sortable
      */
     private String buildOrderByClause(List<SortCriteria> sorts) {
         List<String> orderClauses = new ArrayList<>();
-        
+        boolean includesId = false;
+
         for (SortCriteria sort : sorts) {
+            if (sort == null || sort.getColumn() == null || sort.getColumn().isBlank()) {
+                throw new IllegalArgumentException("Sort field cannot be empty");
+            }
+
             String fieldName = sort.getColumn();
-            
-            if (!allowedFields.containsKey(fieldName)) {
+            FieldMapping mapping = allowedFields.get(fieldName);
+            if (mapping == null) {
                 throw new IllegalArgumentException("Unknown field for sort: " + fieldName);
             }
-            
-            FieldMapping mapping = allowedFields.get(fieldName);
             if (!mapping.sortable()) {
                 throw new IllegalArgumentException("Field not sortable: " + fieldName);
             }
+
+            SortDirection direction = sort.getDirection() == null ? SortDirection.ASC : sort.getDirection();
+            orderClauses.add(mapping.column() + " " + (direction == SortDirection.ASC ? "ASC" : "DESC"));
             
-            String column = mapping.column();
-            String direction = sort.getDirection() == SortDirection.ASC ? "ASC" : "DESC";
-            orderClauses.add(column + " " + direction);
+            if ("id".equalsIgnoreCase(mapping.column())) {
+                includesId = true;
+            }
         }
-        
-        // Add tiebreaker on id to ensure consistent ordering
-        orderClauses.add("id ASC");
-        
+
+        if (!includesId) {
+            orderClauses.add("id ASC");
+        }
+
         return " ORDER BY " + String.join(", ", orderClauses);
     }
 
     /**
-     * Builds keyset pagination clause for cursor-based pagination.
-     * Constructs a WHERE condition that retrieves rows after the cursor position.
-     * 
-     * For example, with sort by (username ASC, id ASC):
-     *   (username, id) > (:cursor_username, :cursor_id)
-     * 
-     * @param cursor decoded cursor data containing column values
-     * @param sorts sort criteria that define the order
-     * @param params parameter map to accumulate cursor values
-     * @return SQL fragment (e.g., "(username, id) > (:cursor_username, :cursor_id)")
+     * Builds the keyset pagination WHERE clause for cursor-based pagination.
+     *
+     * Example with sort by (username ASC, id ASC):
+     *   (u.username, id) > (:cursor_username, :cursor_id)
+     *
+     * @param cursor decoded cursor data containing last-seen column values
+     * @param sorts  sort criteria that define the order
+     * @param params parameter accumulator for cursor values
+     * @return SQL keyset clause, or "1=1" if cursor is empty/invalid
      */
-    private String buildKeysetClause(CursorData cursor, List<SortCriteria> sorts, Map<String, Object> params) {
+    private String buildKeysetClause(CursorData cursor, List<SortCriteria> sorts,
+                                     Map<String, Object> params) {
         if (cursor == null || cursor.getData() == null || cursor.getData().isEmpty()) {
-            return "1=1"; // No cursor, return all rows
+            return "1=1";
         }
-        
+
         List<String> columns = new ArrayList<>();
-        List<String> paramNames = new ArrayList<>();
-        
-        for (SortCriteria sort : sorts) {
-            String fieldName = sort.getColumn();
-            FieldMapping mapping = allowedFields.get(fieldName);
-            String column = mapping.column();
-            
-            columns.add(column);
-            String paramName = "cursor_" + fieldName;
-            paramNames.add(":" + paramName);
-            
-            // Add cursor value to parameters
-            Object cursorValue = cursor.getData().get(fieldName);
-            if (cursorValue != null) {
-                params.put(paramName, convertValue(cursorValue, mapping.type()));
+        List<String> paramRefs = new ArrayList<>();
+
+        for (SortCriteria sort : effectiveSorts) {
+            FieldMapping mapping = allowedFields.get(sort.getColumn());
+            if (mapping == null) {
+                throw new IllegalArgumentException("Unknown field in cursor sorting: " + sort.getColumn());
             }
+
+            String cursorKey = sort.getColumn();
+            if (!cursor.getData().containsKey(cursorKey)) {
+                return "1=1";
+            }
+
+            String paramName = "cursor_" + cursorKey;
+            columns.add(mapping.column());
+            paramRefs.add(":" + paramName);
+            params.put(paramName, convertValue(cursor.getData().get(cursorKey), mapping.type()));
         }
-        
-        // Build comparison: (col1, col2, ...) > (:cursor_col1, :cursor_col2, ...)
-        String columnList = "(" + String.join(", ", columns) + ")";
-        String paramList = "(" + String.join(", ", paramNames) + ")";
-        
-        return columnList + " > " + paramList;
+
+        return "(" + String.join(", ", columns) + ") > (" + String.join(", ", paramRefs) + ")";
     }
 
     /**
-     * Converts a value to the target type with proper error handling.
-     * 
-     * @param value the value to convert
+     * Decodes a Base64-encoded cursor string into CursorData.
+     *
+     * @param encodedCursor Base64url-encoded cursor (from previous response)
+     * @return decoded CursorData
+     * @throws IllegalArgumentException if the cursor is malformed or cannot be decoded
+     */
+    private CursorData decodeCursor(String encodedCursor) {
+        if (encodedCursor == null || encodedCursor.isBlank()) {
+            return null;
+        }
+        try {
+            byte[] bytes = Base64.getUrlDecoder().decode(encodedCursor);
+            return objectMapper.readValue(bytes, CursorData.class);
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Invalid cursor: " + encodedCursor, e);
+        }
+    }
+
+    /**
+     * Encodes a map of cursor values (typically the last row's sort fields) into
+     * a Base64url-encoded cursor string to be sent to the frontend.
+     *
+     * @param values map of field names to their last-seen values
+     * @return Base64url-encoded cursor string, or null if values is null/empty
+     */
+    public static String encodeCursor(Map<String, Object> values) {
+        if (values == null || values.isEmpty()) {
+            return null;
+        }
+        try {
+            byte[] bytes = objectMapper.writeValueAsBytes(new CursorData(values));
+            return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Failed to encode cursor", e);
+        }
+    }
+
+    /**
+     * Converts a raw value (typically deserialized from JSON) to the required Java type.
+     * Supports: String, Integer, Long, Double, Float, Boolean, BigDecimal,
+     *           LocalDate, LocalTime, Instant.
+     *
+     * @param value      the value to convert
      * @param targetType the target Java type
-     * @return converted value
+     * @return converted value, or original value if no conversion is needed
      * @throws IllegalArgumentException if conversion fails
      */
     private Object convertValue(Object value, Class<?> targetType) {
-        if (value == null) {
-            return null;
-        }
-        
-        if (targetType == null || targetType == Object.class || value.getClass() == targetType) {
+        if (value == null || targetType == null || targetType == Object.class
+                || targetType.isInstance(value)) {
             return value;
         }
-        
+
         try {
             return switch (targetType.getSimpleName()) {
-                case "String" -> String.valueOf(value);
-                case "Integer" -> {
-                    if (value instanceof Number) yield ((Number) value).intValue();
-                    yield Integer.parseInt(String.valueOf(value));
-                }
-                case "Long" -> {
-                    if (value instanceof Number) yield ((Number) value).longValue();
-                    yield Long.parseLong(String.valueOf(value));
-                }
-                case "Double" -> {
-                    if (value instanceof Number) yield ((Number) value).doubleValue();
-                    yield Double.parseDouble(String.valueOf(value));
-                }
-                case "Float" -> {
-                    if (value instanceof Number) yield ((Number) value).floatValue();
-                    yield Float.parseFloat(String.valueOf(value));
-                }
-                case "Boolean" -> {
-                    if (value instanceof Boolean) yield value;
-                    yield Boolean.parseBoolean(String.valueOf(value));
-                }
-                case "BigDecimal" -> {
-                    if (value instanceof BigDecimal) yield value;
-                    yield new BigDecimal(String.valueOf(value));
-                }
-                case "LocalDate" -> {
-                    if (value instanceof LocalDate) yield value;
-                    yield LocalDate.parse(String.valueOf(value));
-                }
-                case "LocalTime" -> {
-                    if (value instanceof LocalTime) yield value;
-                    yield LocalTime.parse(String.valueOf(value));
-                }
-                case "Instant" -> {
-                    if (value instanceof Instant) yield value;
-                    yield Instant.parse(String.valueOf(value));
-                }
-                default -> value;
+                case "String"     -> String.valueOf(value);
+                case "Integer"    -> value instanceof Number n ? n.intValue()    : Integer.parseInt(String.valueOf(value));
+                case "Long"       -> value instanceof Number n ? n.longValue()   : Long.parseLong(String.valueOf(value));
+                case "Double"     -> value instanceof Number n ? n.doubleValue() : Double.parseDouble(String.valueOf(value));
+                case "Float"      -> value instanceof Number n ? n.floatValue()  : Float.parseFloat(String.valueOf(value));
+                case "Boolean"    -> value instanceof Boolean b ? b              : Boolean.parseBoolean(String.valueOf(value));
+                case "BigDecimal" -> value instanceof BigDecimal bd ? bd         : new BigDecimal(String.valueOf(value));
+                case "LocalDate"  -> value instanceof LocalDate d ? d            : LocalDate.parse(String.valueOf(value));
+                case "LocalTime"  -> value instanceof LocalTime t ? t            : LocalTime.parse(String.valueOf(value));
+                case "Instant"    -> value instanceof Instant i ? i              : Instant.parse(String.valueOf(value));
+                default           -> value;
             };
-        } catch (Exception e) {
-            throw new IllegalArgumentException(
-                "Cannot convert value '" + value + "' to type " + targetType.getSimpleName(), e
-            );
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Cannot convert value '" + value + "' to type " + targetType.getSimpleName(), e);
         }
     }
 
     /**
-     * Escapes special characters for LIKE patterns in PostgreSQL ILIKE.
-     * Escapes: backslash, percent, underscore
-     * 
-     * @param value the string to escape
+     * Escapes special ILIKE characters in a string value to prevent wildcard injection.
+     * Escapes: backslash → \\, percent → \%, underscore → \_
+     *
+     * @param value the raw string from the user
      * @return escaped string safe for ILIKE patterns
      */
     private String escapeForLike(String value) {
@@ -399,61 +464,20 @@ public class SearchQueryBuilder {
     }
 
     /**
-     * Decodes a Base64-encoded cursor string into CursorData.
-     * 
-     * @param encodedCursor the Base64-encoded cursor
-     * @return decoded CursorData, or null if decoding fails
-     */
-    private CursorData decodeCursor(String encodedCursor) {
-        if (encodedCursor == null || encodedCursor.isEmpty()) {
-            return null;
-        }
-        
-        try {
-            byte[] decodedBytes = Base64.getUrlDecoder().decode(encodedCursor);
-            return objectMapper.readValue(decodedBytes, CursorData.class);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid cursor: " + encodedCursor, e);
-        }
-    }
-
-    /**
-     * Encodes a map of cursor values into a Base64-encoded cursor string.
-     * 
-     * @param values map of column names to values (typically from the last row)
-     * @return Base64-encoded cursor string
-     */
-    public static String encodeCursor(Map<String, Object> values) {
-        if (values == null || values.isEmpty()) {
-            return null;
-        }
-        
-        try {
-            CursorData cursorData = new CursorData(values);
-            byte[] jsonBytes = objectMapper.writeValueAsBytes(cursorData);
-            return Base64.getUrlEncoder().withoutPadding().encodeToString(jsonBytes);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Failed to encode cursor", e);
-        }
-    }
-
-    /**
-     * Generates a unique parameter name based on column and existing parameters.
-     * Avoids collisions by appending an index if needed.
-     * 
-     * @param column the column name
-     * @param params existing parameters map
-     * @return unique parameter name
+     * Generates a unique named parameter key for a column, avoiding collisions
+     * with existing keys by appending an incrementing index.
+     *
+     * @param column the column name (dots replaced with underscores)
+     * @param params the current parameter map
+     * @return unique parameter name (e.g., "u_username_param", "u_username_param_1")
      */
     private String generateParamName(String column, Map<String, Object> params) {
-        String baseName = column.replace(".", "_") + "_param";
-        String paramName = baseName;
-        int index = 0;
-        
-        while (params.containsKey(paramName)) {
-            paramName = baseName + "_" + (index++);
+        String base = column.replace('.', '_') + "_param";
+        String current = base;
+        int i = 0;
+        while (params.containsKey(current)) {
+            current = base + "_" + (i++);
         }
-        
-        return paramName;
+        return current;
     }
 }
