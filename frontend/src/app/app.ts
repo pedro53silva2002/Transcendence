@@ -3,14 +3,15 @@ import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationPopUpComponent } from './shared/pop-up/confirmation-pop-up/confirmation-pop-up.component';
-import { SharedModule } from './shared/shared-module';
+import { NavbarComponent } from './core/layout/navbar/navbar.component';
+import { ButtonComponent } from './shared/components/button/button.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatButtonModule, SharedModule, MatDialogModule],
+  imports: [RouterOutlet, MatButtonModule, MatDialogModule, NavbarComponent, ButtonComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.scss'
 })
 export class App {
   protected readonly title = signal('frontend');

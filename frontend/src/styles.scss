@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+
+@use '@angular/material' as mat;
+@import 'tailwindcss';
+
+
+@button-ok {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+}
+
+:root {
+  //the overlay of the search results is rendered outside of the component object, so we have to change the appearance here 
+  @include mat.autocomplete-overrides((
+    background-color: var(--mat-sys-secondary-container),
+    container-shape: 20px,                    
+  ));
+}

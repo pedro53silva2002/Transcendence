@@ -1,31 +1,22 @@
-<button matButton [matMenuTriggerFor]="aboveMenu">Profile</button>
-<mat-menu #aboveMenu="matMenu" yPosition="above">
-  <!-- <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button> -->
-</mat-menu>
-
-<button matButton [matMenuTriggerFor]="belowMenu">Plan A Trip</button>
-<mat-menu #belowMenu="matMenu" yPosition="below">
-  <!-- <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button> -->
-</mat-menu>
-
-<button matButton [matMenuTriggerFor]="beforeMenu">My Trips</button>
-<mat-menu #beforeMenu="matMenu" xPosition="before">
-  <!-- <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button> -->
-</mat-menu>
-
-
-<button matButton [matMenuTriggerFor]="afterMenu">My Friends</button>
-<mat-menu #afterMenu="matMenu" xPosition="after">
-  <!-- <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button> -->
-</mat-menu>
-
-<button matButton [matMenuTriggerFor]="afterMenu">My Expenses</button>
-<mat-menu #afterMenu="matMenu" xPosition="after">
-  <!-- <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button> -->
-</mat-menu>
-
+<nav>
+  <div class="nav-bar">
+    <button routerLinkActive="active-link" routerLink="/profile" class="btn" matButton="outlined">Profile</button>
+    <button routerLinkActive="active-link" routerLink="/plan-a-trip" class="btn" matButton="outlined">Plan A Trip</button>
+	<button routerLinkActive="active-link" routerLink="/my-trip" class="btn" matButton="outlined">My Trips</button>
+    <button routerLinkActive="active-link" routerLink="/friends" class="btn" matButton="outlined">Friends</button>
+    <button routerLinkActive="active-link" routerLink="/my-expenses" class="btn" matButton="outlined">My Expenses</button>
+	<mat-form-field appearance="outline" class="search">
+		<mat-icon matPrefix>search</mat-icon>
+		<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users"/>
+		<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel">
+			@for (user of filteredUsers; track user) {
+				<mat-option [value]="user">
+					<div>
+						<span>{{user}}</span>
+					</div>
+				</mat-option>
+			}
+		</mat-autocomplete>
+	</mat-form-field>
+</div>
+</nav>

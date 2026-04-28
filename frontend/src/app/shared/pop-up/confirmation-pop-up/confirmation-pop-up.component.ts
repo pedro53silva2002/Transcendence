@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 //   standalone: true,
   imports: [MatDialogModule, MatButtonModule],
   templateUrl: './confirmation-pop-up.component.html',
-  styleUrl: './confirmation-pop-up.component.css',
+  styleUrl: './confirmation-pop-up.component.scss',
 })
 export class ConfirmationPopUpComponent {
 	
