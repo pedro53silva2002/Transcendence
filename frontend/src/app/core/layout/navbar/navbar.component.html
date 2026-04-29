@@ -18,5 +18,12 @@
 			}
 		</mat-autocomplete>
 	</mat-form-field>
-</div>
+	<button matButton="outlined" class="btn-logout" [matMenuTriggerFor]="menu">
+		<mat-icon>power_settings_new</mat-icon>
+	</button>
+	<mat-menu #menu="matMenu" yPosition="below" xPosition="after" class="centered-menu">
+		<button mat-menu-item>Account</button>
+		<button mat-menu-item>Logout</button>
+	</mat-menu>
+	</div>
 </nav>

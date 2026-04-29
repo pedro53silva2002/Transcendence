@@ -4,6 +4,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormField } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -19,7 +20,8 @@ import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 			MatInputModule,
 			MatAutocompleteModule,
 			RouterLink,
-			RouterLinkActive],
+			RouterLinkActive,
+			MatIconModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
