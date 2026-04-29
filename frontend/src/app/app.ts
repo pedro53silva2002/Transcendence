@@ -5,11 +5,19 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationPopUpComponent } from './shared/pop-up/confirmation-pop-up/confirmation-pop-up.component';
 import { NavbarComponent } from './core/layout/navbar/navbar.component';
 import { ButtonComponent } from './shared/components/button/button.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { SidebarComponent } from './core/layout/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatButtonModule, MatDialogModule, NavbarComponent, ButtonComponent],
+  imports: [RouterOutlet, 
+			MatButtonModule,
+			MatDialogModule,
+			NavbarComponent,
+			MatSidenavModule,
+			SidebarComponent,
+			],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

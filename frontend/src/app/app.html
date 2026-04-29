@@ -1,4 +1,15 @@
-<app-navbar></app-navbar>
+<mat-sidenav-container class="layout-container">
+  
+  <mat-sidenav #mainSidenav mode="over">
+    <app-sidebar></app-sidebar> 
+  </mat-sidenav>
 
+  <mat-sidenav-content>
+    <app-navbar (menuClicked)="mainSidenav.toggle()"></app-navbar>
 
-<router-outlet></router-outlet>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

@@ -7,6 +7,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 
@@ -21,7 +22,8 @@ import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 			MatAutocompleteModule,
 			RouterLink,
 			RouterLinkActive,
-			MatIconModule],
+			MatIconModule,
+			MatSidenavModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
@@ -51,6 +53,7 @@ export class NavbarComponent implements OnInit {
 	}
 
 	@Output() menuClicked = new EventEmitter<void>();
+	
 	toggleSidenav() {
   		this.menuClicked.emit();
 	}
