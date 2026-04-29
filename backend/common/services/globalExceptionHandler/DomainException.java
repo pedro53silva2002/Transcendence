@@ -1,4 +1,4 @@
-//package transcendence.backend.common.services.globalExceptionHandler;
+package backend.common.services.globalExceptionHandler;
 /*
  * =========================================================================
  * HTTP CLIENT ERRORS (4xx)
