@@ -2,42 +2,51 @@ server:
   port: ${BACKEND_PORT:8080}
 
 spring:
+  application:
+    name: transcendence-backend
+
+  # PostgreSQL connection — values come from .env via docker-compose
   datasource:
-    url: jdbc:postgresql://postgres-db:5432/${POSTGRES_DB}
+    url: jdbc:postgresql://${POSTGRES_HOST:postgres-db}:5432/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
-    hikari: #connection pool settings
-      maximum-pool-size: 10 #max simultaneous DB connections
-      minimum-idle: 5       #min idle connections in pool
-      # Instead of creating a new database connection for every request (slow), Hikari maintains a pool of reusable connections
-      # When your app needs to query the database, it grabs an available connection from the pool
-      # After the query finishes, the connection goes back to the pool for reuse
-      # If all 10 are busy, requests wait until one becomes available
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+
+  # Hibernate: validate-only — Flyway owns the schema
   jpa:
     hibernate:
-      # 'validate' → Hibernate checks that entity fields match DB columns (Flyway owns the schema)
-      # Never use 'create' or 'update' in production — Flyway handles all DDL
       ddl-auto: validate
-    show-sql: false   # Set to true locally for SQL query debugging
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         jdbc:
-          batch_size: 20 # Insert/update 20 rows at once for better performance
-          fetch_size: 50 # Fetch 50 rows per database trip
+          batch_size: 20
+          fetch_size: 50
+
+  # Flyway: runs versioned SQL migrations from src/main/resources/db/migration
   flyway:
     enabled: true
-    locations: classpath:db/migration # Where migration SQL files live
-    baseline-on-migrate: true         # Safe to run even if DB already has tables
+    locations: classpath:db/migration
+    baseline-on-migrate: true
 
-  application:
-    name: transcendence-backend
+  # Redis (used later for sessions / cache)
+  data:
+    redis:
+      host: ${REDIS_HOST:redis-cache}
+      port: ${REDIS_PORT:6379}
 
-# Logging levels — adjust per environment
 logging:
   level:
     root: INFO
-    com.transcendence: DEBUG          # Verbose logs for our own code
+    com.transcendence: DEBUG
     org.springframework.security: INFO
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-ttl_minutes: ${JWT_ACCESS_TOKEN_TTL_MINUTES}
+  refresh-token-ttl-days: ${JWT_REFRESH_TOKEN_TTL_DAYS}
