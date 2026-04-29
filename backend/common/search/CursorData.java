@@ -1,16 +1,20 @@
-package transcendence.backend.common.search;
+package backend.common.search;
 
 import java.util.Map;
 
 /**
- * Stores cursor-related key-value data used in operations such as
- * pagination or tracking the current position in a dataset.
+ * Wrapper for the raw data used to generate and parse pagination cursors.
  */
 public class CursorData {
 	private Map<String, Object> data;
 	
 	public CursorData() {}
 	
+	/**
+     * Creates a new cursor data container.
+     *
+     * @param data map of field names and values representing the cursor position
+     */
 	public CursorData(Map<String, Object> data) {
 		this.data = data;
 	}

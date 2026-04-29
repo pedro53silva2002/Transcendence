@@ -1,9 +1,9 @@
-package transcendence.backend.common.search;
+package backend.common.search;
 
 /**
- * Classe que representa um critério de filtro para construção de consultas dinâmicas.
- * Cada instância desta classe encapsula uma coluna, um operador de comparação e um valor
- * que serão usados para construir uma cláusula WHERE em uma consulta.
+ * Class that represents a filter criterion for building dynamic queries.
+ * Each instance of this class encapsulates a column, a comparison operator, and a value
+ * that will be used to construct a WHERE clause in a query.
  */
 public class FilterCriteria {
     private String column;
@@ -13,12 +13,27 @@ public class FilterCriteria {
 
     public FilterCriteria() {}
 
+    /**
+     * Basic constructor for standard operators (EQUALS, LIKE, etc.).
+     *
+     * @param column   the logical field name to filter
+     * @param operator the comparison operator
+     * @param value    the value to compare against
+     */
     public FilterCriteria(String column, FilterOperator operator, Object value) {
         this.column = column;
         this.operator = operator;
         this.value = value;
     }
 
+    /**
+     * Constructor for range-based operators.
+     *
+     * @param column   the logical field name to filter
+     * @param operator the comparison operator (e.g., BETWEEN)
+     * @param value    the start value or primary value
+     * @param valueTo  the end value for range comparisons
+     */
     public FilterCriteria(String column, FilterOperator operator, Object value, Object valueTo) {
         this.column = column;
         this.operator = operator;

@@ -1,15 +1,13 @@
-package transcendence.backend.common.search;
+package backend.common.search;
 
 import java.util.Map;
 
 /**
- * A Java record is a concise way to define an immutable data carrier.
- * It automatically provides a constructor, accessor methods, and
- * implementations of equals, hashCode, and toString.
+ * The generated output of the query builder, ready for execution.
  *
- * This record represents the result of a search query construction,
- * containing the generated SQL string, the associated query parameters,
- * and the maximum number of results to return (limit).
+ * @param sql        the generated SQL string with named parameters
+ * @param parameters map of parameter names to their converted values
+ * @param limit      the number of records to fetch (pageSize + 1 for hasNext check)
  */
 public record SearchResult(
     String sql,

@@ -1,11 +1,11 @@
-package transcendence.backend.common.search;
+package backend.common.search;
 
 /**
- * Enumeração de direções de ordenação para construção de consultas dinâmicas.
- * Cada direção representa a forma como os resultados devem ser ordenados
- * com base em uma coluna específica.
+ * Enumeration of available sort directions.
  */
 public enum SortDirection {
+    // Ascending order (A-Z, 0-9)
     ASC,
+    // Descending order (Z-A, 9-0)
     DESC
 }

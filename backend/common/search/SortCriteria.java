@@ -1,9 +1,10 @@
-package transcendence.backend.common.search;
+package backend.common.search;
 
 /**
- * Classe que representa um critério de ordenação para construção de consultas dinâmicas.
- * Cada instância desta classe encapsula uma coluna e uma direção de ordenação
- * que serão usados para construir uma cláusula ORDER BY em uma consulta.
+ * Class that represents a sorting criterion for building dynamic queries.
+ * Each instance of this class encapsulates a column and a sort direction
+ * that will be used to construct an ORDER BY clause in a query.
+ * basically it defines the sorting order for a specific field.
  */
 public class SortCriteria {
     private String column;
@@ -11,6 +12,12 @@ public class SortCriteria {
 
     public SortCriteria() {}
 
+    /**
+     * Creates a sort instruction.
+     *
+     * @param column    the logical field name to sort by
+     * @param direction the direction (ASC or DESC)
+     */
     public SortCriteria(String column, SortDirection direction) {
         this.column = column;
         this.direction = direction;

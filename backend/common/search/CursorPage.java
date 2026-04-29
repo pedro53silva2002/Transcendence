@@ -1,16 +1,9 @@
-package transcendence.backend.common.search;
+package backend.common.search;
 
 import java.util.List;
 
 /**
- * Cursor-based paginated response (like a bookmark that represents a position in the dataset).
- * Returned to the frontend as part of a JSON response.
- *
- * Structure:
- * - items: list of elements in the current page
- * - nextCursor: cursor used to fetch the next page (the position in database) encoded as a string, so we are not dependent on the internal structure
- * - hasNext: indicates if more results are available
- * - size: number of items in the current page
+ * Represents a paginated response using cursor-based navigation.
  *
  * Example:
  * {
@@ -31,6 +24,14 @@ public class CursorPage<T> {
 
 	public CursorPage() {}
 
+	/**
+     * Creates a populated page of results.
+     *
+     * @param content    the list of items for the current page
+     * @param nextCursor the encoded string used to fetch the next page
+     * @param hasNext    indicator if more results are available
+     * @param size       the number of items in the current page
+     */
 	public CursorPage(List<T> content, String nextCursor, boolean hasNext, int size) {
 		this.content = content;
 		this.nextCursor = nextCursor;

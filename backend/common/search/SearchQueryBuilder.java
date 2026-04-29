@@ -1,4 +1,4 @@
-package transcendence.backend.common.search;
+package backend.common.search;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;

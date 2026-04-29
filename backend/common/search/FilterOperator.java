@@ -1,4 +1,4 @@
-package transcendence.backend.common.search;
+package backend.common.search;
 
 public enum FilterOperator {
     EQ,          // coluna = :param
