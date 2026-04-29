@@ -6,11 +6,15 @@
 logs/
 
 # Gradle
+gradle/
 .gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+gradlew
+*.bat
+gradle.properties
 
 # Maven
 target/
@@ -97,3 +101,6 @@ application-secrets.properties
 
 # Docker
 docker-compose.override.yml
+
+docs/*
+docs

@@ -1,4 +1,4 @@
-package backend.common.src.main.java.com.transcendence;
+//package com.transcendence;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

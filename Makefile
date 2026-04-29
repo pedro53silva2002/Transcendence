@@ -37,4 +37,4 @@ test:
 		gradle:8-jdk21 \
 		gradle test
 
-.PHONY: all build up down clean fclean re logs ps
+.PHONY: all build up down clean fclean re logs ps test

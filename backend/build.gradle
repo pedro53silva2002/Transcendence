@@ -50,6 +50,20 @@ dependencies {
 
     // Testing Framework: JUnit 5 with Mockito and AssertJ for unit tests
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // JWT Dependencies
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java', 'common'
+        }
+    }
 }
 
 tasks.named('test') {
