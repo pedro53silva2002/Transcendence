@@ -1,5 +1,5 @@
 import { Q } from '@angular/cdk/keycodes';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -49,4 +49,10 @@ export class NavbarComponent implements OnInit {
 			}
 		})
 	}
+
+	@Output() menuClicked = new EventEmitter<void>();
+	toggleSidenav() {
+  		this.menuClicked.emit();
+	}
 }
+

@@ -1,14 +1,61 @@
 @use '@angular/material' as mat;
 
+/* 1. Esconder o Hamburger por padrão (Desktop) */
+.hamburger-btn {
+    display: none !important;
+}
+
+/* 2. Regras para ecrãs pequenos (Mobile) */
+@media (max-width: 945px) {
+    /* Esconde os botões normais da nav-bar */
+    .nav-bar .btn {
+        display: none !important;
+    }
+
+    /* Mostra o botão do hamburger */
+    .hamburger-btn {
+        display: inline-flex !important;
+        transition: all 300ms ease-in-out;
+        border-radius: 50% !important; 
+        border: 1px solid var(--mat-sys-primary) !important;
+        
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        
+        padding: 0 !important;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 42px !important;
+
+        .mat-icon {
+            color: var(--mat-sys-primary) !important;
+        }
+    }
+
+    .hamburger-btn:hover{
+        background-color: var(--mat-sys-primary) !important;
+        border-color: white;
+
+        .mat-icon {
+            color: white !important;
+        }
+    }
+
+    /* Opcional: Encolher a barra de pesquisa para caber tudo */
+    .search {
+        width: 140px;
+    }
+}
+
 /* Configuração base da Navbar */
 .nav-bar {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     width: 100%;
-    gap: 16px; /* Equivalente a gap-4 */
-    padding: 32px; /* Equivalente a py-8 px-8 */
-    box-sizing: border-box;
+    gap: 16px;
+    padding: 32px;
 }
 
 /* Estilo unificado para botões de texto */
