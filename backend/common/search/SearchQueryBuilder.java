@@ -350,7 +350,7 @@ public class SearchQueryBuilder {
         List<String> columns = new ArrayList<>();
         List<String> paramRefs = new ArrayList<>();
 
-        for (SortCriteria sort : effectiveSorts) {
+        for (SortCriteria sort : sorts) {
             FieldMapping mapping = allowedFields.get(sort.getColumn());
             if (mapping == null) {
                 throw new IllegalArgumentException("Unknown field in cursor sorting: " + sort.getColumn());
@@ -479,5 +479,9 @@ public class SearchQueryBuilder {
             current = base + "_" + (i++);
         }
         return current;
+    }
+
+    public Map<String, FieldMapping> getAllowedFields() {
+        return allowedFields;
     }
 }
