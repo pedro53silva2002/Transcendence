@@ -1,11 +1,9 @@
 @use '@angular/material' as mat;
 
-/* 1. Esconder o Hamburger por padrão (Desktop) */
 .hamburger-btn, .hamburguer-menu-panel{
     display: none !important;
 }
 
-/* Configuração base da Navbar */
 .nav-bar {
     display: flex;
     align-items: center;
@@ -15,7 +13,17 @@
     padding: 32px;
 }
 
-/* Estilo unificado para botões de texto */
+.logo-container {
+    margin-right: auto; 
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+}
+
 .btn {
     transition: all 300ms ease-in-out;
     border-radius: 20px !important;
@@ -23,7 +31,6 @@
     border: 1px solid var(--mat-sys-primary) !important;
 }
 
-/* Ajuste específico para o botão de Logout (Círculo Perfeito) */
 .btn-logout {
     transition: all 300ms ease-in-out;
     border-radius: 50% !important; 
@@ -162,7 +169,7 @@
 }
 
 /* 2. Regras para ecrãs pequenos (Mobile) */
-@media (max-width: 945px) {
+@media (max-width: 990px) {
     /* Esconde os botões normais da nav-bar */
     .nav-bar .btn {
         display: none !important;
