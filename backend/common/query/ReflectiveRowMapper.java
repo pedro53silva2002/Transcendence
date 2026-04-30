@@ -21,7 +21,18 @@ import java.util.UUID;
 
 /**
  * It converts database rows to Java objects automatically.
-  */
+ * example:
+ * | user_id | user_name | created_at       |
+ * | ------- | --------- | ---------------- |
+ * | 123     | m_miguelo | 2026-04-30 13:30 |
+ *
+ * class User {
+ *     int userId;
+ *     String userName;
+ *     Instant createdAt;
+ * }
+ *
+ */
 public class ReflectiveRowMapper<T> implements RowMapper<T> {
     private final Class<T> type; //which java class to map
     private final ObjectMapper objectMapper; // Jackson library tool to convert JSON strings
@@ -36,12 +47,21 @@ public class ReflectiveRowMapper<T> implements RowMapper<T> {
         this.columnToField = CACHE.computeIfAbsent(type, ReflectiveRowMapper::discoverFields);
     }
 
+    // uses reflection to allow the program to work with structure of objects at runtime dynamically,
+    // instead at compile time.
+    // Class<?> represents a Java class at runtime
     private static Map<String, Field> discoverFields(Class<?> cls) {
         Map<String, Field> map = new HashMap<>();
         Class<?> cur = cls;
-        while (cur != null && cur != Object.class) {
-            for (Field f : cur.getDeclaredFields()) {
+        // goes up the inheritance chain (example user -> person -> object)
+        while (cur != null && cur != Object.class)
+        {
+            // get all fields declared in this class
+            for (Field f : cur.getDeclaredFields())
+            {
+                //this allow us to access private fields (by reflection)
                 f.setAccessible(true);
+                //Cache the field by its name
                 map.putIfAbsent(f.getName(), f);
             }
             cur = cur.getSuperclass();
@@ -74,6 +94,8 @@ public class ReflectiveRowMapper<T> implements RowMapper<T> {
         // Result: user_name → userName
     }
 
+    //this function is called by spring for each row the database returns.
+    // it returns a Java object
     @Override
     public T mapRow(ResultSet rs, int rowNum) throws SQLException {
         try {
@@ -84,7 +106,8 @@ public class ReflectiveRowMapper<T> implements RowMapper<T> {
                 String colLabel = meta.getColumnLabel(i);
                 String camel = toCamelCase(colLabel);
                 Field f = columnToField.get(camel);
-                if (f == null) continue; // silently skip missing fields
+                if (f == null)
+                    continue; // silently skip missing fields that are in DB but not in Java class
 
                 Class<?> fieldType = f.getType();
                 Object value = null;
@@ -96,7 +119,8 @@ public class ReflectiveRowMapper<T> implements RowMapper<T> {
                     if (json != null) {
                         try {
                             value = objectMapper.readValue(json, objectMapper.getTypeFactory().constructType(jsonAnn.type()));
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e) {
                             throw new DataMappingException("Failed to parse JSON for field " + f.getName() + " column " + colLabel, e);
                         }
                     }
@@ -107,46 +131,59 @@ public class ReflectiveRowMapper<T> implements RowMapper<T> {
                 // primitives and boxed types
                 if (fieldType == String.class) {
                     value = rs.getString(i);
-                } else if (fieldType == UUID.class) {
+                }
+                else if (fieldType == UUID.class) {
                     String s = rs.getString(i);
                     value = s == null ? null : UUID.fromString(s);
-                } else if (fieldType == int.class || fieldType == Integer.class) {
+                }
+                else if (fieldType == int.class || fieldType == Integer.class) {
                     int v = rs.getInt(i);
                     value = rs.wasNull() ? (fieldType == int.class ? 0 : null) : v;
-                } else if (fieldType == long.class || fieldType == Long.class) {
+                }
+                else if (fieldType == long.class || fieldType == Long.class) {
                     long v = rs.getLong(i);
                     value = rs.wasNull() ? (fieldType == long.class ? 0L : null) : v;
-                } else if (fieldType == boolean.class || fieldType == Boolean.class) {
+                }
+                else if (fieldType == boolean.class || fieldType == Boolean.class) {
                     boolean v = rs.getBoolean(i);
                     value = rs.wasNull() ? (fieldType == boolean.class ? false : null) : v;
-                } else if (fieldType == double.class || fieldType == Double.class) {
+                }
+                else if (fieldType == double.class || fieldType == Double.class) {
                     double v = rs.getDouble(i);
                     value = rs.wasNull() ? (fieldType == double.class ? 0.0 : null) : v;
-                } else if (fieldType == BigDecimal.class) {
+                }
+                else if (fieldType == BigDecimal.class) {
                     value = rs.getBigDecimal(i);
-                } else if (fieldType == Instant.class) {
+                }
+                else if (fieldType == Instant.class) {
                     Timestamp ts = rs.getTimestamp(i);
                     value = ts == null ? null : ts.toInstant();
-                } else if (fieldType == LocalDate.class) {
+                }
+                else if (fieldType == LocalDate.class) {
                     Date d = rs.getDate(i);
                     value = d == null ? null : d.toLocalDate();
-                } else if (fieldType == LocalTime.class) {
+                }
+                else if (fieldType == LocalTime.class) {
                     Time t = rs.getTime(i);
                     value = t == null ? null : t.toLocalTime();
-                } else if (fieldType.isEnum()) {
+                }
+                else if (fieldType.isEnum()) {
                     String s = rs.getString(i);
                     if (s != null) {
                         try {
                             @SuppressWarnings({ "unchecked", "rawtypes" })
                             Enum<?> e = Enum.valueOf((Class<Enum>) fieldType, s);
                             value = e;
-                        } catch (IllegalArgumentException iae) {
+                        }
+                        catch (IllegalArgumentException iae) {
                             throw new DataMappingException("Invalid enum value '" + s + "' for field " + f.getName() + " column " + colLabel, iae);
                         }
-                    } else {
+                    }
+                    else {
                         value = null;
                     }
-                } else {
+                }
+                else {
                     // fallback: try to get object and attempt direct assignment
                     value = rs.getObject(i);
                 }
@@ -154,9 +191,11 @@ public class ReflectiveRowMapper<T> implements RowMapper<T> {
                 setFieldValue(f, instance, value);
             }
             return instance;
-        } catch (DataMappingException e) {
+        }
+        catch (DataMappingException e) {
             throw new SQLException("Data mapping failed: " + e.getMessage(), e);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new SQLException("Failed to map row to " + type.getName(), e);
         }
     }
