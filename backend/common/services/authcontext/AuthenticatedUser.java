@@ -1,4 +1,4 @@
-package com.transcendence;
+package common.services.authcontext;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

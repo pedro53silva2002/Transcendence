@@ -1,5 +1,5 @@
 package services.jwtservice;
-import com.transcendence.AuthenticatedUser;
+import common.services.authcontext.AuthenticatedUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
