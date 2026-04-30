@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationPopUpComponent } from './shared/pop-up/confirmation-pop-up/confirmation-pop-up.component';
 import { NavbarComponent } from './core/layout/navbar/navbar.component';
-import { ButtonComponent } from './shared/components/button/button.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
 
@@ -17,6 +16,7 @@ import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loa
 			NavbarComponent,
 			MatSidenavModule,
 			LoadingSpinnerComponent,
+			ConfirmationPopUpComponent
 			],
   templateUrl: './app.html',
   styleUrl: './app.scss'
