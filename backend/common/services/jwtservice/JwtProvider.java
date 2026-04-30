@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -63,24 +64,31 @@ public class JwtProvider {
         return UUID.randomUUID().toString();
     }
 
-    // Validates the token, if it is a valid request from a valid user.
     public boolean validateToken(String token)
     {
+        return getValidatedClaims(token).isPresent();
+    }
+
+    /**
+     * Parses and validates the token in a single pass.
+     * Prefer this over validateToken + individual getters to avoid re-parsing.
+     */
+    public Optional<Claims> getValidatedClaims(String token)
+    {
         try {
-            Jwts.parser()
+            Claims claims = Jwts.parser()
                 .verifyWith(key)
                 .build()
-                .parseSignedClaims(token);
-
-            return true;
+                .parseSignedClaims(token)
+                .getPayload();
+            return Optional.of(claims);
         }
         catch (JwtException | IllegalArgumentException e)
         {
-            return false;
+            return Optional.empty();
         }
     }
 
-    // Getters
     public UUID getUserIdFromToken(String token)
     {
         return UUID.fromString(parseClaims(token).getSubject());
@@ -99,10 +107,9 @@ public class JwtProvider {
     public long getRemainingTtlMinutes(String token)
     {
         Date exp = parseClaims(token).getExpiration();
-        return Math.max(0, exp.getTime() - System.currentTimeMillis());
+        return Math.max(0, (exp.getTime() - System.currentTimeMillis()) / 60_000);
     }
 
-    // Get claims from jwt token
     private Claims parseClaims(String token)
     {
         return Jwts.parser()
