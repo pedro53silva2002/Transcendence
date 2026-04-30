@@ -1,5 +1,5 @@
 package services.jwtservice;
-
+import com.transcendence.AuthenticatedUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,7 +51,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userId.toString(), null, authorities);
+            AuthenticatedUser principal = new AuthenticatedUser(userId, role);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+                    //new UsernamePasswordAuthenticationToken(userId.toString(), null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(auth);
 

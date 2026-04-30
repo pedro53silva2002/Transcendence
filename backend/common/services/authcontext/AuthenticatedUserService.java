@@ -1,9 +1,10 @@
-//package com.transcendence;
+package com.transcendence;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 
 import java.util.UUID;
 
@@ -21,20 +22,6 @@ public class AuthenticatedUserService {
             throw new UnauthorizedException("No authenticated user in security context");
         }
         return authentication;
-    }
-
-    /**
-     * Returns the username (subject) of the currently authenticated user.
-     *
-     * @throws UnauthorizedException if no authenticated user is found
-     */
-    public String getUsername() {
-        Authentication authentication = getAuthentication();
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof UserDetails userDetails) {
-            return userDetails.getUsername();
-        }
-        return principal.toString(); // fallback for plain JWT subject string
     }
 
     /**
@@ -73,22 +60,14 @@ public class AuthenticatedUserService {
     }
 
     /**
-     * Returns the authenticated user's email.
-     *
-     * @throws UnauthorizedException if not authenticated
-     */
-    public String getCurrentEmail() {
-        return getCurrentUser().getEmail();
-    }
-
-    /**
      * Returns true if there is a non-anonymous authenticated principal in the context.
      */
     public boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null
                 && authentication.isAuthenticated()
-                && !(authentication.getPrincipal() instanceof String s && s.equals("anonymousUser"));
+                && !(authentication instanceof AnonymousAuthenticationToken);
+                //!(authentication.getPrincipal() instanceof String s && s.equals("anonymousUser"));
     }
 
     /**

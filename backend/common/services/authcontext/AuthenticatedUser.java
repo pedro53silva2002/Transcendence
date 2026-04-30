@@ -1,4 +1,4 @@
-//package com.transcendence;
+package com.transcendence;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,19 +10,16 @@ import java.util.UUID;
 public class AuthenticatedUser implements UserDetails {
 
     private final UUID id;
-    private final String email;
     private final String role;
 
-    public AuthenticatedUser(UUID id, String email, String role) {
+    public AuthenticatedUser(UUID id, String role) {
         this.id = id;
-        this.email = email;
         this.role = role;
     }
 
     public UUID getId()      { return id; }
-    public String getEmail() { return email; }
 
-    @Override public String getUsername()              { return email; }
+    @Override public String getUsername()              { return id.toString(); }
     @Override public String getPassword()              { return null; }
     @Override public boolean isAccountNonExpired()     { return true; }
     @Override public boolean isAccountNonLocked()      { return true; }
