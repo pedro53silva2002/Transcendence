@@ -20,8 +20,8 @@
 }
 
 .logo {
-    height: 40px;
-    width: auto;
+    height: 50px;
+    min-width: 95px;
 }
 
 .btn {
@@ -169,7 +169,7 @@
 }
 
 /* 2. Regras para ecrãs pequenos (Mobile) */
-@media (max-width: 990px) {
+@media (max-width: 1053px) {
     /* Esconde os botões normais da nav-bar */
     .nav-bar .btn {
         display: none !important;

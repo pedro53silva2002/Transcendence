@@ -6,7 +6,7 @@ import { ConfirmationPopUpComponent } from './shared/pop-up/confirmation-pop-up/
 import { NavbarComponent } from './core/layout/navbar/navbar.component';
 import { ButtonComponent } from './shared/components/button/button.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { SidebarComponent } from './core/layout/sidebar/sidebar.component';
+import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ import { SidebarComponent } from './core/layout/sidebar/sidebar.component';
 			MatDialogModule,
 			NavbarComponent,
 			MatSidenavModule,
-			SidebarComponent,
+			LoadingSpinnerComponent,
 			],
   templateUrl: './app.html',
   styleUrl: './app.scss'
