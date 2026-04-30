@@ -1,10 +1,19 @@
 <nav>
   <div class="nav-bar">
 	<div class="hamburger-btn">
-		<button mat-icon-button class="hamburger-menu" (click)="toggleSidenav()">
+		<button mat-icon-button class="hamburger-menu" [matMenuTriggerFor]="mobileMenu">
 			<mat-icon>menu</mat-icon>
 		  </button>
+		  <!-- O MENU QUE APARECE ABAIXO (Lado Direito) -->
+		  <mat-menu #mobileMenu="matMenu" yPosition="below" xPosition="after" class="hamburguer-menu-panel">
+			  <button mat-menu-item routerLink="/profile">Profile</button>
+			  <button mat-menu-item routerLink="/plan-a-trip">Plan A Trip</button>
+			  <button mat-menu-item routerLink="/my-trip">My Trips</button>
+			  <button mat-menu-item routerLink="/friends">Friends</button>
+			  <button mat-menu-item routerLink="/my-expenses">My Expenses</button>
+		  </mat-menu>
 	</div>
+
 		<button routerLinkActive="active-link" routerLink="/profile" class="btn" matButton="outlined">Profile</button>
 		<button routerLinkActive="active-link" routerLink="/plan-a-trip" class="btn" matButton="outlined">Plan A Trip</button>
 		<button routerLinkActive="active-link" routerLink="/my-trip" class="btn" matButton="outlined">My Trips</button>

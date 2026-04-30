@@ -1,51 +1,8 @@
 @use '@angular/material' as mat;
 
 /* 1. Esconder o Hamburger por padrão (Desktop) */
-.hamburger-btn {
+.hamburger-btn, .hamburguer-menu-panel{
     display: none !important;
-}
-
-/* 2. Regras para ecrãs pequenos (Mobile) */
-@media (max-width: 945px) {
-    /* Esconde os botões normais da nav-bar */
-    .nav-bar .btn {
-        display: none !important;
-    }
-
-    /* Mostra o botão do hamburger */
-    .hamburger-btn {
-        display: inline-flex !important;
-        transition: all 300ms ease-in-out;
-        border-radius: 50% !important; 
-        border: 1px solid var(--mat-sys-primary) !important;
-        
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        
-        padding: 0 !important;
-        width: 40px !important;
-        height: 40px !important;
-        min-width: 42px !important;
-
-        .mat-icon {
-            color: var(--mat-sys-primary) !important;
-        }
-    }
-
-    .hamburger-btn:hover{
-        background-color: var(--mat-sys-primary) !important;
-        border-color: white;
-
-        .mat-icon {
-            color: white !important;
-        }
-    }
-
-    /* Opcional: Encolher a barra de pesquisa para caber tudo */
-    .search {
-        width: 140px;
-    }
 }
 
 /* Configuração base da Navbar */
@@ -100,13 +57,22 @@
 
 ::ng-deep {
     .mat-mdc-menu-panel.centered-menu {
-        margin-left: -30px; /* Ajuste este valor conforme a largura do seu menu */
+        margin-left: -30px;
         margin-top: 8px !important;
-        /* Garante o arredondamento que você já estava usando */
         border-radius: 20px !important;
         border: 1px solid var(--mat-sys-primary);
         background-color: var(--mat-sys-primary) !important;
-        min-width: 100px !important; /* Define uma largura fixa para facilitar a conta */
+        min-width: 100px !important;
+    }
+
+    .mat-mdc-menu-panel.hamburguer-menu-panel {
+        margin-top: 10px !important;
+        border-radius: 20px !important;
+        border: 1px solid var(--mat-sys-primary);
+        background-color: var(--mat-sys-primary) !important;
+        
+        /* Aumenta a largura conforme pediste anteriormente */
+        min-width: 310px !important;
     }
 
     .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
@@ -117,7 +83,7 @@
     .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
         color: var(--mat-sys-primary);
         text-align: center;
-    }   
+    }  
 }
 
 /* Campo de Pesquisa (Search) */
@@ -192,6 +158,74 @@
     .mdc-notched-outline__trailing {
         border-radius: 0 20px 20px 0 !important;
         border-color: var(--mat-sys-primary) !important;
+    }
+}
+
+/* 2. Regras para ecrãs pequenos (Mobile) */
+@media (max-width: 945px) {
+    /* Esconde os botões normais da nav-bar */
+    .nav-bar .btn {
+        display: none !important;
+    }
+
+    /* Mostra o botão do hamburger */
+    .hamburger-btn {
+        display: inline-flex !important;
+        transition: all 300ms ease-in-out;
+        border-radius: 50% !important; 
+        border: 1px solid var(--mat-sys-primary) !important;
+        
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        
+        padding: 0 !important;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 42px !important;
+
+        .mat-icon {
+            color: var(--mat-sys-primary) !important;
+        }
+    }
+
+    .hamburger-btn:hover{
+        background-color: var(--mat-sys-primary) !important;
+        border-color: white;
+
+        .mat-icon {
+            color: white !important;
+        }
+    }
+
+    ::ng-deep {
+        
+        .mat-mdc-menu-content .centered-menu {
+            background-color: var(--mat-sys-primary) !important;
+            border-radius: 20px !important;
+            margin-top: 10px !important;
+            min-width: 200px;
+        }
+
+        .mat-mdc-menu-panel .centered-menu {
+            margin-left: -30px; /* Ajuste este valor conforme a largura do seu menu */
+            margin-top: 8px !important;
+            /* Garante o arredondamento que você já estava usando */
+            border-radius: 20px !important;
+            border: 1px solid var(--mat-sys-primary);
+            background-color: var(--mat-sys-primary) !important;
+            min-width: 100px !important; /* Define uma largura fixa para facilitar a conta */
+        }
+
+        .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+            color: white !important;
+            text-align: center;
+        }
+
+        .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
+            color: var(--mat-sys-primary);
+            text-align: center;
+        }  
     }
 }
 
