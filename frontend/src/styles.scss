@@ -16,3 +16,16 @@
   ));
 }
 
+.std-btn {
+	transition: all 500ms ease-in-out;
+    border-radius: 20px !important;
+    border: 1px solid var(--mat-sys-primary) !important;
+
+	&:hover
+	{
+		background-color: var(--mat-sys-primary);
+		color: white !important;
+	}
+}
+
+
