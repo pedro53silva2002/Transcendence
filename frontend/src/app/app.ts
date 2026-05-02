@@ -6,6 +6,7 @@ import { ConfirmationPopUpComponent } from './shared/pop-up/confirmation-pop-up/
 import { NavbarComponent } from './core/layout/navbar/navbar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
+import { AppHomeComponent } from './core/layout/app-home/app-home.component';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +14,10 @@ import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loa
   imports: [RouterOutlet, 
 			MatButtonModule,
 			MatDialogModule,
-			NavbarComponent,
 			MatSidenavModule,
 			LoadingSpinnerComponent,
-			ConfirmationPopUpComponent
+			ConfirmationPopUpComponent,
+			AppHomeComponent
 			],
   templateUrl: './app.html',
   styleUrl: './app.scss'
