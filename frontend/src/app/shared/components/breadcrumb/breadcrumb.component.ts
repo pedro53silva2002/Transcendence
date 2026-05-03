@@ -15,8 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './breadcrumb.component.scss',
 })
 export class BreadcrumbComponent {
-	private location = inject(Location);
-	private router = inject(Router);
 	@Input() previousPage: string = '';
 	@Input() backRoute: string = '/';
 }
