@@ -100,7 +100,7 @@ public class SearchQueryBuilder {
         }
 
         List<SortCriteria> sorts = effectivePayload.getSort();
-        OrderByResult orderByClause;
+        OrderByResult orderBy;
         if (sorts != null && !sorts.isEmpty()) {
             orderBy = buildOrderByClause(sorts);
         }
@@ -111,7 +111,7 @@ public class SearchQueryBuilder {
 
         if (page.getEncodedCursor() != null && !page.getEncodedCursor().isBlank()) {
             CursorData cursor = decodeCursor(page.getEncodedCursor());
-            String keysetClause = buildKeysetClause(cursor, sorts, params);
+            String keysetClause = buildKeysetClause(cursor, sorts, !orderBy.includesId(), params);
             if (!"1=1".equals(keysetClause)) {
                 whereClauses.add(keysetClause);
             }
@@ -124,7 +124,7 @@ public class SearchQueryBuilder {
         int sqlLimit = size + 1;
 
         String sql = baseQuery + whereClause + orderBy.clause() + " LIMIT " + sqlLimit;
-        return new SearchResult(sql, params, orderBy.sortFields());
+        return new SearchResult(sql, params, sqlLimit, orderBy.sortFields());
     }
 
     /**
@@ -292,7 +292,7 @@ public class SearchQueryBuilder {
      * @return SQL ORDER BY clause (e.g., " ORDER BY u.username ASC, id ASC")
      * @throws IllegalArgumentException if a sort field is unknown or not sortable
      */
-    private String buildOrderByClause(List<SortCriteria> sorts) {
+    private OrderByResult buildOrderByClause(List<SortCriteria> sorts) {
         List<String> orderClauses = new ArrayList<>();
         List<String> sortFields = new ArrayList<>();
         boolean includesId = false;
@@ -314,7 +314,7 @@ public class SearchQueryBuilder {
             SortDirection direction = sort.getDirection() == null ? SortDirection.ASC : sort.getDirection();
             orderClauses.add(mapping.column() + " " + (direction == SortDirection.ASC ? "ASC" : "DESC"));
             sortFields.add(fieldName);
-            if ("id".equalsIgnoreCase(mapping.column())) {
+            if ("id".equalsIgnoreCase(fieldName) || "id".equalsIgnoreCase(mapping.column())) {
                 includesId = true;
             }
         }
@@ -341,7 +341,7 @@ public class SearchQueryBuilder {
      * @return SQL keyset clause, or "1=1" if cursor is empty/invalid
      */
     private String buildKeysetClause(CursorData cursor, List<SortCriteria> sorts,
-                                     Map<String, Object> params) {
+                                     boolean tiebreakerNeeded, Map<String, Object> params) {
         if (cursor == null || cursor.getData() == null || cursor.getData().isEmpty()) {
             return "1=1";
         }
@@ -364,6 +364,14 @@ public class SearchQueryBuilder {
             columns.add(mapping.column());
             paramRefs.add(":" + paramName);
             params.put(paramName, convertValue(cursor.getData().get(cursorKey), mapping.type()));
+        }
+
+        if (tiebreakerNeeded && cursor.getData().containsKey("id")) {
+            FieldMapping idMapping = allowedFields.get("id");
+            Class<?> idType = (idMapping != null) ? idMapping.type() : Long.class;
+            columns.add("id");
+            paramRefs.add(":cursor_id");
+            params.put("cursor_id", convertValue(cursor.getData().get("id"), idType));
         }
 
         return "(" + String.join(", ", columns) + ") > (" + String.join(", ", paramRefs) + ")";

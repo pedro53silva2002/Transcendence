@@ -23,7 +23,7 @@ class SearchQueryBuilderTest {
         );
         
         builder
-            .field("id", "u.id", Long.class, false, true)
+            .field("id", "u.id", Long.class, true, true)
             .field("username", "u.username", String.class, true, true)
             .field("email", "u.email", String.class, true, true)
             .field("createdAt", "u.created_at", Instant.class, true, true)
@@ -311,7 +311,7 @@ class SearchQueryBuilderTest {
     @DisplayName("Should throw exception for null filter")
     void testNullFilter() {
         SearchPayload payload = new SearchPayload();
-        payload.setFilters(List.of(null));
+        payload.setFilters(Collections.singletonList(null));
         
         assertThatThrownBy(() -> builder.build(payload))
             .isInstanceOf(IllegalArgumentException.class)
