@@ -8,42 +8,43 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
 import { AppHomeComponent } from './core/layout/app-home/app-home.component';
 import { InputLabelComponent } from './shared/components/input-label/input-label.component';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, 
-			MatButtonModule,
-			MatDialogModule,
-			MatSidenavModule,
-			LoadingSpinnerComponent,
-			ConfirmationPopUpComponent,
-			AppHomeComponent,
-			InputLabelComponent,
-			],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+	selector: 'app-root',
+	standalone: true,
+	imports: [RouterOutlet,
+		MatButtonModule,
+		MatDialogModule,
+		MatSidenavModule,
+		LoadingSpinnerComponent,
+		ConfirmationPopUpComponent,
+		AppHomeComponent,
+		InputLabelComponent,
+	],
+	templateUrl: './app.html',
+	styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('frontend');
+	protected readonly title = signal('frontend');
+	controlo = new FormControl('', [Validators.required, Validators.email]);
+	constructor(private dialog: MatDialog) { }
 
-  constructor(private dialog: MatDialog) {}
-  
-  openPopUp(): void {
-	const dialogRef = this.dialog.open(ConfirmationPopUpComponent, {
-		data: {
-			title: "ola",
-			message: "coucou"
-		}
-	});
+	openPopUp(): void {
+		const dialogRef = this.dialog.open(ConfirmationPopUpComponent, {
+			data: {
+				title: "ola",
+				message: "coucou"
+			}
+		});
 
-	dialogRef.afterClosed().subscribe(response => {
-		if (response === true)
-			console.log('ola');
-		else
-			console.log('adeus');
-	});
-  }
+		dialogRef.afterClosed().subscribe(response => {
+			if (response === true)
+				console.log('ola');
+			else
+				console.log('adeus');
+		});
+	}
 }
 
 
