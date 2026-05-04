@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public final class CursorUtil {
     private static final ObjectMapper M = new ObjectMapper();
-    private CursorUtil();
+    private CursorUtil() {};
 
     public static String encode(Map<String,Object> payload) {
         try {

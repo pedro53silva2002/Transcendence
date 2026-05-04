@@ -1,14 +1,22 @@
-package backend.common.query
+package backend.common.query;
 
+import backend.common.search.SearchQueryBuilder;
+import backend.common.search.SearchResult;
+import backend.common.search.CursorPage;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class QueryExecutor {
@@ -24,9 +32,9 @@ public class QueryExecutor {
         return jdbc.query(sql, params, new ReflectiveRowMapper<>(type, objectMapper));
     }
 
-    public <T> Optional<T> queryAsSingle(String sql, MapSqlParameterSource params Class<T> type) {
+    public <T> Optional<T> queryAsSingle(String sql, MapSqlParameterSource params, Class<T> type) {
         try {
-            List <T> list = queryAs(sql, params, type);
+            List<T> list = queryAs(sql, params, type);
             if (list.isEmpty()) {
                 return Optional.empty();
             }
@@ -59,30 +67,111 @@ public class QueryExecutor {
         return searchAs(searchResult, new ReflectiveRowMapper<>(type, objectMapper));
     }
 
-    public <T> CursorPage<T> searchAs(searchResult searchresult, RowMapper<T> mapper) {
-        String sql = searchresult.getSql();
-        MapSqlParameterSource params = searchresult.getParams();
-        int pageSize = searchresult.getPageSize();
-        // ask for one extra row to determine hasNext
-        String pagedSql = sql + " LIMIT : _limit_plus_one";
-        MapSqlParameterSource p = new MapSqlParameterSource();
-        p.addValues(params.getValues());
-        p.addValue("_limit_plus_one", pageSize + 1);
+    public <T> CursorPage<T> searchAs(SearchResult searchResult, RowMapper<T> mapper) {
+        String sql = searchResult.sql();
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        if (searchResult.parameters() != null) {
+            params.addValues(searchResult.parameters());
+        }
 
-        List<T> rows = jdbc.query(pagedSql, p, mapper);
-        boolean hasNext = rows.size() > pageSize;
-        List<T> content = hasMore ? rows.subList(0, pageSize) : rows;
+        List<T> rows = jdbc.query(sql, params, mapper);
+        int pageSize = Math.max(0, searchResult.limit() - 1);
+        boolean hasNext = pageSize > 0 && rows.size() > pageSize;
+        List<T> content = hasNext ? rows.subList(0, pageSize) : rows;
 
         String nextCursor = null;
         if (hasNext && !content.isEmpty()) {
-            // derive cursor from last kept row (SearchResult should expose how to extract sort fields)
             Object lastKept = content.get(content.size() - 1);
-            // Here we assume SearchResult can produce a Map<String, Object> for the sort values for a row.
-            if (lastKept != null) {
-                Map<String, Object> cursorPayload = searchresult.buildCursorFromRow(lastKept);
-                nextCursor = CursorUtil.encode(cursorPayload);
+            Map<String, Object> cursorValues = buildCursorValues(lastKept, searchResult.sortFields());
+            if (!cursorValues.isEmpty()) {
+                nextCursor = SearchQueryBuilder.encodeCursor(cursorValues);
             }
         }
-        return new CursorPage<>(content, hasNext, nextCursor);
+
+        return new CursorPage<>(content, nextCursor, hasNext, content.size());
+    }
+
+    private Map<String, Object> buildCursorValues(Object row, List<String> sortFields) {
+        Map<String, Object> values = new HashMap<>();
+        if (row == null || sortFields == null || sortFields.isEmpty()) {
+            return values;
+        }
+
+        for (String fieldName : sortFields) {
+            if (fieldName == null || fieldName.isBlank()) {
+                continue;
+            }
+            Object fieldValue = readPropertyValue(row, fieldName);
+            if (fieldValue != null || hasProperty(row, fieldName)) {
+                values.put(fieldName, fieldValue);
+            }
+        }
+
+        return values;
+    }
+
+    private boolean hasProperty(Object row, String fieldName) {
+        return findField(row.getClass(), fieldName) != null || findGetter(row.getClass(), fieldName) != null;
+    }
+
+    private Object readPropertyValue(Object row, String fieldName) {
+        Method getter = findGetter(row.getClass(), fieldName);
+        if (getter != null) {
+            try {
+                return getter.invoke(row);
+            }
+            catch (Exception e) {
+                return null;
+            }
+        }
+
+        Field field = findField(row.getClass(), fieldName);
+        if (field != null) {
+            try {
+                field.setAccessible(true);
+                return field.get(row);
+            }
+            catch (Exception e) {
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    private Field findField(Class<?> type, String fieldName) {
+        Class<?> current = type;
+        while (current != null && current != Object.class) {
+            try {
+                return current.getDeclaredField(fieldName);
+            }
+            catch (NoSuchFieldException ignored) {
+                current = current.getSuperclass();
+            }
+        }
+        return null;
+    }
+
+    private Method findGetter(Class<?> type, String fieldName) {
+        String capitalized = capitalize(fieldName);
+        List<String> candidates = new ArrayList<>();
+        candidates.add("get" + capitalized);
+        candidates.add("is" + capitalized);
+
+        for (String name : candidates) {
+            try {
+                return type.getMethod(name);
+            }
+            catch (NoSuchMethodException ignored) {
+            }
+        }
+        return null;
+    }
+
+    private String capitalize(String value) {
+        if (value == null || value.isEmpty()) {
+            return value;
+        }
+        return Character.toUpperCase(value.charAt(0)) + value.substring(1);
     }
 }

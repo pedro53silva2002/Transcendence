@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -12,11 +13,11 @@ import java.sql.Time;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
 import java.math.BigDecimal;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -193,10 +194,132 @@ public class ReflectiveRowMapper<T> implements RowMapper<T> {
             return instance;
         }
         catch (DataMappingException e) {
-            throw new SQLException("Data mapping failed: " + e.getMessage(), e);
+            throw e;
         }
         catch (Exception e) {
             throw new SQLException("Failed to map row to " + type.getName(), e);
         }
+    }
+
+    private void setFieldValue(Field field, T instance, Object value) throws IllegalAccessException {
+        Class<?> fieldType = field.getType();
+        if (value == null && fieldType.isPrimitive()) {
+            value = defaultPrimitiveValue(fieldType);
+        }
+
+        Method setter = findSetter(instance.getClass(), field.getName(), fieldType);
+        if (setter != null) {
+            try {
+                setter.invoke(instance, value);
+                return;
+            }
+            catch (Exception e) {
+                throw new DataMappingException("Failed to set field " + field.getName(), e);
+            }
+        }
+
+        field.setAccessible(true);
+        field.set(instance, value);
+    }
+
+    private Method findSetter(Class<?> cls, String fieldName, Class<?> fieldType) {
+        String setterName = "set" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+        try {
+            return cls.getMethod(setterName, fieldType);
+        }
+        catch (NoSuchMethodException e) {
+            Class<?> altType = alternateType(fieldType);
+            if (altType != null) {
+                try {
+                    return cls.getMethod(setterName, altType);
+                }
+                catch (NoSuchMethodException ignored) {
+                }
+            }
+            return null;
+        }
+    }
+
+    private Class<?> alternateType(Class<?> fieldType) {
+        if (fieldType == null) {
+            return null;
+        }
+        if (fieldType == int.class) {
+            return Integer.class;
+        }
+        if (fieldType == Integer.class) {
+            return int.class;
+        }
+        if (fieldType == long.class) {
+            return Long.class;
+        }
+        if (fieldType == Long.class) {
+            return long.class;
+        }
+        if (fieldType == boolean.class) {
+            return Boolean.class;
+        }
+        if (fieldType == Boolean.class) {
+            return boolean.class;
+        }
+        if (fieldType == double.class) {
+            return Double.class;
+        }
+        if (fieldType == Double.class) {
+            return double.class;
+        }
+        if (fieldType == float.class) {
+            return Float.class;
+        }
+        if (fieldType == Float.class) {
+            return float.class;
+        }
+        if (fieldType == short.class) {
+            return Short.class;
+        }
+        if (fieldType == Short.class) {
+            return short.class;
+        }
+        if (fieldType == byte.class) {
+            return Byte.class;
+        }
+        if (fieldType == Byte.class) {
+            return byte.class;
+        }
+        if (fieldType == char.class) {
+            return Character.class;
+        }
+        if (fieldType == Character.class) {
+            return char.class;
+        }
+        return null;
+    }
+
+    private Object defaultPrimitiveValue(Class<?> fieldType) {
+        if (fieldType == boolean.class) {
+            return false;
+        }
+        if (fieldType == byte.class) {
+            return (byte) 0;
+        }
+        if (fieldType == short.class) {
+            return (short) 0;
+        }
+        if (fieldType == int.class) {
+            return 0;
+        }
+        if (fieldType == long.class) {
+            return 0L;
+        }
+        if (fieldType == float.class) {
+            return 0f;
+        }
+        if (fieldType == double.class) {
+            return 0d;
+        }
+        if (fieldType == char.class) {
+            return '\u0000';
+        }
+        return null;
     }
 }

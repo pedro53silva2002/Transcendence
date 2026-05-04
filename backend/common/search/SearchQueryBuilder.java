@@ -5,12 +5,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Builder class for constructing SQL search queries based on provided field mappings and search criteria.
@@ -105,13 +100,13 @@ public class SearchQueryBuilder {
         }
 
         List<SortCriteria> sorts = effectivePayload.getSort();
-        String orderByClause;
+        OrderByResult orderByClause;
         if (sorts != null && !sorts.isEmpty()) {
-            orderByClause = buildOrderByClause(sorts);
+            orderBy = buildOrderByClause(sorts);
         }
         else {
-            orderByClause = " ORDER BY id ASC";
             sorts = List.of(new SortCriteria("id", SortDirection.ASC));
+            orderBy = new OrderByResult(" ORDER BY id ASC", true, List.of("id"));
         }
 
         if (page.getEncodedCursor() != null && !page.getEncodedCursor().isBlank()) {
@@ -128,8 +123,8 @@ public class SearchQueryBuilder {
         int size = Math.min(requestedSize, 100);
         int sqlLimit = size + 1;
 
-        String sql = baseQuery + whereClause + orderByClause + " LIMIT " + sqlLimit;
-        return new SearchResult(sql, params, sqlLimit);
+        String sql = baseQuery + whereClause + orderBy.clause() + " LIMIT " + sqlLimit;
+        return new SearchResult(sql, params, orderBy.sortFields());
     }
 
     /**
@@ -299,6 +294,7 @@ public class SearchQueryBuilder {
      */
     private String buildOrderByClause(List<SortCriteria> sorts) {
         List<String> orderClauses = new ArrayList<>();
+        List<String> sortFields = new ArrayList<>();
         boolean includesId = false;
 
         for (SortCriteria sort : sorts) {
@@ -317,7 +313,7 @@ public class SearchQueryBuilder {
 
             SortDirection direction = sort.getDirection() == null ? SortDirection.ASC : sort.getDirection();
             orderClauses.add(mapping.column() + " " + (direction == SortDirection.ASC ? "ASC" : "DESC"));
-            
+            sortFields.add(fieldName);
             if ("id".equalsIgnoreCase(mapping.column())) {
                 includesId = true;
             }
@@ -325,10 +321,13 @@ public class SearchQueryBuilder {
 
         if (!includesId) {
             orderClauses.add("id ASC");
+            sortFields.add("id");
         }
 
-        return " ORDER BY " + String.join(", ", orderClauses);
+        return new OrderByResult(" ORDER BY " + String.join(", ", orderClauses), includesId, sortFields);
     }
+
+    private record OrderByResult(String clause, boolean includesId, List<String> sortFields) {}
 
     /**
      * Builds the keyset pagination WHERE clause for cursor-based pagination.
