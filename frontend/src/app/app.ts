@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -7,6 +7,7 @@ import { NavbarComponent } from './core/layout/navbar/navbar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
 import { AppHomeComponent } from './core/layout/app-home/app-home.component';
+import { InputLabelComponent } from './shared/components/input-label/input-label.component';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ import { AppHomeComponent } from './core/layout/app-home/app-home.component';
 			MatSidenavModule,
 			LoadingSpinnerComponent,
 			ConfirmationPopUpComponent,
-			AppHomeComponent
+			AppHomeComponent,
+			InputLabelComponent,
 			],
   templateUrl: './app.html',
   styleUrl: './app.scss'
