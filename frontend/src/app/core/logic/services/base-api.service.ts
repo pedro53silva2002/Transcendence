@@ -46,7 +46,8 @@ export abstract class BaseApiService {
   // inject() can be used outside a constructor in Angular 14+.
   // No need to declare a constructor just to inject dependencies.
   protected readonly http = inject(HttpClient);
-  protected readonly apiUrl = environment.apiUrl;
+  protected readonly apiUrl = (environment as any).apiUrl;
+  // protected readonly apiUrl = environment.apiUrl; this line was giving an error
 
   /**
    * GET request. Used for fetching data.

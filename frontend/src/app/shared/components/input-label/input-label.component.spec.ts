@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageHeaderComponent } from './page-header.component';
+import { InputLabelComponent } from './input-label.component';
 
-describe('PageHeaderComponent', () => {
-  let component: PageHeaderComponent;
-  let fixture: ComponentFixture<PageHeaderComponent>;
+describe('InputLabelComponent', () => {
+  let component: InputLabelComponent;
+  let fixture: ComponentFixture<InputLabelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PageHeaderComponent],
+      imports: [InputLabelComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PageHeaderComponent);
+    fixture = TestBed.createComponent(InputLabelComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
