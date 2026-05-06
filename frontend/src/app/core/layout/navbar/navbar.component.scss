@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 
-.hamburger-btn, .hamburguer-menu-panel{
+.hamburger-btn,
+.hamburguer-menu-panel {
     display: none !important;
 }
 
@@ -13,7 +14,7 @@
 }
 
 .logo-container {
-    margin-right: auto; 
+    margin-right: auto;
     display: flex;
     align-items: center;
 }
@@ -27,38 +28,46 @@
     transition: all 300ms ease-in-out;
     border-radius: 20px !important;
     --mat-outlined-button-outline-color: var(--mat-sys-primary);
-    border: 1px solid var(--mat-sys-primary) !important;
+    border: 2px solid var(--mat-sys-primary) !important;
+    background-color: var(--mat-sys-secondary-container) !important;
+    color: var(--mat-sys-primary) !important;
+}
+
+.mat-icon {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: var(--mat-sys-primary) !important;
+    font-weight: 700;
 }
 
 .btn-logout {
     transition: all 300ms ease-in-out;
-    border-radius: 50% !important; 
-    border: 1px solid var(--mat-sys-primary) !important;
-    
+    border-radius: 50% !important;
+    border: 2px solid var(--mat-sys-primary) !important;
+
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    
+
     padding: 0 !important;
     width: 40px !important;
     height: 40px !important;
     min-width: 42px !important;
-}
-
-.btn:hover {
     background-color: var(--mat-sys-secondary-container) !important;
 }
 
-.btn-logout:hover{
+.btn:hover {
     background-color: var(--mat-sys-primary) !important;
-    color: white;
-    border-color: white;
+    color: var(--mat-sys-secondary-container) !important;
 }
 
-/* Garante que o ícone dentro não tenha margens que empurrem o botão */
-.btn-logout mat-icon {
-    margin: 0 !important;
-    padding: 0 !important;
+.btn-logout:hover {
+    background-color: var(--mat-sys-primary) !important;
+    color: var(--mat-sys-secondary-container) !important;
+
+    .mat-icon {
+        color: var(--mat-sys-secondary) !important;
+    }
 }
 
 ::ng-deep {
@@ -76,31 +85,33 @@
         border-radius: 20px !important;
         border: 1px solid var(--mat-sys-primary);
         background-color: var(--mat-sys-primary) !important;
-        
+
         /* Aumenta a largura conforme pediste anteriormente */
         min-width: 310px !important;
     }
 
     .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
-        color: white !important;
+        color: var(--mat-sys-secondary-container);
         text-align: center;
     }
 
+    .mat-mdc-menu-content .mat-mdc-menu-item:hover {
+        background-color: var(--mat-sys-primary) !important;
+    }
+
     .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
-        color: var(--mat-sys-primary);
+        color: var(--mat-sys-tertiary);
         text-align: center;
-    }  
+    }
 }
 
-/* Campo de Pesquisa (Search) */
 .search {
     transition: all 300ms ease-in-out;
-    width: 192px; /* Equivalente a w-48 */
+    width: 192px;
     margin-bottom: -1.25em;
     font-size: 15px;
     letter-spacing: 0.1px;
 
-    /* Variáveis M3 para o Form Field */
     --mdc-outlined-text-field-container-color: var(--mat-sys-secondary-container);
     --mdc-outlined-text-field-outline-color: var(--mat-sys-secondary);
     --mdc-outlined-text-field-focus-outline-color: var(--mat-sys-primary);
@@ -108,12 +119,13 @@
     --mdc-outlined-text-field-container-shape: 20px;
 
     input {
-        color: var(--mat-sys-on-primary-container) !important;
+        color: var(--mat-sys-primary) !important;
+        font-weight: 500;
         opacity: 1 !important;
     }
 
     input::placeholder {
-        color: var(--mat-sys-on-secondary-container) !important;
+        color: var(--mat-sys-primary) !important;
         opacity: 0.6 !important;
     }
 
@@ -130,17 +142,18 @@
     }
 }
 
-/* Alinhamento interno do Form Field (ng-deep para alcançar o shadow DOM do Material) */
 .search ::ng-deep {
+
     .mat-mdc-form-field-icon-prefix {
         padding: 0 4px 0 12px !important;
     }
 
     .mat-icon {
-        color: var(--mat-sys-primary) !important;
+        margin-left: 8px !important;
+        margin-right: 5px !important;
     }
-
-    .mdc-text-field--outlined {
+    
+    .mdc-text-field--outlined{
         border-radius: 20px !important;
         background-color: var(--mat-sys-secondary-container) !important;
     }
@@ -154,7 +167,6 @@
         border-top: 0 !important;
     }
 
-    /* Bordas customizadas para o efeito arredondado do input */
     .mdc-notched-outline__leading {
         border-radius: 20px 0 0 20px !important;
         width: 20px !important;
@@ -165,47 +177,53 @@
         border-radius: 0 20px 20px 0 !important;
         border-color: var(--mat-sys-primary) !important;
     }
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+        border-width: 2px !important;
+    }
 }
 
-/* 2. Regras para ecrãs pequenos (Mobile) */
 @media (max-width: 1053px) {
-    /* Esconde os botões normais da nav-bar */
+
     .nav-bar .btn {
         display: none !important;
     }
 
-    /* Mostra o botão do hamburger */
     .hamburger-btn {
         display: inline-flex !important;
         transition: all 300ms ease-in-out;
-        border-radius: 50% !important; 
-        border: 1px solid var(--mat-sys-primary) !important;
-        
+        border-radius: 50% !important;
+
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        
+
         padding: 0 !important;
-        width: 40px !important;
-        height: 40px !important;
-        min-width: 42px !important;
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 37px !important;
+        border: 2px solid var(--mat-sys-primary) !important;
+        background-color: var(--mat-sys-secondary-container) !important;
 
         .mat-icon {
             color: var(--mat-sys-primary) !important;
+            font-weight: 300 !important;
         }
     }
 
-    .hamburger-btn:hover{
+    .hamburger-btn:hover {
         background-color: var(--mat-sys-primary) !important;
         border-color: white;
 
         .mat-icon {
-            color: white !important;
+            color: var(--mat-sys-secondary) !important;
         }
     }
 
     ::ng-deep {
-        
+
         .mat-mdc-menu-content .centered-menu {
             background-color: var(--mat-sys-primary) !important;
             border-radius: 20px !important;
@@ -214,13 +232,12 @@
         }
 
         .mat-mdc-menu-panel .centered-menu {
-            margin-left: -30px; /* Ajuste este valor conforme a largura do seu menu */
+            margin-left: -30px;
             margin-top: 8px !important;
-            /* Garante o arredondamento que você já estava usando */
             border-radius: 20px !important;
             border: 1px solid var(--mat-sys-primary);
             background-color: var(--mat-sys-primary) !important;
-            min-width: 100px !important; /* Define uma largura fixa para facilitar a conta */
+            min-width: 100px !important;
         }
 
         .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
@@ -228,12 +245,13 @@
             text-align: center;
         }
 
+        .mat-mdc-menu-content .mat-mdc-menu-item:hover {
+            background-color: var(--mat-sys-primary) !important;
+        }
+
         .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
-            color: var(--mat-sys-primary);
+            color: var(--mat-sys-tertiary) !important;
             text-align: center;
-        }  
+        }
     }
 }
-
-
-

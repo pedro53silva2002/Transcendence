@@ -1,4 +1,6 @@
+
 @use '@angular/material' as mat;
+@use 'material-theme' as theme;
 
 :root {
   //the overlay of the search results is rendered outside of the component object, so we have to change the appearance here 
