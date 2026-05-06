@@ -1,7 +1,7 @@
 @use '@angular/material' as mat;
 
 @include mat.core();
-@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 $my-theme: mat.define-theme((
   color: (
@@ -10,13 +10,13 @@ $my-theme: mat.define-theme((
     tertiary: mat.$orange-palette,
   ),
   typography: (
-    brand-family: 'DynaPuff',
-    plain-family: 'DynaPuff',
+    brand-family: 'Roboto',
+    plain-family: 'Roboto',
   ),
 ));
 
 html {
-  font-family: "DynaPuff", system-ui;
+  font-family: "Roboto", system-ui;
 
   height: 100%;
   @include mat.all-component-themes($my-theme);
