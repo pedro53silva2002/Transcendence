@@ -5,12 +5,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Builder class for constructing SQL search queries based on provided field mappings and search criteria.
@@ -105,18 +100,18 @@ public class SearchQueryBuilder {
         }
 
         List<SortCriteria> sorts = effectivePayload.getSort();
-        String orderByClause;
+        OrderByResult orderBy;
         if (sorts != null && !sorts.isEmpty()) {
-            orderByClause = buildOrderByClause(sorts);
+            orderBy = buildOrderByClause(sorts);
         }
         else {
-            orderByClause = " ORDER BY id ASC";
             sorts = List.of(new SortCriteria("id", SortDirection.ASC));
+            orderBy = new OrderByResult(" ORDER BY id ASC", true, List.of("id"));
         }
 
         if (page.getEncodedCursor() != null && !page.getEncodedCursor().isBlank()) {
             CursorData cursor = decodeCursor(page.getEncodedCursor());
-            String keysetClause = buildKeysetClause(cursor, sorts, params);
+            String keysetClause = buildKeysetClause(cursor, sorts, !orderBy.includesId(), params);
             if (!"1=1".equals(keysetClause)) {
                 whereClauses.add(keysetClause);
             }
@@ -128,8 +123,8 @@ public class SearchQueryBuilder {
         int size = Math.min(requestedSize, 100);
         int sqlLimit = size + 1;
 
-        String sql = baseQuery + whereClause + orderByClause + " LIMIT " + sqlLimit;
-        return new SearchResult(sql, params, sqlLimit);
+        String sql = baseQuery + whereClause + orderBy.clause() + " LIMIT " + sqlLimit;
+        return new SearchResult(sql, params, sqlLimit, orderBy.sortFields());
     }
 
     /**
@@ -297,8 +292,9 @@ public class SearchQueryBuilder {
      * @return SQL ORDER BY clause (e.g., " ORDER BY u.username ASC, id ASC")
      * @throws IllegalArgumentException if a sort field is unknown or not sortable
      */
-    private String buildOrderByClause(List<SortCriteria> sorts) {
+    private OrderByResult buildOrderByClause(List<SortCriteria> sorts) {
         List<String> orderClauses = new ArrayList<>();
+        List<String> sortFields = new ArrayList<>();
         boolean includesId = false;
 
         for (SortCriteria sort : sorts) {
@@ -317,18 +313,21 @@ public class SearchQueryBuilder {
 
             SortDirection direction = sort.getDirection() == null ? SortDirection.ASC : sort.getDirection();
             orderClauses.add(mapping.column() + " " + (direction == SortDirection.ASC ? "ASC" : "DESC"));
-            
-            if ("id".equalsIgnoreCase(mapping.column())) {
+            sortFields.add(fieldName);
+            if ("id".equalsIgnoreCase(fieldName) || "id".equalsIgnoreCase(mapping.column())) {
                 includesId = true;
             }
         }
 
         if (!includesId) {
             orderClauses.add("id ASC");
+            sortFields.add("id");
         }
 
-        return " ORDER BY " + String.join(", ", orderClauses);
+        return new OrderByResult(" ORDER BY " + String.join(", ", orderClauses), includesId, sortFields);
     }
+
+    private record OrderByResult(String clause, boolean includesId, List<String> sortFields) {}
 
     /**
      * Builds the keyset pagination WHERE clause for cursor-based pagination.
@@ -342,7 +341,7 @@ public class SearchQueryBuilder {
      * @return SQL keyset clause, or "1=1" if cursor is empty/invalid
      */
     private String buildKeysetClause(CursorData cursor, List<SortCriteria> sorts,
-                                     Map<String, Object> params) {
+                                     boolean tiebreakerNeeded, Map<String, Object> params) {
         if (cursor == null || cursor.getData() == null || cursor.getData().isEmpty()) {
             return "1=1";
         }
@@ -365,6 +364,14 @@ public class SearchQueryBuilder {
             columns.add(mapping.column());
             paramRefs.add(":" + paramName);
             params.put(paramName, convertValue(cursor.getData().get(cursorKey), mapping.type()));
+        }
+
+        if (tiebreakerNeeded && cursor.getData().containsKey("id")) {
+            FieldMapping idMapping = allowedFields.get("id");
+            Class<?> idType = (idMapping != null) ? idMapping.type() : Long.class;
+            columns.add("id");
+            paramRefs.add(":cursor_id");
+            params.put("cursor_id", convertValue(cursor.getData().get("id"), idType));
         }
 
         return "(" + String.join(", ", columns) + ") > (" + String.join(", ", paramRefs) + ")";
@@ -479,5 +486,9 @@ public class SearchQueryBuilder {
             current = base + "_" + (i++);
         }
         return current;
+    }
+
+    public Map<String, FieldMapping> getAllowedFields() {
+        return allowedFields;
     }
 }

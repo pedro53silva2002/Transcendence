@@ -1,109 +1,239 @@
 @use '@angular/material' as mat;
-@import "tailwindcss";
- 
-.btn {
-	@apply transition-all duration-300 ease-in-out;
-    border-radius: 20px;
-	--mat-outlined-button-outline-color: var(--mat-sys-secondary);
-	/* overflow: visible !important;
-	z-index: 1; */
-	border-color: var(--mat-sys-primary) !important;
-}
 
-.btn:hover {
-  background-color: var(--mat-sys-secondary-container);
-  /* border-radius: 12px; */
-
+.hamburger-btn, .hamburguer-menu-panel{
+    display: none !important;
 }
 
 .nav-bar {
-	@apply flex items-center justify-end w-full gap-4 py-8 px-8;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 32px;
 }
 
-.search {
-    @apply transition-all duration-300 w-48;
+.logo-container {
+    margin-right: auto; 
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 50px;
+    min-width: 95px;
+}
+
+.btn {
+    transition: all 300ms ease-in-out;
+    border-radius: 20px !important;
+    --mat-outlined-button-outline-color: var(--mat-sys-primary);
+    border: 1px solid var(--mat-sys-primary) !important;
+}
+
+.btn-logout {
+    transition: all 300ms ease-in-out;
+    border-radius: 50% !important; 
+    border: 1px solid var(--mat-sys-primary) !important;
     
-    /*Use the official M3 Variables (This is the 'Safe' way) */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    padding: 0 !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 42px !important;
+}
+
+.btn:hover {
+    background-color: var(--mat-sys-secondary-container) !important;
+}
+
+.btn-logout:hover{
+    background-color: var(--mat-sys-primary) !important;
+    color: white;
+    border-color: white;
+}
+
+/* Garante que o ícone dentro não tenha margens que empurrem o botão */
+.btn-logout mat-icon {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+::ng-deep {
+    .mat-mdc-menu-panel.centered-menu {
+        margin-left: -30px;
+        margin-top: 8px !important;
+        border-radius: 20px !important;
+        border: 1px solid var(--mat-sys-primary);
+        background-color: var(--mat-sys-primary) !important;
+        min-width: 100px !important;
+    }
+
+    .mat-mdc-menu-panel.hamburguer-menu-panel {
+        margin-top: 10px !important;
+        border-radius: 20px !important;
+        border: 1px solid var(--mat-sys-primary);
+        background-color: var(--mat-sys-primary) !important;
+        
+        /* Aumenta a largura conforme pediste anteriormente */
+        min-width: 310px !important;
+    }
+
+    .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+        color: white !important;
+        text-align: center;
+    }
+
+    .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
+        color: var(--mat-sys-primary);
+        text-align: center;
+    }  
+}
+
+/* Campo de Pesquisa (Search) */
+.search {
+    transition: all 300ms ease-in-out;
+    width: 192px; /* Equivalente a w-48 */
+    margin-bottom: -1.25em;
+    font-size: 15px;
+    letter-spacing: 0.1px;
+
+    /* Variáveis M3 para o Form Field */
     --mdc-outlined-text-field-container-color: var(--mat-sys-secondary-container);
     --mdc-outlined-text-field-outline-color: var(--mat-sys-secondary);
     --mdc-outlined-text-field-focus-outline-color: var(--mat-sys-primary);
-    
-    /*Set the height and shape variables */
     --mat-form-field-container-height: 40px;
     --mdc-outlined-text-field-container-shape: 20px;
 
-    margin-bottom: -1.25em;
-	font-size: 15px;
-	letter-spacing: 0.1px;
+    input {
+        color: var(--mat-sys-on-primary-container) !important;
+        opacity: 1 !important;
+    }
+
+    input::placeholder {
+        color: var(--mat-sys-on-secondary-container) !important;
+        opacity: 0.6 !important;
+    }
+
+    .mat-icon {
+        font-family: 'Material Icons' !important;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        opacity: 0.5;
+        color: var(--mat-sys-on-secondary-container);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
-/* Force the Icon Font to load and apply transparency */
-.search mat-icon {
-    font-family: 'Material Icons' !important;
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    opacity: 0.5; /* Matches your transparent text request */
-    color: var(--mat-sys-on-secondary-container);
-    @apply flex items-center justify-center;
+/* Alinhamento interno do Form Field (ng-deep para alcançar o shadow DOM do Material) */
+.search ::ng-deep {
+    .mat-mdc-form-field-icon-prefix {
+        padding: 0 4px 0 12px !important;
+    }
+
+    .mat-icon {
+        color: var(--mat-sys-primary) !important;
+    }
+
+    .mdc-text-field--outlined {
+        border-radius: 20px !important;
+        background-color: var(--mat-sys-secondary-container) !important;
+    }
+
+    .mat-mdc-form-field-infix {
+        display: flex;
+        align-items: center;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        min-height: 40px !important;
+        border-top: 0 !important;
+    }
+
+    /* Bordas customizadas para o efeito arredondado do input */
+    .mdc-notched-outline__leading {
+        border-radius: 20px 0 0 20px !important;
+        width: 20px !important;
+        border-color: var(--mat-sys-primary) !important;
+    }
+
+    .mdc-notched-outline__trailing {
+        border-radius: 0 20px 20px 0 !important;
+        border-color: var(--mat-sys-primary) !important;
+    }
 }
 
-/* Fix the alignment of the icon container */
-.search ::ng-deep .mat-mdc-form-field-icon-prefix {
-    padding: 0 4px 0 12px !important;
+/* 2. Regras para ecrãs pequenos (Mobile) */
+@media (max-width: 1053px) {
+    /* Esconde os botões normais da nav-bar */
+    .nav-bar .btn {
+        display: none !important;
+    }
+
+    /* Mostra o botão do hamburger */
+    .hamburger-btn {
+        display: inline-flex !important;
+        transition: all 300ms ease-in-out;
+        border-radius: 50% !important; 
+        border: 1px solid var(--mat-sys-primary) !important;
+        
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        
+        padding: 0 !important;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 42px !important;
+
+        .mat-icon {
+            color: var(--mat-sys-primary) !important;
+        }
+    }
+
+    .hamburger-btn:hover{
+        background-color: var(--mat-sys-primary) !important;
+        border-color: white;
+
+        .mat-icon {
+            color: white !important;
+        }
+    }
+
+    ::ng-deep {
+        
+        .mat-mdc-menu-content .centered-menu {
+            background-color: var(--mat-sys-primary) !important;
+            border-radius: 20px !important;
+            margin-top: 10px !important;
+            min-width: 200px;
+        }
+
+        .mat-mdc-menu-panel .centered-menu {
+            margin-left: -30px; /* Ajuste este valor conforme a largura do seu menu */
+            margin-top: 8px !important;
+            /* Garante o arredondamento que você já estava usando */
+            border-radius: 20px !important;
+            border: 1px solid var(--mat-sys-primary);
+            background-color: var(--mat-sys-primary) !important;
+            min-width: 100px !important; /* Define uma largura fixa para facilitar a conta */
+        }
+
+        .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+            color: white !important;
+            text-align: center;
+        }
+
+        .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
+            color: var(--mat-sys-primary);
+            text-align: center;
+        }  
+    }
 }
-
-.search input {
-    color: var(--mat-sys-on-secondary-container) !important;
-    opacity: 0.7 !important;
-}
-
-/* The Critical Fix: Ensure the internal elements actually USE the 20px radius */
-.search ::ng-deep .mdc-text-field--outlined {
-    /* This forces the background container to match the border shape */
-    border-radius: 20px !important;
-    background-color: var(--mat-sys-secondary-container) !important;
-}
-
-/*Center the text inside the 40px height */
-.search ::ng-deep .mat-mdc-form-field-infix {
-    @apply flex items-center py-0;
-    min-height: 40px !important;
-	border-top: 0 !important;
-}
-
-/* Fix the Left (Leading) side of the border */
-.search ::ng-deep .mdc-notched-outline__leading {
-    border-radius: 20px 0 0 20px !important;
-    width: 20px !important; /* Ensures the curve has enough room to render */
-	border-color: var(--mat-sys-primary) !important;
-}
-
-/* Fix the Right (Trailing) side of the border */
-.search ::ng-deep .mdc-notched-outline__trailing {
-    border-radius: 0 20px 20px 0 !important;
-	border-color: var(--mat-sys-primary) !important;
-}
-
-/* Hide the Notch (Middle) part to prevent gaps in the top line */
-/* .search ::ng-deep .mdc-notched-outline__notch {
-    border-top: none !important; 
-    display: none !important;
-} */
-
-/* Ensure the background container doesn't 'leak' past the border */
-/* .search ::ng-deep .mdc-text-field--outlined {
-    border-radius: 20px !important;
-    overflow: hidden;
-} */
-
-.active-link {
-    background-color: var(--mat-sys-secondary-container) !important;
-}
-
-/* .search-results {
-	background-color: var(--mat-sys-secondary-container) !important;
-} */
 
 
 
