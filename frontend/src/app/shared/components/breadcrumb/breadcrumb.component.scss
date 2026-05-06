@@ -15,9 +15,14 @@
 	display: flex;
 	align-items: center;
 	justify-content: end;
+	
+	a {
+		text-decoration: none;
+	}
 }
 
 .breadcrumb-text {
 	color: var(--mat-sys-primary);
 	font-weight: 500;
 }
+
