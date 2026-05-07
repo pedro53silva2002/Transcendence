@@ -1,0 +1,15 @@
+<mat-form-field appearance="outline">
+	<mat-label>{{ label }}</mat-label>
+
+	<input matInput [formControl]="control" [type]="type" [placeholder]="placeholder" [value]="value"
+	[disabled]="disabled"
+	(input)="onInputChange($event)"
+	(blur)="onTouched()">
+
+	@if (icon) {
+	<mat-icon matSuffix>{{ icon }}</mat-icon>
+	}
+	@if (control.invalid && control.touched) {
+	<mat-error>Invalid</mat-error>
+	}
+</mat-form-field>

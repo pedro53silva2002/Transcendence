@@ -1,0 +1,46 @@
+<nav>
+  <div class="nav-bar">
+	<div class="logo-container">
+		<img src="images/logo.png" alt="Logo" class="logo">
+	</div>
+	<div class="hamburger-btn">
+		<button mat-icon-button class="hamburger-menu" [matMenuTriggerFor]="mobileMenu">
+			<mat-icon>menu</mat-icon>
+		  </button>
+		  <!-- O MENU QUE APARECE ABAIXO (Lado Direito) -->
+		  <mat-menu #mobileMenu="matMenu" yPosition="below" xPosition="after" class="hamburguer-menu-panel">
+			  <button mat-menu-item routerLink="/profile">Profile</button>
+			  <button mat-menu-item routerLink="/plan-a-trip">Plan A Trip</button>
+			  <button mat-menu-item routerLink="/my-trip">My Trips</button>
+			  <button mat-menu-item routerLink="/friends">Friends</button>
+			  <button mat-menu-item routerLink="/my-expenses">My Expenses</button>
+		  </mat-menu>
+	</div>
+
+		<button routerLinkActive="active-link" routerLink="/profile" class="btn" matButton="outlined">Profile</button>
+		<button routerLinkActive="active-link" routerLink="/plan-a-trip" class="btn" matButton="outlined">Plan A Trip</button>
+		<button routerLinkActive="active-link" routerLink="/my-trip" class="btn" matButton="outlined">My Trips</button>
+		<button routerLinkActive="active-link" routerLink="/friends" class="btn" matButton="outlined">Friends</button>
+		<button routerLinkActive="active-link" routerLink="/my-expenses" class="btn" matButton="outlined">My Expenses</button>
+		<mat-form-field appearance="outline" class="search">
+		<mat-icon matPrefix>search</mat-icon>
+		<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users"/>
+		<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel">
+			@for (user of filteredUsers; track user) {
+				<mat-option [value]="user">
+					<div>
+						<span>{{user}}</span>
+					</div>
+				</mat-option>
+			}
+		</mat-autocomplete>
+	</mat-form-field>
+	<button matButton="outlined" class="btn-logout" [matMenuTriggerFor]="menu">
+		<mat-icon>power_settings_new</mat-icon>
+	</button>
+	<mat-menu #menu="matMenu" yPosition="below" xPosition="after" class="centered-menu">
+		<button mat-menu-item>Account</button>
+		<button mat-menu-item>Logout</button>
+	</mat-menu>
+	</div>
+</nav>

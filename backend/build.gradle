@@ -1,0 +1,81 @@
+// Build Plugins: Spring Boot plugin for executable JAR, dependency management for version alignment
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+// Project Metadata: Group ID (reverse domain), version, and source compatibility
+group = 'com.transcendence'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+// Artifact Repositories: Maven Central provides all open-source Java libraries (Spring, PostgreSQL, Redis, etc.)
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // REST API & ORM: Enables web endpoints and Java object-to-SQL mapping via JPA/Hibernate
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Raw JDBC: NamedParameterJdbcTemplate for executing raw SQL queries with named parameters
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    // Database Migrations: Version-controlled SQL schema changes (V1__init.sql, V2__add_users.sql, etc.)
+    implementation 'org.flywaydb:flyway-core:10.8.1'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.8.1'
+
+    // PostgreSQL Driver: JDBC connector for Java to communicate with PostgreSQL database
+    runtimeOnly 'org.postgresql:postgresql:42.7.1'
+
+    // Session & Cache Storage: Redis stores user sessions, chat cache, rate limiting, and real-time activity data
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'redis.clients:jedis'
+
+    // File Storage: MinIO (S3-compatible) stores user uploads like travel photos, chat attachments, and profile pictures
+    implementation 'io.minio:minio:8.5.7'
+
+    // Authentication & Authorization: Spring Security handles login, JWT tokens, password encryption, and access control
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+
+    // Code Generation: Lombok auto-generates getters, setters, constructors, and logger fields to reduce boilerplate
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    // Testing Framework: JUnit 5 with Mockito and AssertJ for unit tests
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // JWT Dependencies
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java', 'common'
+        }
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Spring Boot 3 produces both an executable JAR and a "-plain" JAR by default.
+// Disable the plain one so docker-compose's `COPY .../*.jar` is unambiguous.
+tasks.named('jar') {
+    enabled = false
+}
