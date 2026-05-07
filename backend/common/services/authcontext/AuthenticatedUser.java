@@ -1,5 +1,6 @@
 package common.services.authcontext;
 
+import common.services.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -30,4 +31,5 @@ public class AuthenticatedUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(() -> role);
     }
+
 }
