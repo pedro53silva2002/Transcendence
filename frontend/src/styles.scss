@@ -7,6 +7,10 @@
     background-color: var(--mat-sys-primary-container),
     container-shape: 20px,                    
   ));
+
+  @include mat.form-field-overrides((
+	container-height: 79px,
+  ));
 }
 
 .std-btn {
