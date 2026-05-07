@@ -2,7 +2,6 @@
 
 .hamburger-btn,
 .hamburguer-menu-panel {
-.hamburger-btn, .hamburguer-menu-panel{
     display: none !important;
 }
 
@@ -16,7 +15,6 @@
 
 .logo-container {
     margin-right: auto;
-    margin-right: auto; 
     display: flex;
     align-items: center;
 }
@@ -40,7 +38,6 @@
     padding: 0 !important;
     color: var(--mat-sys-primary) !important;
     font-weight: 700;
-    border: 1px solid var(--mat-sys-primary) !important;
 }
 
 .btn-logout {
@@ -52,13 +49,6 @@
     align-items: center !important;
     justify-content: center !important;
 
-    border-radius: 50% !important; 
-    border: 1px solid var(--mat-sys-primary) !important;
-    
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    
     padding: 0 !important;
     width: 40px !important;
     height: 40px !important;
@@ -80,22 +70,6 @@
     }
 }
 
-.btn:hover {
-    background-color: var(--mat-sys-secondary-container) !important;
-}
-
-.btn-logout:hover{
-    background-color: var(--mat-sys-primary) !important;
-    color: white;
-    border-color: white;
-}
-
-/* Garante que o ícone dentro não tenha margens que empurrem o botão */
-.btn-logout mat-icon {
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
 ::ng-deep {
     .mat-mdc-menu-panel.centered-menu {
         margin-left: -30px;
@@ -111,6 +85,7 @@
         border-radius: 20px !important;
         border: 1px solid var(--mat-sys-primary);
         background-color: var(--mat-sys-primary) !important;
+
         /* Aumenta a largura conforme pediste anteriormente */
         min-width: 310px !important;
     }
@@ -133,19 +108,6 @@
 .search {
     transition: all 300ms ease-in-out;
     width: 192px;
-    color: white !important;
-    text-align: center;
-}
-
-    .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
-        color: var(--mat-sys-primary);
-        text-align: center;
-    }  
-}
-
-.search {
-    transition: all 300ms ease-in-out;
-    width: 192px;
     margin-bottom: -1.25em;
     font-size: 15px;
     letter-spacing: 0.1px;
@@ -158,13 +120,12 @@
 
     input {
         color: var(--mat-sys-primary) !important;
-        color: var(--mat-sys-on-primary-container) !important;
+        font-weight: 500;
         opacity: 1 !important;
     }
 
     input::placeholder {
         color: var(--mat-sys-primary) !important;
-        color: var(--mat-sys-on-secondary-container) !important;
         opacity: 0.6 !important;
     }
 
@@ -182,6 +143,7 @@
 }
 
 .search ::ng-deep {
+
     .mat-mdc-form-field-icon-prefix {
         padding: 0 4px 0 12px !important;
     }
@@ -192,10 +154,6 @@
     }
     
     .mdc-text-field--outlined{
-        color: var(--mat-sys-primary) !important;
-    }
-
-    .mdc-text-field--outlined {
         border-radius: 20px !important;
         background-color: var(--mat-sys-secondary-container) !important;
     }
@@ -228,7 +186,7 @@
 }
 
 @media (max-width: 1053px) {
-    /* Esconde os botões normais da nav-bar */
+
     .nav-bar .btn {
         display: none !important;
     }
@@ -255,33 +213,12 @@
         }
     }
 
-    .hamburger-btn {
-        display: inline-flex !important;
-        transition: all 300ms ease-in-out;
-        border-radius: 50% !important; 
-        border: 1px solid var(--mat-sys-primary) !important;
-        
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        
-        padding: 0 !important;
-        width: 40px !important;
-        height: 40px !important;
-        min-width: 42px !important;
-
-        .mat-icon {
-            color: var(--mat-sys-primary) !important;
-        }
-    }
-
-    .hamburger-btn:hover{
+    .hamburger-btn:hover {
         background-color: var(--mat-sys-primary) !important;
         border-color: white;
 
         .mat-icon {
             color: var(--mat-sys-secondary) !important;
-            color: white !important;
         }
     }
 
@@ -301,15 +238,6 @@
             border: 1px solid var(--mat-sys-primary);
             background-color: var(--mat-sys-primary) !important;
             min-width: 100px !important;
-
-            margin-left: -30px; /* Ajuste este valor conforme a largura do seu menu */
-            margin-top: 8px !important;
-            /* Garante o arredondamento que você já estava usando */
-            border-radius: 20px !important;
-            border: 1px solid var(--mat-sys-primary);
-            background-color: var(--mat-sys-primary) !important;
-            min-width: 100px !important; /* Define uma largura fixa para facilitar a conta */
-
         }
 
         .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
@@ -325,10 +253,5 @@
             color: var(--mat-sys-tertiary) !important;
             text-align: center;
         }
-        .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
-            color: var(--mat-sys-primary);
-            text-align: center;
-        }  
     }
 }
-
