@@ -24,20 +24,20 @@ html {
   @include mat.system-level-typography($my-theme);
 
   // Sobrescrita manual com as tuas cores para o Spring Boot UI
-  --mat-sys-primary: #00497D;
-  --mat-sys-on-primary: #ffffff;
-  --mat-sys-primary-container: #C8E8FF;
-  --mat-sys-on-primary-container: #001d36;
+  --mat-sys-primary: #FFD372;
+  --mat-sys-on-primary: #422E00;
+  --mat-sys-primary-container: #FFEABA;
+  --mat-sys-on-primary-container: #E87C00;
   
-  --mat-sys-secondary: #FFEABA;
-  --mat-sys-tertiary: #FFD372;
-  --mat-sys-on-tertiary: #422E00;
+  --mat-sys-secondary: #FF8800;
+  --mat-sys-tertiary: #558E86;
+  --mat-sys-forth: #ADA864;
 }
 
 body {
   margin: 0;
   height: 100%;
-  background-color: var(--mat-sys-tertiary);
+  background-color: var(--mat-sys-primary);
   color: var(--mat-sys-on-primary-container);
 }
 

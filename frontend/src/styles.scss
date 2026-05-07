@@ -4,7 +4,7 @@
 :root {
   //the overlay of the search results is rendered outside of the component object, so we have to change the appearance here 
   @include mat.autocomplete-overrides((
-    background-color: var(--mat-sys-secondary-container),
+    background-color: var(--mat-sys-primary-container),
     container-shape: 20px,                    
   ));
 }
@@ -12,11 +12,13 @@
 .std-btn {
 	transition: all 500ms ease-in-out;
     border-radius: 20px !important;
-    border: 1px solid var(--mat-sys-primary) !important;
+    border: 2px solid var(--mat-sys-on-primary) !important;
+    background-color: var(--mat-sys-primary-container) !important;
+    color: var(--mat-sys-on-primary) !important;
 
 	&:hover
 	{
-		background-color: var(--mat-sys-primary);
-		color: white !important;
+		background-color: var(--mat-sys-on-primary);
+		color: var(--mat-sys-primary-container) !important;
 	}
 }

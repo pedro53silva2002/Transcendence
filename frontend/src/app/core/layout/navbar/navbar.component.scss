@@ -28,22 +28,22 @@
     transition: all 300ms ease-in-out;
     border-radius: 20px !important;
     --mat-outlined-button-outline-color: var(--mat-sys-primary);
-    border: 2px solid var(--mat-sys-primary) !important;
-    background-color: var(--mat-sys-secondary-container) !important;
-    color: var(--mat-sys-primary) !important;
+    border: 2px solid var(--mat-sys-on-primary) !important;
+    background-color: var(--mat-sys-primary-container) !important;
+    color: var(--mat-sys-on-primary) !important;
 }
 
 .mat-icon {
     margin: 0 !important;
     padding: 0 !important;
-    color: var(--mat-sys-primary) !important;
+    color: var(--mat-sys-on-primary) !important;
     font-weight: 700;
 }
 
 .btn-logout {
     transition: all 300ms ease-in-out;
     border-radius: 50% !important;
-    border: 2px solid var(--mat-sys-primary) !important;
+    border: 2px solid var(--mat-sys-on-primary) !important;
 
     display: inline-flex !important;
     align-items: center !important;
@@ -53,20 +53,20 @@
     width: 40px !important;
     height: 40px !important;
     min-width: 42px !important;
-    background-color: var(--mat-sys-secondary-container) !important;
+    background-color: var(--mat-sys-primary-container) !important;
 }
 
 .btn:hover {
-    background-color: var(--mat-sys-primary) !important;
-    color: var(--mat-sys-secondary-container) !important;
+    background-color: var(--mat-sys-on-primary) !important;
+    color: var(--mat-sys-primary-container) !important;
 }
 
 .btn-logout:hover {
-    background-color: var(--mat-sys-primary) !important;
-    color: var(--mat-sys-secondary-container) !important;
+    background-color: var(--mat-sys-on-primary) !important;
+    color: var(--mat-sys-primary-container) !important;
 
     .mat-icon {
-        color: var(--mat-sys-secondary) !important;
+        color: var(--mat-sys-primary-container) !important;
     }
 }
 
@@ -75,8 +75,8 @@
         margin-left: -30px;
         margin-top: 8px !important;
         border-radius: 20px !important;
-        border: 1px solid var(--mat-sys-primary);
-        background-color: var(--mat-sys-primary) !important;
+        // border: 1px solid var(--mat-sys-primary);
+        background-color: var(--mat-sys-on-primary) !important;
         min-width: 100px !important;
     }
 
@@ -84,23 +84,23 @@
         margin-top: 10px !important;
         border-radius: 20px !important;
         border: 1px solid var(--mat-sys-primary);
-        background-color: var(--mat-sys-primary) !important;
+        background-color: var(--mat-sys-on-primary) !important;
 
         /* Aumenta a largura conforme pediste anteriormente */
         min-width: 310px !important;
     }
 
     .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
-        color: var(--mat-sys-secondary-container);
+        color: var(--mat-sys-primary-container);
         text-align: center;
     }
 
     .mat-mdc-menu-content .mat-mdc-menu-item:hover {
-        background-color: var(--mat-sys-primary) !important;
+        background-color: var(--mat-sys-on-primary) !important;
     }
 
     .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
-        color: var(--mat-sys-tertiary);
+        color: var(--mat-sys-on-primary-container) !important;
         text-align: center;
     }
 }
@@ -112,20 +112,20 @@
     font-size: 15px;
     letter-spacing: 0.1px;
 
-    --mdc-outlined-text-field-container-color: var(--mat-sys-secondary-container);
-    --mdc-outlined-text-field-outline-color: var(--mat-sys-secondary);
-    --mdc-outlined-text-field-focus-outline-color: var(--mat-sys-primary);
+    --mdc-outlined-text-field-container-color: var(--mat-sys-on-primary) !important;
+    --mdc-outlined-text-field-outline-color: var(--mat-sys-on-primary) !important;
+    --mdc-outlined-text-field-focus-outline-color: var(--mat-sys-on-primary) !important;
     --mat-form-field-container-height: 40px;
     --mdc-outlined-text-field-container-shape: 20px;
 
     input {
-        color: var(--mat-sys-primary) !important;
+        color: var(--mat-sys-on-primary) !important;
         font-weight: 500;
         opacity: 1 !important;
     }
 
     input::placeholder {
-        color: var(--mat-sys-primary) !important;
+        color: var(--mat-sys-on-primary) !important;
         opacity: 0.6 !important;
     }
 
@@ -135,7 +135,7 @@
         width: 20px;
         height: 20px;
         opacity: 0.5;
-        color: var(--mat-sys-on-secondary-container);
+        color: var(--mat-sys-on-primary) !important;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -152,10 +152,10 @@
         margin-left: 8px !important;
         margin-right: 5px !important;
     }
-    
-    .mdc-text-field--outlined{
+
+    .mdc-text-field--outlined {
         border-radius: 20px !important;
-        background-color: var(--mat-sys-secondary-container) !important;
+        background-color: var(--mat-sys-primary-container) !important;
     }
 
     .mat-mdc-form-field-infix {
@@ -170,12 +170,12 @@
     .mdc-notched-outline__leading {
         border-radius: 20px 0 0 20px !important;
         width: 20px !important;
-        border-color: var(--mat-sys-primary) !important;
+        border-color: var(--mat-sys-on-primary) !important;
     }
 
     .mdc-notched-outline__trailing {
         border-radius: 0 20px 20px 0 !important;
-        border-color: var(--mat-sys-primary) !important;
+        border-color: var(--mat-sys-on-primary) !important;
     }
 
     .mdc-notched-outline__leading,
@@ -204,53 +204,53 @@
         width: 36px !important;
         height: 36px !important;
         min-width: 37px !important;
-        border: 2px solid var(--mat-sys-primary) !important;
-        background-color: var(--mat-sys-secondary-container) !important;
+        border: 2px solid var(--mat-sys-on-primary) !important;
+        background-color: var(--mat-sys-primary-container) !important;
 
         .mat-icon {
-            color: var(--mat-sys-primary) !important;
+            color: var(--mat-sys-on-primary) !important;
             font-weight: 300 !important;
         }
     }
 
     .hamburger-btn:hover {
-        background-color: var(--mat-sys-primary) !important;
+        background-color: var(--mat-sys-on-primary) !important;
         border-color: white;
 
         .mat-icon {
-            color: var(--mat-sys-secondary) !important;
+            color: var(--mat-sys-primary-container) !important;
         }
     }
 
     ::ng-deep {
 
-        .mat-mdc-menu-content .centered-menu {
-            background-color: var(--mat-sys-primary) !important;
-            border-radius: 20px !important;
-            margin-top: 10px !important;
-            min-width: 200px;
-        }
+        // .mat-mdc-menu-content .centered-menu {
+        //     background-color: var(--mat-sys-primary) !important;
+        //     border-radius: 20px !important;
+        //     margin-top: 10px !important;
+        //     min-width: 200px;
+        // }
 
-        .mat-mdc-menu-panel .centered-menu {
-            margin-left: -30px;
-            margin-top: 8px !important;
-            border-radius: 20px !important;
-            border: 1px solid var(--mat-sys-primary);
-            background-color: var(--mat-sys-primary) !important;
-            min-width: 100px !important;
-        }
+        // .mat-mdc-menu-panel .centered-menu {
+        //     margin-left: -30px;
+        //     margin-top: 8px !important;
+        //     border-radius: 20px !important;
+        //     border: 1px solid var(--mat-sys-primary);
+        //     background-color: var(--mat-sys-primary) !important;
+        //     min-width: 100px !important;
+        // }
 
         .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
-            color: white !important;
+            color: var(--mat-sys-primary-container);
             text-align: center;
         }
 
         .mat-mdc-menu-content .mat-mdc-menu-item:hover {
-            background-color: var(--mat-sys-primary) !important;
+            background-color: var(--mat-sys-on-primary) !important;
         }
 
         .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
-            color: var(--mat-sys-tertiary) !important;
+            color: var(--mat-sys-on-primary-container) !important;
             text-align: center;
         }
     }
