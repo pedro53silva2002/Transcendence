@@ -60,9 +60,17 @@ public class JwtProviderTest {
     @Test
     void validateToken_returnsFalseForTamperedSignature() {
         String token = jwtProvider.generateAccessToken(UUID.randomUUID(), "USER");
+<<<<<<< HEAD
 
         String tampered = token.substring(0, token.length() - 1) + "X";
         
+=======
+        // Replace last character with a different one — if it's 'X' use 'Y', otherwise use 'X'
+        char lastChar = token.charAt(token.length() - 1);
+        char replacement = (lastChar == 'X') ? 'Y' : 'X';
+        String tampered = token.substring(0, token.length() - 1) + replacement;
+
+>>>>>>> dev
         assertThat(jwtProvider.validateToken(tampered)).isFalse();
     }
 
