@@ -1,7 +1,9 @@
 @use '@angular/material' as mat;
 
-.mat-mdc-form-field{
-	@include mat.form-field-overrides((
-		outlined-outline-color: red
-	  ));
-}
+// modelo de input field css
+// .mat-mdc-form-field{
+// 	@include mat.form-field-overrides((
+// 		outlined-outline-color: var(--mat-sys-on-primary),
+// 		outlined-focus-outline-color: var(--mat-sys-secondary),
+// 	  ));
+// }

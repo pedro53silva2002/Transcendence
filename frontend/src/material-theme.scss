@@ -1,7 +1,9 @@
 @use '@angular/material' as mat;
 
 @include mat.core();
-// @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=BBH+Hegarty&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=BBH+Bogle&display=swap');
 
 $my-theme: mat.define-theme((
   color: (
@@ -10,13 +12,13 @@ $my-theme: mat.define-theme((
     tertiary: mat.$orange-palette,
   ),
   typography: (
-    brand-family: 'Roboto',
-    plain-family: 'Roboto',
+    brand-family: 'ADLaM Display',
+    plain-family: 'ADLaM Display',
   ),
 ));
 
 html {
-  font-family: "Roboto", system-ui;
+  font-family: "ADLaM Display", system-ui;
 
   height: 100%;
   @include mat.all-component-themes($my-theme);

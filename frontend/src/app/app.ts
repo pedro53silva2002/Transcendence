@@ -26,12 +26,14 @@ import { MatInputModule } from '@angular/material/input';
 		MatFormFieldModule,
 		MatInputModule
 	],
-	encapsulation: ViewEncapsulation.None,
+	encapsulation: ViewEncapsulation.None, //permite alterar o css de componentes do angular materials sem usar ng-deep
 	templateUrl: './app.html',
 	styleUrl: './app.scss'
 })
 export class App {
-	protected readonly title = signal('frontend');
+
+	// popup
+	/*protected readonly title = signal('frontend');
 	controlo = new FormControl('', [Validators.required, Validators.email]);
 	constructor(private dialog: MatDialog) { }
 
@@ -49,7 +51,7 @@ export class App {
 			else
 				console.log('adeus');
 		});
-	}
+	}*/
 }
 
 

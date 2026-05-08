@@ -185,7 +185,7 @@
     }
 }
 
-@media (max-width: 1053px) {
+@media (max-width: 1125px) {
 
     .nav-bar .btn {
         display: none !important;
@@ -254,4 +254,9 @@
             text-align: center;
         }
     }
+}
+
+h1 {
+	font-family: 'BBH Hegarty';
+	font-weight: 100;
 }

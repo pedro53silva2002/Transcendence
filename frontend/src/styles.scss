@@ -2,15 +2,19 @@
 @use '@angular/material' as mat;
 
 :root {
-  //the overlay of the search results is rendered outside of the component object, so we have to change the appearance here 
   @include mat.autocomplete-overrides((
     background-color: var(--mat-sys-primary-container),
     container-shape: 20px,                    
   ));
 
   @include mat.form-field-overrides((
-	container-height: 79px,
+	container-height: 40px,
+	container-text-size: 16px,
+	container-vertical-padding: 7px,
+	outlined-outline-width: 2px,
+	outlined-container-shape: 20px, //for border-radius
   ));
+
 }
 
 .std-btn {
