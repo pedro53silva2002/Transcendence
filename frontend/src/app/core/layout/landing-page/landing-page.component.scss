@@ -1,0 +1,40 @@
+.main-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+h1 {
+	font-family: 'BBH Hegarty';
+	font-weight: 100;
+	font-size: 150px;
+	margin-bottom: 30px;
+	margin-top: 70px;
+}
+
+.half-globe {
+	width: 100%;
+	height: 58.1vh; // the height of the visible part
+	overflow: hidden; // "cuts" the image
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  
+	.globe {
+	  width: 2200px;
+	  top: 0; //to show the top part of the globe
+	  position: absolute;
+	  animation: rotateGlobe 4.5s ease-in-out infinite;
+	}
+  }
+  
+  @keyframes rotateGlobe {
+	0%, 33.3% {
+	  transform: rotate(0deg);
+	}
+	100% {
+	  transform: rotate(-360deg);
+	}
+  }

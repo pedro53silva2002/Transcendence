@@ -1,9 +1,21 @@
 @use '@angular/material' as mat;
 
-// modelo de input field css
-// .mat-mdc-form-field{
-// 	@include mat.form-field-overrides((
-// 		outlined-outline-color: var(--mat-sys-on-primary),
-// 		outlined-focus-outline-color: var(--mat-sys-secondary),
-// 	  ));
-// }
+// input field
+.mat-mdc-form-field {
+	@include mat.form-field-overrides((outlined-outline-color: var(--mat-sys-on-primary),
+			outlined-focus-outline-color: var(--mat-sys-secondary),
+		));
+}
+
+// handles pop-up panel
+.mat-mdc-dialog-container {
+	@include mat.dialog-overrides((
+		container-color: var(--mat-sys-primary-container),
+	));
+}
+.mat-mdc-dialog-panel {
+	opacity: 0.85 !important;
+}
+.mat-mdc-dialog-inner-container{
+	border-radius: 30px;
+}
