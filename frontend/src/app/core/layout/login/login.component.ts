@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,8 +8,9 @@ import { MatInputModule } from '@angular/material/input';
   selector: 'app-login',
   standalone: true,
   imports: [MatDialogModule,
-			MatFormFieldModule,
-			MatInputModule
+			      MatFormFieldModule,
+			      MatInputModule,
+            MatButtonModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

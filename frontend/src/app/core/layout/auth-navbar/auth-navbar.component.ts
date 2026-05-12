@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { LoginComponent } from '../login/login.component';
@@ -14,9 +14,18 @@ import { LoginComponent } from '../login/login.component';
 })
 export class AuthNavbarComponent {
 
-	constructor(private dialog: MatDialog) {}
+	constructor(private dialog: MatDialog, private cd: ChangeDetectorRef) {}
+
+  isPopupOpen = false;
 
 	openLogin():void {
-		this.dialog.open(LoginComponent, {});
-	}
+		const loginPopup = this.dialog.open(LoginComponent, {});
+
+    this.isPopupOpen = true; //to activate the css of the button while the popup is open
+	
+    loginPopup.afterClosed().subscribe(() => {
+      this.isPopupOpen = false; //to deactivate the css of the button when the popup is closed
+      this.cd.detectChanges(); //to update the view after changing the isPopupOpen variable
+    });
+}
 }
