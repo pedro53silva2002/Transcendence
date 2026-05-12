@@ -1,0 +1,10 @@
+.input-fields {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.mat-mdc-dialog-inner-container {
+	border: 2px solid var(--mat-sys-on-primary) !important;
+}
