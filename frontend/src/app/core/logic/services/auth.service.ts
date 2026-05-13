@@ -27,6 +27,9 @@ import type { MeDto, TripMembership } from '../dtos/me-dto.ts';
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  fetchCurrentUser() {
+    throw new Error('Method not implemented.');
+  }
   private readonly http = inject(HttpClient);
 
   // ── Private writable signals ──────────────────────────────────────────────
@@ -67,7 +70,7 @@ export class AuthService {
     this._loading.set(true);
     try {
       const me = await firstValueFrom(
-        this.http.get<MeDto>('${environment.apiUrl}/auth/me', { withCredentials: true }),
+        this.http.get<MeDto>(`${(environment as any).apiUrl}/auth/me`, { withCredentials: true }),
       );
       localStorage.setItem('avatar', me.profilePicture ?? '');
       this._me.set({
