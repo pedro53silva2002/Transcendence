@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../logic/services/auth.service';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
 	selector: 'app-auth-callback',
@@ -16,28 +18,22 @@ export class AuthCallbackComponent implements OnInit {
 		private authService: AuthService,
 		private router: Router
 	) { }
-
+	
 	ngOnInit() {
-		//verifies URL to look for the word 'error'
 		const error = this.route.snapshot.queryParamMap.get('error');
 		if (error) {
 			this.router.navigate(['/'], { queryParams: { authError: error } });
 			return;
 		}
-
-		//call to BE to verify identity
-		try {
-			this.authService.loadMe();
-
-			if (this.authService.me()) {
-				console.log('Login successful:', this.authService.me());
+		
+		//o takeUntilDestroyed limpa a subscrição assim que o componente sai do ecrã (http requests não precisam disto, mas é boa prática fazer)
+		this.authService.loadMe().pipe(takeUntilDestroyed()).subscribe(success => {
+			if (success) {
 				this.router.navigate(['/home']);
 			} else {
-				throw new Error('User not found.');
+				this.router.navigate(['/login'], { queryParams: { error: 'session_failed' } });
 			}
-		} catch (err) {
-			console.error('Authentication failed:', err);
-			this.router.navigate(['/'], { queryParams: { error: 'session_expired' } });
-		}
+		});
+		
 	}
 }
