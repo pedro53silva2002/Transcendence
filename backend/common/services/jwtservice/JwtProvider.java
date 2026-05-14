@@ -19,7 +19,7 @@ public class JwtProvider {
     private final long refreshTokenTtlDays;
 
     // Use the same values that we created in application.yml
-    // The jwt encription will use the secret to create their encription
+    // The jwt encryption will use the secret to create their encryption
     // The access is valid for 15 minutes. After that, we do another validation
     // After 7 days, the user needs to login again.
     public JwtProvider(
@@ -71,7 +71,7 @@ public class JwtProvider {
 
     /**
      * Parses and validates the token in a single pass.
-     * Prefer this over validateToken + individual getters to avoid re-parsing.
+     * Prefer this over validateToken + individual getters to avoid reparsing.
      */
     public Optional<Claims> getValidatedClaims(String token)
     {

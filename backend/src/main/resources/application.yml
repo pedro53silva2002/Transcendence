@@ -48,5 +48,17 @@ logging:
 
 jwt:
   secret: ${JWT_SECRET}
-  access-token-ttl_minutes: ${JWT_ACCESS_TOKEN_TTL_MINUTES}
+  access-token-ttl-minutes: ${JWT_ACCESS_TOKEN_TTL_MINUTES}
   refresh-token-ttl-days: ${JWT_REFRESH_TOKEN_TTL_DAYS}
+
+google:
+  oauth:
+    client-id: ${GOOGLE_OAUTH_CLIENT_ID}
+    client-secret: ${GOOGLE_OAUTH_CLIENT_SECRET}
+    redirect-uri: ${GOOGLE_OAUTH_REDIRECT_URI}
+    auth-uri: https://accounts.google.com/o/oauth2/v2/auth
+    token-uri: https://oauth2.googleapis.com/token
+    user-info-uri: https://www.openidconnect.googleapis.com/v1/userinfo
+    scopes: openid email profile
+frontend:
+  oauth-sucess-uri: ${FRONTEND_OAUTH_SUCCESS_URI}

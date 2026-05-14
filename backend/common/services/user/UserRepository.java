@@ -3,6 +3,7 @@ package common.services.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Data access layer for the User entity.
@@ -17,8 +18,8 @@ import java.util.Optional;
  *     generates the SQL automatically — no @Query annotation needed for simple lookups.
  *
  * JpaRepository type parameters:
- *   - User    → the entity class this repository manages
- *   - Integer → the type of User's primary key (@Id field)
+ *   - User → the entity class this repository manages
+ *   - UUID → the type of User's primary key (@Id field)
  *
  * Free methods inherited from JpaRepository (examples):
  *   - save(user)          → INSERT or UPDATE
@@ -29,7 +30,7 @@ import java.util.Optional;
  */
 @Repository // Registers this interface as a Spring bean and enables exception translation
 // (converts database exceptions into Spring's DataAccessException hierarchy)
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     /**
      * Finds a user by their email address.

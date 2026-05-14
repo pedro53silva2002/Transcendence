@@ -97,7 +97,7 @@ public class SecurityConfig {
         // - /api/auth is public (login, register) — no JWT needed
         // - Everything else requires a valid JWT token
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated()
         );
 

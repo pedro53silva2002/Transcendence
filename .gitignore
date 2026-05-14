@@ -104,3 +104,8 @@ docker-compose.override.yml
 
 docs/*
 docs
+
+caches/**
+wrapper/**
+daemon/**
+native/**
