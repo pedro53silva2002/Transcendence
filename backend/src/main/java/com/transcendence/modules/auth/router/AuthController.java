@@ -4,11 +4,16 @@ import com.transcendence.modules.auth.dtos.AuthResponseDto;
 import com.transcendence.modules.auth.dtos.GoogleAuthUrlResponse;
 import com.transcendence.modules.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * HTTP layer for authentication endpoints.
@@ -34,12 +39,15 @@ public class AuthController {
 
     private final AuthService authService;
     private final String      frontendSuccessUri;
+    private final long        refreshTokenTtlDays;
 
     public AuthController(
             AuthService authService,
-            @Value("${frontend.oauth-success-uri}") String frontendSuccessUri) {
+            @Value("${frontend.oauth-success-uri}") String frontendSuccessUri,
+            @Value("${jwt.refresh-token-ttl-days}") long refreshTokenTtlDays) {
         this.authService        = authService;
         this.frontendSuccessUri = frontendSuccessUri;
+        this.refreshTokenTtlDays = refreshTokenTtlDays;
     }
 
     /**
@@ -55,7 +63,7 @@ public class AuthController {
      */
     @GetMapping("/google/url")
     public GoogleAuthUrlResponse startGoogleLogin() {
-        throw new UnsupportedOperationException("TODO: return authService.startGoogleLogin();");
+        return authService.startGoogleLogin();
     }
 
     /**
@@ -97,7 +105,32 @@ public class AuthController {
     public ResponseEntity<Void> googleCallback(
             @RequestParam("code")  String code,
             @RequestParam("state") String state) {
-        throw new UnsupportedOperationException(
-            "TODO: call authService.handleGoogleCallback(code, state) and 302-redirect to frontendSuccessUri with the tokens in the URL fragment");
+        AuthResponseDto auth = authService.handleGoogleCallback(code, state);
+
+        // Set HttpOnly cookies for access and refresh tokens; redirect to FE
+        // without exposing tokens in the URL. Cookies: HttpOnly; Secure;
+        // SameSite=Lax; path=/; maxAge as appropriate.
+        var accessCookie = org.springframework.http.ResponseCookie.from("access_token", auth.accessToken())
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(auth.accessTokenExpiresInSeconds())
+                .build();
+
+        long refreshMaxAge = Math.max(0, refreshTokenTtlDays * 24L * 60L * 60L);
+        var refreshCookie = org.springframework.http.ResponseCookie.from("refresh_token", auth.refreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(refreshMaxAge)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header(org.springframework.http.HttpHeaders.SET_COOKIE, accessCookie.toString())
+                .header(org.springframework.http.HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .location(URI.create(frontendSuccessUri))
+                .build();
     }
 }

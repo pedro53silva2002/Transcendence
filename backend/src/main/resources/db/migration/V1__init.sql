@@ -15,6 +15,11 @@ CREATE TYPE member_role AS ENUM (
     'member'
 );
 
+CREATE TYPE provider_type AS ENUM (
+    'google',
+    'none'
+);
+
 CREATE TYPE friend_request_status AS ENUM (
     'pending',
     'accepted',
@@ -32,7 +37,7 @@ CREATE TABLE "auth"."users" (
     "display_name" TEXT NOT NULL,
     "bio" TEXT,
     "profile_photo_url" TEXT,
-    "oauth_provider" TEXT,
+    "oauth_provider" provider_type NOT NULL DEFAULT 'none',
     "oauth_id" TEXT,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()

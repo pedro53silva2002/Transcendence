@@ -3,8 +3,14 @@ package com.transcendence.modules.auth.service;
 import com.transcendence.modules.auth.dtos.GoogleTokenResponse;
 import com.transcendence.modules.auth.dtos.GoogleUserInfoResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * HTTP client for Google's OAuth 2.0 / OpenID Connect endpoints.
@@ -72,7 +78,16 @@ public class GoogleOAuthClient {
      * @return fully-formed Google authorization URL
      */
     public String buildAuthorizationUrl(String state) {
-        throw new UnsupportedOperationException("TODO: build URL with UriComponentsBuilder");
+        return UriComponentsBuilder.fromUriString(authUri)
+                .queryParam("client_id", clientId)
+                .queryParam("redirect_uri", redirectUri)
+                .queryParam("response_type", "code")
+                .queryParam("scope", scopes)
+                .queryParam("state", state)
+                .queryParam("access_type", "offline")
+                .queryParam("prompt", "consent")
+                .build()
+                .toUriString();
     }
 
     /**
@@ -106,7 +121,30 @@ public class GoogleOAuthClient {
      * @return Google's token response
      */
     public GoogleTokenResponse exchangeCodeForTokens(String code) {
-        throw new UnsupportedOperationException("TODO: POST form-encoded to tokenUri");
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("code", code);
+        form.add("client_id", clientId);
+        form.add("client_secret", clientSecret);
+        form.add("redirect_uri", redirectUri);
+        form.add("grant_type", "authorization_code");
+
+        try {
+            return restClient.post()
+                    .uri(tokenUri)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body(form)
+                    .retrieve()
+                    .body(GoogleTokenResponse.class);
+        }
+        catch (RestClientResponseException ex) {
+            if (ex.getStatusCode().is4xxClientError()) {
+                throw new IllegalStateException("google rejected the code", ex);
+            }
+            if (ex.getStatusCode().is5xxServerError()) {
+                throw new IllegalStateException("google token endpoint", ex);
+            }
+            throw ex;
+        }
     }
 
     /**
@@ -131,6 +169,10 @@ public class GoogleOAuthClient {
      * @return Google's user profile
      */
     public GoogleUserInfoResponse fetchUserInfo(String accessToken) {
-        throw new UnsupportedOperationException("TODO: GET userInfoUri with Bearer token");
+        return restClient.get()
+                .uri(userInfoUri)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .retrieve()
+                .body(GoogleUserInfoResponse.class);
     }
 }

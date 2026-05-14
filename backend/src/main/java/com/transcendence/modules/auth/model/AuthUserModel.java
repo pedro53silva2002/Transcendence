@@ -4,6 +4,7 @@ import backend.common.query.QueryExecutor;
 import com.transcendence.modules.auth.dtos.UserDto;
 import common.services.user.User;
 import common.services.user.UserRepository;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -53,7 +54,26 @@ public class AuthUserModel {
      * @return matching user as UserDto, or empty if no row matches
      */
     public Optional<UserDto> findByOauthId(String provider, String oauthId) {
-        throw new UnsupportedOperationException("TODO: implement with QueryExecutor");
+        String sql = """
+                SELECT id,
+                       email,
+                       username,
+                       display_name,
+                       bio,
+                       profile_photo_url,
+                       oauth_provider,
+                       oauth_id,
+                       created_at,
+                       updated_at
+                  FROM auth.users
+                 WHERE oauth_provider = :provider
+                   AND oauth_id = :oauthId
+                 LIMIT 1
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("provider", provider)
+                .addValue("oauthId", oauthId);
+        return queryExecutor.queryAsSingle(sql, params, UserDto.class);
     }
 
     /**
@@ -66,7 +86,25 @@ public class AuthUserModel {
      * @return matching user as UserDto, or empty if no row matches
      */
     public Optional<UserDto> findByEmail(String email) {
-        throw new UnsupportedOperationException("TODO: implement with QueryExecutor");
+        // Normalize lookup by comparing lowercase email to avoid casing mismatches
+        String sql = """
+                SELECT id,
+                       email,
+                       username,
+                       display_name,
+                       bio,
+                       profile_photo_url,
+                       oauth_provider,
+                       oauth_id,
+                       created_at,
+                       updated_at
+                  FROM auth.users
+                 WHERE lower(email) = :emailLower
+                 LIMIT 1
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("emailLower", email == null ? null : email.trim().toLowerCase());
+        return queryExecutor.queryAsSingle(sql, params, UserDto.class);
     }
 
     /**
@@ -81,7 +119,17 @@ public class AuthUserModel {
      * @return true if a user with that username already exists
      */
     public boolean existsByUsername(String username) {
-        throw new UnsupportedOperationException("TODO: implement with QueryExecutor");
+        String sql = """
+                SELECT EXISTS(
+                    SELECT 1
+                      FROM auth.users
+                     WHERE username = :username
+                )
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("username", username);
+        return queryExecutor.queryScalar(sql, params, Boolean.class)
+                .orElse(false);
     }
 
     // ─── WRITES (UserRepository + Hibernate) ──────────────────────────────────
@@ -110,7 +158,32 @@ public class AuthUserModel {
                           String profilePhotoUrl,
                           String oauthProvider,
                           String oauthId) {
-        throw new UnsupportedOperationException("TODO: implement with UserRepository.save");
+        String normalizedEmail = email == null ? null : email.trim().toLowerCase();
+        User entity = new User(
+                normalizedEmail,
+                username,
+                passwordHash,
+                displayName,
+                profilePhotoUrl,
+                oauthProvider,
+                oauthId);
+        User saved = userRepository.save(entity);
+        return toDto(saved);
+    }
+
+
+    /**
+     * Check whether the user with the given email has a local password set.
+     * Keeps the password existence check inside the model layer to avoid
+     * exposing the raw hash to upper layers.
+     *
+     * @param email user email
+     * @return true if a non-null password_hash exists for that email
+     */
+    public boolean hasLocalPassword(String email) {
+        String sql = "SELECT password_hash IS NOT NULL FROM auth.users WHERE email = :email LIMIT 1";
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("email", email);
+        return queryExecutor.queryScalar(sql, params, Boolean.class).orElse(false);
     }
 
     /**
@@ -135,7 +208,12 @@ public class AuthUserModel {
      * @return the updated row as a UserDto
      */
     public UserDto linkOauthToExistingUser(UUID userId, String oauthProvider, String oauthId) {
-        throw new UnsupportedOperationException("TODO: implement with UserRepository.findById + save");
+        User entity = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("user " + userId));
+        entity.setOauthProvider(oauthProvider);
+        entity.setOauthId(oauthId);
+        User saved = userRepository.save(entity);
+        return toDto(saved);
     }
 
     /**
@@ -145,7 +223,7 @@ public class AuthUserModel {
      * Implementation hint: userRepository.deleteById(userId);
      */
     public void delete(UUID userId) {
-        throw new UnsupportedOperationException("TODO: implement with UserRepository.deleteById");
+        userRepository.deleteById(userId);
     }
 
     // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -158,6 +236,23 @@ public class AuthUserModel {
      * call entity.getCreatedAt().toInstant() and getUpdatedAt().toInstant().
      */
     private UserDto toDto(User entity) {
-        throw new UnsupportedOperationException("TODO: field-by-field mapping from entity to UserDto");
+        UserDto dto = new UserDto();
+        dto.setId(entity.getId());
+        dto.setEmail(entity.getEmail());
+        dto.setUsername(entity.getUsernameHandle());
+        dto.setDisplayName(entity.getDisplayName());
+        dto.setBio(entity.getBio());
+        dto.setProfilePhotoUrl(entity.getProfilePhotoUrl());
+        dto.setOauthProvider(entity.getOauthProvider());
+        dto.setOauthId(entity.getOauthId());
+
+        if (entity.getCreatedAt() != null) {
+            dto.setCreatedAt(entity.getCreatedAt().toInstant());
+        }
+        if (entity.getUpdatedAt() != null) {
+            dto.setUpdatedAt(entity.getUpdatedAt().toInstant());
+        }
+
+        return dto;
     }
 }

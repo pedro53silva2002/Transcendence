@@ -11,6 +11,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import services.jwtservice.JwtProvider;
 
+import java.time.Duration;
+import java.util.UUID;
+
 /**
  * Orchestrates the OAuth login flow:
  *
@@ -60,7 +63,14 @@ public class AuthService {
      *         (state is exposed for debugging; the FE does not need to use it)
      */
     public GoogleAuthUrlResponse startGoogleLogin() {
-        throw new UnsupportedOperationException("TODO: state in Redis + build URL via GoogleOAuthClient");
+        String state = UUID.randomUUID().toString();
+        redisTemplate.opsForValue().set(
+                "oauth:state:" + state,
+                "1",
+                Duration.ofMinutes(10));
+
+        String url = googleOAuthClient.buildAuthorizationUrl(state);
+        return new GoogleAuthUrlResponse(url, state);
     }
 
     /**
@@ -106,7 +116,54 @@ public class AuthService {
      * @return tokens + the public-safe user payload
      */
     public AuthResponseDto handleGoogleCallback(String code, String state) {
-        throw new UnsupportedOperationException("TODO: state check → token exchange → userinfo → upsert → JWT");
+        Boolean deleted = redisTemplate.delete("oauth:state:" + state);
+        if (!Boolean.TRUE.equals(deleted)) {
+            throw new IllegalStateException("invalid or expired oauth state");
+        }
+
+        var tokens = googleOAuthClient.exchangeCodeForTokens(code);
+        GoogleUserInfoResponse info = googleOAuthClient.fetchUserInfo(tokens.accessToken());
+
+        if (!Boolean.TRUE.equals(info.emailVerified())) {
+            throw new IllegalStateException("google email not verified");
+        }
+
+        // Upsert policy: prefer existing OAuth-linked user; if the email already
+        // exists as a local account (non-oauth), we reject and ask FE to show an
+        // explicit error (no silent merge). Otherwise create a new OAuth user.
+        UserDto user = authUserModel.findByOauthId("google", info.sub())
+                .or(() -> {
+                    var byEmail = authUserModel.findByEmail(info.email());
+                    if (byEmail.isPresent()) {
+                        String provider = byEmail.get().getOauthProvider();
+                        // If provider is 'none' (local account), reject per policy.
+                        if (provider == null || provider.equalsIgnoreCase("none")) {
+                            throw new com.transcendence.modules.auth.exceptions.OAuthConflictException(
+                                    "an account with this email already exists; please sign in with your existing credentials and link Google from your profile");
+                        }
+                        // provider indicates OAuth (e.g., 'google') — link and continue
+                        UserDto linked = authUserModel.linkOauthToExistingUser(byEmail.get().getId(), "google", info.sub());
+                        return java.util.Optional.of(linked);
+                    }
+                    return java.util.Optional.empty();
+                })
+                .orElseGet(() -> authUserModel.create(
+                        info.email(),
+                        generateUniqueUsername(info),
+                        null,
+                        info.name(),
+                        info.picture(),
+                        "google",
+                        info.sub()));
+
+        String access = jwtProvider.generateAccessToken(user.getId(), "USER");
+        String refresh = jwtProvider.generateRefreshToken();
+
+        return new AuthResponseDto(
+                access,
+                refresh,
+                accessTokenTtlMinutes * 60,
+                toPublic(user));
     }
 
     /**
@@ -130,7 +187,20 @@ public class AuthService {
      * @return a username unique against the users table at this moment
      */
     private String generateUniqueUsername(GoogleUserInfoResponse info) {
-        throw new UnsupportedOperationException("TODO: derive from email prefix, retry until unique");
+        String base = info.email()
+                .split("@")[0]
+                .toLowerCase()
+                .replaceAll("[^a-z0-9_.-]", "");
+
+        String candidate = base;
+        int i = 1;
+        while (authUserModel.existsByUsername(candidate)) {
+            candidate = base + i++;
+            if (i > 100) {
+                throw new IllegalStateException("could not pick username");
+            }
+        }
+        return candidate;
     }
 
     /**
@@ -148,6 +218,12 @@ public class AuthService {
      *       u.getProfilePhotoUrl());
      */
     private PublicUserDto toPublic(UserDto u) {
-        throw new UnsupportedOperationException("TODO: map UserDto → PublicUserDto");
+        return new PublicUserDto(
+                u.getId(),
+                u.getEmail(),
+                u.getUsername(),
+                u.getDisplayName(),
+                u.getBio(),
+                u.getProfilePhotoUrl());
     }
 }
