@@ -1,7 +1,7 @@
-package backend.common.query;
+package com.transcendence.common.query;
 
-import backend.common.search.CursorPage;
-import backend.common.search.SearchResult;
+import com.transcendence.common.search.CursorPage;
+import com.transcendence.common.search.SearchResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

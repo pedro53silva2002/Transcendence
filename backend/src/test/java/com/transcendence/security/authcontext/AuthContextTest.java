@@ -1,8 +1,8 @@
 package src.test.java.com.transcendence.security.authcontext;
 
-import common.services.authcontext.AuthenticatedUser;
-import common.services.authcontext.AuthenticatedUserService;
-import common.services.authcontext.UnauthorizedException;
+import com.transcendence.common.services.authcontext.AuthenticatedUser;
+import com.transcendence.common.services.authcontext.AuthenticatedUserService;
+import com.transcendence.common.services.authcontext.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

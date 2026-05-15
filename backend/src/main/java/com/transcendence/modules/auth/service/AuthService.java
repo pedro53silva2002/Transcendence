@@ -9,7 +9,7 @@ import com.transcendence.modules.auth.model.AuthUserModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import services.jwtservice.JwtProvider;
+import com.transcendence.common.services.jwtservice.JwtProvider;
 
 import java.time.Duration;
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package com.transcendence.security.jwt;
 
-import services.jwtservice.JwtProvider;
+import com.transcendence.common.services.jwtservice.JwtProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

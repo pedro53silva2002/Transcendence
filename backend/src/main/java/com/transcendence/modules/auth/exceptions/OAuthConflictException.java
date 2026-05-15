@@ -1,6 +1,6 @@
 package com.transcendence.modules.auth.exceptions;
 
-import backend.common.services.globalExceptionHandler.DomainException;
+import com.transcendence.common.services.globalExceptionHandler.DomainException;
 
 /**
  * Thrown when an OAuth flow would collide with an existing local account

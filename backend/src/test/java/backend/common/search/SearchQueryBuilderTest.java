@@ -1,4 +1,4 @@
-package backend.common.search;
+package com.transcendence.common.search;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

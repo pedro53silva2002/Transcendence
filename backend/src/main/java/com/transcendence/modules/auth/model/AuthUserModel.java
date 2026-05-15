@@ -1,9 +1,9 @@
 package com.transcendence.modules.auth.model;
 
-import backend.common.query.QueryExecutor;
+import com.transcendence.common.query.QueryExecutor;
 import com.transcendence.modules.auth.dtos.UserDto;
-import common.services.user.User;
-import common.services.user.UserRepository;
+import com.transcendence.common.services.user.User;
+import com.transcendence.common.services.user.UserRepository;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
 

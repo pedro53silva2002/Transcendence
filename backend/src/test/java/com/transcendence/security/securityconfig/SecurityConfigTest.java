@@ -1,7 +1,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import common.services.securityconfig.JwtAuthenticationEntryPoint;
-import common.services.securityconfig.JwtAccessDeniedHandler;
+import com.transcendence.common.services.securityconfig.JwtAuthenticationEntryPoint;
+import com.transcendence.common.services.securityconfig.JwtAccessDeniedHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
