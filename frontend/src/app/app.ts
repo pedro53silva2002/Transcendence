@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, signal, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -9,6 +9,8 @@ import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loa
 import { AppHomeComponent } from './core/layout/app-home/app-home.component';
 import { InputLabelComponent } from './shared/components/input-label/input-label.component';
 import { FormControl, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
 	selector: 'app-root',
@@ -17,16 +19,17 @@ import { FormControl, Validators } from '@angular/forms';
 		MatButtonModule,
 		MatDialogModule,
 		MatSidenavModule,
-		LoadingSpinnerComponent,
-		ConfirmationPopUpComponent,
-		AppHomeComponent,
-		InputLabelComponent,
+		MatFormFieldModule,
+		MatInputModule
 	],
+	encapsulation: ViewEncapsulation.None, //permite alterar o css de componentes do angular materials sem usar ng-deep
 	templateUrl: './app.html',
 	styleUrl: './app.scss'
 })
 export class App {
-	protected readonly title = signal('frontend');
+
+	// popup
+	/*protected readonly title = signal('frontend');
 	controlo = new FormControl('', [Validators.required, Validators.email]);
 	constructor(private dialog: MatDialog) { }
 
@@ -44,7 +47,7 @@ export class App {
 			else
 				console.log('adeus');
 		});
-	}
+	}*/
 }
 
 

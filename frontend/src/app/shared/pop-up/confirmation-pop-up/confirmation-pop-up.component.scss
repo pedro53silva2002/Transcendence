@@ -1,10 +1,24 @@
-.btn {
-    transition: all 300ms ease-in-out;
+.std-btn {
+	transition: all 300ms ease-in-out;
     border-radius: 20px !important;
-    --mat-outlined-button-outline-color: var(--mat-sys-primary);
-    border: 1px solid var(--mat-sys-primary) !important;
+    border: 2px solid var(--mat-sys-on-primary) !important;
+    background-color: var(--mat-sys-primary-container) !important;
+    color: var(--mat-sys-on-primary) !important;
+
+	&:hover
+	{
+		background-color: var(--mat-sys-on-primary) !important;
+		color: var(--mat-sys-primary-container) !important;
+	}
+}
+
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: var(--mat-sys-primary-container); /* A cor que definiste antes */
+  border-radius: 24px;
+  border: 2px solid var(--mat-sys-on-primary) !important;
+  box-shadow: none; /* Exemplo de edição */
 }
 
 .title {
-    color: var(--mat-sys-primary);
+    color: var(--mat-sys-terciary);
 }
