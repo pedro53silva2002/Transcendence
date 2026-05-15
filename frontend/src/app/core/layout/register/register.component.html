@@ -1,13 +1,14 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
   <div class="dialog-header">
+    <app-close-button color="var(--mat-sys-on-primary-container)"></app-close-button>
+  </div>
+  <div class="title">
     <h2 mat-dialog-title>{{ 'auth.register' | transloco }}</h2>
-    <button type="button" mat-icon-button mat-dialog-close class="close-btn">
-      <mat-icon>close</mat-icon>
-    </button>
+    <hr>  
   </div>
 
-  <mat-dialog-content class="register-form">
-    <div class="input-fields">
+  <mat-dialog-content>
+    <div class="register-form">
       <mat-form-field appearance="outline" [hideRequiredMarker]="true">
         <input matInput type="text" formControlName="username" placeholder="username" />
       </mat-form-field>
@@ -27,5 +28,6 @@
     <button type="submit" mat-flat-button class="register-btn" [disabled]="form.invalid">
       {{ 'auth.register' | transloco }}
     </button>
+    <app-google-auth-button></app-google-auth-button>
   </mat-dialog-actions>
 </form>
