@@ -28,7 +28,7 @@
 			<mat-icon matPrefix>search</mat-icon>
 			<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users" />
 			<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel">
-				@for (user of filteredUsers; track user) {
+				@for (user of filteredUsers | async; track user) {
 				<mat-option [value]="user">
 					<div>
 						<span>{{user}}</span>

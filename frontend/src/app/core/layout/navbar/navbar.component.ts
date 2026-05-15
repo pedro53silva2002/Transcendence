@@ -1,5 +1,5 @@
-import { Q } from '@angular/cdk/keycodes';
-import { Component, EventEmitter, HostListener, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
+import { debounceTime, delay, distinctUntilChanged, map, Observable, of, Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -23,15 +23,17 @@ import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 			RouterLink,
 			RouterLinkActive,
 			MatIconModule,
-			MatSidenavModule],
+			MatSidenavModule,
+			AsyncPipe],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
 	searchControl = new FormControl('');
 	users = ['Maria', 'João', 'Diogo', 'Maria João', 'Rui Diogo', 'Rui'];
-	filteredUsers: string[] = [];
+	filteredUsers: Observable<string[]> = new Observable();
 	private searchSub?: Subscription;
+	private backendSub?: Subscription;
 
 	// constructor() {
 	// 	this.searchControl.valueChanges.subscribe(value => {
@@ -42,14 +44,21 @@ export class NavbarComponent implements OnInit {
 	ngOnInit(): void {
 		this.searchSub = this.searchControl.valueChanges.pipe(
 			debounceTime(300),
-			distinctUntilChanged(),
-		).subscribe(query => {
-			console.log(query)
-			if(query!= null){
-				this.filteredUsers= this.users.filter(user => user.toLowerCase().includes(query.toLowerCase()))
-				console.log(this.filteredUsers)
-			}
+			distinctUntilChanged(), //if we type more and then change it to the previous input, it doesn't register any change
+		).subscribe(abc => {
+			//console.log(abc)
+			 if(abc!= null){
+			 	this.filteredUsers = this.getUsers(abc).pipe(
+					tap(list => console.log(list)),
+					map(list => list.map(name => name.toLowerCase()))
+				);
+			 }
 		})
+	}
+
+	ngOnDestroy(): void {
+		this.searchSub?.unsubscribe();
+		this.backendSub?.unsubscribe();
 	}
 
 	//to close the side menu when the screen is resized to desktop size (if it's open)
@@ -61,5 +70,17 @@ export class NavbarComponent implements OnInit {
 		this.menuTrigger.closeMenu();
 		}
 	}
+
+
+	private mockUsers = ['Alice Silva', 'Alice Costa','Alice Souza', 'Alice Lima'];
+
+	  
+	getUsers(text :string): Observable<string[]> {
+		// 'of' transforma a S em um Observable
+		// 'delay(1000)' pausa a emissão por 1 segundo (1000ms)
+		return of(this.mockUsers.filter(nomeDeUser => nomeDeUser.toLowerCase().includes(text.toLowerCase()))).pipe(
+		  delay(1000)
+		);
+	  }
 }
 
