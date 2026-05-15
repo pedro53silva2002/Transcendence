@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { environment } from '../../../../environments/environment';
 import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-auth-button.component';
+import { CloseButtonComponent } from '../../../shared/components/close-button/close-button.component';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-	GoogleAuthButtonComponent
+	  GoogleAuthButtonComponent,
+    CloseButtonComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
