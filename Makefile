@@ -25,7 +25,7 @@ gradle-clean:
 	find . -type d \( -name "build" -o -name ".gradle" -o -name ".tmp" -o -name "caches" \) -prune -exec rm -rf {} +
 	@echo "Gradle clean complete!"
 
-fclean: clean gradle-clean
+fclean: clean
 	docker system prune -af --volumes
 
 re: fclean up
