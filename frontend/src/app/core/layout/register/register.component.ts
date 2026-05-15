@@ -15,12 +15,10 @@ import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-
   imports: [
     MatDialogModule,
     MatIconModule,
-    MatDialogClose,
     MatFormFieldModule,
     MatInputModule,
     TranslocoModule,
     MatButtonModule,
-    MatIcon,
     ReactiveFormsModule,
     CloseButtonComponent,
     GoogleAuthButtonComponent
