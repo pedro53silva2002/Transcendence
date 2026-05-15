@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import com.transcendence.common.services.jwtservice.JwtProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.UUID;
@@ -27,6 +29,8 @@ import java.util.UUID;
  */
 @Service
 public class AuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     private final GoogleOAuthClient    googleOAuthClient;
     private final AuthUserModel        authUserModel;
@@ -68,6 +72,8 @@ public class AuthService {
                 "oauth:state:" + state,
                 "1",
                 Duration.ofMinutes(10));
+
+        log.info("OAuth state created: {}", state);
 
         String url = googleOAuthClient.buildAuthorizationUrl(state);
         return new GoogleAuthUrlResponse(url, state);
@@ -117,6 +123,7 @@ public class AuthService {
      */
     public AuthResponseDto handleGoogleCallback(String code, String state) {
         Boolean deleted = redisTemplate.delete("oauth:state:" + state);
+        log.info("OAuth state validation for {} -> deleted={}", state, deleted);
         if (!Boolean.TRUE.equals(deleted)) {
             throw new IllegalStateException("invalid or expired oauth state");
         }

@@ -162,6 +162,18 @@ public class User implements UserDetails {
     public void setOauthProvider(String oauthProvider)     { this.oauthProvider = oauthProvider; }
     public void setOauthId(String oauthId)                 { this.oauthId = oauthId; }
 
+    @PrePersist
+    private void onCreate() {
+        OffsetDateTime now = OffsetDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    private void onUpdate() {
+        this.updatedAt = OffsetDateTime.now();
+    }
+
     // ─── UserDetails interface methods ────────────────────────────────────────
     //
     // Spring Security calls these methods during authentication and authorization.
