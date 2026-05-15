@@ -48,5 +48,8 @@ logging:
 
 jwt:
   secret: ${JWT_SECRET}
-  access-token-ttl_minutes: ${JWT_ACCESS_TOKEN_TTL_MINUTES}
+  access-token-ttl-minutes: ${JWT_ACCESS_TOKEN_TTL_MINUTES}
   refresh-token-ttl-days: ${JWT_REFRESH_TOKEN_TTL_DAYS}
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}

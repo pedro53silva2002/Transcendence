@@ -3,6 +3,7 @@ package common.services.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Data access layer for the User entity.
@@ -48,4 +49,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
      * @return Optional containing the User if found, or empty Optional if not found
      */
     Optional<User> findByEmail(String email);
+
+    Optional<User> findByUuid(UUID uuid);
+
+    public String getEmail() { return email; }
 }

@@ -5,6 +5,9 @@ export interface TripMembership {
 
 export interface MeDto {
   username: string;
+  displayName: string;
+  email: string;
   profilePicture?: string;
+  profilePhotoUrl?: string;
   trips?: TripMembership[];
 }

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Represents a user in the database and in Spring Security.
@@ -35,6 +36,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    private UUID uuid;
 
     // Each user must have a unique email — enforced at both DB level (unique = true)
     // and application level. Cannot be null.
@@ -80,6 +84,13 @@ public class User implements UserDetails {
     // Updated every time the user's record is modified.
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
+
+    // ─── Plain getters (used by the auth service layer) ──────────────────────
+
+    public Integer getId()              { return id; }
+    public UUID    getUuid()            { return uuid; }
+    public String  getDisplayName()     { return displayName; }
+    public String  getProfilePhotoUrl() { return profilePhotoUrl; }
 
     // ─── UserDetails interface methods ────────────────────────────────────────
     //
