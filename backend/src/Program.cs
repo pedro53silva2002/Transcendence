@@ -1,20 +1,57 @@
-DotNetEnv.Env.TraversePath().Load();
+using DotNetEnv;
+using Serilog;
+using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
+using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 
-var port = Environment.GetEnvironmentVariable("BACKEND_PORT") ?? "5024";
-var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls($"http://+:{port}");
+Env.TraversePath().Load();
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-builder.Services.AddHealthChecks();
+// Bootstrap logger — captures failures during builder configuration itself.
+Log.Logger = SerilogBootstrap.CreateBootstrapLogger();
 
-var app = builder.Build();
+try
+{
+    Log.Information("Starting Trippie backend");
 
-app.MapOpenApi();
-app.MapHealthChecks("/health");
+    var port = Environment.GetEnvironmentVariable("BACKEND_PORT") ?? "5024";
+    var builder = WebApplication.CreateBuilder(args);
+    builder.WebHost.UseUrls($"http://+:{port}");
 
-app.UseAuthorization();
+    // Replace MS logging with Serilog (reads "Serilog" + "ErrorHandling" sections).
+    builder.Host.UseAppSerilog();
 
-app.MapControllers();
+    builder.Services.AddControllers();
+    builder.Services.AddOpenApi();
+    builder.Services.AddHealthChecks();
 
-app.Run();
+    // Exception handling subsystem.
+    builder.Services.AddExceptionHandling(builder.Configuration);
+
+    var app = builder.Build();
+
+    // ── Middleware order matters ────────────────────────────────────────────────
+    // 1. Correlation ID + global exception handler — must be FIRST so they wrap
+    //    every subsequent middleware (auth, static files, endpoints).
+    app.UseExceptionHandling();
+
+    // 2. Serilog's request logger writes one line per request with timing.
+    app.UseSerilogRequestLogging();
+
+    // 3. Standard pipeline.
+    app.MapOpenApi();
+    app.MapHealthChecks("/health");
+    app.UseAuthorization();
+    app.MapControllers();
+
+    app.Run();
+}
+catch (System.Exception ex)
+{
+    Log.Fatal(ex, "Trippie backend terminated unexpectedly");
+    return 1;
+}
+finally
+{
+    Log.CloseAndFlush();
+}
+
+return 0;
