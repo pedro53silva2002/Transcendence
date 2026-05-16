@@ -39,7 +39,11 @@ public sealed class GlobalExceptionMiddleware(
     {
         var result = pipeline.Map(exception);
 
-        var traceId = Activity.Current?.TraceId.ToString() ?? context.TraceIdentifier;
+        // Prefer context.TraceIdentifier so the body matches the X-Correlation-Id header
+        // that CorrelationIdMiddleware echoes (which itself honours an inbound header).
+        var traceId = !string.IsNullOrWhiteSpace(context.TraceIdentifier)
+            ? context.TraceIdentifier
+            : Activity.Current?.TraceId.ToString() ?? string.Empty;
 
         var (file, line) = ExtractFileLine(exception);
 
@@ -74,7 +78,7 @@ public sealed class GlobalExceptionMiddleware(
             exception.GetType().Name,
             result.ErrorCode,
             (int)result.StatusCode,
-            file ?? "?",
+            file is null ? "?" : Path.GetFileName(file),
             line ?? 0,
             traceId
         );

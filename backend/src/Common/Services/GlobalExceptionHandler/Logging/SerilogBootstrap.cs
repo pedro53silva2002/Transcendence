@@ -2,14 +2,11 @@ using Serilog;
 using Serilog.Enrichers.Span;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
-using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Trippie.Common.Services.GlobalExceptionHandler.Logging;
 
 public static class SerilogBootstrap
 {
-    private const string ConsoleTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}";
-
     private const string FileTemplate =
         "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] " +
         "{TraceId} {SourceContext} :: {Message:lj}{NewLine}{Exception}";
@@ -17,7 +14,7 @@ public static class SerilogBootstrap
     public static Serilog.ILogger CreateBootstrapLogger() =>
         new LoggerConfiguration()
             .MinimumLevel.Information()
-            .WriteTo.Console(theme: AnsiConsoleTheme.Literate, outputTemplate: ConsoleTemplate)
+            .WriteTo.HumanReadableConsole()
             .CreateBootstrapLogger();
 
     public static IHostBuilder UseAppSerilog(this IHostBuilder host) =>
@@ -34,10 +31,7 @@ public static class SerilogBootstrap
                 .Enrich.WithThreadId()
                 .Enrich.WithSpan()
                 .Enrich.WithProperty("Application", "Trippie")
-                .WriteTo.Console(
-                    theme: AnsiConsoleTheme.Literate,
-                    outputTemplate: ConsoleTemplate
-                )
+                .WriteTo.HumanReadableConsole()
                 .WriteTo.File(
                     path: Path.Combine(logsRoot, "all-.log"),
                     outputTemplate: FileTemplate,

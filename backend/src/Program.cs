@@ -1,6 +1,7 @@
 using DotNetEnv;
 using Serilog;
 using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
+using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 
 Env.TraversePath().Load();
@@ -29,15 +30,26 @@ try
     var app = builder.Build();
 
     // ── Middleware order matters ────────────────────────────────────────────────
-    // 1. Correlation ID + global exception handler — must be FIRST so they wrap
-    //    every subsequent middleware (auth, static files, endpoints).
+    // 1. Serilog's request logger must be OUTERMOST so it observes the final status
+    //    code after GlobalExceptionMiddleware has mapped the exception to e.g. 404.
+    //    If it ran inside the exception handler, every error would be logged as 500.
+    app.UseSerilogRequestLogging(opts =>
+        opts.MessageTemplate =
+            "HTTP {RequestMethod:l} {RequestPath:l} responded {StatusCode} in {Elapsed:0.0000} ms");
+
+    // 2. Correlation ID + global exception handler wrap the rest of the pipeline
+    //    (auth, static files, endpoints).
     app.UseExceptionHandling();
 
-    // 2. Serilog's request logger writes one line per request with timing.
-    app.UseSerilogRequestLogging();
-
     // 3. Standard pipeline.
-    app.MapOpenApi();
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/openapi/v1.json", "Trippie v1");
+        });
+    }
     app.MapHealthChecks("/health");
     app.UseAuthorization();
     app.MapControllers();

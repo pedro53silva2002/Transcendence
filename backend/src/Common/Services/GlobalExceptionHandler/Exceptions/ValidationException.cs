@@ -5,7 +5,7 @@ namespace Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 public sealed class ValidationException(IReadOnlyDictionary<string, IReadOnlyList<string>> errors) : AppException(
     HttpStatusCode.BadRequest,
     "validation.failed",
-    "One or more validation errors ocurred.",
+    "One or more validation errors occurred.",
     metadata: null
     )
 {
