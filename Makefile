@@ -29,12 +29,4 @@ logs-%:
 ps:
 	docker compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) ps
 
-test:
-	docker run --rm \
-		-v "$(CURDIR)/backend:/app" \
-		-v gradle-cache:/root/.gradle \
-		-w /app \
-		gradle:8-jdk21 \
-		gradle test
-
 .PHONY: all build up down clean fclean re logs ps test
