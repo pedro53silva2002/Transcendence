@@ -1,5 +1,6 @@
 using DotNetEnv;
 using Serilog;
+using Trippie.Common.Services.Authentication.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
@@ -14,7 +15,13 @@ try
     Log.Information("Starting Trippie backend");
 
     var port = Environment.GetEnvironmentVariable("BACKEND_PORT") ?? "5024";
-    var builder = WebApplication.CreateBuilder(args);
+    var environmentName = Environment.GetEnvironmentVariable("ENVIRONMENT") ?? Environments.Production;
+
+    var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+    {
+        Args = args,
+        EnvironmentName = environmentName
+    });
     builder.WebHost.UseUrls($"http://+:{port}");
 
     // Replace MS logging with Serilog (reads "Serilog" + "ErrorHandling" sections).
@@ -26,6 +33,8 @@ try
 
     // Exception handling subsystem.
     builder.Services.AddExceptionHandling(builder.Configuration);
+
+    builder.Services.AddTrippieAuthentication(builder.Configuration);
 
     var app = builder.Build();
 
@@ -51,6 +60,7 @@ try
         });
     }
     app.MapHealthChecks("/health");
+    app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
 
