@@ -33,7 +33,7 @@ CREATE TABLE "auth"."users" (
     "oauth_provider" TEXT,
     "oauth_id" TEXT,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    "updated_at" TIMESTAMPTZ
 );
 
 CREATE TABLE "auth"."countries" (

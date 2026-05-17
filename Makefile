@@ -1,5 +1,7 @@
 COMPOSE_FILE = docker-compose.yml
+COMPOSE_DEV_FILE = docker-compose.dev.yml
 PROJECT_NAME = transcendence
+DEV_INFRA_SERVICES = postgres-db redis minio
 
 all: up
 
@@ -29,4 +31,14 @@ logs-%:
 ps:
 	docker compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) ps
 
-.PHONY: all build up down clean fclean re logs ps test
+dev-infra:
+	docker compose -f $(COMPOSE_FILE) -f $(COMPOSE_DEV_FILE) -p $(PROJECT_NAME) up -d $(DEV_INFRA_SERVICES)
+
+dev: dev-infra
+	@echo ""
+	@echo "Infra is up (postgres, redis, minio)."
+	@echo "Open two terminals and run:"
+	@echo "  make dev-backend"
+	@echo "  make dev-frontend"
+
+.PHONY: all build up down clean fclean re logs ps test dev dev-infra dev-backend dev-frontend
