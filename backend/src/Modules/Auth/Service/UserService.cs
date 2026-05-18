@@ -15,15 +15,12 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         if (string.IsNullOrWhiteSpace(dto.Username)) throw new ValidationException("username", "Username is required.");
         if (string.IsNullOrWhiteSpace(dto.Password)) throw new ValidationException("password", "Password is required.");
 
-        var clash = await db.Users
-            .AsNoTracking()
-            .Where(u => u.Email == dto.Email || u.Username == dto.Username)
-            .Select(u => new { u.Email, u.Username })
-            .FirstOrDefaultAsync(ct);
+        var existsUsername = await userModel.GetByUsername(dto.Username, ct);
+        var existsEmails = await userModel.GetByEmail(dto.Email, ct);
 
-        if (clash is not null)
+        if (existsEmails is not null || existsUsername is not null)
         {
-            var field = string.Equals(clash.Email, dto.Email, StringComparison.OrdinalIgnoreCase) ? "email" : "username";
+            var field = existsEmails is not null ? "email" : "username";
             throw new ConflictException($"User with this {field} already exists.");
         }
 
