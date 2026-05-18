@@ -3,7 +3,8 @@
 		"register": "Register",
 		"login": "Login",
 		"password": "password",
-		"google": "Sign In With",
-		"username": "username"
+		"google": "Sign In with",
+		"username": "username",
+		"password-confirmation": "confirm password"
 	}
 }

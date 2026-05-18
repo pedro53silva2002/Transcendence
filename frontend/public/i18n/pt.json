@@ -4,6 +4,7 @@
 		"login": "Entrar",
 		"password": "palavra-passe",
 		"google": "Entrar com o",
-		"username": "nome de utilizador"
+		"username": "nome de utilizador",
+		"password-confirmation": "confirma a palavra-passe"
 	}
 }
