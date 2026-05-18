@@ -12,13 +12,14 @@ h1 {
     font-weight: 100;
     font-size: 150px;
     margin-top: 70px;
+	padding-bottom: 0px;
     z-index: 2; /* Garante que o texto fica à frente do globo se eles se cruzarem */
 }
 
 .half-globe {
     width: 100%;
     height: 58.1vh; 
-    overflow: hidden; 
+    // overflow: hidden; 
 
     position: absolute; 
     bottom: 0; /* Cola o elemento no fundo do main-container (Y máximo) */
@@ -28,20 +29,63 @@ h1 {
     align-items: center;
     justify-content: center;
     z-index: 1;
-  
-    .globe {
-      width: 2200px;
-      position: absolute;
-      top: 0; 
-      animation: rotateGlobe 4.5s ease-in-out infinite;
-    }
-}
-  
-  @keyframes rotateGlobe {
-	0%, 33.3% {
-	  transform: rotate(0deg);
+	
+	.globe {
+		width: 2200px;
+		position: absolute;
+		top: 0; 
+		animation: rotateGlobe 20s ease-in-out infinite; /* Aumentei para 20s para dar mais tempo de leitura */
+	  }
+	  
+	  .signatures {
+		z-index: 3;
+		width: 2250px;
+		position: absolute;
+		top: -30px; 
+		animation: rotateSignature 20s ease-in-out infinite;
+	  }
 	}
-	100% {
-	  transform: rotate(-360deg);
-	}
-  }
+	  
+	  /* 
+		O GLOBO E A FRASE MEXEM-SE JUNTOS E PARAM JUNTOS
+		Exemplo do 1º bloco (0% a 25%):
+		- De 0% a 15%: Os dois rodam ao mesmo tempo.
+		- De 15% a 25%: Os dois ficam parados (pausa para leitura).
+	  */
+	  @keyframes rotateGlobe {
+		/* 1ª Rotação + Pausa */
+		0% { transform: rotate(0deg); }
+		15% { transform: rotate(-360deg); }
+		25% { transform: rotate(-360deg); } /* Fica parado aqui */
+	  
+		/* 2ª Rotação + Pausa */
+		40% { transform: rotate(-720deg); }
+		50% { transform: rotate(-720deg); } /* Fica parado aqui */
+	  
+		/* 3ª Rotação + Pausa */
+		65% { transform: rotate(-1080deg); }
+		75% { transform: rotate(-1080deg); } /* Fica parado aqui */
+	  
+		/* 4ª Rotação + Pausa */
+		90% { transform: rotate(-1440deg); }
+		100% { transform: rotate(-1440deg); } /* Fica parado aqui e faz o loop */
+	  }
+	  
+	  @keyframes rotateSignature {
+		/* 1ª Rotação + Pausa */
+		0% { transform: rotate(0deg); }
+		15% { transform: rotate(-90deg); }   /* Roda 1/4 de volta */
+		25% { transform: rotate(-90deg); }   /* Fica parado para leitura */
+	  
+		/* 2ª Rotação + Pausa */
+		40% { transform: rotate(-180deg); }  /* Roda mais 1/4 */
+		50% { transform: rotate(-180deg); }  /* Fica parado para leitura */
+	  
+		/* 3ª Rotação + Pausa */
+		65% { transform: rotate(-270deg); }  /* Roda mais 1/4 */
+		75% { transform: rotate(-270deg); }  /* Fica parado para leitura */
+	  
+		/* 4ª Rotação + Pausa */
+		90% { transform: rotate(-360deg); }  /* Completa a volta */
+		100% { transform: rotate(-360deg); } /* Fica parado para leitura */
+	  }
