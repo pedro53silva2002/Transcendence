@@ -1,6 +1,6 @@
 .card-wrapper {
 	position: relative; 
-    width: 360px; // O tamanho máximo passa para o pai
+    width: 385px; // O tamanho máximo passa para o pai
     border-radius: 25px; // Mantemos o raio aqui para o corte funcionar
     overflow: hidden; // Garante que a imagem sobreposta também respeita os cantos arredondados
 	height: 438px; //+8 because of the borders
