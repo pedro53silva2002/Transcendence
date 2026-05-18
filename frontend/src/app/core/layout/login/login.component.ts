@@ -1,11 +1,11 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { environment } from '../../../../environments/environment';
 import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-auth-button.component';
 import { CloseButtonComponent } from '../../../shared/components/close-button/close-button.component';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +14,9 @@ import { CloseButtonComponent } from '../../../shared/components/close-button/cl
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-	  GoogleAuthButtonComponent,
-    CloseButtonComponent
+	GoogleAuthButtonComponent,
+    CloseButtonComponent,
+	TranslocoModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

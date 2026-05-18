@@ -3,10 +3,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../logic/services/auth.service';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
 	selector: 'app-google-auth-button',
-	imports: [MatButtonModule],
+	imports: [MatButtonModule, TranslocoModule],
 	templateUrl: './google-auth-button.component.html',
 	styleUrl: './google-auth-button.component.scss',
 })

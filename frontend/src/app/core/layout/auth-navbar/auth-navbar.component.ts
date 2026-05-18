@@ -4,11 +4,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TranslocoModule } from '@jsverse/transloco';
 import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
+import { LanguageButtonComponent } from '../../../shared/components/language-button/language-button.component';
 
 @Component({
   selector: 'app-auth-navbar',
   standalone: true,
-  imports: [MatButtonModule, MatDialogModule, TranslocoModule],
+  imports: [MatButtonModule, MatDialogModule, TranslocoModule, LanguageButtonComponent],
   templateUrl: './auth-navbar.component.html',
   styleUrl: './auth-navbar.component.scss',
 })

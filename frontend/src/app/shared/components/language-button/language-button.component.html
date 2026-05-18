@@ -1,0 +1,8 @@
+<button matButton="outlined" class="std-btn language" [matMenuTriggerFor]="menu">
+	<mat-icon>language</mat-icon>
+</button>
+<mat-menu #menu="matMenu" yPosition="below" xPosition="after" class="centered-menu">
+	<button mat-menu-item (click)="changeLanguage('en')">EN</button>
+	<button mat-menu-item (click)="changeLanguage('es')">ES</button>
+	<button mat-menu-item (click)="changeLanguage('pt')">PT</button>
+</mat-menu>

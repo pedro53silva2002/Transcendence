@@ -1,5 +1,9 @@
 {
-  "auth": {
-    "register": "Register"
-  }
+	"auth": {
+		"register": "Register",
+		"login": "Login",
+		"password": "password",
+		"google": "Sign In With",
+		"username": "username"
+	}
 }

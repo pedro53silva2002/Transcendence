@@ -1,1 +1,9 @@
-{}
+{
+	"auth": {
+		"register": "Registro",
+		"login": "Acceso",
+		"password": "contraseña",
+		"google": "Iniciar Sesión con",
+		"username": "nombre de usuario"
+	}
+}
