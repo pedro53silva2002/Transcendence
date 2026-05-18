@@ -19,10 +19,6 @@ import { MatInputModule } from '@angular/material/input';
 		MatButtonModule,
 		MatDialogModule,
 		MatSidenavModule,
-		LoadingSpinnerComponent,
-		ConfirmationPopUpComponent,
-		AppHomeComponent,
-		InputLabelComponent,
 		MatFormFieldModule,
 		MatInputModule
 	],

@@ -8,8 +8,6 @@
 $my-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$orange-palette,
   ),
   typography: (
     brand-family: 'ADLaM Display',
@@ -25,7 +23,6 @@ html {
   @include mat.system-level-colors($my-theme);
   @include mat.system-level-typography($my-theme);
 
-  // Sobrescrita manual com as tuas cores para o Spring Boot UI
   --mat-sys-primary: #FFD372;
   --mat-sys-on-primary: #422E00;
   --mat-sys-primary-container: #FFEABA;
@@ -42,5 +39,3 @@ body {
   background-color: var(--mat-sys-primary);
   color: var(--mat-sys-on-primary-container);
 }
-
-
