@@ -6,5 +6,26 @@
 		"google": "Sign In with",
 		"username": "username",
 		"password-confirmation": "confirm password"
+	},
+
+	"navbar": {
+		"profile": "Profile",
+		"trip": "Plan a Trip",
+		"my-trips": "My Trips",
+		"my-friends": "My Friends",
+		"my-expenses": "My Expenses"
+	},
+
+	"card": {
+		"trip-description": "Click here to start planning your next trip.",
+		"my-trips-description": "Click here to view your past, present and future trips.",
+		"my-friends-description": "Click here to view your list of friends.",
+		"my-expenses-description": "Click here to check where your money wandered."
+	},
+
+	"dashboard": {
+		"greet": "Hello, ",
+		"intro": "Ready for your next adventure?" 
 	}
+
 }

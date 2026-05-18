@@ -1,0 +1,60 @@
+.full-page {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.dashboard-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 32px;
+	margin-left: 26px;
+	margin-right: 26px;
+}
+
+.logo-container {
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+
+	h1 {
+		font-family: 'BBH Hegarty';
+		font-weight: 100;
+	}
+}
+
+.main-container {
+	width: 70%;
+	margin: 0 auto; //centers the component
+	margin-bottom: 100px;
+}
+
+.greet-text {
+	display: flex;
+	flex-direction: column;
+	font-family: "BBH Hegarty";
+	font-weight: 100;
+	
+	h1 {
+		color: var(--mat-sys-on-primary);
+		font-size: 55px;
+		margin-bottom: 0px;
+	}
+
+	p {
+		color: var(--mat-sys-on-primary-container);
+		font-size: 30px;
+		margin-bottom: 15px;
+		margin-top: 6px;
+	}
+}
+
+.cards-section {
+	display: flex;
+	gap: 32px;
+	margin-top: 35px;
+	flex-wrap: wrap; //allows the cards to be responsive
+}
+
