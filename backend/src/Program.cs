@@ -57,6 +57,7 @@ try
     //Add dependency injection for model and service
     builder.Services.AddScoped<UserModel>();
     builder.Services.AddScoped<UserService>();
+    builder.Services.AddScoped<AuthService>();
 
     var app = builder.Build();
 

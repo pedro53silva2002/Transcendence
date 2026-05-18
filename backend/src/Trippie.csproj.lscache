@@ -131,8 +131,12 @@ Modules/Auth/
  Model/
   AuthModel.cs
   UserModel.cs
- Router/UserRouter.cs
- Service/UserService.cs
+ Router/
+  AuthRouter.cs
+  UserRouter.cs
+ Service/
+  AuthService.cs
+  UserService.cs
 obj/Debug/net9.0/
  .NETCoreApp,Version=v9.0.AssemblyAttributes.cs
  Trippie.AssemblyInfo.cs

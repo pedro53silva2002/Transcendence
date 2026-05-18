@@ -55,6 +55,15 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         return User.ToDto(user);
     }
 
+    public async Task<UserDto?> GetByEmail(string email, CancellationToken ct = default)
+    {
+        if (email is null) throw new ValidationException("email", $"Email can not be empty.");
+
+        var res = await userModel.GetByEmail(email, ct);
+
+        return res;
+    }
+
     public async Task DeleteAsync(int id, CancellationToken ct = default)
     {
         var deleted = await userModel.DeleteAsync(id, ct);
