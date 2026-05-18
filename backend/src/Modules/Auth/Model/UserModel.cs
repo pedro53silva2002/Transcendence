@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
@@ -41,7 +42,9 @@ public sealed class UserModel(AppDbContext db)
 {
     public async Task<UserDto> CreateAsync(CreateUserDto dto, CancellationToken ct = default)
     {
-        var passwordHash = new BCryptPasswordHasher().Hash(dto.Password);
+        string? passwordHash = null;
+        if (!string.IsNullOrEmpty(dto.Password))
+            passwordHash = new BCryptPasswordHasher().Hash(dto.Password);
 
         var user = new User
         {
@@ -50,12 +53,14 @@ public sealed class UserModel(AppDbContext db)
             Username = dto.Username,
             DisplayName = dto.Username,
             PasswordHash = passwordHash,
+            OauthProvider = dto.OAuthProvider
         };
 
         db.Users.Add(user);
         await db.SaveChangesAsync(ct);
         return User.ToDto(user);
     }
+    
     public async Task<CursorPage<UserDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
     {
         var res = await new SearchQueryBuilder<User>(db.Users)
@@ -64,14 +69,15 @@ public sealed class UserModel(AppDbContext db)
             {
                 "email" => x => x.Email,
                 "username" => x => x.Username,
+                "displayname" => x => x.DisplayName,
                 "createdat" => x => x.CreatedAt,
                 "id" => x => x.Id,
                 _ => throw new SearchValidationException($"Unknown filter field '{field}'."),
             })
             .SetOrderBy(payload.Sort, field => field.ToLowerInvariant() switch
             {
-                "email" => x => x.Email,
                 "username" => x => x.Username,
+                "displayname" => x => x.DisplayName,
                 "createdat" => x => x.CreatedAt,
                 "id" => x => x.Id,
                 _ => throw new SearchValidationException($"Unsortable field '{field}'."),
@@ -90,13 +96,30 @@ public sealed class UserModel(AppDbContext db)
         if (dto.Email is not null) user.Email = dto.Email;
         if (dto.Username is not null) user.Username = dto.Username;
         if (dto.DisplayName is not null) user.DisplayName = dto.DisplayName;
-        if (dto.Bio is not null) user.Bio = dto.Bio;
-        if (dto.ProfilePhotoUrl is not null) user.ProfilePhotoUrl = dto.ProfilePhotoUrl;
+        user.ProfilePhotoUrl = dto.ProfilePhotoUrl;
+        user.Bio = dto.Bio;
         user.UpdatedAt = DateTime.UtcNow;
 
+        db.Users.Update(user);
         await db.SaveChangesAsync(ct);
 
         return user;
+    }
+
+    public async Task<UserDto?> GetByEmail(string email, CancellationToken ct = default)
+    {
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Email == email, ct);
+        if (user is not null)
+            return User.ToDto(user);
+        return null;
+    }
+
+    public async Task<UserDto?> GetByUsername(string username, CancellationToken ct = default)
+    {
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username, ct);
+        if (user is not null)
+            return User.ToDto(user);
+        return null;
     }
 
     public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
