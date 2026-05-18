@@ -11,6 +11,6 @@ public sealed class ValidationException(IReadOnlyDictionary<string, IReadOnlyLis
 {
     public IReadOnlyDictionary<string, IReadOnlyList<string>> Errors { get; } = errors;
 
-    public ValidationException(string field, string message)
+    public ValidationException(string field, string message, string? clientMessage = null)
         : this(new Dictionary<string, IReadOnlyList<string>> { [field] = [message] }) { }
 }
