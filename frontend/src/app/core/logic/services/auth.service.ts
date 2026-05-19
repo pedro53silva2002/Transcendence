@@ -8,28 +8,37 @@ import { TokenStorageService } from './token-storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly apiURL = environment.apiUrl;
+  getGoogleRedirectUrl() {
+    throw new Error('Method not implemented.');
+  }
+  private readonly apiURL = `${(environment as any).apiUrl}`;
+
+  fetchCurrentUser() {
+    throw new Error('Method not implemented.');
+  }
   private readonly http = inject(HttpClient);
-  private readonly tokenStorage = inject(TokenStorageService);
-  private readonly router = inject(Router);
 
-  private readonly _loading = signal<boolean>(true);
-  private readonly _me = signal<MeDto | undefined>(undefined);
+  // ── Private writable signals ──────────────────────────────────────────────
+  private readonly _loading = signal<boolean>(true); // True while calling /me endpoint
+  private readonly _me = signal<MeDto | undefined>(undefined); // The call to get the authenticated user from backend
 
+  // ── Public read-only signals ──────────────────────────────────────────────
   readonly loading = this._loading.asReadonly();
   readonly me = this._me.asReadonly();
-  readonly isAuthenticated = computed(() => this._me() !== undefined);
+
+  /**
+   * Simplified user object for components that only need the username.
+   *
+   * computed() derives its value from _me automatically.
+   * It recalculates only when _me changes, and is memoised —
+   * reading it multiple times in one render cycle does not re-execute the function.
+   */
   readonly user = computed(() => {
     const me = this._me();
-    return me ? { username: me.username, displayName: me.displayName } : null;
+    return me ? { username: me.username } : null;
   });
 
-  clearSession(): void {
-    this.tokenStorage.clearTokens();
-    this._me.set(undefined);
-    this._loading.set(false);
-    this.router.navigate(['/']);
-  }
+  // ── Data fetching ─────────────────────────────────────────────────────────
 
   /**
    * Fetches the current user profile from the backend.
@@ -62,7 +71,6 @@ export class AuthService {
   //   }
 
   loadMe(): Observable<boolean> {
-    this._loading.set(true);
     return this.http.get<MeDto>(`${this.apiURL}/auth/me`).pipe(
       //pipe serve para executar algo sobre o observable antes de ser subscrito
       tap((user) => this._me.set(user)), //tap é usado para efetuar tarefas secundárias sem alterar o fluxo principal do método
@@ -71,7 +79,6 @@ export class AuthService {
         this._me.set(undefined);
         return of(false); //para retornar false num observable, o of serve para criá-lo com false
       }),
-      finalize(() => this._loading.set(false)), //finalize é executado sempre, independentemente de sucesso ou erro
     );
   }
 
@@ -79,14 +86,5 @@ export class AuthService {
 
   canAccessTrip(trip: TripMembership): boolean {
     return this._me()?.trips?.includes(trip) ?? false;
-  }
-
-  /**
-   *
-   * @returns returns the Google URL for the user to be able to login with the Google account
-   */
-  getGoogleRedirectUrl() {
-    const url = this.apiURL + `/auth/google/url`;
-    return this.http.get<{ authorizationUrl: string }>(url);
   }
 }

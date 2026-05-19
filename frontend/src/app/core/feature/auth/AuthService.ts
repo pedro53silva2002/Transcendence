@@ -11,4 +11,12 @@ export class AuthService extends BaseApiService {
   public async me(): Promise<ApiResponse<MeDto>> {
     return this._get<MeDto>('/auth/me');
   }
+
+  /**
+   *
+   * @returns returns the Google URL for the user to be able to login with the Google account
+   */
+  public getGoogleRedirectUrl() {
+    return this._getO<{ authorizationUrl: string }>('/auth/google/url');
+  }
 }

@@ -1,14 +1,8 @@
-import { Component, Input, signal, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ConfirmationPopUpComponent } from './shared/pop-up/confirmation-pop-up/confirmation-pop-up.component';
-import { NavbarComponent } from './core/layout/navbar/navbar.component';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
-import { AppHomeComponent } from './core/layout/app-home/app-home.component';
-import { InputLabelComponent } from './shared/components/input-label/input-label.component';
-import { FormControl, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 

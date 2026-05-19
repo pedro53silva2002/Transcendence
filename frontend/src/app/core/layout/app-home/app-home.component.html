@@ -1,8 +1,30 @@
-<!-- PÁGINA BASE QUANDO O USER ESTÁ LOGGADO -->
+<!-- DASHBOARD USER -->
+<div class="full-page">
+	<nav>
+		<div class="logo-container">
+			<h1>TRIPPIE</h1>
+		</div>
+		<div class="buttons">
+			<button routerLinkActive="active-link" routerLink="/profile" class="std-btn profile" mat-stroked-button>{{
+				'navbar.profile' | transloco }}</button>
+			<app-language-button></app-language-button>
+		</div>
+	</nav>
+	<div class="main-container">
+		<div class="greet-text">
+			<h1> {{ 'dashboard.greet' | transloco }} @user</h1>
+			<p> {{ 'dashboard.intro' | transloco }} </p>
+		</div>
 
-<app-navbar></app-navbar>
-
-<!-- apagar -->
-<!-- <app-breadcrumb previousPage="Home" backRoute="/"></app-breadcrumb> -->
-
-<router-outlet></router-outlet>
+		<div class="cards-section">
+			<app-dashboard-card title="navbar.trip" description="card.trip-description"
+				imagePath="./images/trip.png"></app-dashboard-card>
+			<app-dashboard-card title="navbar.my-trips" description="card.my-trips-description"
+				imagePath="./images/my_trips.png"></app-dashboard-card>
+			<app-dashboard-card title="navbar.my-friends" description="card.my-friends-description"
+				imagePath="./images/friends.png"></app-dashboard-card>
+			<app-dashboard-card title="navbar.my-expenses" description="card.my-expenses-description"
+				imagePath="./images/wallet.png"></app-dashboard-card>
+		</div>
+	</div>
+</div>

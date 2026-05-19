@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
@@ -72,6 +71,36 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
             return null;
         return res;
     }
+    public async Task<string> GenerateUniqueUsername(string baseUsername, CancellationToken ct = default)
+    {
+        var searchResult = await userModel.SearchAsync(new SearchPayload
+        {
+            Filters = [new FilterCriterion("username", FilterOperator.StartsWith, baseUsername)],
+            Sort = [new SortCriterion("username", SortDirection.Asc)],
+            Page = new CursorPageRequest
+            {
+                PageSize = 100
+            }
+        }, ct);
+        var existingUsers = searchResult?.Content;
+
+        if (existingUsers is null || !existingUsers.Any())
+            return baseUsername;
+
+        int number = 1;
+        while (existingUsers.Any(u => u.Username.Equals($"{baseUsername}{number}", StringComparison.OrdinalIgnoreCase)))
+            number++;
+        var candidateUsername = $"{baseUsername}{number}";
+        return candidateUsername;
+    }
+
+    public async Task<UserDto?> GetByOAuthIdAsync(string oauthProvider, string oauthId, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(oauthId))
+            throw new ValidationException("oauthId", "OAuth ID is required.");
+
+        return await userModel.GetByOAuthIdAsync(oauthProvider, oauthId, ct);
+    }
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
     {
@@ -79,13 +108,13 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         if (!deleted) throw new NotFoundException($"User {id} not found.", id);
     }
 
-	public async Task<string?> GetPasswordByEmail(string email, CancellationToken ct = default)
-	{
-		if (email is null) throw new ValidationException("email", $"Email cannot be empty");
+    public async Task<string?> GetPasswordByEmail(string email, CancellationToken ct = default)
+    {
+        if (email is null) throw new ValidationException("email", $"Email cannot be empty");
 
-		var res = await userModel.GetPasswordByEmail(email, ct);
-		if (res is not null)
-			return res;
-		return null;
-	}
+        var res = await userModel.GetPasswordByEmail(email, ct);
+        if (res is not null)
+            return res;
+        return null;
+    }
 }
