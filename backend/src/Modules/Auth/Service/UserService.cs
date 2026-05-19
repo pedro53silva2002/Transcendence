@@ -64,6 +64,14 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         return res;
     }
 
+    public async Task<UserDto?> GetById(int id, CancellationToken ct = default)
+    {
+        var res = await userModel.GetById(id, ct);
+        if (res is null)
+            return null;
+        return res;
+    }
+
     public async Task DeleteAsync(int id, CancellationToken ct = default)
     {
         var deleted = await userModel.DeleteAsync(id, ct);
