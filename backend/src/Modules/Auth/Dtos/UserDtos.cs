@@ -7,7 +7,7 @@ public sealed class CreateUserDto
     public required string Email { get; set; }
     public required string Username { get; set; }
     public required string Password { get; set; }
-    public string? OAuthProvider { get;set; }
+    public string? OAuthProvider { get; set; }
 }
 
 public sealed class UserDto

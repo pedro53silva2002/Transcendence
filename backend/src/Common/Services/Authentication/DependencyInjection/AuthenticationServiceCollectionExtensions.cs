@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Trippie.Common.Services.Authentication.Context;
 using Trippie.Common.Services.Authentication.Jwt;
@@ -30,6 +31,7 @@ public static class AuthenticationServiceCollectionExtensions
 
         var signingKey = new SymmetricSecurityKey(keyBytes);
 
+        services.AddMemoryCache();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
         services.AddHttpContextAccessor();
@@ -68,9 +70,16 @@ public static class AuthenticationServiceCollectionExtensions
                     OnAuthenticationFailed = ctx =>
                     {
                         if (ctx.Exception is SecurityTokenExpiredException)
-                        {
                             ctx.Response.Headers.Append("Token-Expired", "true");
-                        }
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = ctx =>
+                    {
+                        var jwtService = ctx.HttpContext.RequestServices
+                            .GetRequiredService<IJwtTokenService>();
+                        var jti = ctx.Principal?.FindFirst("jti")?.Value;
+                        if (jti is not null && jwtService.IsRevoked(jti))
+                            ctx.Fail("Token has been revoked.");
                         return Task.CompletedTask;
                     }
                 };

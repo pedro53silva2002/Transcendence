@@ -19,12 +19,12 @@ public record ErrorResponse
     [JsonPropertyName("timestamp")]
     public required DateTimeOffset Timestamp { get; init; }
 
-    [JsonPropertyName("metadata")]
-    public IReadOnlyDictionary<string, object?>? Metadata { get; init; }
+[JsonPropertyName("metadata")]
+public IReadOnlyDictionary<string, object?>? Metadata { get; init; }
 
-    [JsonPropertyName("errors")]
-    public IReadOnlyDictionary<string, IReadOnlyList<string>>? Errors { get; init; }
+[JsonPropertyName("errors")]
+public IReadOnlyDictionary<string, IReadOnlyList<string>>? Errors { get; init; }
 
-    [JsonPropertyName("details")]
-    public ErrorDetails? Details { get; init; }
+[JsonPropertyName("details")]
+public ErrorDetails? Details { get; init; }
 }

@@ -1,7 +1,8 @@
+using System.Security.Claims;
+using Trippie.Common.Services.Authentication.Extensions;
 using Trippie.Common.Services.Authentication.Jwt;
-using Trippie.Common.Services.Authentication.Security;
-using Trippie.Modules.Auth.Dtos;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
+using Trippie.Modules.Auth.Dtos;
 
 namespace Trippie.Modules.Auth.Service;
 
@@ -9,70 +10,69 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt)
 {
 	public async Task<AuthResponseDto> Register(RegisterDto dto, CancellationToken ct = default)
 	{
-		if (dto.Username is null) throw new ValidationException("email", "Username cannot be empty.", "Username cannot be empty.");
-		if (dto.Email is null) throw new ValidationException("email", "Email cannot be empty.", "Email cannot be empty.");
-		if (dto.Password is null) throw new ValidationException("password", "Password cannot be null.", "Password cannot be null.");
-		if (dto.Password.Length < 8) throw new ValidationException("password", "Password needs to have at least 8 characters.", "Password needs to have at least 8 characters.");
-		if (!dto.Email.Contains('@')) throw new ValidationException("email", "Email needs to have one @.", "Email needs to have one @.");
+		if (dto.Username is null) throw new ValidationException("username", "Username can not be empty.");
+		if (dto.Email is null) throw new ValidationException("email", "Email can not be empty.");
+		if (dto.Password is null) throw new ValidationException("password", "Password can not be null.");
+		if (dto.Password.Length < 8) throw new ValidationException("password", "Password needs to have at least 8 characters.");
+		if (!dto.Email.Contains('@')) throw new ValidationException("email", "Email needs to have one @.");
 
 		CreateUserDto createUserDto = new()
 		{
 			Email = dto.Email,
 			Username = dto.Username,
-			Password = dto.Password
+			Password = dto.Password,
 		};
 
 		var createdUser = await userService.CreateAsync(createUserDto, ct);
 
-		var (Token, ExpiresAtUtc) = jwt.GenerateToken(new JwtUserClaims
+		var (token, expiresAt) = jwt.GenerateToken(new JwtUserClaims
 		{
 			UserId = createdUser.Id,
-			Email = createdUser.Email,
 			Username = createdUser.Username,
+			Email = createdUser.Email,
 			DisplayName = createdUser.DisplayName,
 			Trips = []
 		});
 
-		var authResponse = new AuthResponseDto
+		var response = new AuthResponseDto
 		{
+			Token = token,
 			User = createdUser,
-			Token = Token,
-			ExpiresAt = ExpiresAtUtc.UtcDateTime
+			ExpiresAt = expiresAt.UtcDateTime
 		};
 
-		return authResponse;
+		return response;
 	}
 
-	public async Task<AuthResponseDto> Login(LoginDto dto, CancellationToken ct = default)
+	public async Task<MeDto> GetMe(ClaimsPrincipal principal, CancellationToken ct = default)
 	{
-		if (dto.Email is null) throw new ValidationException("email", "Email cannot be empty.", "Email cannot be empty.");
-		if (dto.Password is null) throw new ValidationException("password", "Password cannot be null.", "Password cannot be null.");
-		if (dto.Password.Length < 8) throw new ValidationException("password", "Password needs to have at least 8 characters.", "Password needs to have at least 8 characters.");
-		if (!dto.Email.Contains('@')) throw new ValidationException("email", "Email needs to have one @.", "Email needs to have one @.");
+		var userId = principal.GetUserId() ?? throw new UnauthorizedException("User not authenticated");
+		var user = await userService.GetById(userId, ct) ?? throw new NotFoundException($"User with id {userId} not found.", userId);
 
-
-		var foundUser = await userService.GetByEmail(dto.Email, ct) ?? throw new ValidationException("email", "Email is incorrect.", "Email is incorrect.");
-
-		string? passwordHash = await userService.GetPasswordByEmail(foundUser.Email, ct);
-		if (passwordHash is null) throw new ValidationException("password", "Password cannot be empty in database.", "Password cannot be empty in database.");
-		if (new BCryptPasswordHasher().Verify(dto.Password, passwordHash) == false)
-			throw new ValidationException("password", "Password invalid.", "Password invalid.");
-		var (Token, ExpiresAtUtc) = jwt.GenerateToken(new JwtUserClaims
+		var me = new MeDto
 		{
-			UserId = foundUser.Id,
-			Email = foundUser.Email,
-			Username = foundUser.Username,
-			DisplayName = foundUser.DisplayName,
-			Trips = [] // TODO: Load trips for user and convert to JwtTripClaim when we have trips submodule
-		});
-
-		var authResponse = new AuthResponseDto
-		{
-			User = foundUser,
-			Token = Token,
-			ExpiresAt = ExpiresAtUtc.UtcDateTime
+			Username = user.Username,
+			DisplayName = user.DisplayName,
+			Email = user.Email,
+			ProfilePhotoUrl = user.ProfilePhotoUrl,
+			Trips = [.. principal.GetTrips().Select(t => new TripMembershipDto
+			{
+				TripId = t.TripId,
+				Role = t.Role
+			})]
 		};
 
-		return authResponse;
+		return me;
+	}
+
+	public async Task<AuthResponseDto> Logout(string token, CancellationToken ct = default)
+	{
+		jwt.InvalidateToken(token);
+		return new AuthResponseDto
+		{
+			Token = string.Empty,
+			User = null!,
+			ExpiresAt = DateTime.UtcNow
+		};
 	}
 }

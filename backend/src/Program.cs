@@ -44,9 +44,24 @@ try
 	// Replace MS logging with Serilog (reads "Serilog" + "ErrorHandling" sections).
 	builder.Host.UseAppSerilog();
 
-	builder.Services.AddControllers();
-	builder.Services.AddOpenApi();
-	builder.Services.AddHealthChecks();
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            var allowedOrigins = builder.Configuration
+                .GetSection("AllowedOrigins")
+                .Get<string[]>() ?? ["http://localhost:4200"];
+
+            policy.WithOrigins(allowedOrigins)
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+    });
+
+    builder.Services.AddControllers();
+    builder.Services.AddOpenApi();
+    builder.Services.AddHealthChecks();
 
 	// Exception handling subsystem.
 	builder.Services.AddExceptionHandling(builder.Configuration);
@@ -116,19 +131,20 @@ try
 	//    (auth, static files, endpoints).
 	app.UseExceptionHandling();
 
-	// 3. Standard pipeline.
-	if (app.Environment.IsDevelopment())
-	{
-		app.MapOpenApi();
-		app.UseSwaggerUI(options =>
-		{
-			options.SwaggerEndpoint("/openapi/v1.json", "Trippie v1");
-		});
-	}
-	app.MapHealthChecks("/health");
-	app.UseAuthentication();
-	app.UseAuthorization();
-	app.MapControllers();
+    // 3. Standard pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/openapi/v1.json", "Trippie v1");
+        });
+    }
+    app.MapHealthChecks("/health");
+    app.UseCors();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapControllers();
 
 	app.Run();
 }
