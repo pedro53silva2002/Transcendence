@@ -26,5 +26,11 @@
 	"dashboard": {
 		"greet": "Bem-vindo, ",
 		"intro": "Preparado para a tua aventura?" 
+	},
+
+	"stats": {
+		"countries": "Paises Visitados",
+		"trips": "Viagens Este Ano",
+		"countdown": "Dias Para Viagem"
 	}
 }
