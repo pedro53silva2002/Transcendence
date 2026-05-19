@@ -46,13 +46,12 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
             var idToken = await googleOAuthService.ExchangeCodeForTokenAsync(code, codeVerifier, ct);
             var tokenPayload = googleOAuthService.DecodeToken(idToken);
 
-            var user = await service.RegisterOrLoginViaOAuthAsync(
-                email: tokenPayload.Email,
-                oauthId: tokenPayload.Sub,
-                oauthProvider: "google",
-                profilePhotoUrl: tokenPayload.Picture,
-                ct: ct
-            );
+            var user = await service.RegisterOrLoginViaOAuthAsync(new GoogleRegisterOrLoginDto {
+                Email = tokenPayload.Email,
+                OAuthId = tokenPayload.Sub,
+                OAuthProvider = "google",
+                ProfilePhotoUrl = tokenPayload.Picture
+                }, ct: ct);
 
             var frontendSuccessUri = $"{_googleOAuthOptions.FrontendSuccessUri}?success=true";
             return Redirect(frontendSuccessUri);
@@ -63,4 +62,3 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
         }
     }
 }
-

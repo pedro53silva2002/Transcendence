@@ -61,26 +61,6 @@ public sealed class UserModel(AppDbContext db)
         return User.ToDto(user);
     }
 
-    public async Task<UserDto> CreateOAuthAsync(string email, string username, string displayName, string oauthProvider, string oauthId, string? profilePhotoUrl, CancellationToken ct = default)
-    {
-        var user = new User
-        {
-            Id = 0,
-            Email = email,
-            Username = username,
-            DisplayName = displayName,
-            PasswordHash = null,
-            OauthProvider = oauthProvider,
-            OauthId = oauthId,
-            ProfilePhotoUrl = profilePhotoUrl,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        db.Users.Add(user);
-        await db.SaveChangesAsync(ct);
-        return User.ToDto(user);
-    }
-    
     public async Task<CursorPage<UserDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
     {
         var res = await new SearchQueryBuilder<User>(db.Users)

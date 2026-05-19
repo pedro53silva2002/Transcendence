@@ -1,10 +1,11 @@
 //using Trippie.Common.Services.Authentication.Jwt;
+using Trippie.Common.Services.Authentication.Jwt;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Modules.Auth.Dtos;
 
 namespace Trippie.Modules.Auth.Service;
 
-public sealed class AuthService(UserService userService)
+public sealed class AuthService(UserService userService, IJwtTokenService jwt)
 {
     public async Task<UserDto> Register(RegisterDto dto, CancellationToken ct = default)
     {
@@ -33,40 +34,91 @@ public sealed class AuthService(UserService userService)
         return createdUser;
     }
 
-    public async Task<UserDto> RegisterOrLoginViaOAuthAsync(string email, string oauthId, string oauthProvider, string? profilePhotoUrl, CancellationToken ct = default)
+    public async Task<AuthResponseDto> RegisterOrLoginViaOAuthAsync(GoogleRegisterOrLoginDto dto, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(email))
+        if (string.IsNullOrWhiteSpace(dto.Email))
             throw new ValidationException("email", "Email is required.");
-        if (string.IsNullOrWhiteSpace(oauthId))
+        if (string.IsNullOrWhiteSpace(dto.OAuthId))
             throw new ValidationException("oauthId", "OAuth ID is required.");
-        if (string.IsNullOrWhiteSpace(oauthProvider))
+        if (string.IsNullOrWhiteSpace(dto.OAuthProvider))
             throw new ValidationException("oauthProvider", "OAuth provider is required.");
 
-        var existingOAuthUser = await userService.GetByOAuthIdAsync(oauthProvider, oauthId, ct);
+        var existingOAuthUser = await userService.GetByOAuthIdAsync(dto.OAuthProvider, dto.OAuthId, ct);
         if (existingOAuthUser is not null)
-            return existingOAuthUser;
-
-        var existingEmailUser = await userService.GetByEmail(email, ct);
-        if (existingEmailUser is not null)
         {
-            if (existingEmailUser.OAuthProvider is null)
-                throw new ConflictException($"User with this email already exists with traditional signup.");
-            throw new ConflictException($"User with this email already exists.");
+            var (tokenUser, expiresAtUser) = jwt.GenerateToken(new JwtUserClaims
+            {
+                UserId = existingOAuthUser.Id,
+                Email = existingOAuthUser.Email,
+                Username = existingOAuthUser.Username,
+                DisplayName = existingOAuthUser.DisplayName,
+                Trips = [] // TODO: Map trips to JwtTripClaim
+            });
+
+            var responseDtoUser = new AuthResponseDto
+            {
+                User = existingOAuthUser,
+                Token = tokenUser,
+                ExpiresAt = expiresAtUser.UtcDateTime
+            };
+
+            return responseDtoUser;
         }
 
-        var baseUsername = email.Split('@')[0];
+        var existingEmailUser = await userService.GetByEmail(dto.Email, ct);
+        if (existingEmailUser is not null)
+        {
+            if (existingEmailUser.OAuthProvider == "none")
+                throw new ConflictException($"User with this email already exists with traditional signup.");
+
+            var (tokenEmail, expiresAtEmail) = jwt.GenerateToken(new JwtUserClaims
+            {
+                UserId = existingEmailUser.Id,
+                Email = existingEmailUser.Email,
+                Username = existingEmailUser.Username,
+                DisplayName = existingEmailUser.DisplayName,
+                Trips = [] // TODO: Map trips to JwtTripClaim
+            });
+
+            var responseDtoEmail = new AuthResponseDto
+            {
+                User = existingEmailUser,
+                Token = tokenEmail,
+                ExpiresAt = expiresAtEmail.UtcDateTime
+            };
+
+            return responseDtoEmail;
+        }
+
+        var baseUsername = dto.Email.Split('@')[0];
         var uniqueUsername = await userService.GenerateUniqueUsername(baseUsername, ct);
 
-        var newUser = await userService.CreateOAuthAsync(
-            email: email,
-            username: uniqueUsername,
-            displayName: uniqueUsername,
-            oauthProvider: oauthProvider,
-            oauthId: oauthId,
-            profilePhotoUrl: profilePhotoUrl,
-            ct: ct
-        );
+        var newUser = await userService.CreateAsync(new CreateUserDto
+        {
+            Email = dto.Email,
+            Username = uniqueUsername,
+            OAuthProvider = dto.OAuthProvider,
+            OAuthId = dto.OAuthId,
+            ProfilePhotoUrl = dto.ProfilePhotoUrl,
+            Password = null
+        }, ct);
 
-        return newUser;
+        var (token, expiresAt) = jwt.GenerateToken(new JwtUserClaims
+            {
+                UserId = newUser.Id,
+                Email = newUser.Email,
+                Username = newUser.Username,
+                DisplayName = newUser.DisplayName,
+                Trips = [] // TODO: Map trips to JwtTripClaim
+            });
+
+            var responseDto = new AuthResponseDto
+            {
+                User = newUser,
+                Token = token,
+                ExpiresAt = expiresAt.UtcDateTime
+            };
+
+        return responseDto;
     }
 }

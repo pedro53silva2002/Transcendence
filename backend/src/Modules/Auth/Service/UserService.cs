@@ -16,8 +16,6 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
             throw new ValidationException("email", "Email is required.");
         if (string.IsNullOrWhiteSpace(dto.Username))
             throw new ValidationException("username", "Username is required.");
-        if (string.IsNullOrWhiteSpace(dto.Password))
-            throw new ValidationException("password", "Password is required.");
 
         var existsUsername = await userModel.GetByUsername(dto.Username, ct);
         var existsEmails = await userModel.GetByEmail(dto.Email, ct);
@@ -98,17 +96,6 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
             throw new ValidationException("oauthId", "OAuth ID is required.");
 
         return await userModel.GetByOAuthIdAsync(oauthProvider, oauthId, ct);
-    }
-
-    public async Task<UserDto> CreateOAuthAsync(string email, string username, string displayName, string oauthProvider, string oauthId, string? profilePhotoUrl, CancellationToken ct = default)
-    {
-        if (string.IsNullOrWhiteSpace(email))
-            throw new ValidationException("email", "Email is required.");
-        if (string.IsNullOrWhiteSpace(username))
-            throw new ValidationException("username", "Username is required.");
-
-        var user = await userModel.CreateOAuthAsync(email, username, displayName, oauthProvider, oauthId, profilePhotoUrl, ct);
-        return user;
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
