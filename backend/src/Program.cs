@@ -44,6 +44,21 @@ try
     // Replace MS logging with Serilog (reads "Serilog" + "ErrorHandling" sections).
     builder.Host.UseAppSerilog();
 
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            var allowedOrigins = builder.Configuration
+                .GetSection("AllowedOrigins")
+                .Get<string[]>() ?? ["http://localhost:4200"];
+
+            policy.WithOrigins(allowedOrigins)
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+    });
+
     builder.Services.AddControllers();
     builder.Services.AddOpenApi();
     builder.Services.AddHealthChecks();
@@ -126,6 +141,7 @@ try
         });
     }
     app.MapHealthChecks("/health");
+    app.UseCors();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();

@@ -141,5 +141,5 @@ internal static class ValueCoercer
         // Public field (not property) is critical — EF Core's parameter extractor
         // recognises member access on closure-captured constants as a parameter.
         public readonly T Value = value;
-    }
+}
 }

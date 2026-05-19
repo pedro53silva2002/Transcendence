@@ -46,9 +46,8 @@ export class RegisterComponent {
       alert('password does not match');
       return;
     }
-    console.log(
-      'SENDING INFO: username: ' + username + '\npassword: ' + password + '\nemail: ' + email,
-    );
-    //await this.authService.register({ username, email, password });
+    const user = await this.authService.register({ username, email, password });
+
+    console.log(user);
   }
 }

@@ -25,7 +25,6 @@ export const appConfig: ApplicationConfig = {
       const auth = inject(AuthService);
       return auth.loadMe();
     }),
-    provideHttpClient(),
     provideTransloco({
       config: {
         availableLangs: ['en', 'pt', 'es'],

@@ -1,6 +1,5 @@
 interface ImportMetaEnv {
-  readonly VITE_API_URL: string;
-  readonly VITE_ACCESS_TOKEN_KEY: string;
+  readonly NG_APP_API_URL: string;
 }
 
 interface ImportMeta {

@@ -60,7 +60,7 @@ public sealed class UserModel(AppDbContext db)
         await db.SaveChangesAsync(ct);
         return User.ToDto(user);
     }
-    
+
     public async Task<CursorPage<UserDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
     {
         var res = await new SearchQueryBuilder<User>(db.Users)
@@ -117,6 +117,14 @@ public sealed class UserModel(AppDbContext db)
     public async Task<UserDto?> GetByUsername(string username, CancellationToken ct = default)
     {
         var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username, ct);
+        if (user is not null)
+            return User.ToDto(user);
+        return null;
+    }
+
+    public async Task<UserDto?> GetById(int id, CancellationToken ct = default)
+    {
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id, ct);
         if (user is not null)
             return User.ToDto(user);
         return null;

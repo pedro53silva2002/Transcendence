@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import type { MeDto, TripMembership } from '../dtos/me-dto.ts';
 import { TokenStorageService } from './token-storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  apiURL = environment.apiUrl;
+  private readonly apiURL = environment.apiUrl;
   private readonly http = inject(HttpClient);
   private readonly tokenStorage = inject(TokenStorageService);
   private readonly router = inject(Router);
@@ -62,6 +62,7 @@ export class AuthService {
   //   }
 
   loadMe(): Observable<boolean> {
+    this._loading.set(true);
     return this.http.get<MeDto>(`${this.apiURL}/auth/me`).pipe(
       //pipe serve para executar algo sobre o observable antes de ser subscrito
       tap((user) => this._me.set(user)), //tap é usado para efetuar tarefas secundárias sem alterar o fluxo principal do método
@@ -70,6 +71,7 @@ export class AuthService {
         this._me.set(undefined);
         return of(false); //para retornar false num observable, o of serve para criá-lo com false
       }),
+      finalize(() => this._loading.set(false)), //finalize é executado sempre, independentemente de sucesso ou erro
     );
   }
 
