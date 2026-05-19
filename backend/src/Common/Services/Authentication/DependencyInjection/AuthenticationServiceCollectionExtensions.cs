@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Trippie.Common.Services.Authentication.Context;
-using Trippie.Common.Services.Authentication.Extensions;
 using Trippie.Common.Services.Authentication.Jwt;
 using Trippie.Common.Services.Authentication.Security;
 
@@ -35,7 +34,6 @@ public static class AuthenticationServiceCollectionExtensions
         services.AddMemoryCache();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
-        services.AddSingleton<ITokenBlocklistService, MemoryCacheTokenBlocklistService>();
         services.AddHttpContextAccessor();
         services.AddScoped<IUserContext, UserContext>();
 
@@ -77,10 +75,10 @@ public static class AuthenticationServiceCollectionExtensions
                     },
                     OnTokenValidated = ctx =>
                     {
-                        var blocklist = ctx.HttpContext.RequestServices
-                            .GetRequiredService<ITokenBlocklistService>();
-                        var jti = ctx.Principal?.GetJti();
-                        if (jti is not null && blocklist.IsRevoked(jti))
+                        var jwtService = ctx.HttpContext.RequestServices
+                            .GetRequiredService<IJwtTokenService>();
+                        var jti = ctx.Principal?.FindFirst("jti")?.Value;
+                        if (jti is not null && jwtService.IsRevoked(jti))
                             ctx.Fail("Token has been revoked.");
                         return Task.CompletedTask;
                     }

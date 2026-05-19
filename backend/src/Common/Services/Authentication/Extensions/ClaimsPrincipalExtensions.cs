@@ -53,14 +53,4 @@ public static class ClaimsPrincipalExtensions
         return false;
     }
 
-    public static string? GetJti(this ClaimsPrincipal principal) =>
-        principal.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
-
-    public static DateTimeOffset? GetExpiry(this ClaimsPrincipal principal)
-    {
-        var raw = principal.FindFirst(JwtRegisteredClaimNames.Exp)?.Value;
-        return long.TryParse(raw, out var seconds)
-            ? DateTimeOffset.FromUnixTimeSeconds(seconds)
-            : null;
-    }
 }
