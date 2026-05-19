@@ -7,19 +7,21 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService } from '../../feature/auth/AuthService';
+import { CloseButtonComponent } from '../../../shared/components/close-button/close-button.component';
+import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-auth-button.component';
 
 @Component({
   selector: 'app-register',
   imports: [
     MatDialogModule,
     MatIconModule,
-    MatDialogClose,
     MatFormFieldModule,
     MatInputModule,
     TranslocoModule,
     MatButtonModule,
-    MatIcon,
     ReactiveFormsModule,
+    CloseButtonComponent,
+    GoogleAuthButtonComponent
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',

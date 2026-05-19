@@ -11,3 +11,17 @@
 		color: var(--mat-sys-primary-container) !important;
 	}
 }
+
+img {
+	width: 15px;
+	height: 15px;
+	// margin-left: 5px;
+	// margin-top: 4px;
+	margin-right: 6px;
+}
+
+.button-content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

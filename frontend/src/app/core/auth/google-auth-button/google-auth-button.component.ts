@@ -1,12 +1,13 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, input, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../../logic/services/auth.service';
+import { TranslocoModule } from '@jsverse/transloco';
+import { AuthService } from '../../feature/auth/AuthService';
 
 @Component({
 	selector: 'app-google-auth-button',
-	imports: [MatButtonModule],
+	imports: [MatButtonModule, TranslocoModule],
 	templateUrl: './google-auth-button.component.html',
 	styleUrl: './google-auth-button.component.scss',
 })
@@ -20,7 +21,7 @@ export class GoogleAuthButtonComponent implements OnDestroy {
 			.subscribe({
 				//if the subscribe succeeds
 				next: (res) => {
-					window.location.href = res.authorizationUrl;
+					window.location.href = res.data?.googleRedirectURL || '/';
 				},
 				error: (err) => console.error(err)
 			});

@@ -4,5 +4,9 @@
 	<h1>TRIPPIE</h1>
 	<div class="half-globe">
 		<img class="globe" src="./images/globe.png" alt="globe">
+		<img class="signatures" [class.hidden-signatures]="isDialogOpen$ | async" src="./images/signatures.png" alt="signatures">
+	</div>
+	<div class="half-signatures">
 	</div>
 </div>
+
