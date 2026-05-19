@@ -19,7 +19,7 @@ public sealed class User
     public string? PasswordHash { get; set; }
     public string? Bio { get; set; }
     public string? ProfilePhotoUrl { get; set; }
-    public string? OauthProvider { get; set; }
+    public required string OauthProvider { get; set; }
     public string? OauthId { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
@@ -53,7 +53,27 @@ public sealed class UserModel(AppDbContext db)
             Username = dto.Username,
             DisplayName = dto.Username,
             PasswordHash = passwordHash,
-            OauthProvider = dto.OAuthProvider
+            OauthProvider = dto.OAuthProvider ?? "none",
+        };
+
+        db.Users.Add(user);
+        await db.SaveChangesAsync(ct);
+        return User.ToDto(user);
+    }
+
+    public async Task<UserDto> CreateOAuthAsync(string email, string username, string displayName, string oauthProvider, string oauthId, string? profilePhotoUrl, CancellationToken ct = default)
+    {
+        var user = new User
+        {
+            Id = 0,
+            Email = email,
+            Username = username,
+            DisplayName = displayName,
+            PasswordHash = null,
+            OauthProvider = oauthProvider,
+            OauthId = oauthId,
+            ProfilePhotoUrl = profilePhotoUrl,
+            CreatedAt = DateTime.UtcNow
         };
 
         db.Users.Add(user);
@@ -117,6 +137,14 @@ public sealed class UserModel(AppDbContext db)
     public async Task<UserDto?> GetByUsername(string username, CancellationToken ct = default)
     {
         var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username, ct);
+        if (user is not null)
+            return User.ToDto(user);
+        return null;
+    }
+
+    public async Task<UserDto?> GetByOAuthIdAsync(string oauthProvider, string oauthId, CancellationToken ct = default)
+    {
+        var user = await db.Users.FirstOrDefaultAsync(u => u.OauthProvider == oauthProvider && u.OauthId == oauthId, ct);
         if (user is not null)
             return User.ToDto(user);
         return null;
