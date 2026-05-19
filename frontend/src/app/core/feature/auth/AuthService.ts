@@ -7,4 +7,15 @@ export class AuthService extends BaseApiService {
   public async register(dto: CreateUserDto): Promise<ApiResponse<void>> {
     return this._post<void>('/auth/register', dto);
   }
+
+   /**
+   *
+   * @returns returns the Google URL for the user to be able to login with the Google account
+   */
+  getGoogleRedirectUrl() {
+    return this._getO<{ googleRedirectURL: string}>('/auth/google/url');
+  }
 }
+
+
+
