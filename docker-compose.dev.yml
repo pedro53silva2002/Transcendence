@@ -1,0 +1,70 @@
+services:
+  postgres-db:
+    image: postgres:16
+    container_name: postgres-db
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    container_name: redis-cache
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT}:6379"
+    command: ["redis-server", "--port", "${REDIS_PORT}"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "${REDIS_PORT}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio-storage
+    restart: unless-stopped
+    ports:
+      - "${MINIO_PORT}:9000"
+      - "${MINIO_CONSOLE_PORT}:9001"
+    command:
+      [
+        "server",
+        "/data",
+        "--console-address",
+        ":${MINIO_CONSOLE_PORT}",
+        "--address",
+        ":${MINIO_PORT}",
+      ]
+    environment:
+      MINIO_ROOT_USER: "${MINIO_ROOT_USER}"
+      MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD}"
+    volumes:
+      - minio-data:/data
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+  redis-data:
+  minio-data:
+
+networks:
+  app-network:
+    driver: bridge

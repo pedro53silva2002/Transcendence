@@ -10,16 +10,16 @@
   <mat-dialog-content>
     <div class="register-form">
       <mat-form-field appearance="outline" [hideRequiredMarker]="true">
-        <input matInput type="text" formControlName="username" placeholder="username" />
+        <input matInput type="text" formControlName="username" placeholder="{{ 'auth.username' | transloco }}" />
       </mat-form-field>
       <mat-form-field appearance="outline" [hideRequiredMarker]="true">
         <input matInput type="email" formControlName="email" placeholder="email" />
       </mat-form-field>
       <mat-form-field appearance="outline" [hideRequiredMarker]="true">
-        <input matInput type="password" formControlName="password" placeholder="password" />
+        <input matInput type="password" formControlName="password" placeholder="{{ 'auth.password' | transloco }}" />
       </mat-form-field>
       <mat-form-field appearance="outline" [hideRequiredMarker]="true">
-        <input matInput type="password" formControlName="confirmPassword" placeholder="confirm password" />
+        <input matInput type="password" formControlName="confirmPassword" placeholder="{{ 'auth.password-confirmation' | transloco }}" />
       </mat-form-field>
     </div>
   </mat-dialog-content>

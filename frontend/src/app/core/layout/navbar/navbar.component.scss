@@ -10,7 +10,9 @@
     align-items: center;
     justify-content: flex-end;
     gap: 16px;
-    padding: 32px;
+    padding: 12px;
+	margin-left: 20px;
+	margin-right: 20px;
 }
 
 .logo-container {
@@ -69,35 +71,12 @@
 }
 
 ::ng-deep {
-    .mat-mdc-menu-panel.centered-menu {
-        margin-left: -30px;
-        margin-top: 8px !important;
-        border-radius: 20px !important;
-        // border: 1px solid var(--mat-sys-primary);
-        background-color: var(--mat-sys-on-primary) !important;
-        min-width: 100px !important;
-    }
-
     .mat-mdc-menu-panel.hamburguer-menu-panel {
         margin-top: 10px !important;
         border-radius: 20px !important;
         border: 1px solid var(--mat-sys-primary);
         background-color: var(--mat-sys-on-primary) !important;
         min-width: 310px !important;
-    }
-
-    .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
-        color: var(--mat-sys-primary-container);
-        text-align: center;
-    }
-
-    .mat-mdc-menu-content .mat-mdc-menu-item:hover {
-        background-color: var(--mat-sys-on-primary) !important;
-    }
-
-    .mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
-        color: var(--mat-sys-on-primary-container) !important;
-        text-align: center;
     }
 }
 

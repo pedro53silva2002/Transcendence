@@ -1,0 +1,31 @@
+@Trippie_HostAddress = http://localhost:5024
+
+### Health check
+GET {{Trippie_HostAddress}}/health
+Accept: application/json
+
+### 404 — domain NotFoundException
+GET {{Trippie_HostAddress}}/dev/throw/notfound
+X-Correlation-Id: probe-notfound
+
+### 400 — ValidationException with per-field errors
+GET {{Trippie_HostAddress}}/dev/throw/validation
+X-Correlation-Id: probe-validation
+
+### 409 — ConflictException with custom error code
+GET {{Trippie_HostAddress}}/dev/throw/conflict
+X-Correlation-Id: probe-conflict
+
+### 401 — UnauthorizedException
+GET {{Trippie_HostAddress}}/dev/throw/unauthorized
+X-Correlation-Id: probe-unauthorized
+
+### 403 — ForbiddenException
+GET {{Trippie_HostAddress}}/dev/throw/forbidden
+X-Correlation-Id: probe-forbidden
+
+### 500 — unhandled InvalidOperationException (fallback mapper)
+GET {{Trippie_HostAddress}}/dev/throw/internal
+X-Correlation-Id: probe-internal
+
+###

@@ -1,0 +1,70 @@
+.full-page {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+nav {
+	width: 90%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 0 auto; //to center the nav in the page
+	margin-top: 40px;
+	margin-bottom: 20px;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+.logo-container {
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+
+	h1 {
+		font-family: 'BBH Hegarty';
+		font-weight: 100;
+	}
+}
+
+.main-container {
+	width: 90%;
+	margin: 0 auto; //centers the component
+	margin-bottom: 100px;
+}
+
+.greet-text {
+	display: flex;
+	flex-direction: column;
+	font-family: "BBH Hegarty";
+	font-weight: 100;
+	margin-top: 10px;
+	
+	h1 {
+		color: var(--mat-sys-on-primary);
+		font-size: 45px;
+		margin-bottom: 0px;
+		font-weight: 100;
+	}
+
+	p {
+		color: var(--mat-sys-on-primary-container);
+		font-size: 22px;
+		margin-bottom: 15px;
+		margin-top: 6px;
+	}
+}
+
+.cards-section {
+	display: flex;
+	justify-content: space-between;
+	gap: 32px;
+	margin-top: 35px;
+	flex-wrap: wrap; //allows the cards to be responsive
+}
+
