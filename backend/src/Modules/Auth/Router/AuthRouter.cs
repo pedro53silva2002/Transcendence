@@ -18,6 +18,11 @@ public sealed class AuthRouter(AuthService service) : ControllerBase
 	[Authorize]
 	public async Task<ActionResult<MeDto>> Me(CancellationToken ct)
 		=> await service.GetMe(User, ct);
+	
+	[HttpPost("login")]
+	[Authorize]
+	public async Task<ActionResult<AuthResponseDto>> Login([FromBody] LoginDto dto, CancellationToken ct)
+		=> await service.Login(dto, ct);
 
 	[HttpPost("logout")]
 	[Authorize]

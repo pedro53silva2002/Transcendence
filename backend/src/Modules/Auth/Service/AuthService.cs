@@ -65,6 +65,36 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt)
 		return me;
 	}
 
+	public async Task<AuthResponseDto> Login(LoginDto dto, CancellationToken ct = default)
+	{
+		if (dto.Email is null) throw new ValidationException("email", "Email can not be empty.");
+		if (dto.Password is null) throw new ValidationException("password", "Password can not be null.");
+
+		var user = await userService.GetByEmail(dto.Email, ct) ?? throw new UnauthorizedException("Invalid email or password.");
+
+		string passwordHash = await userService.GetPasswordByEmail(dto.Email, ct) ?? throw new UnauthorizedException("Invalid email or password.");
+		//if (passwordHash == null || !BCrypt.Net.BCrypt.Verify(dto.Password, passwordHash)) throw new UnauthorizedException("Invalid email or password.");
+		if (!BCrypt.Net.BCrypt.Verify(dto.Password, passwordHash)) throw new UnauthorizedException("Invalid email or password.");
+
+		var (token, expiresAt) = jwt.GenerateToken(new JwtUserClaims
+		{
+			UserId = user.Id,
+			Username = user.Username,
+			Email = user.Email,
+			DisplayName = user.DisplayName,
+			Trips = []
+		});
+
+		var response = new AuthResponseDto
+		{
+			Token = token,
+			User = user,
+			ExpiresAt = expiresAt.UtcDateTime
+		};
+
+		return response;
+	}
+
 	public async Task<AuthResponseDto> Logout(string token, CancellationToken ct = default)
 	{
 		jwt.InvalidateToken(token);
