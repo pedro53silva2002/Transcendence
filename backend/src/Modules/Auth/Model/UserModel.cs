@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -113,6 +114,14 @@ public sealed class UserModel(AppDbContext db)
             return User.ToDto(user);
         return null;
     }
+
+	public async Task<string?> GetPasswordByEmail(string email, CancellationToken ct = default)
+	{
+		var user = await db.Users.FirstOrDefaultAsync(u => u.Email == email, ct);
+		if (user is not null)
+			return user.PasswordHash;
+		return null;
+	}
 
     public async Task<UserDto?> GetByUsername(string username, CancellationToken ct = default)
     {

@@ -84,6 +84,7 @@ Common/
    ConflictException.cs
    ForbiddenException.cs
    InternalServerException.cs
+   InvalidPasswordException.cs
    NotFoundException.cs
    UnauthorizedException.cs
    ValidationException.cs

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
@@ -57,7 +58,7 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
 
     public async Task<UserDto?> GetByEmail(string email, CancellationToken ct = default)
     {
-        if (email is null) throw new ValidationException("email", $"Email can not be empty.");
+        if (email is null) throw new ValidationException("email", $"Email cannot be empty.");
 
         var res = await userModel.GetByEmail(email, ct);
 
@@ -69,4 +70,14 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         var deleted = await userModel.DeleteAsync(id, ct);
         if (!deleted) throw new NotFoundException($"User {id} not found.", id);
     }
+
+	public async Task<string?> GetPasswordByEmail(string email, CancellationToken ct = default)
+	{
+		if (email is null) throw new ValidationException("email", $"Email cannot be empty");
+
+		var res = await userModel.GetPasswordByEmail(email, ct);
+		if (res is not null)
+			return res;
+		return null;
+	}
 }
