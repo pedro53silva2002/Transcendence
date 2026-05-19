@@ -8,14 +8,11 @@ export class AuthService extends BaseApiService {
     return this._post<void>('/auth/register', dto);
   }
 
-   /**
+  /**
    *
    * @returns returns the Google URL for the user to be able to login with the Google account
    */
-  getGoogleRedirectUrl() {
-    return this._getO<{ googleRedirectURL: string}>('/auth/google/url');
+  public getGoogleRedirectUrl() {
+    return this._getO<{ authorizationUrl: string }>('/auth/google/url');
   }
 }
-
-
-
