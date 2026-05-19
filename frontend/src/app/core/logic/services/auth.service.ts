@@ -1,34 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import type { MeDto, TripMembership } from '../dtos/me-dto.ts';
+import { TokenStorageService } from './token-storage.service';
 
-/**
- * Manages the authenticated user's session state for the entire application.
- *
- * WHY SIGNALS?
- * Angular Signals are the modern lightweight way to manage reactive state.
- * Compared to BehaviorSubject:
- *   - No need to unsubscribe (signals are not Observables)
- *   - computed() is cleaner than combineLatest/map pipes
- *   - Templates track signal reads automatically — no async pipe needed
- *   - Less boilerplate than NgRx for straightforward auth state
- *
- * Provided at root = exactly ONE instance shared across the entire app.
- * Every component and guard that injects AuthService gets the same signals.
- *
- * FLOW:
- *   1. app.config.ts registers loadMe() as an APP_INITIALIZER
- *   2. Angular calls it before bootstrapping any component
- *   3. loadMe() calls /auth/me using the session cookie
- *   4. Success → _me is set, user() returns the logged-in user
- *   5. Failure → _me stays undefined, user() returns null → guards redirect to /login
- */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   getGoogleRedirectUrl() {
-	  throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
   private readonly apiURL = `${(environment as any).apiUrl}`;
 
@@ -106,5 +87,4 @@ export class AuthService {
   canAccessTrip(trip: TripMembership): boolean {
     return this._me()?.trips?.includes(trip) ?? false;
   }
-
 }

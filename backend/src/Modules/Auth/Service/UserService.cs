@@ -11,10 +11,9 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
 {
     public async Task<UserDto> CreateAsync(CreateUserDto dto, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(dto.Email))
-            throw new ValidationException("email", "Email is required.");
-        if (string.IsNullOrWhiteSpace(dto.Username))
-            throw new ValidationException("username", "Username is required.");
+        if (string.IsNullOrWhiteSpace(dto.Email)) throw new ValidationException("email", "Email is required.");
+        if (string.IsNullOrWhiteSpace(dto.Username)) throw new ValidationException("username", "Username is required.");
+        if (string.IsNullOrWhiteSpace(dto.Password)) throw new ValidationException("password", "Password is required.");
 
         var existsUsername = await userModel.GetByUsername(dto.Username, ct);
         var existsEmails = await userModel.GetByEmail(dto.Email, ct);
@@ -58,14 +57,20 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
 
     public async Task<UserDto?> GetByEmail(string email, CancellationToken ct = default)
     {
-        if (email is null)
-            throw new ValidationException("email", $"Email can not be empty.");
+        if (email is null) throw new ValidationException("email", $"Email cannot be empty.");
 
         var res = await userModel.GetByEmail(email, ct);
 
         return res;
     }
 
+    public async Task<UserDto?> GetById(int id, CancellationToken ct = default)
+    {
+        var res = await userModel.GetById(id, ct);
+        if (res is null)
+            return null;
+        return res;
+    }
     public async Task<string> GenerateUniqueUsername(string baseUsername, CancellationToken ct = default)
     {
         var searchResult = await userModel.SearchAsync(new SearchPayload
@@ -100,7 +105,16 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
     public async Task DeleteAsync(int id, CancellationToken ct = default)
     {
         var deleted = await userModel.DeleteAsync(id, ct);
-        if (!deleted)
-            throw new NotFoundException($"User {id} not found.", id);
+        if (!deleted) throw new NotFoundException($"User {id} not found.", id);
+    }
+
+    public async Task<string?> GetPasswordByEmail(string email, CancellationToken ct = default)
+    {
+        if (email is null) throw new ValidationException("email", $"Email cannot be empty");
+
+        var res = await userModel.GetPasswordByEmail(email, ct);
+        if (res is not null)
+            return res;
+        return null;
     }
 }

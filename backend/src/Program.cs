@@ -163,6 +163,7 @@ try
         });
     }
     app.MapHealthChecks("/health");
+    app.UseCors();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
