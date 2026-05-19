@@ -14,9 +14,9 @@ import { TranslocoModule } from '@jsverse/transloco';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-	GoogleAuthButtonComponent,
+    GoogleAuthButtonComponent,
     CloseButtonComponent,
-	TranslocoModule
+    TranslocoModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
