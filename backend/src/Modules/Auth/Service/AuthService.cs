@@ -104,20 +104,20 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt)
         }, ct);
 
         var (token, expiresAt) = jwt.GenerateToken(new JwtUserClaims
-            {
-                UserId = newUser.Id,
-                Email = newUser.Email,
-                Username = newUser.Username,
-                DisplayName = newUser.DisplayName,
-                Trips = [] // TODO: Map trips to JwtTripClaim
-            });
+        {
+            UserId = newUser.Id,
+            Email = newUser.Email,
+            Username = newUser.Username,
+            DisplayName = newUser.DisplayName,
+            Trips = [] // TODO: Map trips to JwtTripClaim
+        });
 
-            var responseDto = new AuthResponseDto
-            {
-                User = newUser,
-                Token = token,
-                ExpiresAt = expiresAt.UtcDateTime
-            };
+        var responseDto = new AuthResponseDto
+        {
+            User = newUser,
+            Token = token,
+            ExpiresAt = expiresAt.UtcDateTime
+        };
 
         return responseDto;
     }

@@ -5,7 +5,6 @@ using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Model;
 
-
 namespace Trippie.Modules.Auth.Service;
 
 public sealed class UserService(AppDbContext db, UserModel userModel)
