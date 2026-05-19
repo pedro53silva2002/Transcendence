@@ -10,7 +10,7 @@ namespace Trippie.Modules.Auth.Router;
 public sealed class AuthRouter(AuthService service) : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<ActionResult<UserDto>> Register([FromBody] RegisterDto dto, CancellationToken ct)
+    public async Task<ActionResult<AuthResponseDto>> Register([FromBody] RegisterDto dto, CancellationToken ct)
         => await service.Register(dto, ct);
 
     [HttpGet("me")]

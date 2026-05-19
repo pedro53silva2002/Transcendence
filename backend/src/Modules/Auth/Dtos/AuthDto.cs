@@ -21,3 +21,10 @@ public sealed class TripMembershipDto
     public required int TripId { get; set; }
     public required string Role { get; set; }
 }
+
+public sealed class AuthResponseDto
+{
+    public required UserDto User { get; set; }
+    public required string Token { get; set; }
+    public required DateTime ExpiresAt { get; set; }
+}
