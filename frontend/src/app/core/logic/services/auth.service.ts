@@ -27,6 +27,9 @@ import type { MeDto, TripMembership } from '../dtos/me-dto.ts';
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  getGoogleRedirectUrl() {
+	  throw new Error('Method not implemented.');
+  }
   private readonly apiURL = `${(environment as any).apiUrl}`;
 
   fetchCurrentUser() {
