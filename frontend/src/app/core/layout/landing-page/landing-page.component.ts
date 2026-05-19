@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { AuthNavbarComponent } from '../auth-navbar/auth-navbar.component';
 import { map, merge, pipe, startWith } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
 	selector: 'app-landing-page',
 	standalone: true,
-	imports: [AuthNavbarComponent, CommonModule],
+	imports: [NavbarComponent, CommonModule],
 	templateUrl: './landing-page.component.html',
 	styleUrl: './landing-page.component.scss',
 })

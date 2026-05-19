@@ -5,25 +5,31 @@
     display: none !important;
 }
 
-.nav-bar {
+nav {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto; //to center the nav in the page
+    margin-top: 25px;
+    margin-bottom: 20px;
+}
+
+.logo-container h1 {
+        opacity: 0;
+        font-family: 'BBH Hegarty';
+        font-weight: 100;
+}
+
+.logo-container h1.logo {
+    opacity: 1;
+}
+
+.buttons {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 16px;
-    padding: 12px;
-	margin-left: 20px;
-	margin-right: 20px;
-}
-
-.logo-container {
-    margin-right: auto;
-    display: flex;
-    align-items: center;
-}
-
-.logo {
-    height: 50px;
-    min-width: 95px;
 }
 
 .btn {
@@ -232,6 +238,16 @@
 }
 
 h1 {
-	font-family: 'BBH Hegarty';
-	font-weight: 100;
+    font-family: 'BBH Hegarty';
+    font-weight: 100;
+}
+
+.register {
+    border: 2px solid var(--mat-sys-secondary) !important;
+    color: var(--mat-sys-secondary) !important;
+
+    &:hover {
+        background-color: var(--mat-sys-secondary) !important;
+        color: var(--mat-sys-primary-container) !important;
+    }
 }

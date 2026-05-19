@@ -4,34 +4,6 @@
 	width: 100%;
 }
 
-nav {
-	width: 90%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin: 0 auto; //to center the nav in the page
-	margin-top: 40px;
-	margin-bottom: 20px;
-}
-
-.buttons {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 16px;
-}
-
-.logo-container {
-    margin-right: auto;
-    display: flex;
-    align-items: center;
-
-	h1 {
-		font-family: 'BBH Hegarty';
-		font-weight: 100;
-	}
-}
-
 .main-container {
 	width: 90%;
 	margin: 0 auto; //centers the component
