@@ -1,15 +1,6 @@
 <!-- DASHBOARD USER -->
 <div class="full-page">
-	<nav>
-		<div class="logo-container">
-			<h1>TRIPPIE</h1>
-		</div>
-		<div class="buttons">
-			<button routerLinkActive="active-link" routerLink="/profile" class="std-btn profile" mat-stroked-button>{{
-				'navbar.profile' | transloco }}</button>
-			<app-language-button></app-language-button>
-		</div>
-	</nav>
+	<app-navbar [showSearch]="true" [showProfile]="true" [showLanguageSelector]="true" [showLogout]="true"></app-navbar>
 	<div class="main-container">
 		<div class="greet-text">
 			<h1> {{ 'dashboard.greet' | transloco }} @user</h1>
@@ -27,4 +18,19 @@
 				imagePath="./images/wallet.png"></app-dashboard-card>
 		</div>
 	</div>
+	<div class="stats">
+		<div class="circle">
+			<h1>14</h1> 
+			<p>{{ 'stats.countries' | transloco }} </p>
+		</div>
+		<div class="circle">
+			<h1>4</h1> 
+			<p>{{ 'stats.trips' | transloco }} </p>
+		</div>
+		<div class="circle">
+			<h1>2</h1> 
+			<p>{{ 'stats.countdown' | transloco }} </p>
+		</div>
+	</div>
+	<h1 class="slogan">Less time planning. More time wandering.</h1>
 </div>
