@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -11,13 +12,15 @@ public sealed class JwtTokenService : IJwtTokenService
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
+    private readonly IMemoryCache _cache;
     private readonly JwtOptions _options;
     private readonly SigningCredentials _signingCredentials;
     private readonly TokenValidationParameters _validationParameters;
     private readonly JwtSecurityTokenHandler _handler = new() { MapInboundClaims = false };
 
-    public JwtTokenService(IOptions<JwtOptions> options)
+    public JwtTokenService(IOptions<JwtOptions> options, IMemoryCache cache)
     {
+        _cache = cache;
         _options = options.Value;
         var keyBytes = Encoding.UTF8.GetBytes(_options.SecretKey);
         if (keyBytes.Length < 32)
@@ -82,6 +85,18 @@ public sealed class JwtTokenService : IJwtTokenService
         var principal = _handler.ValidateToken(token, _validationParameters, out _);
         return principal;
     }
+
+    public void InvalidateToken(string rawToken)
+    {
+        var parsed = _handler.ReadJwtToken(rawToken);
+        var jti = parsed.Id;
+        var expiry = parsed.ValidTo;
+        var ttl = expiry - DateTime.UtcNow;
+        if (!string.IsNullOrEmpty(jti) && ttl > TimeSpan.Zero)
+            _cache.Set(jti, true, ttl);
+    }
+
+    public bool IsRevoked(string jti) => _cache.TryGetValue(jti, out _);
 
     public JwtUserClaims? ExtractClaims(ClaimsPrincipal principal)
     {

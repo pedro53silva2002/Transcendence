@@ -37,7 +37,7 @@ CREATE TABLE "auth"."users" (
     "display_name" TEXT NOT NULL,
     "bio" TEXT,
     "profile_photo_url" TEXT,
-    "oauth_provider" provider_type NOT NULL DEFAULT 'none',
+    "oauth_provider" TEXT NOT NULL,
     "oauth_id" TEXT,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
