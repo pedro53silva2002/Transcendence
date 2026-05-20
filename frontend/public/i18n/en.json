@@ -1,20 +1,21 @@
 {
-	"auth": {
-		"register": "Register",
-		"login": "Login",
-		"password": "password",
-		"google": "Sign In with",
-		"username": "username",
-		"password-confirmation": "confirm password"
-	},
+  "auth": {
+    "register": "Register",
+    "login": "Login",
+    "password": "password",
+    "google": "Sign In with",
+    "username": "username",
+    "password-confirmation": "confirm password",
+    "email": "Email"
+  },
 
-	"navbar": {
-		"profile": "Profile",
-		"trip": "Plan a Trip",
-		"my-trips": "My Trips",
-		"my-friends": "My Friends",
-		"my-expenses": "My Expenses"
-	},
+  "navbar": {
+    "profile": "Profile",
+    "trip": "Plan a Trip",
+    "my-trips": "My Trips",
+    "my-friends": "My Friends",
+    "my-expenses": "My Expenses"
+  },
 
 	"card": {
 		"trip-description": "Click here to start planning your next trip.",
@@ -34,4 +35,8 @@
 		"countdown": "Days Until Next Trip"
 	}
 
+  "dashboard": {
+    "greet": "Hello, ",
+    "intro": "Ready for your next adventure?"
+  }
 }

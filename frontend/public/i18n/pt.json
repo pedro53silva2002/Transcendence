@@ -1,27 +1,28 @@
 {
-	"auth": {
-		"register": "Registar",
-		"login": "Entrar",
-		"password": "palavra-passe",
-		"google": "Entrar com o",
-		"username": "nome de utilizador",
-		"password-confirmation": "confirmar palavra-passe"
-	},
+  "auth": {
+    "register": "Registar",
+    "login": "Entrar",
+    "password": "palavra-passe",
+    "google": "Entrar com o",
+    "username": "nome de utilizador",
+    "password-confirmation": "confirmar palavra-passe",
+    "email": "Email"
+  },
 
-	"navbar": {
-		"profile": "Perfil",
-		"trip": "Planear Viagem",
-		"my-trips": "Lista de Viagens",
-		"my-friends": "Amigos",
-		"my-expenses": "Despesas"
-	},
+  "navbar": {
+    "profile": "Perfil",
+    "trip": "Planear Viagem",
+    "my-trips": "Lista de Viagens",
+    "my-friends": "Amigos",
+    "my-expenses": "Despesas"
+  },
 
-	"card": {
-		"trip-description": "Carrega aqui para começares a planear a próxima viagem.",
-		"my-trips-description": "Carrega aqui para veres as tuas viagens passadas, presentes e futuras.",
-		"my-friends-description": "Carrega aqui para veres a tua lista de amigos.",
-		"my-expenses-description": "Carrega aqui para verificares para onde fugiu o teu dinheiro."
-	},
+  "card": {
+    "trip-description": "Carrega aqui para começares a planear a próxima viagem.",
+    "my-trips-description": "Carrega aqui para veres as tuas viagens passadas, presentes e futuras.",
+    "my-friends-description": "Carrega aqui para veres a tua lista de amigos.",
+    "my-expenses-description": "Carrega aqui para verificares para onde fugiu o teu dinheiro."
+  },
 
 	"dashboard": {
 		"greet": "Bem-vindo, ",
