@@ -1,9 +1,9 @@
-import { Component, input, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService } from '../../feature/auth/AuthService';
+import { AuthService as SessionService } from '../../logic/services/auth.service';
 
 @Component({
   selector: 'app-google-auth-button',
@@ -15,11 +15,14 @@ export class GoogleAuthButtonComponent implements OnDestroy {
   redirectSubscription?: Subscription;
 
   constructor(
-    private http: HttpClient,
     private authService: AuthService,
+    private sessionService: SessionService,
   ) {}
 
   redirectToGoogle() {
+    // Clear any stale session so the OAuth callback can save fresh tokens
+    // without the app initializer firing the old expired token at /auth/me.
+    this.sessionService.clearSession();
     this.redirectSubscription = this.authService.getGoogleRedirectUrl().subscribe({
       //if the subscribe succeeds
       next: (res) => {
