@@ -7,8 +7,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-app-home',
-  imports: [LanguageButtonComponent,
-            TranslocoModule,
+  imports: [TranslocoModule,
             MatButtonModule,
             DashboardCardComponent,
             NavbarComponent],
