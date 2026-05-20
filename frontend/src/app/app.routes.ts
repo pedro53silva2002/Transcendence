@@ -14,7 +14,7 @@ export const routes: Routes = [
   {
     path: 'home',
     component: AppHomeComponent, //o componente que tem a nav-bar e router-outlet para navegar pelas páginas do site
-    canActivate: [authGuard],
+    canActivate: [guestGuard],
     children: [
       // { path: '', component: DashboardComponent }, //para a dashboard do user quando faz login
       {
