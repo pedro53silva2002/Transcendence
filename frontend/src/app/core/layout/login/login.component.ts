@@ -52,6 +52,7 @@ export class LoginComponent {
       const result = await this.apiAuthService.login({ email, password });
       if (result.data) {
         this.tokenStorage.saveAccessToken(result.data.token);
+        this.tokenStorage.saveRefreshToken(result.data.refreshToken);
         const ok = await firstValueFrom(this.authService.loadMe());
         if (ok) {
           this.dialogRef.close();

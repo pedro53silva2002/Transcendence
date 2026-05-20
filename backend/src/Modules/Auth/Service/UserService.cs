@@ -13,7 +13,6 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
     {
         if (string.IsNullOrWhiteSpace(dto.Email)) throw new ValidationException("email", "Email is required.");
         if (string.IsNullOrWhiteSpace(dto.Username)) throw new ValidationException("username", "Username is required.");
-        if (string.IsNullOrWhiteSpace(dto.Password)) throw new ValidationException("password", "Password is required.");
 
         var existsUsername = await userModel.GetByUsername(dto.Username, ct);
         var existsEmails = await userModel.GetByEmail(dto.Email, ct);

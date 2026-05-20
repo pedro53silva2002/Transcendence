@@ -1,14 +1,20 @@
 using System.Security.Claims;
+using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.Extensions;
 using Trippie.Common.Services.Authentication.Jwt;
 using Trippie.Common.Services.Authentication.Security;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Modules.Auth.Dtos;
+using Trippie.Modules.Auth.Model;
 
 namespace Trippie.Modules.Auth.Service;
 
-public sealed class AuthService(UserService userService, IJwtTokenService jwt)
+public sealed class AuthService(UserService userService, IJwtTokenService jwt, AppDbContext db, IOptions<JwtOptions> jwtOptions)
 {
+    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
     public async Task<AuthResponseDto> Register(RegisterDto dto, CancellationToken ct = default)
     {
         if (dto.Username is null) throw new ValidationException("username", "Username can not be empty.");
@@ -26,21 +32,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt)
 
         var createdUser = await userService.CreateAsync(createUserDto, ct);
 
-        var (token, expiresAt) = jwt.GenerateToken(new JwtUserClaims
-        {
-            UserId = createdUser.Id,
-            Username = createdUser.Username,
-            Email = createdUser.Email,
-            DisplayName = createdUser.DisplayName,
-            Trips = []
-        });
-
-        var response = new AuthResponseDto
-        {
-            Token = token,
-            User = createdUser,
-            ExpiresAt = expiresAt.UtcDateTime
-        };
+        var response = await BuildAuthResponse(createdUser, [], ct);
 
         return response;
     }
@@ -76,34 +68,35 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt)
         string passwordHash = await userService.GetPasswordByEmail(dto.Email, ct) ?? throw new UnauthorizedException("Password not found.");
         if (!new BCryptPasswordHasher().Verify(dto.Password, passwordHash)) throw new UnauthorizedException("Invalid email or password.");
 
-        var (token, expiresAt) = jwt.GenerateToken(new JwtUserClaims
-        {
-            UserId = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            DisplayName = user.DisplayName,
-            Trips = []
-        });
-
-        var response = new AuthResponseDto
-        {
-            Token = token,
-            User = user,
-            ExpiresAt = expiresAt.UtcDateTime
-        };
+        var response = await BuildAuthResponse(user, [], ct);
 
         return response;
     }
 
-    public async Task<AuthResponseDto> Logout(string token, CancellationToken ct = default)
+    public async Task<AuthResponseDto> Refresh(RefreshTokenRequestDto dto, CancellationToken ct = default)
     {
-        jwt.InvalidateToken(token);
-        return new AuthResponseDto
-        {
-            Token = string.Empty,
-            User = null!,
-            ExpiresAt = DateTime.UtcNow
-        };
+        var stored = await db.RefreshTokens.FirstOrDefaultAsync(r => r.Token == dto.RefreshToken, ct)
+            ?? throw new UnauthorizedException("Invalid refresh token");
+
+        if (!stored.IsActive)
+            throw new UnauthorizedException("Refresh token is expired or has been revoked.");
+
+        stored.RevokedAt = DateTime.UtcNow;
+        db.RefreshTokens.Update(stored);
+
+        var user = await userService.GetById(stored.UserId, ct)
+            ?? throw new UnauthorizedException("User not found");
+
+        return await BuildAuthResponse(user, [], ct);
+    }
+
+    public async Task Logout(int userId, string token, CancellationToken ct = default)
+    {
+        if (!string.IsNullOrWhiteSpace(token))
+            jwt.InvalidateToken(token);
+        await db.RefreshTokens
+            .Where(r => r.UserId == userId && r.RevokedAt == null)
+            .ExecuteUpdateAsync(s => s.SetProperty(r => r.RevokedAt, DateTime.UtcNow), ct);
     }
 
     public async Task<AuthResponseDto> RegisterOrLoginViaOAuthAsync(GoogleRegisterOrLoginDto dto, CancellationToken ct = default)
@@ -117,50 +110,11 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt)
 
         var existingOAuthUser = await userService.GetByOAuthIdAsync(dto.OAuthProvider, dto.OAuthId, ct);
         if (existingOAuthUser is not null)
-        {
-            var (tokenUser, expiresAtUser) = jwt.GenerateToken(new JwtUserClaims
-            {
-                UserId = existingOAuthUser.Id,
-                Email = existingOAuthUser.Email,
-                Username = existingOAuthUser.Username,
-                DisplayName = existingOAuthUser.DisplayName,
-                Trips = [] // TODO: Map trips to JwtTripClaim
-            });
-
-            var responseDtoUser = new AuthResponseDto
-            {
-                User = existingOAuthUser,
-                Token = tokenUser,
-                ExpiresAt = expiresAtUser.UtcDateTime
-            };
-
-            return responseDtoUser;
-        }
+            return await BuildAuthResponse(existingOAuthUser, [], ct);
 
         var existingEmailUser = await userService.GetByEmail(dto.Email, ct);
         if (existingEmailUser is not null)
-        {
-            if (existingEmailUser.OAuthProvider == "none")
-                throw new ConflictException($"User with this email already exists with traditional signup.");
-
-            var (tokenEmail, expiresAtEmail) = jwt.GenerateToken(new JwtUserClaims
-            {
-                UserId = existingEmailUser.Id,
-                Email = existingEmailUser.Email,
-                Username = existingEmailUser.Username,
-                DisplayName = existingEmailUser.DisplayName,
-                Trips = [] // TODO: Map trips to JwtTripClaim
-            });
-
-            var responseDtoEmail = new AuthResponseDto
-            {
-                User = existingEmailUser,
-                Token = tokenEmail,
-                ExpiresAt = expiresAtEmail.UtcDateTime
-            };
-
-            return responseDtoEmail;
-        }
+            return await BuildAuthResponse(existingEmailUser, [], ct);
 
         var baseUsername = dto.Email.Split('@')[0];
         var uniqueUsername = await userService.GenerateUniqueUsername(baseUsername, ct);
@@ -175,22 +129,41 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt)
             Password = null
         }, ct);
 
-        var (token, expiresAt) = jwt.GenerateToken(new JwtUserClaims
+        return await BuildAuthResponse(newUser, [], ct);
+    }
+
+    private static string GenerateRefreshToken() => Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+    private async Task<AuthResponseDto> BuildAuthResponse(UserDto user, IReadOnlyList<JwtTripClaim> trips, CancellationToken ct)
+    {
+        var (accessToken, expiresAt) = jwt.GenerateToken(new JwtUserClaims
         {
-            UserId = newUser.Id,
-            Email = newUser.Email,
-            Username = newUser.Username,
-            DisplayName = newUser.DisplayName,
-            Trips = [] // TODO: Map trips to JwtTripClaim
+            UserId = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            DisplayName = user.DisplayName,
+            Trips = trips
         });
 
-        var responseDto = new AuthResponseDto
-        {
-            User = newUser,
-            Token = token,
-            ExpiresAt = expiresAt.UtcDateTime
-        };
+        var refreshTokenValue = GenerateRefreshToken();
+        var refreshTokenExpire = DateTime.UtcNow.AddDays(_jwtOptions.RefreshTokenLifetimeDays);
 
-        return responseDto;
+        db.RefreshTokens.Add(new RefreshToken
+        {
+            Id = 0,
+            UserId = user.Id,
+            Token = refreshTokenValue,
+            ExpiresAt = refreshTokenExpire,
+        });
+
+        await db.SaveChangesAsync(ct);
+
+        return new AuthResponseDto
+        {
+            Token = accessToken,
+            ExpiresAt = expiresAt.UtcDateTime,
+            User = user,
+            RefreshToken = refreshTokenValue,
+            RefreshTokenExpiresAt = refreshTokenExpire
+        };
     }
 }

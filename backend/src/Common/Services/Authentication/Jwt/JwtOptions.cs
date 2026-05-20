@@ -20,4 +20,7 @@ public sealed class JwtOptions
 
     [Range(0, 300)]
     public int ClockSkewSeconds { get; init; } = 0;
+
+    [Range(1, 365)]
+    public int RefreshTokenLifetimeDays { get; set; } = 7;
 }

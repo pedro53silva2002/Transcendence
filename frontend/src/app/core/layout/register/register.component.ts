@@ -60,6 +60,7 @@ export class RegisterComponent {
       const result = await this.apiAuthService.register({ username, email, password });
       if (result.data) {
         this.tokenStorage.saveAccessToken(result.data.token);
+        this.tokenStorage.saveRefreshToken(result.data.refreshToken);
         const ok = await firstValueFrom(this.authService.loadMe());
         if (ok) {
           this.dialogRef.close();
