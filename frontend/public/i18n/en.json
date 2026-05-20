@@ -34,9 +34,4 @@
 		"trips": "Trips Booked This Year",
 		"countdown": "Days Until Next Trip"
 	}
-
-  "dashboard": {
-    "greet": "Hello, ",
-    "intro": "Ready for your next adventure?"
-  }
 }
