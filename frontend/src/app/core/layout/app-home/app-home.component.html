@@ -3,7 +3,11 @@
 	<app-navbar [showSearch]="true" [showProfile]="true" [showLanguageSelector]="true" [showLogout]="true"></app-navbar>
 	<div class="main-container">
 		<div class="greet-text">
-			<h1> {{ 'dashboard.greet' | transloco }} @user</h1>
+			<h1> {{ 'dashboard.greet' | transloco }}
+				@if (user()) {
+					&nbsp;{{ user()?.username }}
+				} @else {&nbsp;Guest}
+			</h1>
 			<p> {{ 'dashboard.intro' | transloco }} </p>
 		</div>
 
