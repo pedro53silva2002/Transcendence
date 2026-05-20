@@ -75,7 +75,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 	users = ['Maria', 'João', 'Diogo', 'Maria João', 'Rui Diogo', 'Rui'];
 	filteredUsers: Observable<string[]> = new Observable();
 	private searchSub?: Subscription;
-	private backendSub?: Subscription;
+	private readonly backendSub?: Subscription;
 
 	// constructor() {
 	// 	this.searchControl.valueChanges.subscribe(value => {
