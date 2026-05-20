@@ -24,8 +24,14 @@
     "my-expenses-description": "Carrega aqui para verificares para onde fugiu o teu dinheiro."
   },
 
-  "dashboard": {
-    "greet": "Bem-vindo, ",
-    "intro": "Preparado para a tua aventura?"
-  }
+	"dashboard": {
+		"greet": "Bem-vindo, ",
+		"intro": "Preparado para a tua aventura?" 
+	},
+
+	"stats": {
+		"countries": "Paises Visitados",
+		"trips": "Viagens Este Ano",
+		"countdown": "Dias Para Viagem"
+	}
 }

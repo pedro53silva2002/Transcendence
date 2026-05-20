@@ -1,19 +1,19 @@
 import { Component, inject } from '@angular/core';
-import { AuthNavbarComponent } from '../auth-navbar/auth-navbar.component';
-import { map, merge, pipe, startWith } from 'rxjs';
+import { map, merge, startWith } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
 	selector: 'app-landing-page',
 	standalone: true,
-	imports: [AuthNavbarComponent, CommonModule],
+	imports: [NavbarComponent, CommonModule],
 	templateUrl: './landing-page.component.html',
 	styleUrl: './landing-page.component.scss',
 })
 export class LandingPageComponent {
 	//instead of using the constructor, we can inject it
-	private dialog = inject(MatDialog);
+	private readonly dialog = inject(MatDialog);
 
 	//isDialogOpen$ is an observable stream that will emit values over time
 	//merge merges two observables into one stream (whichever one emits a value, it gets passed down the chain)

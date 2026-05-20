@@ -3,7 +3,7 @@
     width: 385px; // O tamanho máximo passa para o pai
     border-radius: 25px; // Mantemos o raio aqui para o corte funcionar
     overflow: hidden; // Garante que a imagem sobreposta também respeita os cantos arredondados
-	height: 438px; //+8 because of the borders
+	height: 430px; //+8 because of the borders
 	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 	&:hover {
 		cursor: pointer;
@@ -14,7 +14,7 @@
 .main-container {
 	display: flex;
 	flex-direction: column;
-	height: 430px;
+	height: 422px;
 	align-items: center;
 	justify-content: center;
 	border: 4px solid var(--mat-sys-secondary) !important;
@@ -49,7 +49,7 @@
     justify-content: center;
 
     img {
-        width: 410px;
+        width: 420px;
         opacity: 0.82;
 		margin-top: 310px;
     }

@@ -24,8 +24,14 @@
     "my-expenses-description": "Haz clic aquí para ver en qué gastaste tu dinero."
   },
 
-  "dashboard": {
-    "greet": "Hola, ",
-    "intro": "¿Listo para tu aventura?"
-  }
+	"dashboard": {
+		"greet": "Hola, ",
+		"intro": "¿Listo para tu aventura?" 
+	},
+
+	"stats": {
+		"countries": "Paises Visitados",
+		"trips": "Viajes Este Ano",
+		"countdown": "Dias Para El Viaje"
+	}
 }
