@@ -1,12 +1,16 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogClose, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
-import { AuthService } from '../../feature/auth/AuthService';
+import { AuthService as ApiAuthService } from '../../feature/auth/AuthService';
+import { AuthService } from '../../logic/services/auth.service';
+import { TokenStorageService } from '../../logic/services/token-storage.service';
 import { CloseButtonComponent } from '../../../shared/components/close-button/close-button.component';
 import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-auth-button.component';
 
@@ -21,7 +25,7 @@ import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-
     MatButtonModule,
     ReactiveFormsModule,
     CloseButtonComponent,
-    GoogleAuthButtonComponent
+    GoogleAuthButtonComponent,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
@@ -29,7 +33,11 @@ import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
+  private readonly apiAuthService = inject(ApiAuthService);
   private readonly authService = inject(AuthService);
+  private readonly tokenStorage = inject(TokenStorageService);
+  private readonly router = inject(Router);
+  private readonly dialogRef = inject(MatDialogRef<RegisterComponent>);
 
   readonly form = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -44,12 +52,25 @@ export class RegisterComponent {
   async submit(): Promise<void> {
     if (this.form.invalid) return;
     const { username, email, password, confirmPassword } = this.form.getRawValue();
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       alert('password does not match');
       return;
     }
-    const user = await this.authService.register({ username, email, password });
-
-    console.log(user);
+    try {
+      const result = await this.apiAuthService.register({ username, email, password });
+      if (result.data) {
+        this.tokenStorage.saveAccessToken(result.data.token);
+        const ok = await firstValueFrom(this.authService.loadMe());
+        if (ok) {
+          this.dialogRef.close();
+          this.router.navigate(['/home']);
+          return;
+        }
+      }
+    } catch {
+      // registration failed
+    }
+    this.dialogRef.close();
+    this.router.navigate(['/login']);
   }
 }

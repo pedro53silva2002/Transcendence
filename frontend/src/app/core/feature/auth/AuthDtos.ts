@@ -29,3 +29,14 @@ export interface UserDto {
   createdAt: string;
   updatedAt: string | null;
 }
+
+export interface AuthResponseDto {
+  user: UserDto;
+  token: string;
+  expiresAt: string;
+}
+
+export interface LoginDto {
+  email: string;
+  password: string;
+}
