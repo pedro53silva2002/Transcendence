@@ -12,8 +12,8 @@ public sealed class AuthResponseDto
     public required UserDto User { get; set; }
     public required string Token { get; set; }
     public required DateTime ExpiresAt { get; set; }
-    public string? RefreshToken { get; set; }
-    public DateTime? RefreshTokenExpiresAt { get; set; }
+    public required string RefreshToken { get; set; }
+    public required DateTime RefreshTokenExpiresAt { get; set; }
 }
 
 public sealed class LoginDto

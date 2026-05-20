@@ -110,50 +110,11 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
 
         var existingOAuthUser = await userService.GetByOAuthIdAsync(dto.OAuthProvider, dto.OAuthId, ct);
         if (existingOAuthUser is not null)
-        {
-            var (tokenUser, expiresAtUser) = jwt.GenerateToken(new JwtUserClaims
-            {
-                UserId = existingOAuthUser.Id,
-                Email = existingOAuthUser.Email,
-                Username = existingOAuthUser.Username,
-                DisplayName = existingOAuthUser.DisplayName,
-                Trips = [] // TODO: Map trips to JwtTripClaim
-            });
-
-            var responseDtoUser = new AuthResponseDto
-            {
-                User = existingOAuthUser,
-                Token = tokenUser,
-                ExpiresAt = expiresAtUser.UtcDateTime
-            };
-
-            return responseDtoUser;
-        }
+            return await BuildAuthResponse(existingOAuthUser, [], ct);
 
         var existingEmailUser = await userService.GetByEmail(dto.Email, ct);
         if (existingEmailUser is not null)
-        {
-            if (existingEmailUser.OAuthProvider == "none")
-                throw new ConflictException($"User with this email already exists with traditional signup.");
-
-            var (tokenEmail, expiresAtEmail) = jwt.GenerateToken(new JwtUserClaims
-            {
-                UserId = existingEmailUser.Id,
-                Email = existingEmailUser.Email,
-                Username = existingEmailUser.Username,
-                DisplayName = existingEmailUser.DisplayName,
-                Trips = [] // TODO: Map trips to JwtTripClaim
-            });
-
-            var responseDtoEmail = new AuthResponseDto
-            {
-                User = existingEmailUser,
-                Token = tokenEmail,
-                ExpiresAt = expiresAtEmail.UtcDateTime
-            };
-
-            return responseDtoEmail;
-        }
+            return await BuildAuthResponse(existingEmailUser, [], ct);
 
         var baseUsername = dto.Email.Split('@')[0];
         var uniqueUsername = await userService.GenerateUniqueUsername(baseUsername, ct);
@@ -168,23 +129,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             Password = null
         }, ct);
 
-        var (token, expiresAt) = jwt.GenerateToken(new JwtUserClaims
-        {
-            UserId = newUser.Id,
-            Email = newUser.Email,
-            Username = newUser.Username,
-            DisplayName = newUser.DisplayName,
-            Trips = [] // TODO: Map trips to JwtTripClaim
-        });
-
-        var responseDto = new AuthResponseDto
-        {
-            User = newUser,
-            Token = token,
-            ExpiresAt = expiresAt.UtcDateTime
-        };
-
-        return responseDto;
+        return await BuildAuthResponse(newUser, [], ct);
     }
 
     private static string GenerateRefreshToken() => Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));

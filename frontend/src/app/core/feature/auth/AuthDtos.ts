@@ -34,6 +34,8 @@ export interface AuthResponseDto {
   user: UserDto;
   token: string;
   expiresAt: string;
+  refreshToken: string;
+  refreshTokenExpires: string;
 }
 
 export interface LoginDto {
