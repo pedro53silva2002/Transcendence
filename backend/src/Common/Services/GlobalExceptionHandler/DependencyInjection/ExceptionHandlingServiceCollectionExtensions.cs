@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Trippie.Common.Services.GlobalExceptionHandler.Config;
 using Trippie.Common.Services.GlobalExceptionHandler.Mappings;

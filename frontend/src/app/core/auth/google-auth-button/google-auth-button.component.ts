@@ -6,28 +6,30 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService } from '../../feature/auth/AuthService';
 
 @Component({
-	selector: 'app-google-auth-button',
-	imports: [MatButtonModule, TranslocoModule],
-	templateUrl: './google-auth-button.component.html',
-	styleUrl: './google-auth-button.component.scss',
+  selector: 'app-google-auth-button',
+  imports: [MatButtonModule, TranslocoModule],
+  templateUrl: './google-auth-button.component.html',
+  styleUrl: './google-auth-button.component.scss',
 })
 export class GoogleAuthButtonComponent implements OnDestroy {
-	redirectSubscription?: Subscription;
+  redirectSubscription?: Subscription;
 
-	constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {}
 
-	redirectToGoogle() {
-		this.redirectSubscription = this.authService.getGoogleRedirectUrl()
-			.subscribe({
-				//if the subscribe succeeds
-				next: (res) => {
-					window.location.href = res.data?.googleRedirectURL || '/';
-				},
-				error: (err) => console.error(err)
-			});
-	}
+  redirectToGoogle() {
+    this.redirectSubscription = this.authService.getGoogleRedirectUrl().subscribe({
+      //if the subscribe succeeds
+      next: (res) => {
+        window.location.href = res.data?.authorizationUrl || '/';
+      },
+      error: (err) => console.error(err),
+    });
+  }
 
-	ngOnDestroy() {
-		this.redirectSubscription?.unsubscribe();
-	}
+  ngOnDestroy() {
+    this.redirectSubscription?.unsubscribe();
+  }
 }

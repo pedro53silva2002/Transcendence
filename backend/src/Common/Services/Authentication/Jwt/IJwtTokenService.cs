@@ -7,4 +7,6 @@ public interface IJwtTokenService
     (string Token, DateTimeOffset ExpiresAtUtc) GenerateToken(JwtUserClaims claims);
     ClaimsPrincipal ValidateToken(string token);
     JwtUserClaims? ExtractClaims(ClaimsPrincipal principal);
+    void InvalidateToken(string rawToken);
+    bool IsRevoked(string jti);
 }

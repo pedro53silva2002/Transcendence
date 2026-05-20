@@ -12,11 +12,11 @@ namespace Trippie.Common.Services.GlobalExceptionHandler.Logging;
 /// </summary>
 public sealed class HumanReadableConsoleSink : ILogEventSink
 {
-    private const string Reset    = "[0m";
-    private const string Green    = "[32m";
-    private const string Red      = "[31m";
-    private const string White    = "[97m";
-    private const string Yellow   = "[33m";
+    private const string Reset = "[0m";
+    private const string Green = "[32m";
+    private const string Red = "[31m";
+    private const string White = "[97m";
+    private const string Yellow = "[33m";
     private const string DarkGrey = "[90m";
 
     // Fields to render for an error event (label -> property name on the log event).
@@ -97,13 +97,13 @@ public sealed class HumanReadableConsoleSink : ILogEventSink
 
     private static (string text, string color) LevelStyle(LogEventLevel l) => l switch
     {
-        LogEventLevel.Verbose     => ("VRB", DarkGrey),
-        LogEventLevel.Debug       => ("DBG", DarkGrey),
+        LogEventLevel.Verbose => ("VRB", DarkGrey),
+        LogEventLevel.Debug => ("DBG", DarkGrey),
         LogEventLevel.Information => ("INF", Green),
-        LogEventLevel.Warning     => ("WRN", Yellow),
-        LogEventLevel.Error       => ("ERR", Red),
-        LogEventLevel.Fatal       => ("FTL", Red),
-        _                         => ("???", White)
+        LogEventLevel.Warning => ("WRN", Yellow),
+        LogEventLevel.Error => ("ERR", Red),
+        LogEventLevel.Fatal => ("FTL", Red),
+        _ => ("???", White)
     };
 
     private string Color(string text, string code) =>
