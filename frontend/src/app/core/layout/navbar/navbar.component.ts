@@ -32,13 +32,12 @@ import { UserDto } from '../../feature/auth/dtos/UserDto';
 		MatIconModule,
 		MatSidenavModule,
 		AsyncPipe,
-		NgOptimizedImage,
 		TranslocoModule,
 		LanguageButtonComponent],
 	templateUrl: './navbar.component.html',
 	styleUrl: './navbar.component.scss',
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnDestroy {
 	showHome = input(false);
 	showProfile = input(false);
 	showPlanATrip = input(false);
@@ -78,7 +77,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 	}
 
 	searchControl = new FormControl('');
-	filteredUsers: Observable<UserDto[]> = of([]);
 	private searchSub?: Subscription;
 	private readonly backendSub?: Subscription;
 
@@ -88,26 +86,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
 	// 	})
 	// }
 
-	ngOnInit(): void {
-		this.searchSub = this.searchControl.valueChanges.pipe(
-			debounceTime(300),
-			distinctUntilChanged(),
-			switchMap(text => {
+	filteredUsers: Observable<UserDto[]> = this.searchControl.valueChanges.pipe(
+		debounceTime(300),
+		distinctUntilChanged(),
+		switchMap(text => {
 			if (!text || text.trim() === '') return of([]);
 			return from(
 				this.userService.search({
-				search: { username: { op: 'CONTAINS', value: text } },
-				pageSize: 10,
+					search: { username: { op:'CONTAINS', value: text}},
+					pageSize: 10,
 				})
-			).pipe(
+			)
+			.pipe(
 				map(res => res.data?.content ?? []),
-				catchError(err => { console.error('User search failed:', err); return of([]); })
-			);
-			})
-		).subscribe(users => {
-			this.filteredUsers = of(users);
-		});
-	}
+				catchError(err => { console.error('User search failed:', err); return of([])})
+			)
+		})
+	);
 
 	displayUser(user: UserDto | string | null): string {
 		if (!user || typeof user === 'string') return user ?? '';
