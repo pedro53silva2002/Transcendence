@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
-import { AuthService as ApiAuthService } from '../../feature/auth/services/AuthService';
+import { AuthService as ApiAuthService } from '../../feature/auth/services/auth.service';
 import { AuthService } from '../../logic/services/auth.service';
 import { TokenStorageService } from '../../logic/services/token-storage.service';
 import { CloseButtonComponent } from '../../../shared/components/close-button/close-button.component';

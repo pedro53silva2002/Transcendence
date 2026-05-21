@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
-import { AuthResponseDto, LoginDto, MeDto } from './../dtos/AuthDtos';
-import { CreateUserDto } from '../dtos/UserDto';
+import { AuthResponseDto, LoginDto, MeDto } from '../dtos/auth.dto';
+import { CreateUserDto } from '../dtos/user.dto';
 import { AuthService as SessionService } from '../../../logic/services/auth.service';
 
 @Injectable({ providedIn: 'root' })
@@ -28,7 +28,7 @@ export class AuthService extends BaseApiService {
   }
 
   public async logout(): Promise<ApiResponse<void>> {
-    const res =  await this._post<void>(`/auth/logout`, null);
+    const res = await this._post<void>(`/auth/logout`, null);
     this.authSession.clearSession();
     return res;
   }

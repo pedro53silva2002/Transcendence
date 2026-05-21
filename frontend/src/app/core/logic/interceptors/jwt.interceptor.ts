@@ -1,13 +1,27 @@
-import { HttpBackend, HttpClient, HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import {
+  HttpBackend,
+  HttpClient,
+  HttpErrorResponse,
+  HttpInterceptorFn,
+} from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable, catchError, finalize, map, shareReplay, switchMap, tap, throwError } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  finalize,
+  map,
+  shareReplay,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { TokenStorageService } from '../services/token-storage.service';
 import { Router } from '@angular/router';
-import { AuthResponseDto } from '../../feature/auth/dtos/AuthDtos';
+import { AuthResponseDto } from '../../feature/auth/dtos/auth.dto';
 import { environment } from '../../../../environments/environment';
 
-let refreshInProgress: Observable<string> | null = null
+let refreshInProgress: Observable<string> | null = null;
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenStorage = inject(TokenStorageService);
@@ -23,10 +37,10 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
       if (!(error instanceof HttpErrorResponse && error.status === 401)) {
         return throwError(() => error);
       }
-      const isExpired    = error.headers.get('Token-Expired') === 'true';
+      const isExpired = error.headers.get('Token-Expired') === 'true';
       const refreshToken = tokenStorage.getRefreshToken();
 
-     if (isExpired && refreshToken) {
+      if (isExpired && refreshToken) {
         if (!refreshInProgress) {
           // HttpBackend bypasses all interceptors — no infinite loop.
           const http = new HttpClient(httpBackend);
@@ -39,7 +53,9 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
               }),
               map((res) => res.token),
               shareReplay(1),
-              finalize(() => { refreshInProgress = null; }),
+              finalize(() => {
+                refreshInProgress = null;
+              }),
             );
         }
 

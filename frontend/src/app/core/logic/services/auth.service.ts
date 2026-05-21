@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import type { MeDto, TripMembershipDto } from '../../feature/auth/dtos/AuthDtos';
+import type { MeDto, TripMembershipDto } from '../../feature/auth/dtos/auth.dto';
 import { TokenStorageService } from './token-storage.service';
 
 @Injectable({ providedIn: 'root' })

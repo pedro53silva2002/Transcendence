@@ -18,12 +18,12 @@ export interface UserDto {
 }
 
 export interface UpdateUserDto {
-    id: number;
-    email: string;
-    username: string;
-    displayName: string;
-    bio: string;
-    profilePhotoUrl: string;
+  id: number;
+  email: string;
+  username: string;
+  displayName: string;
+  bio: string;
+  profilePhotoUrl: string;
 }
 
 export interface AuthResponseDto {
@@ -40,6 +40,6 @@ export type UserSearchFieldsDto = {
   email: string;
   id: number;
   createdAt: number;
-}
+};
 
 export type UserOrderByFieldsDto = 'username' | 'displayName' | 'createdAt' | 'id';
