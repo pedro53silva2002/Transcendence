@@ -20,7 +20,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
         if (dto.Username is null) throw new ValidationException("username", "Username can not be empty.");
         if (dto.Email is null) throw new ValidationException("email", "Email can not be empty.");
         if (dto.Password is null) throw new ValidationException("password", "Password can not be null.");
-        if (dto.Password.Length < 8) throw new ValidationException("password", "Password needs to have at least 8 characters.");
+        if (dto.Password.Length < 8 || dto.Password.Length > 20) throw new ValidationException("password", "Password needs to be between 8 and 20 characters.");
         if (!dto.Email.Contains('@')) throw new ValidationException("email", "Email needs to have one @.");
 
         CreateUserDto createUserDto = new()
