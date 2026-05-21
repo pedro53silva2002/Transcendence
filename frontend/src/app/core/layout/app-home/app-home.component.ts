@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { DashboardCardComponent } from "../../../shared/dashboard-card/dashboard-card.component";
 import { NavbarComponent } from '../navbar/navbar.component';
 import { AuthService } from '../../logic/services/auth.service';
-import { MeDto } from '../../feature/auth/AuthDtos';
+import { MeDto } from '../../feature/auth/dtos/auth.dto';
 
 @Component({
 	selector: 'app-app-home',
