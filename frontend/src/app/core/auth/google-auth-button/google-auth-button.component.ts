@@ -1,8 +1,8 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
-import { AuthService } from '../../feature/auth/AuthService';
+import { AuthService } from '../../feature/auth/services/auth.service';
 import { AuthService as SessionService } from '../../logic/services/auth.service';
 
 @Component({
@@ -12,12 +12,10 @@ import { AuthService as SessionService } from '../../logic/services/auth.service
   styleUrl: './google-auth-button.component.scss',
 })
 export class GoogleAuthButtonComponent implements OnDestroy {
+  private readonly authService = inject(AuthService);
   redirectSubscription?: Subscription;
 
-  constructor(
-    private authService: AuthService,
-    private sessionService: SessionService,
-  ) {}
+  constructor(private sessionService: SessionService) {}
 
   redirectToGoogle() {
     // Clear any stale session so the OAuth callback can save fresh tokens
@@ -25,10 +23,10 @@ export class GoogleAuthButtonComponent implements OnDestroy {
     this.sessionService.clearSession();
     this.redirectSubscription = this.authService.getGoogleRedirectUrl().subscribe({
       //if the subscribe succeeds
-      next: (res) => {
-        window.location.href = res.data?.authorizationUrl || '/';
+      next: (res: { data?: { authorizationUrl: string } }) => {
+        window.location.href = res.data?.authorizationUrl ?? '/';
       },
-      error: (err) => console.error(err),
+      error: (err: unknown) => console.error(err),
     });
   }
 

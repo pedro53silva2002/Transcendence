@@ -83,16 +83,16 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
     public async Task<IActionResult> Logout(CancellationToken ct)
     {
         {
-        var userId = User.GetUserId()
-            ?? throw new UnauthorizedException("User not authenticated.");
+            var userId = User.GetUserId()
+                ?? throw new UnauthorizedException("User not authenticated.");
 
-        var rawToken = Request.Headers.Authorization
-            .FirstOrDefault()
-            ?.Replace("Bearer ", string.Empty)
-            ?? string.Empty;
+            var rawToken = Request.Headers.Authorization
+                .FirstOrDefault()
+                ?.Replace("Bearer ", string.Empty)
+                ?? string.Empty;
 
-        await service.Logout(userId, rawToken, ct);
-        return NoContent();
+            await service.Logout(userId, rawToken, ct);
+            return NoContent();
         }
     }
 }

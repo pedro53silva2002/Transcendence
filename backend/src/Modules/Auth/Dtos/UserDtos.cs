@@ -23,7 +23,7 @@ public sealed class UserDto
     public string? OAuthProvider { get; set; }
     public string? OAuthId { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }
 
 public sealed class UpdateUserDto

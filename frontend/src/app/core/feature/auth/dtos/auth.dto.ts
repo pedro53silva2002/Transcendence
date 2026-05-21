@@ -1,8 +1,4 @@
-export interface CreateUserDto {
-  username: string;
-  email: string;
-  password: string;
-}
+import { UserDto } from './user.dto';
 
 export interface MeDto {
   username: string;
@@ -15,19 +11,6 @@ export interface MeDto {
 export interface TripMembershipDto {
   tripId: number;
   role: 'ADMIN' | 'MEMBER';
-}
-
-export interface UserDto {
-  id: number;
-  email: string;
-  username: string;
-  displayName: string;
-  bio: string | null;
-  profilePhotoUrl: string | null;
-  oAuthProvider: string | null;
-  oAuthId: string | null;
-  createdAt: string;
-  updatedAt: string | null;
 }
 
 export interface AuthResponseDto {
