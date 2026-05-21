@@ -18,11 +18,9 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
     public async Task<AuthResponseDto> Register(RegisterDto dto, CancellationToken ct = default)
     {
         if (dto.Username is null) throw new ValidationException("username", "Username can not be empty.");
-        if (dto.Email is null) throw new ValidationException("email", "Email can not be empty.");
-        if (dto.Password is null) throw new ValidationException("password", "Password can not be null.");
-        if (dto.Password.Length < 8) throw new ValidationException("password", "Password needs to have at least 8 characters.");
-        if (!dto.Email.Contains('@')) throw new ValidationException("email", "Email needs to have one @.");
-
+        EmailVerification(dto.Email);
+        PasswordVerification(dto.Password);
+    
         CreateUserDto createUserDto = new()
         {
             Email = dto.Email,
@@ -165,5 +163,60 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             RefreshToken = refreshTokenValue,
             RefreshTokenExpiresAt = refreshTokenExpire
         };
+    }
+
+    private static void EmailVerification(string Email)
+    {
+        if (string.IsNullOrWhiteSpace(Email))
+            throw new ValidationException("email.empty", "Email cannot be null or empty.", "Email cannot be null or empty.");
+        if (!Email.Contains('@'))
+            throw new ValidationException("email.format.missing_at", "Email must contain exactly one '@' symbol.", "Email must contain exactly one '@' symbol.");
+
+        string[] emailParts = Email.Split('@');
+
+        if (emailParts.Length != 2)
+            throw new ValidationException("email.format.invalid_at", "Email must contain only one '@' symbol.", "Email must contain only one '@' symbol.");
+
+        string localPart = emailParts[0];
+        string domain = emailParts[1];
+
+        if (string.IsNullOrWhiteSpace(localPart))
+            throw new ValidationException("email.local.empty", "Email username (before '@') cannot be empty.", "Email username (before '@') cannot be empty.");
+        if (!domain.Contains('.'))
+            throw new ValidationException("email.domain.format", "Email domain must contain a '.' (example: domain.com).", "Email domain must contain a '.' (example: domain.com).");
+        
+        string[] domainParts = domain.Split('.');
+        
+        if (domainParts.Length < 2)
+            throw new ValidationException("email.domain.invalid", "Email domain must include a valid structure like domain.com.", "Email domain must include a valid structure like domain.com.");
+
+        string domainName = domainParts[0];
+        string topLevelDomain = domainParts[^1];
+
+        if (string.IsNullOrWhiteSpace(domainName))
+            throw new ValidationException("email.domain.name.empty", "Domain name cannot be empty.", "Domain name cannot be empty.");
+        if (domainName.Length < 2)
+            throw new ValidationException("email.domain.name.too_short", "Domain name must be at least 2 characters long.", "Domain name must be at least 2 characters long.");
+        if (string.IsNullOrWhiteSpace(topLevelDomain))
+            throw new ValidationException("email.tld.empty", "Top-level domain cannot be empty.", "Top-level domain cannot be empty.");
+        if (topLevelDomain.Length < 2)
+            throw new ValidationException("email.tld.too_short", "Top-level domain must be at least 2 characters long.", "Top-level domain must be at least 2 characters long.");
+    }
+
+    private static void PasswordVerification(string Password)
+    {
+
+        if (string.IsNullOrWhiteSpace(Password))
+            throw new ValidationException("password.empty", "Password cannot be null or empty.", "Password cannot be null or empty.");
+        if (Password.Length < 8 || Password.Length > 20)
+            throw new ValidationException("password.length", "Password must be between 8 and 20 characters long.", "Password must be between 8 and 20 characters long.");
+        if (!Password.Any(char.IsUpper))
+            throw new ValidationException("password.uppercase", "Password must contain at least one uppercase letter.", "Password must contain at least one uppercase letter.");
+        if (!Password.Any(char.IsLower))
+            throw new ValidationException("password.lowercase", "Password must contain at least one lowercase letter.", "Password must contain at least one lowercase letter.");
+        if (!Password.Any(char.IsDigit))
+            throw new ValidationException("password.digit", "Password must contain at least one digit.", "Password must contain at least one digit.");
+        if (!Password.Any(ch => !char.IsLetterOrDigit(ch)))
+            throw new ValidationException("password.special", "Password must contain at least one special character.", "Password must contain at least one special character.");
     }
 }
