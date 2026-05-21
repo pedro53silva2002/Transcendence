@@ -26,6 +26,14 @@ export interface UpdateUserDto {
     profilePhotoUrl: string;
 }
 
+export interface AuthResponseDto {
+  user: UserDto;
+  token: string;
+  expiresAt: string;
+  refreshToken: string;
+  refreshTokenExpires: string;
+}
+
 export type UserSearchFieldsDto = {
   username: string;
   displayName: string;

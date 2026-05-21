@@ -2,6 +2,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Trippie.Common.Services.Authentication.Extensions;
+using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Service;
 
@@ -50,7 +52,7 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
             var idToken = await googleOAuthService.ExchangeCodeForTokenAsync(code, codeVerifier, ct);
             var tokenPayload = googleOAuthService.DecodeToken(idToken);
 
-            var user = await service.RegisterOrLoginViaOAuthAsync(new GoogleRegisterOrLoginDto
+            var authResponse = await service.RegisterOrLoginViaOAuthAsync(new GoogleRegisterOrLoginDto
             {
                 Email = tokenPayload.Email,
                 OAuthId = tokenPayload.Sub,
@@ -58,7 +60,7 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
                 ProfilePhotoUrl = tokenPayload.Picture
             }, ct: ct);
 
-            var frontendSuccessUri = $"{_googleOAuthOptions.FrontendSuccessUri}?success=true";
+            var frontendSuccessUri = $"{_googleOAuthOptions.FrontendSuccessUri}#token={Uri.EscapeDataString(authResponse.Token)}&refreshToken={Uri.EscapeDataString(authResponse.RefreshToken)}";
             return Redirect(frontendSuccessUri);
         }
         catch (Exception ex)
