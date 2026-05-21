@@ -95,7 +95,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt)
         return response;
     }
 
-    public async Task<AuthResponseDto> Logout(string token, CancellationToken ct = default)
+    public AuthResponseDto Logout(string token, CancellationToken ct = default)
     {
         jwt.InvalidateToken(token);
         return new AuthResponseDto

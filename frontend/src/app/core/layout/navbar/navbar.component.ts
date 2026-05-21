@@ -94,6 +94,7 @@ export class NavbarComponent implements OnDestroy {
 			return from(
 				this.userService.search({
 					search: { username: { op:'STARTSWITH', value: text}},
+					orderBy: [{ field: 'username', descending: false}],
 					pageSize: 10,
 				})
 			)

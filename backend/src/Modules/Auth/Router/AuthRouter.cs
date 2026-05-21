@@ -78,6 +78,6 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
 
     [HttpPost("logout")]
     [Authorize]
-    public async Task<ActionResult<AuthResponseDto>> Logout(CancellationToken ct)
-        => await service.Logout(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty, ct);
+    public ActionResult<AuthResponseDto> Logout(CancellationToken ct)
+        => service.Logout(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty, ct);
 }
