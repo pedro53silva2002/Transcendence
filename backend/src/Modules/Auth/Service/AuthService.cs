@@ -166,4 +166,6 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             RefreshTokenExpiresAt = refreshTokenExpire
         };
     }
+
+    private EmailVerification(String email)
 }
