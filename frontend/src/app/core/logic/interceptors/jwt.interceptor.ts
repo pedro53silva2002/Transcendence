@@ -4,7 +4,7 @@ import { Observable, catchError, finalize, map, shareReplay, switchMap, tap, thr
 import { AuthService } from '../services/auth.service';
 import { TokenStorageService } from '../services/token-storage.service';
 import { Router } from '@angular/router';
-import { AuthResponseDto } from '../../feature/auth/AuthDtos';
+import { AuthResponseDto } from '../../feature/auth/dtos/AuthDtos';
 import { environment } from '../../../../environments/environment';
 
 let refreshInProgress: Observable<string> | null = null

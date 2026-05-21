@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Trippie.Common.Database;
@@ -165,5 +166,10 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             RefreshToken = refreshTokenValue,
             RefreshTokenExpiresAt = refreshTokenExpire
         };
+    }
+
+    internal ActionResult<AuthResponseDto> Logout(string v, CancellationToken ct)
+    {
+        throw new NotImplementedException();
     }
 }

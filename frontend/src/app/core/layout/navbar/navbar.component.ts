@@ -1,3 +1,4 @@
+import { AuthService } from './../../feature/auth/services/AuthService';
 import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectorRef, Component, HostListener, inject, input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -56,6 +57,7 @@ export class NavbarComponent implements OnDestroy {
 	) { }
 
 	private readonly userService = inject(UserService);
+	private readonly authService = inject(AuthService);
 	private readonly router = inject(Router);
 
 	isPopupOpen = false;
@@ -104,6 +106,11 @@ export class NavbarComponent implements OnDestroy {
 			)
 		})
 	);
+
+	async logout() {
+		await this.authService.logout();
+		this.router.navigate(['/']);
+	}
 
 	displayUser(user: UserDto | string | null): string {
 		if (!user || typeof user === 'string') return user ?? '';
