@@ -1,9 +1,12 @@
-import { Injectable } from '@angular/core';
-import { ApiResponse, BaseApiService } from '../../logic/services/base-api.service';
-import { AuthResponseDto, CreateUserDto, LoginDto, MeDto, UserDto } from './AuthDtos';
+import { inject, Injectable } from '@angular/core';
+import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
+import { AuthResponseDto, LoginDto, MeDto } from '../dtos/auth.dto';
+import { CreateUserDto } from '../dtos/user.dto';
+import { AuthService as SessionService } from '../../../logic/services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseApiService {
+  private readonly authSession = inject(SessionService);
   public async register(dto: CreateUserDto): Promise<ApiResponse<AuthResponseDto>> {
     return this._post<AuthResponseDto>('/auth/register', dto);
   }
@@ -22,5 +25,11 @@ export class AuthService extends BaseApiService {
    */
   public getGoogleRedirectUrl() {
     return this._getO<{ authorizationUrl: string }>('/auth/google/url');
+  }
+
+  public async logout(): Promise<ApiResponse<void>> {
+    const res = await this._post<void>(`/auth/logout`, null);
+    this.authSession.clearSession();
+    return res;
   }
 }

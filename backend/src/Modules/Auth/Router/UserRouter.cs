@@ -1,3 +1,6 @@
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Auth.Dtos;
@@ -9,6 +12,12 @@ namespace Trippie.Modules.Auth.Router;
 [Route("api/users")]
 public sealed class UserRouter(UserService service) : ControllerBase
 {
+    private static readonly JsonSerializerOptions SearchJsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        Converters = { new JsonStringEnumConverter() }
+    };
+
     [HttpPost]
     public async Task<ActionResult<UserDto>> Create([FromBody] CreateUserDto dto, CancellationToken ct)
     {
@@ -16,9 +25,11 @@ public sealed class UserRouter(UserService service) : ControllerBase
         return CreatedAtAction(nameof(Create), user);
     }
 
-    [HttpPost("search")]
-    public async Task<ActionResult<CursorPage<UserDto>>> Search([FromBody] SearchPayload payload, CancellationToken ct)
+    [HttpGet("search")]
+    public async Task<ActionResult<CursorPage<UserDto>>> Search([FromQuery] string q, CancellationToken ct)
     {
+        var json = Encoding.UTF8.GetString(Convert.FromBase64String(q));
+        var payload = JsonSerializer.Deserialize<SearchPayload>(json, SearchJsonOptions) ?? new SearchPayload();
         var page = await service.SearchAsync(payload, ct);
         return Ok(page);
     }
