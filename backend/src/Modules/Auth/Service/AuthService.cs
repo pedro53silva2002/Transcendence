@@ -167,9 +167,4 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             RefreshTokenExpiresAt = refreshTokenExpire
         };
     }
-
-    internal ActionResult<AuthResponseDto> Logout(string v, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
 }
