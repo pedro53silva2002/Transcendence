@@ -49,14 +49,28 @@
 			<mat-form-field appearance="outline" class="search">
 				<mat-icon matPrefix>search</mat-icon>
 				<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users" />
-				<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel">
-					@for (user of filteredUsers | async; track user) {
+				<mat-autocomplete
+				#auto="matAutocomplete"
+				panelClass="custom-search-panel"
+				[displayWith]="displayUser"
+				(optionSelected)="selectUser($event.option.value)">
+
+				@for (user of filteredUsers | async; track user.id) {
 					<mat-option [value]="user">
-						<div>
-							<span>{{user}}</span>
+					<div class="search-result-option">
+						@if (user.profilePhotoUrl) {
+						<img [ngSrc]="user.profilePhotoUrl" width="32" height="32"
+							[alt]="user.displayName" class="search-avatar" />
+						} @else {
+						<mat-icon class="search-avatar-placeholder">account_circle</mat-icon>
+						}
+						<div class="search-result-text">
+						<span class="search-display-name">{{ user.displayName }}</span>
+						<span class="search-username">@{{ user.username }}</span>
 						</div>
+					</div>
 					</mat-option>
-					}
+				}
 				</mat-autocomplete>
 			</mat-form-field>
 			}

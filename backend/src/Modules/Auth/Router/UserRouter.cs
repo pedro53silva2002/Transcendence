@@ -16,7 +16,7 @@ public sealed class UserRouter(UserService service) : ControllerBase
         return CreatedAtAction(nameof(Create), user);
     }
 
-    [HttpPost("search")]
+    [HttpGet("search")]
     public async Task<ActionResult<CursorPage<UserDto>>> Search([FromBody] SearchPayload payload, CancellationToken ct)
     {
         var page = await service.SearchAsync(payload, ct);

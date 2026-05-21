@@ -1,5 +1,5 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectorRef, Component, HostListener, input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { ChangeDetectorRef, Component, HostListener, inject, input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,12 +9,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { debounceTime, delay, distinctUntilChanged, map, Observable, of, Subscription, tap } from 'rxjs';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { catchError, debounceTime, delay, distinctUntilChanged, from, map, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
 import { TranslocoModule } from '@jsverse/transloco';
 import { LanguageButtonComponent } from '../../../shared/components/language-button/language-button.component';
+import { UserService } from '../../feature/auth/services/UserService';
+import { UserDto } from '../../feature/auth/dtos/UserDto';
 
 @Component({
 	selector: 'app-navbar',
@@ -30,6 +32,7 @@ import { LanguageButtonComponent } from '../../../shared/components/language-but
 		MatIconModule,
 		MatSidenavModule,
 		AsyncPipe,
+		NgOptimizedImage,
 		TranslocoModule,
 		LanguageButtonComponent],
 	templateUrl: './navbar.component.html',
@@ -53,6 +56,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 		private readonly cd: ChangeDetectorRef,
 	) { }
 
+	private readonly userService = inject(UserService);
+	private readonly router = inject(Router);
+
 	isPopupOpen = false;
 
 	openLogin(): void {
@@ -72,8 +78,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 	}
 
 	searchControl = new FormControl('');
-	users = ['Maria', 'João', 'Diogo', 'Maria João', 'Rui Diogo', 'Rui'];
-	filteredUsers: Observable<string[]> = new Observable();
+	filteredUsers: Observable<UserDto[]> = of([]);
 	private searchSub?: Subscription;
 	private readonly backendSub?: Subscription;
 
@@ -86,17 +91,33 @@ export class NavbarComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.searchSub = this.searchControl.valueChanges.pipe(
 			debounceTime(300),
-			distinctUntilChanged(), //if we type more and then change it to the previous input, it doesn't register any change
-		).subscribe(abc => {
-			//console.log(abc)
-			if (abc != null) {
-				this.filteredUsers = this.getUsers(abc).pipe(
-					tap(list => console.log(list)),
-					map(list => list.map(name => name.toLowerCase()))
-				);
-			}
-		})
+			distinctUntilChanged(),
+			switchMap(text => {
+			if (!text || text.trim() === '') return of([]);
+			return from(
+				this.userService.search({
+				search: { username: { op: 'CONTAINS', value: text } },
+				pageSize: 10,
+				})
+			).pipe(
+				map(res => res.data?.content ?? []),
+				catchError(err => { console.error('User search failed:', err); return of([]); })
+			);
+			})
+		).subscribe(users => {
+			this.filteredUsers = of(users);
+		});
 	}
+
+	displayUser(user: UserDto | string | null): string {
+		if (!user || typeof user === 'string') return user ?? '';
+		return user.displayName;
+	}
+
+	selectUser(user: UserDto): void {
+		this.router.navigate(['/profile', user.id]);
+	}
+
 
 	ngOnDestroy(): void {
 		this.searchSub?.unsubscribe();
