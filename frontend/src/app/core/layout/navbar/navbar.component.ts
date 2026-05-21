@@ -93,7 +93,7 @@ export class NavbarComponent implements OnDestroy {
 			if (!text || text.trim() === '') return of([]);
 			return from(
 				this.userService.search({
-					search: { username: { op:'CONTAINS', value: text}},
+					search: { username: { op:'STARTSWITH', value: text}},
 					pageSize: 10,
 				})
 			)
