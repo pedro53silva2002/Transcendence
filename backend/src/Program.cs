@@ -62,7 +62,7 @@ try
         {
             var allowedOrigins = builder.Configuration
                 .GetSection("AllowedOrigins")
-                .Get<string[]>() ?? ["http://localhost:4200"];
+                .Get<string[]>() ?? [Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGIN") ?? throw new InvalidOperationException("CORS_ALLOWED_ORIGIN not set")];
 
             policy.WithOrigins(allowedOrigins)
                   .AllowAnyHeader()

@@ -80,7 +80,7 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
     private string BuildFailureRedirectUri(string reason, string? message = null)
     {
         var separator = _googleOAuthOptions.FrontendFailureUri.Contains('?') ? "&" : "?";
-        var redirectUri = $"{_googleOAuthOptions.FrontendFailureUri}{separator}reason={Uri.EscapeDataString(reason)}";
+        var redirectUri = $"{_googleOAuthOptions.FrontendFailureUri}{separator}error={Uri.EscapeDataString(reason)}";
 
         if (!string.IsNullOrWhiteSpace(message))
             redirectUri += $"&message={Uri.EscapeDataString(message)}";
