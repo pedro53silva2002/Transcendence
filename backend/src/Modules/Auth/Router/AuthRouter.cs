@@ -38,14 +38,22 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
     }
 
     [HttpGet("google/callback")]
-    public async Task<IActionResult> GoogleCallback([FromQuery] string code, [FromQuery] string state, CancellationToken ct)
+    public async Task<IActionResult> GoogleCallback(
+        [FromQuery] string? code,
+        [FromQuery] string? state,
+        [FromQuery] string? error,
+        [FromQuery(Name = "error_description")] string? errorDescription,
+        CancellationToken ct)
     {
-        if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(state))
-            return BadRequest("Missing code or state");
+        if (!string.IsNullOrWhiteSpace(error))
+            return Redirect(BuildFailureRedirectUri(error, errorDescription));
+
+        if (string.IsNullOrWhiteSpace(code) || string.IsNullOrWhiteSpace(state))
+            return Redirect(BuildFailureRedirectUri("missing_code_or_state"));
 
         var (found, codeVerifier) = oauthStateStore.TryGet(state);
         if (!found || string.IsNullOrEmpty(codeVerifier))
-            return BadRequest("Invalid state or missing code verifier");
+            return Redirect(BuildFailureRedirectUri("invalid_state_or_missing_code_verifier"));
 
         try
         {
@@ -63,10 +71,21 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
             var frontendSuccessUri = $"{_googleOAuthOptions.FrontendSuccessUri}#token={Uri.EscapeDataString(authResponse.Token)}&refreshToken={Uri.EscapeDataString(authResponse.RefreshToken)}";
             return Redirect(frontendSuccessUri);
         }
-        catch (Exception ex)
+        catch
         {
-            return BadRequest($"OAuth callback failed: {ex.Message}");
+            return Redirect(BuildFailureRedirectUri("oauth_callback_failed"));
         }
+    }
+
+    private string BuildFailureRedirectUri(string reason, string? message = null)
+    {
+        var separator = _googleOAuthOptions.FrontendFailureUri.Contains('?') ? "&" : "?";
+        var redirectUri = $"{_googleOAuthOptions.FrontendFailureUri}{separator}reason={Uri.EscapeDataString(reason)}";
+
+        if (!string.IsNullOrWhiteSpace(message))
+            redirectUri += $"&message={Uri.EscapeDataString(message)}";
+
+        return redirectUri;
     }
 
     [HttpGet("me")]
