@@ -29,6 +29,9 @@
       @if (form.controls.email.hasError('email')) {
         <span class="field-error">{{ 'auth.invalidEmail' | transloco }}</span>
       }
+      @if (form.controls.email.hasError('dot')) {
+        <span class="field-error">{{ 'auth.invalidEmail' | transloco }}</span>
+      }
       <mat-form-field appearance="outline" [hideRequiredMarker]="true">
         <input
           matInput
@@ -111,8 +114,8 @@
       {{ 'auth.register' | transloco }}
     </button>
     <app-google-auth-button></app-google-auth-button>
-	@if (showOAuthErrorMessage) {
-		<div class="error-message"><p>Google Authentication failed.</p></div>
-	}
+    @if (showOAuthErrorMessage) {
+      <div class="error-message"><p>Google Authentication failed.</p></div>
+    }
   </mat-dialog-actions>
 </form>

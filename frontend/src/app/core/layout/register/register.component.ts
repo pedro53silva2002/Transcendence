@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
+  OnInit,
   ViewEncapsulation,
   computed,
   inject,
@@ -37,13 +38,12 @@ import {
 } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService as ApiAuthService } from '../../feature/auth/services/auth.service';
-import { AuthService } from '../../logic/services/auth.service';
 import { TokenStorageService } from '../../logic/services/token-storage.service';
 import { CloseButtonComponent } from '../../../shared/components/close-button/close-button.component';
 import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-auth-button.component';
 import { UserService } from '../../feature/auth/services/user.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { SessionService } from '../../logic/services/session.service';
 
 @Component({
   standalone: true,
@@ -64,9 +64,9 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   private readonly apiAuthService = inject(ApiAuthService);
-  private readonly authService = inject(AuthService);
+  private readonly sessionService = inject(SessionService);
   private readonly tokenStorage = inject(TokenStorageService);
   private readonly router = inject(Router);
   private readonly dialogRef = inject(MatDialogRef<RegisterComponent>);
@@ -94,7 +94,7 @@ export class RegisterComponent {
 
   ngOnInit(): void {
     if (sessionStorage.getItem('auth_origin') === 'register') {
-      if (this.authService.getOAuthResult() === false) {
+      if (this.sessionService.getOAuthResult() === false) {
         this.showOAuthErrorMessage = true;
       } else {
         this.showOAuthErrorMessage = false;
@@ -138,6 +138,14 @@ export class RegisterComponent {
     );
   };
 
+  validateUserEmail: ValidatorFn = (control) => {
+    const email = control.value;
+    if (!email) return null;
+
+    if (!/[.]/.test(email)) return { dot: true };
+    return null;
+  };
+
   passwordMatches: ValidatorFn = (group) => {
     const pwd = group.get('password')?.value;
     const confirm = group.get('confirmPassword')?.value;
@@ -177,7 +185,7 @@ export class RegisterComponent {
       }),
       email: new FormControl('', {
         nonNullable: true,
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required, Validators.email, this.validateUserEmail],
         asyncValidators: [this.validateUniqueEmail],
         updateOn: 'blur',
       }),
@@ -203,7 +211,7 @@ export class RegisterComponent {
       if (result.data) {
         this.tokenStorage.saveAccessToken(result.data.token);
         this.tokenStorage.saveRefreshToken(result.data.refreshToken);
-        const ok = await firstValueFrom(this.authService.loadMe());
+        const ok = await firstValueFrom(this.sessionService.loadMe());
         if (ok) {
           this.dialogRef.close();
           this.router.navigate(['/home']);

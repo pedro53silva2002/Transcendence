@@ -6,7 +6,7 @@ import type { MeDto, TripMembershipDto } from '../../feature/auth/dtos/auth.dto'
 import { TokenStorageService } from './token-storage.service';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class SessionService {
   private readonly apiURL = `${(environment as any).apiUrl}`;
   private readonly http = inject(HttpClient);
   private readonly tokenStorage = inject(TokenStorageService);
@@ -53,11 +53,10 @@ export class AuthService {
   }
 
   getOAuthResult(): boolean {
-	return this.isOAuthSuccessful;
+    return this.isOAuthSuccessful;
   }
 
   setOAuthSuccess(result: boolean): void {
-	this.isOAuthSuccessful = result;
+    this.isOAuthSuccessful = result;
   }
-
 }
