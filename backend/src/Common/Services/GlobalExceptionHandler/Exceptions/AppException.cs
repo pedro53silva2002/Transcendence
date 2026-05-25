@@ -11,6 +11,6 @@ public abstract class AppException(
     ) : System.Exception(message, innerException)
 {
     public HttpStatusCode StatusCode { get; } = statusCode;
-public string ErrorCode { get; } = errorCode;
-public IReadOnlyDictionary<string, object?> Metadata { get; } = metadata ?? new Dictionary<string, object?>();
+    public string ErrorCode { get; } = errorCode;
+    public IReadOnlyDictionary<string, object?> Metadata { get; } = metadata ?? new Dictionary<string, object?>();
 }

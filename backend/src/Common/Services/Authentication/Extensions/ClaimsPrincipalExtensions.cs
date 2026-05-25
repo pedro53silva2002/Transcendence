@@ -52,5 +52,4 @@ public static class ClaimsPrincipalExtensions
             if (t.TripId == tripId) return true;
         return false;
     }
-
 }

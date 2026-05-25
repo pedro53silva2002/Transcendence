@@ -6,8 +6,10 @@ public sealed class CreateUserDto
 {
     public required string Email { get; set; }
     public required string Username { get; set; }
-    public required string Password { get; set; }
+    public string? Password { get; set; }
     public string? OAuthProvider { get; set; }
+    public string? OAuthId { get; set; }
+    public string? ProfilePhotoUrl { get; set; }
 }
 
 public sealed class UserDto
@@ -21,7 +23,7 @@ public sealed class UserDto
     public string? OAuthProvider { get; set; }
     public string? OAuthId { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }
 
 public sealed class UpdateUserDto

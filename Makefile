@@ -17,6 +17,16 @@ down:
 clean: down
 	docker compose -f $(COMPOSE_FILE) -p $(PROJECT_NAME) down --volumes
 
+# ----------------------------
+# Gradle / Java safe clean
+# ----------------------------
+gradle-clean:
+	@echo "Running Gradle clean and removing build artifacts..."
+	./gradlew clean
+	# Remove rebuildable directories safely
+	find . -type d \( -name "build" -o -name ".gradle" -o -name ".tmp" -o -name "caches" \) -prune -exec rm -rf {} +
+	@echo "Gradle clean complete!"
+
 fclean: clean
 	docker system prune -af --volumes
 

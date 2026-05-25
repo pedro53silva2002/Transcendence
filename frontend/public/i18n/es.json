@@ -1,1 +1,37 @@
-{}
+{
+  "auth": {
+    "register": "Registro",
+    "login": "Acceso",
+    "password": "contraseña",
+    "google": "Iniciar Sesión con",
+    "username": "nombre de usuario",
+    "password-confirmation": "confirmar contraseña",
+    "email": "Email"
+  },
+
+  "navbar": {
+    "profile": "Perfil",
+    "trip": "Planear Viaje",
+    "my-trips": "Mis Viajes",
+    "my-friends": "Mis Amigos",
+    "my-expenses": "Mis Gastos"
+  },
+
+  "card": {
+    "trip-description": "Haz clic aquí para empezar a planificar tu próximo viaje.",
+    "my-trips-description": "Haz clic aquí para ver tus viajes pasados, presentes y futuros.",
+    "my-friends-description": "Haz clic aquí para ver tu lista de amigos.",
+    "my-expenses-description": "Haz clic aquí para ver en qué gastaste tu dinero."
+  },
+
+	"dashboard": {
+		"greet": "Hola, ",
+		"intro": "¿Listo para tu aventura?" 
+	},
+
+	"stats": {
+		"countries": "Paises Visitados",
+		"trips": "Viajes Este Ano",
+		"countdown": "Dias Para El Viaje"
+	}
+}

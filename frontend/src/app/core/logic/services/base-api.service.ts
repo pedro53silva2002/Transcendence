@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 /**
@@ -55,12 +55,17 @@ export abstract class BaseApiService {
    * @param path - Endpoint path (e.g. '/invoices/1'). Base URL is prepended automatically.
    */
   protected _get<T>(path: string): Promise<ApiResponse<T>> {
-    return firstValueFrom(this.http.get<T>(this.apiUrl + path)).then((data) => ({
-      status: 200,
-      data,
-    }));
+    return firstValueFrom(this.http.get<T>(this.apiUrl + path, { withCredentials: true })).then(
+      (data) => ({ status: 200, data }),
+    );
     // If the request fails, the errorInterceptor converts the error
     // to an ApiError before it reaches here. No try/catch needed.
+  }
+
+  protected _getO<T>(path: string): Observable<ApiResponse<T>> {
+    return this.http
+      .get<T>(this.apiUrl + path, { withCredentials: true })
+      .pipe(map((data) => ({ status: 200, data })));
   }
 
   /**
@@ -73,10 +78,9 @@ export abstract class BaseApiService {
    * @param body - Request payload, serialised to JSON automatically.
    */
   protected _post<T>(path: string, body: unknown): Promise<ApiResponse<T>> {
-    return firstValueFrom(this.http.post<T>(this.apiUrl + path, body)).then((data) => ({
-      status: 200,
-      data,
-    }));
+    return firstValueFrom(
+      this.http.post<T>(this.apiUrl + path, body, { withCredentials: true }),
+    ).then((data) => ({ status: 200, data }));
   }
 
   /**
@@ -86,10 +90,9 @@ export abstract class BaseApiService {
    * @param body - The complete updated resource.
    */
   protected _put<T>(path: string, body: unknown): Promise<ApiResponse<T>> {
-    return firstValueFrom(this.http.put<T>(this.apiUrl + path, body)).then((data) => ({
-      status: 200,
-      data,
-    }));
+    return firstValueFrom(
+      this.http.put<T>(this.apiUrl + path, body, { withCredentials: true }),
+    ).then((data) => ({ status: 200, data }));
   }
 
   /**
@@ -101,10 +104,9 @@ export abstract class BaseApiService {
    * @param body - Optional payload.
    */
   protected _delete<T>(path: string, body?: unknown): Promise<ApiResponse<T>> {
-    return firstValueFrom(this.http.delete<T>(this.apiUrl + path, { body })).then((data) => ({
-      status: 200,
-      data,
-    }));
+    return firstValueFrom(
+      this.http.delete<T>(this.apiUrl + path, { body, withCredentials: true }),
+    ).then((data) => ({ status: 200, data }));
   }
 
   /**
@@ -120,10 +122,9 @@ export abstract class BaseApiService {
    * @param form - FormData containing files and/or text fields.
    */
   protected _postForm<T>(path: string, form: FormData): Promise<ApiResponse<T>> {
-    return firstValueFrom(this.http.post<T>(this.apiUrl + path, form)).then((data) => ({
-      status: 200,
-      data,
-    }));
+    return firstValueFrom(
+      this.http.post<T>(this.apiUrl + path, form, { withCredentials: true }),
+    ).then((data) => ({ status: 200, data }));
   }
 
   /**
@@ -134,9 +135,8 @@ export abstract class BaseApiService {
    * @param form - FormData object.
    */
   protected _putForm<T>(path: string, form: FormData): Promise<ApiResponse<T>> {
-    return firstValueFrom(this.http.put<T>(this.apiUrl + path, form)).then((data) => ({
-      status: 200,
-      data,
-    }));
+    return firstValueFrom(
+      this.http.put<T>(this.apiUrl + path, form, { withCredentials: true }),
+    ).then((data) => ({ status: 200, data }));
   }
 }

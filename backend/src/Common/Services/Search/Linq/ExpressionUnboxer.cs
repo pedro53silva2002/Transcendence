@@ -42,5 +42,5 @@ internal static class ExpressionUnboxer
     {
         protected override Expression VisitParameter(ParameterExpression node)
             => node == from ? to : node;
-}
+    }
 }

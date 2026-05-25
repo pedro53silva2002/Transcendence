@@ -14,12 +14,12 @@ export type SearchOperator =
   | 'AFTER'
   | 'BETWEEN'
   | 'CONTAINS'
-  | 'STARTS_WITH'
-  | 'ENDS_WITH'
-  | 'IS_NULL'
-  | 'IS_NOT_NULL'
+  | 'STARTSWITH'
+  | 'ENDSWITH'
+  | 'ISNULL'
+  | 'ISNOTNULL'
   | 'IN'
-  | 'NOT_IN';
+  | 'NOTIN';
 
 /**
  * A single filter value.

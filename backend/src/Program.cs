@@ -44,21 +44,6 @@ try
     // Replace MS logging with Serilog (reads "Serilog" + "ErrorHandling" sections).
     builder.Host.UseAppSerilog();
 
-    builder.Services.AddCors(options =>
-    {
-        options.AddDefaultPolicy(policy =>
-        {
-            var allowedOrigins = builder.Configuration
-                .GetSection("AllowedOrigins")
-                .Get<string[]>() ?? ["http://localhost:4200"];
-
-            policy.WithOrigins(allowedOrigins)
-                  .AllowAnyHeader()
-                  .AllowAnyMethod()
-                  .AllowCredentials();
-        });
-    });
-
     builder.Services.AddControllers();
     builder.Services.AddOpenApi();
     builder.Services.AddHealthChecks();
@@ -68,6 +53,40 @@ try
 
     builder.Services.AddTrippieAuthentication(builder.Configuration);
 
+    // OAuth state store for managing PKCE state without sessions
+    builder.Services.AddSingleton<OAuthStateStore>();
+
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            var allowedOrigins = builder.Configuration
+                .GetSection("AllowedOrigins")
+                .Get<string[]>() ?? [Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGIN") ?? throw new InvalidOperationException("CORS_ALLOWED_ORIGIN not set")];
+
+            policy.WithOrigins(allowedOrigins)
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+    });
+
+    // Google OAuth configuration from environment variables
+    var googleOAuthOptions = new GoogleOAuthOptions
+    {
+        ClientId = Environment.GetEnvironmentVariable("GOOGLE_OAUTH_CLIENT_ID") ?? throw new InvalidOperationException("GOOGLE_OAUTH_CLIENT_ID not set"),
+        ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_OAUTH_CLIENT_SECRET") ?? throw new InvalidOperationException("GOOGLE_OAUTH_CLIENT_SECRET not set"),
+        CallbackUri = Environment.GetEnvironmentVariable("GOOGLE_OAUTH_REDIRECT_URI") ?? throw new InvalidOperationException("GOOGLE_OAUTH_REDIRECT_URI not set"),
+        FrontendUri = Environment.GetEnvironmentVariable("FRONTEND_OAUTH") ?? throw new InvalidOperationException("FRONTEND_OAUTH not set"),
+    };
+    builder.Services.Configure<GoogleOAuthOptions>(opts =>
+    {
+        opts.ClientId = googleOAuthOptions.ClientId;
+        opts.ClientSecret = googleOAuthOptions.ClientSecret;
+        opts.CallbackUri = googleOAuthOptions.CallbackUri;
+        opts.FrontendUri = googleOAuthOptions.FrontendUri;
+    });
+    builder.Services.AddHttpClient<GoogleOAuthService>();
 
     //Add dependency injection for model and service
     builder.Services.AddScoped<UserModel>();
@@ -130,6 +149,9 @@ try
     // 2. Correlation ID + global exception handler wrap the rest of the pipeline
     //    (auth, static files, endpoints).
     app.UseExceptionHandling();
+
+    // 2.5. CORS middleware
+    app.UseCors();
 
     // 3. Standard pipeline.
     if (app.Environment.IsDevelopment())

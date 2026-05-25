@@ -1,0 +1,56 @@
+.card-wrapper {
+	position: relative; 
+    width: 385px; // O tamanho máximo passa para o pai
+    border-radius: 25px; // Mantemos o raio aqui para o corte funcionar
+    overflow: hidden; // Garante que a imagem sobreposta também respeita os cantos arredondados
+	height: 430px; //+8 because of the borders
+	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+	&:hover {
+		cursor: pointer;
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.55);
+	}
+}
+
+.main-container {
+	display: flex;
+	flex-direction: column;
+	height: 422px;
+	align-items: center;
+	justify-content: center;
+	border: 4px solid var(--mat-sys-secondary) !important;
+	border-radius: 25px;
+	background-color: var(--mat-sys-primary-container) !important;
+	
+	h1 {
+		color: var(--mat-sys-on-primary) !important;
+		font-family: "BBH Hegarty";
+		font-weight: 100;
+		font-size: 24px;
+		margin-bottom: 4px;
+	}
+	
+	p {
+		margin-bottom: 260px;
+		margin-top: 0px;
+		width: 260px;
+		text-align: center;
+		font-size: 14px;
+	}
+}
+
+.overlay-container {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 420px;
+        opacity: 0.82;
+		margin-top: 310px;
+    }
+}

@@ -1,32 +1,36 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../../logic/services/auth.service';
+import { TranslocoModule } from '@jsverse/transloco';
+import { AuthService } from '../../feature/auth/services/auth.service';
+import { AuthService as SessionService } from '../../logic/services/auth.service';
 
 @Component({
-	selector: 'app-google-auth-button',
-	imports: [MatButtonModule],
-	templateUrl: './google-auth-button.component.html',
-	styleUrl: './google-auth-button.component.scss',
+  selector: 'app-google-auth-button',
+  imports: [MatButtonModule, TranslocoModule],
+  templateUrl: './google-auth-button.component.html',
+  styleUrl: './google-auth-button.component.scss',
 })
 export class GoogleAuthButtonComponent implements OnDestroy {
-	redirectSubscription?: Subscription;
+  private readonly authService = inject(AuthService);
+  redirectSubscription?: Subscription;
 
-	constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private sessionService: SessionService) {}
 
-	redirectToGoogle() {
-		this.redirectSubscription = this.authService.getGoogleRedirectUrl()
-			.subscribe({
-				//if the subscribe succeeds
-				next: (res) => {
-					window.location.href = res.authorizationUrl;
-				},
-				error: (err) => console.error(err)
-			});
-	}
+  redirectToGoogle() {
+    // Clear any stale session so the OAuth callback can save fresh tokens
+    // without the app initializer firing the old expired token at /auth/me.
+    this.sessionService.clearSession();
+    this.redirectSubscription = this.authService.getGoogleRedirectUrl().subscribe({
+      //if the subscribe succeeds
+      next: (res: { data?: { authorizationUrl: string } }) => {
+        window.location.href = res.data?.authorizationUrl ?? '/';
+      },
+      error: (err: unknown) => console.error(err),
+    });
+  }
 
-	ngOnDestroy() {
-		this.redirectSubscription?.unsubscribe();
-	}
+  ngOnDestroy() {
+    this.redirectSubscription?.unsubscribe();
+  }
 }
