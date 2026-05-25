@@ -49,24 +49,17 @@
     color: var(--mat-sys-on-primary-container) !important;
     opacity: 0.6 !important;
   }
-}
-
-.register-form {
   .mdc-notched-outline__leading,
   .mdc-notched-outline__notch,
   .mdc-notched-outline__trailing {
-    border-color: var(--mat-sys-on-primary-container) !important;
+	border-color: var(--mat-sys-on-primary-container) !important;
   }
-
+  
   .mdc-text-field__input {
-    color: var(--mat-sys-on-primary-container) !important;
-  }
-
-  ::placeholder {
-    color: var(--mat-sys-on-primary-container) !important;
-    opacity: 0.6 !important;
+	color: var(--mat-sys-on-primary-container) !important;
   }
 }
+
 
 .mat-mdc-form-field {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);

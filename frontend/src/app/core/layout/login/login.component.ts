@@ -14,83 +14,92 @@ import { CloseButtonComponent } from '../../../shared/components/close-button/cl
 import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-auth-button.component';
 
 @Component({
-  selector: 'app-login',
-  imports: [
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    GoogleAuthButtonComponent,
-    CloseButtonComponent,
-    TranslocoModule,
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+	selector: 'app-login',
+	imports: [
+		MatDialogModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatButtonModule,
+		ReactiveFormsModule,
+		GoogleAuthButtonComponent,
+		CloseButtonComponent,
+		TranslocoModule,
+	],
+	templateUrl: './login.component.html',
+	styleUrl: './login.component.scss',
+	encapsulation: ViewEncapsulation.None,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
-  private readonly apiAuthService = inject(ApiAuthService);
-  private readonly authService = inject(SessionService);
-  private readonly tokenStorage = inject(TokenStorageService);
-  private readonly router = inject(Router);
-  private readonly dialogRef = inject(MatDialogRef<LoginComponent>);
+	private readonly apiAuthService = inject(ApiAuthService);
+	private readonly authService = inject(SessionService);
+	private readonly tokenStorage = inject(TokenStorageService);
+	private readonly router = inject(Router);
+	private readonly dialogRef = inject(MatDialogRef<LoginComponent>);
 
-  readonly form = new FormGroup({
-    email: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.email],
-    }),
-    password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-  });
+	readonly form = new FormGroup({
+		email: new FormControl('', {
+			nonNullable: true,
+			validators: [Validators.required, Validators.email],
+		}),
+		password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+	});
 
-  showOAuthErrorMessage = false;
-  showLoginErrorMessage = false;
+	showOAuthErrorMessage = false;
+	showLoginErrorMessage = false;
 
+	//signal that will check if the login button was already clicked (to prevent multiple requests)
+	public isLoading = signal<boolean>(false);
 
-  //signal that will check if the login button was already clicked (to prevent multiple requests)
-  public isLoading = signal<boolean>(false);
+	ngOnInit(): void {
+		if (sessionStorage.getItem('auth_origin') === 'login') {
+			if (this.authService.getOAuthResult() === false) {
+				this.showOAuthErrorMessage = true;
+			} else {
+				this.showOAuthErrorMessage = false;
+			}
+		}
 
-  ngOnInit(): void {
-    if (sessionStorage.getItem('auth_origin') === 'login') {
-      if (this.authService.getOAuthResult() === false) {
-        this.showOAuthErrorMessage = true;
-      } else {
-        this.showOAuthErrorMessage = false;
-      }
-    }
+		//sets the auth_origin in the session storage to 'login'
+		sessionStorage.setItem('auth_origin', 'login');
+	}
 
-    //sets the auth_origin in the session storage to 'login'
-    sessionStorage.setItem('auth_origin', 'login');
-  }
+	async submit(): Promise<void> {
 
-  async submit(): Promise<void> {
+		//if the program is already loading, it prevents the user from clicking the login again
+		if (this.isLoading()) {
+			console.log('entrou 1');
+			return;
+		}
 
-    //if the program is already loading, it prevents the user from clicking the login again
-    if (this.isLoading()) return;
+		this.isLoading.set(true);
+		this.showOAuthErrorMessage = false;
+		this.showLoginErrorMessage = false;
 
-    this.isLoading.set(true);
-    this.showOAuthErrorMessage = false;
-    
-    if (this.form.invalid) return;
-    const { email, password } = this.form.getRawValue();
-    try {
-      const result = await this.apiAuthService.login({ email, password });
-      if (result.data) {
-        this.tokenStorage.saveAccessToken(result.data.token);
-        this.tokenStorage.saveRefreshToken(result.data.refreshToken);
-        const ok = await firstValueFrom(this.authService.loadMe());
-        if (ok) {
-          this.dialogRef.close();
-          this.router.navigate(['/home']);
-          return;
-        }
-      }
-    } catch {
-      // login failed
-      this.showLoginErrorMessage = true;
-      this.isLoading.set(false);
-    }
-  }
+		if (this.form.invalid) {
+			console.log('entrou 2');
+			this.isLoading.set(false);
+			this.showLoginErrorMessage = true;
+			return;
+		}
+		const { email, password } = this.form.getRawValue();
+		try {
+			const result = await this.apiAuthService.login({ email, password });
+			if (result.data) {
+				this.tokenStorage.saveAccessToken(result.data.token);
+				this.tokenStorage.saveRefreshToken(result.data.refreshToken);
+				const ok = await firstValueFrom(this.authService.loadMe());
+				if (ok) {
+					this.dialogRef.close();
+					this.router.navigate(['/home']);
+					return;
+				}
+			}
+		} catch {
+			// login failed
+			console.log('entrou 3');
+			this.showLoginErrorMessage = true;
+			this.isLoading.set(false);
+		}
+	}
 }

@@ -11,8 +11,11 @@
 .mat-mdc-dialog-content {
 	display: flex;
 	flex-direction: column;
+	align-items: stretch;
 	justify-content: center;
-	align-items: center;
+	gap: 17px;
+	width: 87%;
+	padding-bottom: 6px !important;
 
 	.mat-mdc-form-field {
 		width: 100%;
@@ -23,16 +26,14 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 16px;
 	gap: 17px;
-	width: 100%;
 	margin-bottom: 25px;
 
 	.btn-login {
 		transition: all 300ms ease-in-out;
 		background-color: var(--mat-sys-on-primary) !important;
 		color: var(--mat-sys-primary-container) !important;
-		width: 82%;
+		width: 84.8%;
 		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 		display: block;
 
@@ -41,16 +42,14 @@
 			color: var(--mat-sys-primary-container) !important;
 		}
 
-		// &:disabled {
-		// 	background-color: var(--mat-sys-on-primary-container) !important;
-		// 	color: var(--mat-sys-primary-container) !important;
-		// 	opacity: 0.6 !important;
-		// 	cursor: not-allowed;
-		// }
+		&:disabled {
+			opacity: 0.6 !important;
+			cursor: not-allowed;
+		}
 	}
 
 	app-google-auth-button {
-		width: 82%;
+		width: 84.8%;
 	}
 }
 
@@ -76,10 +75,8 @@
 .login-form {
 	display: flex;
 	flex-direction: column;
-	align-items: stretch;
-	gap: 17px;
-	width: 87%;
-	padding: 5px;
+	justify-content: center;
+	align-items: center;
 
 	::placeholder {
 		color: var(--mat-sys-on-primary) !important;
@@ -88,13 +85,17 @@
 }
 
 .mat-mdc-form-field {
-	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-	border-radius: 25px;
-	display: block;
+	.mdc-text-field--outlined {
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+		border-radius: 25px;
+		display: block;
+	}
 }
 
-.mat-mdc-form-field-subscript-wrapper {
-	display: none;
+.mat-mdc-form-field-error {
+	color: var(--mat-sys-error) !important;
+	font-size: 11px;
+	margin-top: 2px;
 }
 
 .dialog-header {
@@ -108,7 +109,15 @@
 	p {
 		margin-top: 0;
 		margin-bottom: 0;
-		text-align: center;
+		margin-left: 10px;
 		color: var(--mat-sys-error);
 	}
+}
+
+.credentials-error-message {
+	color: var(--mat-sys-error);
+	font-size: 12px;
+	margin-top: 13px;
+	width: 65%;
+	text-align: center;
 }
