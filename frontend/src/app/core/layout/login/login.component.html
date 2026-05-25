@@ -13,10 +13,15 @@
 		<mat-form-field appearance="outline" [hideRequiredMarker]="true">
 			<input matInput type="password" formControlName="password" placeholder="{{ 'auth.password' | transloco }}" required>
 		</mat-form-field>
-		<button matButton="filled" type="submit" class="btn-login">{{ 'auth.login' | transloco }}</button>
-		<app-google-auth-button></app-google-auth-button>
-		@if (showOAuthErrorMessage) {
-			<div class="error-message"><p>Google Authentication failed.</p></div>
-		}
 	</form>
+	@if (showLoginErrorMessage) {
+		<div class="error-message"><p>Invalid credentials.</p></div>
+	}
 </mat-dialog-content>
+<mat-dialog-actions>
+	<button matButton="filled" type="submit" class="btn-login">{{ 'auth.login' | transloco }}</button>
+	<app-google-auth-button></app-google-auth-button>
+	@if (showOAuthErrorMessage) {
+		<div class="error-message"><p>Google Authentication failed.</p></div>
+	}
+</mat-dialog-actions>

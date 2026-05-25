@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -52,6 +46,11 @@ export class LoginComponent implements OnInit {
   });
 
   showOAuthErrorMessage = false;
+  showLoginErrorMessage = false;
+
+
+  //signal that will check if the login button was already clicked (to prevent multiple requests)
+  public isLoading = signal<boolean>(false);
 
   ngOnInit(): void {
     if (sessionStorage.getItem('auth_origin') === 'login') {
@@ -67,7 +66,13 @@ export class LoginComponent implements OnInit {
   }
 
   async submit(): Promise<void> {
+
+    //if the program is already loading, it prevents the user from clicking the login again
+    if (this.isLoading()) return;
+
+    this.isLoading.set(true);
     this.showOAuthErrorMessage = false;
+    
     if (this.form.invalid) return;
     const { email, password } = this.form.getRawValue();
     try {
@@ -84,7 +89,8 @@ export class LoginComponent implements OnInit {
       }
     } catch {
       // login failed
+      this.showLoginErrorMessage = true;
+      this.isLoading.set(false);
     }
-    alert('Invalid credentials');
   }
 }

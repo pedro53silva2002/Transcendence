@@ -10,11 +10,47 @@
 
 .mat-mdc-dialog-content {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	margin-bottom: 15px;
+
 	.mat-mdc-form-field {
 		width: 100%;
+	}
+}
+
+.mat-mdc-dialog-actions {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 16px;
+	gap: 17px;
+	width: 100%;
+	margin-bottom: 25px;
+
+	.btn-login {
+		transition: all 300ms ease-in-out;
+		background-color: var(--mat-sys-on-primary) !important;
+		color: var(--mat-sys-primary-container) !important;
+		width: 82%;
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+		display: block;
+
+		&:hover {
+			background-color: var(--mat-sys-secondary) !important;
+			color: var(--mat-sys-primary-container) !important;
+		}
+
+		// &:disabled {
+		// 	background-color: var(--mat-sys-on-primary-container) !important;
+		// 	color: var(--mat-sys-primary-container) !important;
+		// 	opacity: 0.6 !important;
+		// 	cursor: not-allowed;
+		// }
+	}
+
+	app-google-auth-button {
+		width: 82%;
 	}
 }
 
@@ -26,6 +62,7 @@
 		margin-top: 4px;
 		padding-bottom: 1px;
 	}
+
 	hr {
 		margin-top: 0px;
 		width: 75px;
@@ -43,7 +80,7 @@
 	gap: 17px;
 	width: 87%;
 	padding: 5px;
-	
+
 	::placeholder {
 		color: var(--mat-sys-on-primary) !important;
 		opacity: 0.6 !important;
@@ -57,28 +94,14 @@
 }
 
 .mat-mdc-form-field-subscript-wrapper {
-    display: none;
-}
-
-.btn-login {
-	transition: all 300ms ease-in-out;
-	background-color: var(--mat-sys-on-primary) !important;
-	color: var(--mat-sys-primary-container) !important;
-	width: 100%;
-	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-	display: block;
-
-	&:hover {
-		background-color: var(--mat-sys-secondary) !important;
-		color: var(--mat-sys-primary-container) !important;
-	}
+	display: none;
 }
 
 .dialog-header {
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  padding: 16px 16px 0;
+	display: flex;
+	align-items: center;
+	justify-content: end;
+	padding: 16px 16px 0;
 }
 
 .error-message {
@@ -89,4 +112,3 @@
 		color: var(--mat-sys-error);
 	}
 }
-
