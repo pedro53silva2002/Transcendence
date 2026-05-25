@@ -15,5 +15,8 @@
 		</mat-form-field>
 		<button matButton="filled" type="submit" class="btn-login">{{ 'auth.login' | transloco }}</button>
 		<app-google-auth-button></app-google-auth-button>
+		@if (showOAuthErrorMessage) {
+			<div class="error-message"><p>Google Authentication failed.</p></div>
+		}
 	</form>
 </mat-dialog-content>
