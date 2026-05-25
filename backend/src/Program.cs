@@ -77,16 +77,14 @@ try
         ClientId = Environment.GetEnvironmentVariable("GOOGLE_OAUTH_CLIENT_ID") ?? throw new InvalidOperationException("GOOGLE_OAUTH_CLIENT_ID not set"),
         ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_OAUTH_CLIENT_SECRET") ?? throw new InvalidOperationException("GOOGLE_OAUTH_CLIENT_SECRET not set"),
         CallbackUri = Environment.GetEnvironmentVariable("GOOGLE_OAUTH_REDIRECT_URI") ?? throw new InvalidOperationException("GOOGLE_OAUTH_REDIRECT_URI not set"),
-        FrontendSuccessUri = Environment.GetEnvironmentVariable("FRONTEND_OAUTH_SUCCESS") ?? throw new InvalidOperationException("FRONTEND_OAUTH_SUCCESS not set"),
-        FrontendFailureUri = Environment.GetEnvironmentVariable("FRONTEND_OAUTH_FAILURE") ?? throw new InvalidOperationException("FRONTEND_OAUTH_FAILURE not set")
+        FrontendUri = Environment.GetEnvironmentVariable("FRONTEND_OAUTH") ?? throw new InvalidOperationException("FRONTEND_OAUTH not set"),
     };
     builder.Services.Configure<GoogleOAuthOptions>(opts =>
     {
         opts.ClientId = googleOAuthOptions.ClientId;
         opts.ClientSecret = googleOAuthOptions.ClientSecret;
         opts.CallbackUri = googleOAuthOptions.CallbackUri;
-        opts.FrontendSuccessUri = googleOAuthOptions.FrontendSuccessUri;
-        opts.FrontendFailureUri = googleOAuthOptions.FrontendFailureUri;
+        opts.FrontendUri = googleOAuthOptions.FrontendUri;
     });
     builder.Services.AddHttpClient<GoogleOAuthService>();
 
