@@ -17,6 +17,8 @@ export class AuthService {
   readonly loading = this._loading.asReadonly();
   readonly me = this._me.asReadonly();
 
+  private isOAuthSuccessful = true;
+
   readonly user = computed(() => {
     const me = this._me();
     return me ? { username: me.username } : null;
@@ -49,4 +51,13 @@ export class AuthService {
   canAccessTrip(trip: TripMembershipDto): boolean {
     return this._me()?.trips?.includes(trip) ?? false;
   }
+
+  getOAuthResult(): boolean {
+	return this.isOAuthSuccessful;
+  }
+
+  setOAuthSuccess(result: boolean): void {
+	this.isOAuthSuccessful = result;
+  }
+
 }
