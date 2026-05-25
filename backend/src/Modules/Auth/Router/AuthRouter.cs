@@ -68,8 +68,8 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
                 ProfilePhotoUrl = tokenPayload.Picture
             }, ct: ct);
 
-            var frontendSuccessUri = $"{_googleOAuthOptions.FrontendSuccessUri}#token={Uri.EscapeDataString(authResponse.Token)}&refreshToken={Uri.EscapeDataString(authResponse.RefreshToken)}";
-            return Redirect(frontendSuccessUri);
+            var frontendUri = $"{_googleOAuthOptions.FrontendUri}#token={Uri.EscapeDataString(authResponse.Token)}&refreshToken={Uri.EscapeDataString(authResponse.RefreshToken)}";
+            return Redirect(frontendUri);
         }
         catch
         {
@@ -79,8 +79,8 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
 
     private string BuildFailureRedirectUri(string reason, string? message = null)
     {
-        var separator = _googleOAuthOptions.FrontendFailureUri.Contains('?') ? "&" : "?";
-        var redirectUri = $"{_googleOAuthOptions.FrontendFailureUri}{separator}error={Uri.EscapeDataString(reason)}";
+        var separator = _googleOAuthOptions.FrontendUri.Contains('?') ? "&" : "?";
+        var redirectUri = $"{_googleOAuthOptions.FrontendUri}{separator}error={Uri.EscapeDataString(reason)}";
 
         if (!string.IsNullOrWhiteSpace(message))
             redirectUri += $"&message={Uri.EscapeDataString(message)}";
