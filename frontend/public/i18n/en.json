@@ -10,7 +10,14 @@
     "usernameTaken": "This username is already taken.",
     "invalidEmail": "Invalid e-mail.",
     "emailTaken": "This email is already used.",
-    "passwordMismatch": "The passwords does not match"
+    "passwordMismatch": "The passwords does not match",
+    "passwordRules": {
+      "length": "8-20 characters long",
+      "lowercase": "1 lowercase character",
+      "uppercase": "1 uppercase character",
+      "special": "1 special character",
+      "digits": "1 digit"
+    }
   },
 
   "navbar": {
