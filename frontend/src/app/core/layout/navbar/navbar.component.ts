@@ -94,14 +94,20 @@ export class NavbarComponent implements OnInit {
 	openLogin(): void {
 		const loginPopup = this.dialog.open(LoginComponent, {});
 
+		//to remove the google error message when we close and open the component again
 		loginPopup.afterClosed().subscribe(() => {
 			this.authService.setOAuthSuccess(true);
 		});
 	}
 	
 	openRegister(): void {
-		this.dialog.open(RegisterComponent, {
+		const registerPopup = this.dialog.open(RegisterComponent, {
 			panelClass: 'register-dialog',
+		});
+
+		//to remove the google error message when we close and open the component again
+		registerPopup.afterClosed().subscribe(() => {
+			this.authService.setOAuthSuccess(true);
 		});
 	}
 
