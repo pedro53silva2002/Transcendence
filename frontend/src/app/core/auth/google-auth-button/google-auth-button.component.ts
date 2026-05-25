@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService } from '../../feature/auth/services/auth.service';
-import { AuthService as SessionService } from '../../logic/services/auth.service';
+import { SessionService as SessionService } from '../../logic/services/session.service';
 
 @Component({
   selector: 'app-google-auth-button',
