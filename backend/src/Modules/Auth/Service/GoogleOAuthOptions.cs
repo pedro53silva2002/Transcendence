@@ -5,6 +5,5 @@ public sealed class GoogleOAuthOptions
     public required string ClientId { get; set; }
     public required string ClientSecret { get; set; }
     public required string CallbackUri { get; set; }
-    public required string FrontendSuccessUri { get; set; }
-    public required string FrontendFailureUri { get; set; }
+    public required string FrontendUri { get; set; }
 }

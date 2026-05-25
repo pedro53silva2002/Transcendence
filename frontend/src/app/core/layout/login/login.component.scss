@@ -1,7 +1,6 @@
 .mat-mdc-dialog-container {
 	margin-top: 60px;
 	width: 335px;
-	height: 392px;
 }
 
 .mat-mdc-dialog-inner-container {
@@ -13,6 +12,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	margin-bottom: 15px;
 	.mat-mdc-form-field {
 		width: 100%;
 	}
@@ -81,4 +81,12 @@
   padding: 16px 16px 0;
 }
 
+.error-message {
+	p {
+		margin-top: 0;
+		margin-bottom: 0;
+		text-align: center;
+		color: var(--mat-sys-error);
+	}
+}
 

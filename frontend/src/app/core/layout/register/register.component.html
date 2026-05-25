@@ -111,5 +111,8 @@
       {{ 'auth.register' | transloco }}
     </button>
     <app-google-auth-button></app-google-auth-button>
+	@if (showOAuthErrorMessage) {
+		<div class="error-message"><p>Google Authentication failed.</p></div>
+	}
   </mat-dialog-actions>
 </form>

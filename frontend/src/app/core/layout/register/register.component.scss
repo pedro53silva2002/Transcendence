@@ -1,7 +1,6 @@
 .mat-mdc-dialog-container {
   margin-top: 75px;
   width: 365px;
-  //height: 490px;
 }
 
 .mat-mdc-dialog-inner-container {
@@ -58,6 +57,7 @@
   .mdc-notched-outline__trailing {
     border-color: var(--mat-sys-on-primary-container) !important;
   }
+
   .mdc-text-field__input {
     color: var(--mat-sys-on-primary-container) !important;
   }
@@ -95,6 +95,7 @@
   padding: 16px;
   gap: 17px;
   width: 100%;
+  margin-bottom: 25px;
 
   .register-btn {
     transition: all 300ms ease-in-out;
@@ -119,6 +120,15 @@
 
   app-google-auth-button {
     width: 82%;
+  }
+}
+
+.error-message {
+  p {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
+    color: var(--mat-sys-error);
   }
 }
 

@@ -15,17 +15,19 @@ export class AuthCallbackComponent implements OnInit {
 
 	private readonly destroyRef = inject(DestroyRef);
 	private readonly tokenStorage = inject(TokenStorageService);
+	private authService = inject(AuthService);
+
 
 	constructor(
-		private route: ActivatedRoute,
-		private authService: AuthService,
-		private router: Router
+		private readonly route: ActivatedRoute,
+		private readonly router: Router
 	) { }
 
 	ngOnInit() {
 		const error = this.route.snapshot.queryParamMap.get('error');
 		if (error) {
-			this.router.navigate(['/'], { queryParams: { authError: error } });
+			this.authService.setOAuthSuccess(false);
+			this.router.navigate(['/']);
 			return;
 		}
 
@@ -46,9 +48,11 @@ export class AuthCallbackComponent implements OnInit {
 		//o takeUntilDestroyed limpa a subscrição assim que o componente sai do ecrã (http requests não precisam disto, mas é boa prática fazer)
 		this.authService.loadMe().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(success => {
 			if (success) {
+				this.authService.setOAuthSuccess(true);
 				this.router.navigate(['/home']);
 			} else {
-				this.router.navigate(['/'], { queryParams: { authError: 'session_failed' } });
+				this.authService.setOAuthSuccess(false);
+				this.router.navigate(['/']);
 			}
 		});
 	}

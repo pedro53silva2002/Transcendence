@@ -90,6 +90,20 @@ export class RegisterComponent {
       .subscribe((value) => this.passwordValue.set(value));
   }
 
+  showOAuthErrorMessage = false;
+
+  ngOnInit(): void {
+    if (sessionStorage.getItem('auth_origin') === 'register') {
+      if (this.authService.getOAuthResult() === false) {
+        this.showOAuthErrorMessage = true;
+      } else {
+        this.showOAuthErrorMessage = false;
+      }
+    }
+
+    sessionStorage.setItem('auth_origin', 'register');
+  }
+
   private validateUsername = (control: AbstractControl): Observable<ValidationErrors | null> => {
     const value = (control.value ?? '').trim();
     if (!value) return of(null);
@@ -180,6 +194,7 @@ export class RegisterComponent {
   );
 
   async submit(): Promise<void> {
+    this.showOAuthErrorMessage = false;
     if (this.form.invalid || this.submitting()) return;
     this.submitting.set(true);
     try {
@@ -203,6 +218,4 @@ export class RegisterComponent {
       this.submitting.set(false);
     }
   }
-
-  // Criar validador username
 }
