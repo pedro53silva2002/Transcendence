@@ -51,6 +51,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 	showOAuthErrorMessage = false;
 	showLoginErrorMessage = signal<boolean>(false);
 	protected readonly passwordVisible = signal(false);
+
+	//we use subjects because we cannot use RxJS operators directly in HTML events
+	//this creates an open, empty pipeline waiting for data (it listens and we also can inject data)
 	private readonly submit$ = new Subject<void>();
 	private readonly destroy$ = new Subject<void>();
 
@@ -75,6 +78,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 				const { username, password } = this.form.getRawValue();
 
+				//form operator transforms the promise service result into an observable, so we can use pipe
 				return from(this.apiAuthService.login({ username, password })).pipe(
 					tap(async (result) => {
 						if (result.data) {
@@ -102,11 +106,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 	}
 
 	submit(): void {
-		this.submit$.next();
+		this.submit$.next(); //activates the exhaustMap
 	}
 
 	ngOnDestroy(): void {
-		this.destroy$.next();
-		this.destroy$.complete();
+		this.destroy$.next(); //tells the takeUntil to unsubscribe
+		this.destroy$.complete(); //closes the destroy channel
 	}
 }

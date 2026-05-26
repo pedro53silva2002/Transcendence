@@ -18,7 +18,7 @@
       "special": "1 special character",
       "digits": "1 digit"
     },
-	"error-login": "Invalid e-mail or password.",
+	"error-login": "Invalid username or password.",
 	"error-oauth": "Google Authentication failed."
 
   },
