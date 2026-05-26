@@ -12,6 +12,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { EMPTY, Subject, catchError, exhaustMap, finalize, of, switchMap, tap } from 'rxjs';
@@ -33,6 +34,7 @@ import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-
     GoogleAuthButtonComponent,
     CloseButtonComponent,
     TranslocoModule,
+    MatIcon,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -49,11 +51,13 @@ export class LoginComponent implements OnInit {
   private readonly submitTrigger$ = new Subject<void>();
 
   protected readonly submitting = signal(false);
+  protected readonly passwordVisible = signal(false);
+  readonly showLoginErrorMessage = signal(false);
 
   readonly form = new FormGroup({
-    email: new FormControl('', {
+    username: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.email],
+      validators: [Validators.required],
     }),
     password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
@@ -78,11 +82,11 @@ export class LoginComponent implements OnInit {
                 this.dialogRef.close();
                 this.router.navigate(['/home']);
               } else {
-                alert('Invalid credentials');
+                this.showLoginErrorMessage.set(true);
               }
             }),
             catchError(() => {
-              alert('Invalid credentials');
+              this.showLoginErrorMessage.set(true);
               return EMPTY;
             }),
             finalize(() => this.submitting.set(false)),
@@ -107,7 +111,7 @@ export class LoginComponent implements OnInit {
 
   submit(): void {
     if (this.form.invalid) return;
-    this.showOAuthErrorMessage = false;
+    this.showLoginErrorMessage.set(false);
     this.submitting.set(true);
     this.submitTrigger$.next();
   }

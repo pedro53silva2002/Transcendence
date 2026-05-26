@@ -93,27 +93,29 @@ export class RegisterComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => this.passwordValue.set(value));
 
-    this.submitTrigger$.pipe(
-      exhaustMap(() =>
-        from(this.apiAuthService.register(this.form.getRawValue())).pipe(
-          switchMap((result) => {
-            if (result.data) {
-              this.tokenStorage.saveAccessToken(result.data.token);
-              this.tokenStorage.saveRefreshToken(result.data.refreshToken);
-              return this.sessionService.loadMe();
-            }
-            return of(false);
-          }),
-          tap((ok) => {
-            this.dialogRef.close();
-            this.router.navigate([ok ? '/home' : '/login']);
-          }),
-          catchError(() => EMPTY),
-          finalize(() => this.submitting.set(false)),
+    this.submitTrigger$
+      .pipe(
+        exhaustMap(() =>
+          from(this.apiAuthService.register(this.form.getRawValue())).pipe(
+            switchMap((result) => {
+              if (result.data) {
+                this.tokenStorage.saveAccessToken(result.data.token);
+                this.tokenStorage.saveRefreshToken(result.data.refreshToken);
+                return this.sessionService.loadMe();
+              }
+              return of(false);
+            }),
+            tap((ok) => {
+              this.dialogRef.close();
+              this.router.navigate([ok ? '/home' : '/login']);
+            }),
+            catchError(() => EMPTY),
+            finalize(() => this.submitting.set(false)),
+          ),
         ),
-      ),
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe();
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
   }
 
   showOAuthErrorMessage = false;
@@ -130,7 +132,9 @@ export class RegisterComponent implements OnInit {
     sessionStorage.setItem('auth_origin', 'register');
   }
 
-  private validateUsername = (control: AbstractControl): Observable<ValidationErrors | null> => {
+  private readonly validateUsername = (
+    control: AbstractControl,
+  ): Observable<ValidationErrors | null> => {
     const value = (control.value ?? '').trim();
     if (!value) return of(null);
     return timer(400).pipe(
@@ -147,7 +151,9 @@ export class RegisterComponent implements OnInit {
     );
   };
 
-  private validateUniqueEmail = (control: AbstractControl): Observable<ValidationErrors | null> => {
+  private readonly validateUniqueEmail = (
+    control: AbstractControl,
+  ): Observable<ValidationErrors | null> => {
     const value = (control.value ?? '').trim();
     if (!value) return of(null);
     return timer(400).pipe(

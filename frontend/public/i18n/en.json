@@ -6,7 +6,7 @@
     "google": "Sign In with",
     "username": "username",
     "password-confirmation": "confirm password",
-    "email": "Email",
+    "email": "email",
     "usernameTaken": "This username is already taken.",
     "invalidEmail": "Invalid e-mail.",
     "emailTaken": "This email is already used.",
@@ -17,7 +17,10 @@
       "uppercase": "1 uppercase character",
       "special": "1 special character",
       "digits": "1 digit"
-    }
+    },
+	"error-login": "Invalid username or password.",
+	"error-oauth": "Google Authentication failed."
+
   },
 
   "navbar": {
