@@ -39,3 +39,7 @@
 		}
 	</mat-dialog-actions>
 </form>
+
+@if (isLoading()) {
+	<app-loading-spinner [fullPage]="true"></app-loading-spinner>
+}

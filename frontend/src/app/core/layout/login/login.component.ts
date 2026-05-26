@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, ViewEncapsulation, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { catchError, exhaustMap, finalize, firstValueFrom, from, of, Subject, takeUntil, tap } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService as ApiAuthService } from '../../feature/auth/services/auth.service';
 import { SessionService } from '../../logic/services/session.service';
@@ -15,46 +15,50 @@ import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-
 import { MatIcon } from "@angular/material/icon";
 
 @Component({
-	selector: 'app-login',
-	imports: [
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    GoogleAuthButtonComponent,
-    CloseButtonComponent,
-    TranslocoModule,
-    MatIcon
-],
-	templateUrl: './login.component.html',
-	styleUrl: './login.component.scss',
-	encapsulation: ViewEncapsulation.None,
-	changeDetection: ChangeDetectionStrategy.OnPush, //the html will only be redesigned if a signal changes or if an html event is set
+    selector: 'app-login',
+    imports: [
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        ReactiveFormsModule,
+        GoogleAuthButtonComponent,
+        CloseButtonComponent,
+        TranslocoModule,
+        MatIcon,
+		LoadingSpinnerComponent
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss',
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit {
-	private readonly apiAuthService = inject(ApiAuthService);
-	private readonly authService = inject(SessionService);
-	private readonly tokenStorage = inject(TokenStorageService);
-	private readonly router = inject(Router);
-	private readonly dialogRef = inject(MatDialogRef<LoginComponent>);
+export class LoginComponent implements OnInit, OnDestroy {
+    private readonly apiAuthService = inject(ApiAuthService);
+    private readonly authService = inject(SessionService);
+    private readonly tokenStorage = inject(TokenStorageService);
+    private readonly router = inject(Router);
+    private readonly dialogRef = inject(MatDialogRef<LoginComponent>);
 
-	readonly form = new FormGroup({
-		email: new FormControl('', {
-			nonNullable: true,
-			validators: [Validators.required, Validators.email],
-		}),
-		password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-	});
 
-	showOAuthErrorMessage = false;
-	showLoginErrorMessage = signal<boolean>(false);
-	protected readonly passwordVisible = signal(false);
+    readonly form = new FormGroup({
+        email: new FormControl('', {
+            nonNullable: true,
+            validators: [Validators.required, Validators.email],
+        }),
+        password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    });
 
-	//signal that will check if the login button was already clicked (to prevent multiple requests)
-	public isLoading = signal<boolean>(false);
+    showOAuthErrorMessage = false;
+    showLoginErrorMessage = signal<boolean>(false);
+    protected readonly passwordVisible = signal(false);
+    public isLoading = signal<boolean>(false);
 
-	ngOnInit(): void {
+    private readonly submit$ = new Subject<void>();
+    private readonly destroy$ = new Subject<void>();
+
+    ngOnInit(): void {
+
 		if (sessionStorage.getItem('auth_origin') === 'login') {
 			if (this.authService.getOAuthResult() === false) {
 				this.showOAuthErrorMessage = true;
@@ -63,47 +67,52 @@ export class LoginComponent implements OnInit {
 			}
 		}
 
-		//sets the auth_origin in the session storage to 'login'
-		sessionStorage.setItem('auth_origin', 'login');
-	}
+        this.submit$.pipe(
+			//exhaustMap just catches the first click of the user and ignores clicking spam
+            exhaustMap(() => {
+                // if (this.form.invalid) {
+                //     this.form.markAllAsTouched();
+                //     return of(null);
+                // }
 
-	async submit(): Promise<void> {
+                this.isLoading.set(true);
+                this.showLoginErrorMessage.set(false);
 
-		//if the program is already loading, it prevents the user from clicking the login again
-		if (this.isLoading()) {
-			console.log('entrou 1');
-			return;
-		}
+                const { email, password } = this.form.getRawValue();
 
-		this.isLoading.set(true);
-		this.showOAuthErrorMessage = false;
-		this.showLoginErrorMessage.set(false);
+                return from(this.apiAuthService.login({ email, password })).pipe(
+                    tap(async (result) => {
+                        if (result.data) {
+                            this.tokenStorage.saveAccessToken(result.data.token);
+                            this.tokenStorage.saveRefreshToken(result.data.refreshToken);
+                            
+                            const ok = await firstValueFrom(this.authService.loadMe());
+                            if (ok) {
+                                this.dialogRef.close();
+                                this.router.navigate(['/home']);
+                            }
+                        }
+                    }),
+                    catchError((error) => {
+                        console.log('entrou 3');
+                        this.showLoginErrorMessage.set(true);
+                        return of(null);
+                    }),
+                    finalize(() => this.isLoading.set(false))
+                );
+            }),
+            takeUntil(this.destroy$)
+        ).subscribe(); // <── Faltava fechar o cano e subscrever aqui!
 
-		if (this.form.invalid) {
-			console.log('entrou 2');
-			this.isLoading.set(false);
-			this.showLoginErrorMessage.set(true);
-			return;
-		}
-		const { email, password } = this.form.getRawValue();
-		try {
-			const result = await this.apiAuthService.login({ email, password });
-			if (result.data) {
-				this.tokenStorage.saveAccessToken(result.data.token);
-				this.tokenStorage.saveRefreshToken(result.data.refreshToken);
-				const ok = await firstValueFrom(this.authService.loadMe());
-				if (ok) {
-					this.dialogRef.close();
-					this.router.navigate(['/home']);
-					return;
-				}
-			}
-		} catch {
-			// login failed
-			console.log('entrou 3');
-			this.showLoginErrorMessage.set(true);
-			this.isLoading.set(false);
-		}
-		// this.showLoginErrorMessage = true;
-	}
+        sessionStorage.setItem('auth_origin', 'login');
+    }
+
+    submit(): void {
+        this.submit$.next();
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }
