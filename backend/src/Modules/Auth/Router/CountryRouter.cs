@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Service;

@@ -1,5 +1,4 @@
 using Trippie.Modules.Auth.Dtos;
-using Trippie.Modules.Auth.Service;
 using Trippie.Common.Database;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Common.Services.Search.Linq;
