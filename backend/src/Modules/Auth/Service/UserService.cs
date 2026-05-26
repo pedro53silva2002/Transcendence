@@ -32,9 +32,9 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
 
     public async Task<UserDto> UpdateAsync(int id, UpdateUserDto dto, CancellationToken ct = default)
     {
-        if (dto.Email is not null && string.IsNullOrWhiteSpace(dto.Email))
+        if (string.IsNullOrWhiteSpace(dto.Email))
             throw new ValidationException("email", "Email can not be empty.");
-        if (dto.Username is not null && string.IsNullOrWhiteSpace(dto.Username))
+        if (string.IsNullOrWhiteSpace(dto.Username))
             throw new ValidationException("username", "Username can not be blank.");
 
         if (dto.Email is not null || dto.Username is not null)
