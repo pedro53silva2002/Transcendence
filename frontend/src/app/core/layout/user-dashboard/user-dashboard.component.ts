@@ -6,10 +6,11 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { SessionService } from '../../logic/services/session.service';
 import { MeDto } from '../../feature/auth/dtos/auth.dto';
 import { FooterComponent } from '../footer/footer.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-user-dashboard',
-  imports: [TranslocoModule, MatButtonModule, DashboardCardComponent, NavbarComponent, FooterComponent],
+  imports: [TranslocoModule, MatButtonModule, DashboardCardComponent, NavbarComponent, FooterComponent, RouterModule],
   templateUrl: './user-dashboard.component.html',
   styleUrl: './user-dashboard.component.scss',
 })
