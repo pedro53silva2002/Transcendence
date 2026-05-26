@@ -31,7 +31,7 @@ import { MatIcon } from "@angular/material/icon";
 	styleUrl: './login.component.scss',
 	encapsulation: ViewEncapsulation.None,
 	//the html will only be redesigned if a signal changes or if an html event is set
-	changeDetection: ChangeDetectionStrategy.OnPush, 
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit, OnDestroy {
 	private readonly apiAuthService = inject(ApiAuthService);
@@ -51,8 +51,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 	showOAuthErrorMessage = false;
 	showLoginErrorMessage = signal<boolean>(false);
 	protected readonly passwordVisible = signal(false);
-	public isLoading = signal<boolean>(false);
-
 	private readonly submit$ = new Subject<void>();
 	private readonly destroy$ = new Subject<void>();
 
@@ -73,7 +71,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 				// 	return of(null);
 				// }
 
-				this.isLoading.set(true);
 				this.showLoginErrorMessage.set(false);
 
 				const { username, password } = this.form.getRawValue();
@@ -95,8 +92,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 						console.log('entrou 3');
 						this.showLoginErrorMessage.set(true);
 						return of(null);
-					}),
-					finalize(() => this.isLoading.set(false))
+					})
 				);
 			}),
 			takeUntil(this.destroy$)
