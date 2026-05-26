@@ -59,12 +59,12 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
 
     public async Task<AuthResponseDto> Login(LoginDto dto, CancellationToken ct = default)
     {
-        if (dto.Email is null) throw new ValidationException("email", "Email can not be empty.");
+        if (dto.Username is null) throw new ValidationException("email", "Email can not be empty.");
         if (dto.Password is null) throw new ValidationException("password", "Password can not be null.");
 
-        var user = await userService.GetByEmail(dto.Email, ct) ?? throw new UnauthorizedException("User not found.");
+        var user = await userService.GetByUsername(dto.Username, ct) ?? throw new UnauthorizedException("User not found.");
 
-        string passwordHash = await userService.GetPasswordByEmail(dto.Email, ct) ?? throw new UnauthorizedException("Password not found.");
+        string passwordHash = await userService.GetPasswordByUsername(dto.Username, ct) ?? throw new UnauthorizedException("Password not found.");
         if (!new BCryptPasswordHasher().Verify(dto.Password, passwordHash)) throw new UnauthorizedException("Invalid email or password.");
 
         var response = await BuildAuthResponse(user, [], ct);
