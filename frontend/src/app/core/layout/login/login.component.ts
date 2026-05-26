@@ -12,19 +12,21 @@ import { SessionService } from '../../logic/services/session.service';
 import { TokenStorageService } from '../../logic/services/token-storage.service';
 import { CloseButtonComponent } from '../../../shared/components/close-button/close-button.component';
 import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-auth-button.component';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
 	selector: 'app-login',
 	imports: [
-		MatDialogModule,
-		MatFormFieldModule,
-		MatInputModule,
-		MatButtonModule,
-		ReactiveFormsModule,
-		GoogleAuthButtonComponent,
-		CloseButtonComponent,
-		TranslocoModule,
-	],
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    GoogleAuthButtonComponent,
+    CloseButtonComponent,
+    TranslocoModule,
+    MatIcon
+],
 	templateUrl: './login.component.html',
 	styleUrl: './login.component.scss',
 	encapsulation: ViewEncapsulation.None,
@@ -47,6 +49,7 @@ export class LoginComponent implements OnInit {
 
 	showOAuthErrorMessage = false;
 	showLoginErrorMessage = signal<boolean>(false);
+	protected readonly passwordVisible = signal(false);
 
 	//signal that will check if the login button was already clicked (to prevent multiple requests)
 	public isLoading = signal<boolean>(false);

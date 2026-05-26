@@ -26,14 +26,12 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import {
   catchError,
-  delay,
   firstValueFrom,
   from,
   map,
   Observable,
   of,
   switchMap,
-  tap,
   timer,
 } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
@@ -104,7 +102,7 @@ export class RegisterComponent implements OnInit {
     sessionStorage.setItem('auth_origin', 'register');
   }
 
-  private validateUsername = (control: AbstractControl): Observable<ValidationErrors | null> => {
+  private readonly validateUsername = (control: AbstractControl): Observable<ValidationErrors | null> => {
     const value = (control.value ?? '').trim();
     if (!value) return of(null);
     return timer(400).pipe(
@@ -121,7 +119,7 @@ export class RegisterComponent implements OnInit {
     );
   };
 
-  private validateUniqueEmail = (control: AbstractControl): Observable<ValidationErrors | null> => {
+  private readonly validateUniqueEmail = (control: AbstractControl): Observable<ValidationErrors | null> => {
     const value = (control.value ?? '').trim();
     if (!value) return of(null);
     return timer(400).pipe(
