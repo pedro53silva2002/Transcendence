@@ -1,17 +1,20 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   OnInit,
   ViewEncapsulation,
   inject,
+  signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { EMPTY, Subject, catchError, exhaustMap, finalize, of, switchMap, tap } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService as ApiAuthService } from '../../feature/auth/services/auth.service';
 import { SessionService } from '../../logic/services/session.service';
@@ -42,6 +45,10 @@ export class LoginComponent implements OnInit {
   private readonly tokenStorage = inject(TokenStorageService);
   private readonly router = inject(Router);
   private readonly dialogRef = inject(MatDialogRef<LoginComponent>);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly submitTrigger$ = new Subject<void>();
+
+  protected readonly submitting = signal(false);
 
   readonly form = new FormGroup({
     email: new FormControl('', {
@@ -53,6 +60,39 @@ export class LoginComponent implements OnInit {
 
   showOAuthErrorMessage = false;
 
+  constructor() {
+    this.submitTrigger$
+      .pipe(
+        exhaustMap(() =>
+          this.apiAuthService.login(this.form.getRawValue()).pipe(
+            switchMap((result) => {
+              if (result.data) {
+                this.tokenStorage.saveAccessToken(result.data.token);
+                this.tokenStorage.saveRefreshToken(result.data.refreshToken);
+                return this.authService.loadMe();
+              }
+              return of(false);
+            }),
+            tap((ok) => {
+              if (ok) {
+                this.dialogRef.close();
+                this.router.navigate(['/home']);
+              } else {
+                alert('Invalid credentials');
+              }
+            }),
+            catchError(() => {
+              alert('Invalid credentials');
+              return EMPTY;
+            }),
+            finalize(() => this.submitting.set(false)),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+  }
+
   ngOnInit(): void {
     if (sessionStorage.getItem('auth_origin') === 'login') {
       if (this.authService.getOAuthResult() === false) {
@@ -62,29 +102,13 @@ export class LoginComponent implements OnInit {
       }
     }
 
-    //sets the auth_origin in the session storage to 'login'
     sessionStorage.setItem('auth_origin', 'login');
   }
 
-  async submit(): Promise<void> {
-    this.showOAuthErrorMessage = false;
+  submit(): void {
     if (this.form.invalid) return;
-    const { email, password } = this.form.getRawValue();
-    try {
-      const result = await this.apiAuthService.login({ email, password });
-      if (result.data) {
-        this.tokenStorage.saveAccessToken(result.data.token);
-        this.tokenStorage.saveRefreshToken(result.data.refreshToken);
-        const ok = await firstValueFrom(this.authService.loadMe());
-        if (ok) {
-          this.dialogRef.close();
-          this.router.navigate(['/home']);
-          return;
-        }
-      }
-    } catch {
-      // login failed
-    }
-    alert('Invalid credentials');
+    this.showOAuthErrorMessage = false;
+    this.submitting.set(true);
+    this.submitTrigger$.next();
   }
 }
