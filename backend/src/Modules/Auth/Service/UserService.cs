@@ -63,6 +63,15 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         return res;
     }
 
+	 public async Task<UserDto?> GetByUsername(string username, CancellationToken ct = default)
+    {
+        if (username is null) throw new ValidationException("username", $"Username cannot be empty.");
+
+        var res = await userModel.GetByUsername(username, ct);
+
+        return res;
+    }
+
     public async Task<UserDto?> GetById(int id, CancellationToken ct = default)
     {
         var res = await userModel.GetById(id, ct);
@@ -107,11 +116,11 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         if (!deleted) throw new NotFoundException($"User {id} not found.", id);
     }
 
-    public async Task<string?> GetPasswordByEmail(string email, CancellationToken ct = default)
+    public async Task<string?> GetPasswordByUsername(string username, CancellationToken ct = default)
     {
-        if (email is null) throw new ValidationException("email", $"Email cannot be empty");
+        if (username is null) throw new ValidationException("email", $"Email cannot be empty");
 
-        var res = await userModel.GetPasswordByEmail(email, ct);
+        var res = await userModel.GetPasswordByUsername(username, ct);
         if (res is not null)
             return res;
         return null;
