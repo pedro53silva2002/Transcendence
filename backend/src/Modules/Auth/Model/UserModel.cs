@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.Security;
@@ -113,9 +111,9 @@ public sealed class UserModel(AppDbContext db)
         return null;
     }
 
-    public async Task<string?> GetPasswordByEmail(string email, CancellationToken ct = default)
+    public async Task<string?> GetPasswordByUsername(string username, CancellationToken ct = default)
     {
-        var user = await db.Users.FirstOrDefaultAsync(u => u.Email == email, ct);
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username, ct);
         if (user is not null)
             return user.PasswordHash;
         return null;

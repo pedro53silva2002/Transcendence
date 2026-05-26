@@ -11,7 +11,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { errorInterceptor } from './core/logic/interceptors/error.interceptor';
 import { jwtInterceptor } from './core/logic/interceptors/jwt.interceptor';
-import { AuthService } from './core/logic/services/auth.service';
+import { SessionService } from './core/logic/services/session.service';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 
@@ -22,7 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([jwtInterceptor, errorInterceptor])),
 
     provideAppInitializer(() => {
-      const auth = inject(AuthService);
+      const auth = inject(SessionService);
       return auth.loadMe();
     }),
     provideTransloco({

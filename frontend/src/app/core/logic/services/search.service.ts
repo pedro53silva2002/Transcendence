@@ -4,12 +4,12 @@
  */
 
 export type SearchOperator =
-  | 'EQ'
-  | 'NEQ'
-  | 'GT'
-  | 'GTE'
-  | 'LT'
-  | 'LTE'
+  | 'EQUAL'
+  | 'NOTEQUAL'
+  | 'GREATERTHAN'
+  | 'GREATERTHANOREQUAL'
+  | 'LESSTHAN'
+  | 'LESSTHANOREQUAL'
   | 'BEFORE'
   | 'AFTER'
   | 'BETWEEN'
@@ -161,7 +161,7 @@ export function searchToQuery<
         } else {
           payload.filters.push({
             column: key,
-            operator: 'EQ',
+            operator: 'EQUAL',
             value: raw instanceof Date ? (raw as Date).toISOString() : raw,
           });
         }

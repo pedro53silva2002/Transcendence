@@ -5,10 +5,7 @@ using Serilog;
 using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
-using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
-using Trippie.Common.Services.Search.Compilation;
-using Trippie.Common.Services.Search.DependencyInjection;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
 
