@@ -5,7 +5,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { catchError, exhaustMap, finalize, firstValueFrom, from, of, Subject, takeUntil, tap } from 'rxjs';
+import { catchError, exhaustMap, firstValueFrom, from, of, Subject, takeUntil, tap } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService as ApiAuthService } from '../../feature/auth/services/auth.service';
 import { SessionService } from '../../logic/services/session.service';
@@ -69,11 +69,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 		this.submit$.pipe(
 			exhaustMap(() => {
-				// if (this.form.invalid) {
-				// 	this.form.markAllAsTouched();
-				// 	return of(null);
-				// }
-
 				this.showLoginErrorMessage.set(false);
 
 				const { username, password } = this.form.getRawValue();
@@ -93,7 +88,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 						}
 					}),
 					catchError((error) => {
-						console.log('entrou 3');
 						this.showLoginErrorMessage.set(true);
 						return of(null);
 					})
