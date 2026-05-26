@@ -25,7 +25,7 @@
 	</mat-dialog-content>
 	@if (showLoginErrorMessage()) {
 	<span class="credentials-error-message">
-		Invalid e-mail or password.
+		{{ 'auth.error-login' | transloco }}
 	</span>
 	}
 	<mat-dialog-actions>
@@ -34,12 +34,8 @@
 		<app-google-auth-button></app-google-auth-button>
 		@if (showOAuthErrorMessage) {
 		<div class="error-message">
-			<p>Google Authentication failed.</p>
+			<p>{{ 'auth.error-oauth' | transloco }}</p>
 		</div>
 		}
 	</mat-dialog-actions>
 </form>
-
-@if (isLoading()) {
-	<app-loading-spinner [fullPage]="true"></app-loading-spinner>
-}

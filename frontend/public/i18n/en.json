@@ -17,7 +17,10 @@
       "uppercase": "1 uppercase character",
       "special": "1 special character",
       "digits": "1 digit"
-    }
+    },
+	"error-login": "Invalid e-mail or password.",
+	"error-oauth": "Google Authentication failed."
+
   },
 
   "navbar": {

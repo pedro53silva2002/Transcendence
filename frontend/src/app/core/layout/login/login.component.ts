@@ -15,49 +15,48 @@ import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-
 import { MatIcon } from "@angular/material/icon";
 
 @Component({
-    selector: 'app-login',
-    imports: [
-        MatDialogModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        ReactiveFormsModule,
-        GoogleAuthButtonComponent,
-        CloseButtonComponent,
-        TranslocoModule,
-        MatIcon,
-		LoadingSpinnerComponent
-    ],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss',
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+	selector: 'app-login',
+	imports: [
+		MatDialogModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatButtonModule,
+		ReactiveFormsModule,
+		GoogleAuthButtonComponent,
+		CloseButtonComponent,
+		TranslocoModule,
+		MatIcon,
+	],
+	templateUrl: './login.component.html',
+	styleUrl: './login.component.scss',
+	encapsulation: ViewEncapsulation.None,
+	//the html will only be redesigned if a signal changes or if an html event is set
+	changeDetection: ChangeDetectionStrategy.OnPush, 
 })
 export class LoginComponent implements OnInit, OnDestroy {
-    private readonly apiAuthService = inject(ApiAuthService);
-    private readonly authService = inject(SessionService);
-    private readonly tokenStorage = inject(TokenStorageService);
-    private readonly router = inject(Router);
-    private readonly dialogRef = inject(MatDialogRef<LoginComponent>);
+	private readonly apiAuthService = inject(ApiAuthService);
+	private readonly authService = inject(SessionService);
+	private readonly tokenStorage = inject(TokenStorageService);
+	private readonly router = inject(Router);
+	private readonly dialogRef = inject(MatDialogRef<LoginComponent>);
 
+	readonly form = new FormGroup({
+		email: new FormControl('', {
+			nonNullable: true,
+			validators: [Validators.required, Validators.email],
+		}),
+		password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+	});
 
-    readonly form = new FormGroup({
-        email: new FormControl('', {
-            nonNullable: true,
-            validators: [Validators.required, Validators.email],
-        }),
-        password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    });
+	showOAuthErrorMessage = false;
+	showLoginErrorMessage = signal<boolean>(false);
+	protected readonly passwordVisible = signal(false);
+	public isLoading = signal<boolean>(false);
 
-    showOAuthErrorMessage = false;
-    showLoginErrorMessage = signal<boolean>(false);
-    protected readonly passwordVisible = signal(false);
-    public isLoading = signal<boolean>(false);
+	private readonly submit$ = new Subject<void>();
+	private readonly destroy$ = new Subject<void>();
 
-    private readonly submit$ = new Subject<void>();
-    private readonly destroy$ = new Subject<void>();
-
-    ngOnInit(): void {
+	ngOnInit(): void {
 
 		if (sessionStorage.getItem('auth_origin') === 'login') {
 			if (this.authService.getOAuthResult() === false) {
@@ -67,52 +66,51 @@ export class LoginComponent implements OnInit, OnDestroy {
 			}
 		}
 
-        this.submit$.pipe(
-			//exhaustMap just catches the first click of the user and ignores clicking spam
-            exhaustMap(() => {
-                // if (this.form.invalid) {
-                //     this.form.markAllAsTouched();
-                //     return of(null);
-                // }
+		this.submit$.pipe(
+			exhaustMap(() => {
+				// if (this.form.invalid) {
+				// 	this.form.markAllAsTouched();
+				// 	return of(null);
+				// }
 
-                this.isLoading.set(true);
-                this.showLoginErrorMessage.set(false);
+				this.isLoading.set(true);
+				this.showLoginErrorMessage.set(false);
 
-                const { email, password } = this.form.getRawValue();
+				const { email, password } = this.form.getRawValue();
 
-                return from(this.apiAuthService.login({ email, password })).pipe(
-                    tap(async (result) => {
-                        if (result.data) {
-                            this.tokenStorage.saveAccessToken(result.data.token);
-                            this.tokenStorage.saveRefreshToken(result.data.refreshToken);
-                            
-                            const ok = await firstValueFrom(this.authService.loadMe());
-                            if (ok) {
-                                this.dialogRef.close();
-                                this.router.navigate(['/home']);
-                            }
-                        }
-                    }),
-                    catchError((error) => {
-                        console.log('entrou 3');
-                        this.showLoginErrorMessage.set(true);
-                        return of(null);
-                    }),
-                    finalize(() => this.isLoading.set(false))
-                );
-            }),
-            takeUntil(this.destroy$)
-        ).subscribe(); // <── Faltava fechar o cano e subscrever aqui!
+				return from(this.apiAuthService.login({ email, password })).pipe(
+					tap(async (result) => {
+						if (result.data) {
+							this.tokenStorage.saveAccessToken(result.data.token);
+							this.tokenStorage.saveRefreshToken(result.data.refreshToken);
 
-        sessionStorage.setItem('auth_origin', 'login');
-    }
+							const ok = await firstValueFrom(this.authService.loadMe());
+							if (ok) {
+								this.dialogRef.close();
+								this.router.navigate(['/home']);
+							}
+						}
+					}),
+					catchError((error) => {
+						console.log('entrou 3');
+						this.showLoginErrorMessage.set(true);
+						return of(null);
+					}),
+					finalize(() => this.isLoading.set(false))
+				);
+			}),
+			takeUntil(this.destroy$)
+		).subscribe();
 
-    submit(): void {
-        this.submit$.next();
-    }
+		sessionStorage.setItem('auth_origin', 'login');
+	}
 
-    ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
-    }
+	submit(): void {
+		this.submit$.next();
+	}
+
+	ngOnDestroy(): void {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }
