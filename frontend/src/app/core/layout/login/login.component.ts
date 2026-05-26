@@ -41,9 +41,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 	private readonly dialogRef = inject(MatDialogRef<LoginComponent>);
 
 	readonly form = new FormGroup({
-		email: new FormControl('', {
+		username: new FormControl('', {
 			nonNullable: true,
-			validators: [Validators.required, Validators.email],
+			validators: [Validators.required],
 		}),
 		password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
 	});
@@ -76,9 +76,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 				this.isLoading.set(true);
 				this.showLoginErrorMessage.set(false);
 
-				const { email, password } = this.form.getRawValue();
+				const { username, password } = this.form.getRawValue();
 
-				return from(this.apiAuthService.login({ email, password })).pipe(
+				return from(this.apiAuthService.login({ username, password })).pipe(
 					tap(async (result) => {
 						if (result.data) {
 							this.tokenStorage.saveAccessToken(result.data.token);

@@ -8,7 +8,7 @@
 <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
 	<mat-dialog-content>
 		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
-			<input matInput type="email" formControlName="email" placeholder="{{ 'auth.email' | transloco }}" required>
+			<input matInput type="username" formControlName="username" placeholder="{{ 'auth.username' | transloco }}" required>
 			<!-- @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
 				<mat-error>Formato de email inválido</mat-error>
 			} -->
