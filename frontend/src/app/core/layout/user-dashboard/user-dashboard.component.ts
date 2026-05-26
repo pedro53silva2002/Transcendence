@@ -5,14 +5,15 @@ import { DashboardCardComponent } from '../../../shared/dashboard-card/dashboard
 import { NavbarComponent } from '../navbar/navbar.component';
 import { SessionService } from '../../logic/services/session.service';
 import { MeDto } from '../../feature/auth/dtos/auth.dto';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
-  selector: 'app-app-home',
-  imports: [TranslocoModule, MatButtonModule, DashboardCardComponent, NavbarComponent],
-  templateUrl: './app-home.component.html',
-  styleUrl: './app-home.component.scss',
+  selector: 'app-user-dashboard',
+  imports: [TranslocoModule, MatButtonModule, DashboardCardComponent, NavbarComponent, FooterComponent],
+  templateUrl: './user-dashboard.component.html',
+  styleUrl: './user-dashboard.component.scss',
 })
-export class AppHomeComponent implements OnInit {
+export class UserDashboardComponent implements OnInit {
   private readonly authService = inject(SessionService);
   public user = signal<MeDto | null>(null);
 
