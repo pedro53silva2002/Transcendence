@@ -28,7 +28,7 @@ import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-
 	templateUrl: './login.component.html',
 	styleUrl: './login.component.scss',
 	encapsulation: ViewEncapsulation.None,
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.OnPush, //the html will only be redesigned if a signal changes or if an html event is set
 })
 export class LoginComponent implements OnInit {
 	private readonly apiAuthService = inject(ApiAuthService);
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
 	});
 
 	showOAuthErrorMessage = false;
-	showLoginErrorMessage = false;
+	showLoginErrorMessage = signal<boolean>(false);
 
 	//signal that will check if the login button was already clicked (to prevent multiple requests)
 	public isLoading = signal<boolean>(false);
@@ -74,12 +74,12 @@ export class LoginComponent implements OnInit {
 
 		this.isLoading.set(true);
 		this.showOAuthErrorMessage = false;
-		this.showLoginErrorMessage = false;
+		this.showLoginErrorMessage.set(false);
 
 		if (this.form.invalid) {
 			console.log('entrou 2');
 			this.isLoading.set(false);
-			this.showLoginErrorMessage = true;
+			this.showLoginErrorMessage.set(true);
 			return;
 		}
 		const { email, password } = this.form.getRawValue();
@@ -98,8 +98,9 @@ export class LoginComponent implements OnInit {
 		} catch {
 			// login failed
 			console.log('entrou 3');
-			this.showLoginErrorMessage = true;
+			this.showLoginErrorMessage.set(true);
 			this.isLoading.set(false);
 		}
+		// this.showLoginErrorMessage = true;
 	}
 }

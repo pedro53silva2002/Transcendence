@@ -9,16 +9,16 @@
 	<mat-dialog-content>
 		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
 			<input matInput type="email" formControlName="email" placeholder="{{ 'auth.email' | transloco }}" required>
-			@if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+			<!-- @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
 				<mat-error>Formato de email inválido</mat-error>
-			}
+			} -->
 		</mat-form-field>
 		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
 			<input matInput type="password" formControlName="password" placeholder="{{ 'auth.password' | transloco }}"
 				required>
 		</mat-form-field>
 	</mat-dialog-content>
-	@if (showLoginErrorMessage) {
+	@if (showLoginErrorMessage()) {
 	<span class="credentials-error-message">
 		Invalid e-mail or password.
 	</span>
