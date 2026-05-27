@@ -6,7 +6,8 @@ namespace Trippie.Modules.Travel.Dtos;
 public enum TripVisibility
 {
 	Private,
-	Public
+	Public,
+	FriendsOnly
 }
 public sealed class CreatedTripDto
 {

@@ -11,7 +11,7 @@ using Trippie.Modules.Travel.Service;
 namespace Trippie.Modules.Travel.Router;
 
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/trips")]
 public sealed class TripRouter(TripService service) : ControllerBase
 {

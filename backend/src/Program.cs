@@ -9,6 +9,9 @@ using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
+using Trippie.Modules.Travel.Dtos;
+using Trippie.Modules.Travel.Model;
+using Trippie.Modules.Travel.Service;
 
 Env.TraversePath().Load();
 
@@ -90,9 +93,16 @@ try
 
     //Add dependency injection for model and service
     builder.Services.AddScoped<UserModel>();
+	builder.Services.AddScoped<TripModel>();
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<AuthService>();
+	builder.Services.AddScoped<TripService>();
 
+
+	//Add enum configuration for trips table, visibility column
+	var datasourceduilder = new NpgsqlDataSourceBuilder(connectionString);
+	datasourceduilder.MapEnum<TripVisibility>("trip_visibility");
+	builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(connectionString, o => o.MapEnum<TripVisibility>("visibility", "trips")));
     var app = builder.Build();
 
     // ── Handle --migrate argument to run database migrations ────────────────────
