@@ -1,7 +1,7 @@
 
 using Trippie.Common.Services.Search.Model;
 
-namespace Trippie.Modules.Trips.Dtos;
+namespace Trippie.Modules.Travel.Dtos;
 
 public enum TripVisibility
 {
@@ -12,7 +12,7 @@ public sealed class CreatedTripDto
 {
 	public required string TripName { get; set; }
 	public string? Description { get; set; }
-	public string? Location { get; set; }
+	public string? Destination { get; set; }
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
@@ -25,7 +25,7 @@ public sealed class TripDto
 	public required int Id { get; set; }
 	public required string TripName { get; set; }
 	public string? Description { get; set; }
-	public string? Location { get; set; }
+	public string? Destination { get; set; }
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
@@ -40,7 +40,7 @@ public sealed class UpdateTripDto
 	public required int Id { get; set; }
 	public required string TripName { get; set; }
 	public string? Description { get; set; }
-	public string? Location { get; set; }
+	public string? Destination { get; set; }
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }

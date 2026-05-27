@@ -6,15 +6,15 @@ using Trippie.Common.Database;
 using Trippie.Common.Services.Search.Exception;
 using Trippie.Common.Services.Search.Linq;
 using Trippie.Common.Services.Search.Model;
-using Trippie.Modules.Trips.Dtos;
+using Trippie.Modules.Travel.Dtos;
 
-namespace Trippie.Modules.Trips.Model;
+namespace Trippie.Modules.Travel.Model;
 public sealed class Trip
 {
 	public required int Id { get; set; }
 	public required string TripName { get; set; }
 	public string? Description { get; set; }
-	public string? Location { get; set; }
+	public string? Destination { get; set; }
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
@@ -28,7 +28,7 @@ public sealed class Trip
 		Id = t.Id,
 		TripName = t.TripName,
 		Description = t.Description,
-		Location = t.Location,
+		Destination = t.Destination,
 		StartDate = t.StartDate,
 		EndDate = t.EndDate,
 		Budget = t.Budget,
@@ -48,7 +48,7 @@ public sealed class TripModel(AppDbContext db)
 			Id = 0,
 			TripName = dto.TripName,
 			Description = dto.Description,
-			Location = dto.Location,
+			Destination = dto.Destination,
 			StartDate = dto.StartDate,
 			EndDate = dto.EndDate,
 			Budget = dto.Budget,
@@ -67,7 +67,7 @@ public sealed class TripModel(AppDbContext db)
 			.AddFilters(payload.Filters, field => field.ToLowerInvariant() switch
 			{
 				"tripname" => x => x.TripName,
-				"location" => x => x.Location,
+				"destination" => x => x.Destination,
 				"startdate" => x => x.StartDate,
 				"createdat" => x => x.CreatedAt,
 				"id" => x => x.Id,
@@ -76,7 +76,7 @@ public sealed class TripModel(AppDbContext db)
 			.SetOrderBy(payload.Sort, field => field.ToLowerInvariant() switch
 			{
 				"tripname" => x => x.TripName,
-				"location" => x => x.Location,
+				"destination" => x => x.Destination,
 				"startdate" => x => x.StartDate,
 				"createdat" => x => x.CreatedAt,
 				"id" => x => x.Id,
@@ -96,7 +96,7 @@ public sealed class TripModel(AppDbContext db)
 		if (dto.Description is not null) trip.Description = dto.Description;
 		if (dto.StartDate != trip.StartDate) trip.StartDate = dto.StartDate;
 		if (dto.EndDate != trip.EndDate) trip.EndDate = dto.EndDate;
-		if (dto.Location is not null) trip.Location = dto.Location;
+		if (dto.Destination is not null) trip.Destination = dto.Destination;
 		if (dto.Budget is not 0) trip.Budget = dto.Budget;
 		trip.UpdatedAt = DateTime.UtcNow;
 

@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
-using Trippie.Modules.Trips.Dtos;
-using Trippie.Modules.Trips.Model;
+using Trippie.Modules.Travel.Dtos;
+using Trippie.Modules.Travel.Model;
 
 
-namespace Trippie.Modules.Trips.Service;
+namespace Trippie.Modules.Travel.Service;
 
-public sealed class TripService(AppDbContext db, TripModel tripModel)
+public sealed class TripService(TripModel tripModel)
 {
 	public async Task<TripDto> CreateAsync(CreatedTripDto dto, CancellationToken ct = default)
 	{
@@ -22,7 +22,7 @@ public sealed class TripService(AppDbContext db, TripModel tripModel)
 		return trip;
 	}
 
-	public async Task<CursorPage<TripDto>> Search(SearchPayload payload, CancellationToken ct = default)
+	public async Task<CursorPage<TripDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
 	=> await tripModel.SearchAsync(payload, ct);
 
 	public async Task<TripDto> UpdateAsync(int id, UpdateTripDto dto, CancellationToken ct = default)
@@ -31,10 +31,22 @@ public sealed class TripService(AppDbContext db, TripModel tripModel)
 		if (dto.StartDate == default(DateTime)) throw new ValidationException("startdate", "Start date is required");
 		if (dto.EndDate == default(DateTime)) throw new ValidationException("enddate", "End date is required");
 
-		if (dto.TripName is not null || dto.StartDate != default(DateTime) || dto.EndDate != default(DateTime))
-		{
-			var clash = await db.Trips
-				.AsNoTracking()
-		}
+		var trip = await tripModel.UpdateAsync(id, dto, ct) ?? throw new NotFoundException($"User {id} not found.", id);
+
+		return Trip.ToDto(trip);
+	}
+
+	public async Task<TripDto?> GetById(int id, CancellationToken ct = default)
+	{
+		var res = await tripModel.GetById(id, ct);
+		if (res is null)
+			return null;
+		return res;
+	}
+
+	public async Task DeleteAsync(int id, CancellationToken ct = default)
+	{
+		var delete = await tripModel.DeleteAsync(id, ct);
+		if (!delete) throw new NotFoundException($"User {id} not found.", id);
 	}
 }

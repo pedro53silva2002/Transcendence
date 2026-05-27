@@ -4,10 +4,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Trippie.Common.Services.Search.Model;
-using Trippie.Modules.Trips.Dtos;
-using Trippie.Modules.Trips.Service;
+using Trippie.Modules.Travel.Dtos;
+using Trippie.Modules.Travel.Service;
 
-namespace Trippie.Modules.Trips.Router;
+namespace Trippie.Modules.Travel.Router;
 
 [ApiController]
 [Route("api/trips")]
