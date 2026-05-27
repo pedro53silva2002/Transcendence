@@ -1,5 +1,6 @@
 # Transcendence
-* 42 - Common Core - Rank 6 - Transcendence: the last project of 42 Common core. *
+
+- 42 - Common Core - Rank 6 - Transcendence: the last project of 42 Common core. \*
 
 <img width="1181" height="846" alt="image" src="https://github.com/user-attachments/assets/9e11d7db-e97e-4cdd-a989-ce5a3325af0e" />
 
@@ -8,7 +9,7 @@ Project Architecture
 
 transcendence/
 ├── README.md                           # Project documentation
-├── .env                                # Environment variables
+├── .env                                # Environment variables.
 ├── .gitignore
 ├── docker-compose.yml                  # Service orchestration configuration
 ├── nginx/
@@ -38,6 +39,7 @@ transcendence/
 ```
 
 Useful Docker commands
+
 ```
 # Stop and remove all containers, networks (keeps volumes/data)
 docker compose down
@@ -71,6 +73,7 @@ docker compose down -v
 ```
 
 Most common practices
+
 ```
 # Services already built, just start them
 docker compose up -d
@@ -89,16 +92,18 @@ docker compose down
 ```
 
 To restart just the backend
+
 ```
 docker compose restart backend
 ```
 
 Postgresql databases commands
+
 ```
 \l              # List databases
 \dt             # List tables in current database
 \du             # List users/roles
 \d table_name   # Describe a table structure
 \q              # Quit psql
-\c databa_name  # Connects to a different database (shortcut after psql -U <user> -d <database>)             
+\c databa_name  # Connects to a different database (shortcut after psql -U <user> -d <database>)
 ```
