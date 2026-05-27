@@ -1,27 +1,47 @@
 import { Routes } from '@angular/router';
-import { AppHomeComponent } from './core/layout/app-home/app-home.component';
+import { UserDashboardComponent } from './core/layout/user-dashboard/user-dashboard.component';
 import { LandingPageComponent } from './core/layout/landing-page/landing-page.component';
 import { authGuard } from './core/logic/services/authGuard.service';
 import { guestGuard } from './core/logic/services/guestGuard.service';
 import { AuthCallbackComponent } from './core/auth/auth-callback/auth-callback.component';
+import { AppLayoutComponent } from './core/layout/app-layout/app-layout.component';
+import { PlanATripComponent } from './core/feature/plan-a-trip/plan-a-trip.component';
 
 export const routes: Routes = [
-  { path: '', component: LandingPageComponent, canActivate: [guestGuard] },
+  { 
+	path: '',
+	component: LandingPageComponent,
+	canActivate: [guestGuard]
+},
 
   //to verify if the google auth was successful and redirect to the home page
-  { path: 'auth/callback', component: AuthCallbackComponent },
+  { 
+	path: 'auth/callback',
+	component: AuthCallbackComponent
+	},
 
+  //user dashboard (after logging in)
   {
     path: 'home',
-    component: AppHomeComponent, //o componente que tem a nav-bar e router-outlet para navegar pelas páginas do site
-    canActivate: [authGuard],
-    children: [
-      // { path: '', component: DashboardComponent }, //para a dashboard do user quando faz login
-      {
-        path: 'profile',
-        loadComponent: () => import('./core/profile/profile.component'),
-      },
-    ],
+    component: UserDashboardComponent, //o componente que tem a nav-bar e router-outlet para navegar pelas páginas do site
+    canActivate: [guestGuard],
+  },
+
+  //all other pages
+  {
+	path: '',
+	component: AppLayoutComponent,
+	// canActivate: [guestGuard],
+	children: [
+		// {
+		// 	path: 'profile',
+		// 	loadComponent: () => import('<url from component'),
+		// },
+		{
+			path: 'plan-a-trip',
+			component: PlanATripComponent
+		}
+	]
   },
   { path: '**', redirectTo: '' },
 ];

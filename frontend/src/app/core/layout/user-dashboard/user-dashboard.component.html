@@ -12,7 +12,7 @@
 		</div>
 
 		<div class="cards-section">
-			<app-dashboard-card title="navbar.trip" description="card.trip-description"
+			<app-dashboard-card routerLink="/plan-a-trip" title="navbar.trip" description="card.trip-description"
 				imagePath="./images/trip.png"></app-dashboard-card>
 			<app-dashboard-card title="navbar.my-trips" description="card.my-trips-description"
 				imagePath="./images/my_trips.png"></app-dashboard-card>
@@ -36,5 +36,5 @@
 			<p>{{ 'stats.countdown' | transloco }} </p>
 		</div>
 	</div>
-	<h1 class="slogan">Less time planning. More time wandering.</h1>
+	<app-footer></app-footer>
 </div>
