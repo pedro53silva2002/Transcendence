@@ -32,9 +32,9 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
 
     public async Task<UserDto> UpdateAsync(int id, UpdateUserDto dto, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(dto.Email))
+        if (dto.Email is not null && string.IsNullOrWhiteSpace(dto.Email))
             throw new ValidationException("email", "Email can not be empty.");
-        if (string.IsNullOrWhiteSpace(dto.Username))
+        if (dto.Username is not null && string.IsNullOrWhiteSpace(dto.Username))
             throw new ValidationException("username", "Username can not be blank.");
 
         if (dto.Email is not null || dto.Username is not null)
@@ -59,6 +59,15 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         if (email is null) throw new ValidationException("email", $"Email cannot be empty.");
 
         var res = await userModel.GetByEmail(email, ct);
+
+        return res;
+    }
+
+	 public async Task<UserDto?> GetByUsername(string username, CancellationToken ct = default)
+    {
+        if (username is null) throw new ValidationException("username", $"Username cannot be empty.");
+
+        var res = await userModel.GetByUsername(username, ct);
 
         return res;
     }
@@ -107,11 +116,11 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         if (!deleted) throw new NotFoundException($"User {id} not found.", id);
     }
 
-    public async Task<string?> GetPasswordByEmail(string email, CancellationToken ct = default)
+    public async Task<string?> GetPasswordByUsername(string username, CancellationToken ct = default)
     {
-        if (email is null) throw new ValidationException("email", $"Email cannot be empty");
+        if (username is null) throw new ValidationException("email", $"Email cannot be empty");
 
-        var res = await userModel.GetPasswordByEmail(email, ct);
+        var res = await userModel.GetPasswordByUsername(username, ct);
         if (res is not null)
             return res;
         return null;

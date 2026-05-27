@@ -15,7 +15,11 @@ import {
   tap,
   throwError,
 } from 'rxjs';
+<<<<<<< HEAD
 import { AuthService } from '../services/auth.service';
+=======
+import { SessionService } from '../services/session.service';
+>>>>>>> origin/feat/trips
 import { TokenStorageService } from '../services/token-storage.service';
 import { Router } from '@angular/router';
 import { AuthResponseDto } from '../../feature/auth/dtos/auth.dto';
@@ -25,7 +29,11 @@ let refreshInProgress: Observable<string> | null = null;
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenStorage = inject(TokenStorageService);
+<<<<<<< HEAD
   const authService = inject(AuthService);
+=======
+  const authService = inject(SessionService);
+>>>>>>> origin/feat/trips
   const httpBackend = inject(HttpBackend);
   const router = inject(Router);
 

@@ -1,4 +1,5 @@
 .mat-mdc-dialog-container {
+<<<<<<< HEAD
   margin-top: 75px;
   width: 365px;
   height: 490px;
@@ -50,27 +51,79 @@
     color: var(--mat-sys-on-primary-container) !important;
     opacity: 0.6 !important;
   }
+=======
+	margin-top: 75px;
+	width: 365px;
+}
+
+.mat-mdc-dialog-inner-container {
+	border: 2px solid var(--mat-sys-on-primary-container) !important;
+	border-radius: 29px !important;
+}
+
+.mat-mdc-dialog-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.mat-mdc-form-field {
+		width: 100%;
+
+		mat-icon {
+			color: var(--mat-sys-on-primary-container);
+			font-size: 18px;
+			opacity: 0.6;
+			text-align: left;
+			height: 19px;
+		}
+	}
+}
+
+.title {
+	.mat-mdc-dialog-title {
+		text-align: center;
+		font-size: 24px;
+		color: var(--mat-sys-on-primary-container) !important;
+		margin-top: 4px;
+		padding-bottom: 1px;
+	}
+
+	hr {
+		margin-top: 0px;
+		width: 100px;
+		height: 3px;
+		background-color: var(--mat-sys-on-primary-container);
+		border: none;
+		border-radius: 3px;
+	}
+>>>>>>> origin/feat/trips
 }
 
 .register-form {
-  .mdc-notched-outline__leading,
-  .mdc-notched-outline__notch,
-  .mdc-notched-outline__trailing {
-    border-color: var(--mat-sys-on-primary-container) !important;
-  }
-  .mdc-text-field__input {
-    color: var(--mat-sys-on-primary-container) !important;
-  }
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 17px;
+	width: 87%;
+	padding: 5px;
 
-  .mat-mdc-form-field.mat-focused {
-    .mdc-notched-outline__leading,
-    .mdc-notched-outline__notch,
-    .mdc-notched-outline__trailing {
-      border-color: var(--mat-sys-on-primary) !important;
-    }
-  }
+	::placeholder {
+		color: var(--mat-sys-on-primary-container) !important;
+		opacity: 0.6 !important;
+	}
+
+	.mdc-notched-outline__leading,
+	.mdc-notched-outline__notch,
+	.mdc-notched-outline__trailing {
+		border-color: var(--mat-sys-on-primary-container) !important;
+	}
+
+	.mdc-text-field__input {
+		color: var(--mat-sys-on-primary-container) !important;
+	}
 }
 
+<<<<<<< HEAD
 .mat-mdc-form-field {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   border-radius: 25px;
@@ -121,3 +174,100 @@
     width: 82%;
   }
 }
+=======
+
+.mat-mdc-form-field {
+	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+	border-radius: 25px;
+	display: block;
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+	display: none;
+}
+
+.dialog-header {
+	display: flex;
+	align-items: center;
+	justify-content: end;
+	padding: 16px 16px 0;
+}
+
+.mat-mdc-dialog-actions {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 16px;
+	gap: 17px;
+	width: 100%;
+	margin-bottom: 25px;
+
+	.register-btn {
+		transition: all 300ms ease-in-out;
+		background-color: var(--mat-sys-on-primary-container) !important;
+		color: var(--mat-sys-primary-container) !important;
+		width: 82%;
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+		display: block;
+
+		&:hover {
+			background-color: var(--mat-sys-secondary) !important;
+			color: var(--mat-sys-primary-container) !important;
+		}
+
+		&:disabled {
+			background-color: var(--mat-sys-on-primary-container) !important;
+			color: var(--mat-sys-primary-container) !important;
+			opacity: 0.6 !important;
+			cursor: not-allowed;
+		}
+	}
+
+	app-google-auth-button {
+		width: 82%;
+	}
+}
+
+.error-message {
+	p {
+		margin-top: 0;
+		margin-bottom: 0;
+		text-align: center;
+		font-size: 12px;
+		color: var(--mat-sys-error);
+	}
+}
+
+.field-error {
+	color: var(--mat-sys-error);
+	font-size: 12px;
+	margin-top: -16px; // pulls it up closer to the field
+	display: block;
+	padding-left: 16px;
+}
+
+.password-checklist {
+	list-style: none;
+	padding: 0;
+	margin: 0 18px 0;
+	font-size: 12px;
+
+	li::before {
+		content: '✗  ';
+		color: var(--mat-sys-error);
+	}
+
+	li.ok::before {
+		content: '✓  ';
+		color: var(--mat-sys-forth);
+	}
+
+	li.ok {
+		color: var(--mat-sys-forth);
+	}
+
+	li.error {
+		color: var(--mat-sys-error);
+	}
+}
+>>>>>>> origin/feat/trips

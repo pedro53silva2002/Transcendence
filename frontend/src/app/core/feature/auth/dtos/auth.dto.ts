@@ -22,6 +22,10 @@ export interface AuthResponseDto {
 }
 
 export interface LoginDto {
+<<<<<<< HEAD
   email: string;
+=======
+  username: string;
+>>>>>>> origin/feat/trips
   password: string;
 }

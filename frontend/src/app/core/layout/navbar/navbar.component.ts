@@ -1,12 +1,19 @@
+<<<<<<< HEAD
 import { AuthService } from '../../feature/auth/services/auth.service';
 import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+=======
+import { AsyncPipe } from '@angular/common';
+>>>>>>> origin/feat/trips
 import {
   ChangeDetectorRef,
   Component,
   HostListener,
   inject,
   input,
+<<<<<<< HEAD
   OnDestroy,
+=======
+>>>>>>> origin/feat/trips
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -23,15 +30,22 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import {
   catchError,
   debounceTime,
+<<<<<<< HEAD
   delay,
+=======
+>>>>>>> origin/feat/trips
   distinctUntilChanged,
   from,
   map,
   Observable,
   of,
+<<<<<<< HEAD
   Subscription,
   switchMap,
   tap,
+=======
+  switchMap,
+>>>>>>> origin/feat/trips
 } from 'rxjs';
 import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
@@ -39,6 +53,11 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { LanguageButtonComponent } from '../../../shared/components/language-button/language-button.component';
 import { UserService } from '../../feature/auth/services/user.service';
 import { UserDto } from '../../feature/auth/dtos/user.dto';
+<<<<<<< HEAD
+=======
+import { SessionService } from '../../logic/services/session.service';
+import { AuthService as OtherAuth } from '../../feature/auth/services/auth.service';
+>>>>>>> origin/feat/trips
 
 @Component({
   selector: 'app-navbar',
@@ -61,7 +80,11 @@ import { UserDto } from '../../feature/auth/dtos/user.dto';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
+<<<<<<< HEAD
 export class NavbarComponent {
+=======
+export class NavbarComponent implements OnInit {
+>>>>>>> origin/feat/trips
   showHome = input(false);
   showProfile = input(false);
   showPlanATrip = input(false);
@@ -80,14 +103,31 @@ export class NavbarComponent {
   ) {}
 
   private readonly userService = inject(UserService);
+<<<<<<< HEAD
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
   isPopupOpen = false;
+=======
+  private readonly authService = inject(SessionService);
+  private readonly router = inject(Router);
+  private readonly otherAuth = inject(OtherAuth);
+
+  ngOnInit(): void {
+    if (!this.authService.getOAuthResult()) {
+      if (sessionStorage.getItem('auth_origin') === 'register') {
+        this.openRegister();
+      } else if (sessionStorage.getItem('auth_origin') === 'login') {
+        this.openLogin();
+      }
+    }
+  }
+>>>>>>> origin/feat/trips
 
   openLogin(): void {
     const loginPopup = this.dialog.open(LoginComponent, {});
 
+<<<<<<< HEAD
     this.isPopupOpen = true; //to activate the css of the button while the popup is open
 
     loginPopup.afterClosed().subscribe(() => {
@@ -108,6 +148,26 @@ export class NavbarComponent {
   // 		console.log("Current search query:", value);
   // 	})
   // }
+=======
+    //to remove the google error message when we close and open the component again
+    loginPopup.afterClosed().subscribe(() => {
+      this.authService.setOAuthSuccess(true);
+    });
+  }
+
+  openRegister(): void {
+    const registerPopup = this.dialog.open(RegisterComponent, {
+      panelClass: 'register-dialog',
+    });
+
+    //to remove the google error message when we close and open the component again
+    registerPopup.afterClosed().subscribe(() => {
+      this.authService.setOAuthSuccess(true);
+    });
+  }
+
+  searchControl = new FormControl('');
+>>>>>>> origin/feat/trips
 
   filteredUsers: Observable<UserDto[]> = this.searchControl.valueChanges.pipe(
     debounceTime(300),
@@ -131,7 +191,11 @@ export class NavbarComponent {
   );
 
   async logout() {
+<<<<<<< HEAD
     await this.authService.logout();
+=======
+    await this.otherAuth.logout();
+>>>>>>> origin/feat/trips
     this.router.navigate(['/']);
   }
 

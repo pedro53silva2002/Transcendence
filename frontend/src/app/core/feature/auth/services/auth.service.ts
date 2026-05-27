@@ -2,7 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
 import { AuthResponseDto, LoginDto, MeDto } from '../dtos/auth.dto';
 import { CreateUserDto } from '../dtos/user.dto';
+<<<<<<< HEAD
 import { AuthService as SessionService } from '../../../logic/services/auth.service';
+=======
+import { SessionService } from '../../../logic/services/session.service';
+>>>>>>> origin/feat/trips
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseApiService {

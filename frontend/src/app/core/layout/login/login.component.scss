@@ -1,7 +1,6 @@
 .mat-mdc-dialog-container {
 	margin-top: 60px;
 	width: 335px;
-	height: 392px;
 }
 
 .mat-mdc-dialog-inner-container {
@@ -11,10 +10,46 @@
 
 .mat-mdc-dialog-content {
 	display: flex;
+	flex-direction: column;
+	align-items: stretch;
 	justify-content: center;
-	align-items: center;
+	gap: 17px;
+	width: 87%;
+	padding-bottom: 6px !important;
+
 	.mat-mdc-form-field {
 		width: 100%;
+	}
+}
+
+.mat-mdc-dialog-actions {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 17px;
+	margin-bottom: 25px;
+
+	.btn-login {
+		transition: all 300ms ease-in-out;
+		background-color: var(--mat-sys-on-primary) !important;
+		color: var(--mat-sys-primary-container) !important;
+		width: 84.8%;
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+		display: block;
+
+		&:hover {
+			background-color: var(--mat-sys-secondary) !important;
+			color: var(--mat-sys-primary-container) !important;
+		}
+
+		&:disabled {
+			opacity: 0.6 !important;
+			cursor: not-allowed;
+		}
+	}
+
+	app-google-auth-button {
+		width: 84.8%;
 	}
 }
 
@@ -26,6 +61,7 @@
 		margin-top: 4px;
 		padding-bottom: 1px;
 	}
+
 	hr {
 		margin-top: 0px;
 		width: 75px;
@@ -39,11 +75,17 @@
 .login-form {
 	display: flex;
 	flex-direction: column;
+<<<<<<< HEAD
 	align-items: stretch;
 	gap: 17px;
 	width: 87%;
 	padding: 5px;
 	
+=======
+	justify-content: center;
+	align-items: center;
+
+>>>>>>> origin/feat/trips
 	::placeholder {
 		color: var(--mat-sys-on-primary) !important;
 		opacity: 0.6 !important;
@@ -51,15 +93,16 @@
 }
 
 .mat-mdc-form-field {
-	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-	border-radius: 25px;
-	display: block;
-}
 
-.mat-mdc-form-field-subscript-wrapper {
-    display: none;
-}
+	mat-icon {
+		color: var(--mat-sys-on-primary);
+		font-size: 18px;
+		opacity: 0.6;
+		text-align: left;
+		height: 19px;
+	}
 
+<<<<<<< HEAD
 .btn-login {
 	transition: all 300ms ease-in-out;
 	background-color: var(--mat-sys-on-primary) !important;
@@ -81,4 +124,42 @@
   padding: 16px 16px 0;
 }
 
+=======
+	.mdc-text-field--outlined {
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+		border-radius: 25px;
+		display: block;
+	}
+}
 
+.mat-mdc-form-field-error {
+	color: var(--mat-sys-error) !important;
+	font-size: 11px;
+	margin-top: 2px;
+}
+>>>>>>> origin/feat/trips
+
+.dialog-header {
+	display: flex;
+	align-items: center;
+	justify-content: end;
+	padding: 16px 16px 0;
+}
+
+.error-message {
+	p {
+		margin-top: 0;
+		margin-bottom: 0;
+		text-align: center;
+		font-size: 12px;
+		color: var(--mat-sys-error);
+	}
+}
+
+.credentials-error-message {
+	color: var(--mat-sys-error);
+	font-size: 12px;
+	margin-top: 6px;
+	width: 65%;
+	text-align: center;
+}

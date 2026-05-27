@@ -1,9 +1,32 @@
 <nav>
+<<<<<<< HEAD
 	<!-- <div class="nav-bar"> -->
 		<div class="logo-container">
 			<h1 [class.logo]="showProfile()">TRIPPIE</h1>
-		</div>
+=======
+	<div class="logo-container">
+		<h1 [class.logo]="showProfile()">TRIPPIE</h1>
+	</div>
 
+	<div class="buttons">
+		<!-- HAMBURGER MENU -->
+		@if (showPlanATrip()) {
+		<div class="hamburger-btn">
+			<button mat-icon-button class="hamburger-menu" [matMenuTriggerFor]="mobileMenu">
+				<mat-icon>menu</mat-icon>
+			</button>
+			<mat-menu #mobileMenu="matMenu" yPosition="below" xPosition="after" class="hamburguer-menu-panel">
+				<button mat-menu-item routerLink="/profile">Profile</button>
+				<button mat-menu-item routerLink="/plan-a-trip">Plan A Trip</button>
+				<button mat-menu-item routerLink="/my-trip">My Trips</button>
+				<button mat-menu-item routerLink="/friends">Friends</button>
+				<button mat-menu-item routerLink="/my-expenses">My Expenses</button>
+			</mat-menu>
+>>>>>>> origin/feat/trips
+		</div>
+		}
+
+<<<<<<< HEAD
 		<div class="buttons">
 			<!-- HAMBURGER MENU -->
 			@if (showPlanATrip()) {
@@ -89,4 +112,75 @@
 			}
 		</div>
 	<!-- </div> -->
+=======
+		<!-- MAIN MENU -->
+		 <div class="full-screen-buttons">
+			 @if (showHome()) {
+			 <button routerLinkActive="active-link" routerLink="/home" class="std-btn" matButton="outlined">Home</button>
+			 }
+			 @if (showProfile()) {
+			 <button routerLinkActive="active-link" routerLink="/profile" class="std-btn"
+				 matButton="outlined">Profile</button>
+			 }
+			 @if (showPlanATrip()) {
+			 <button routerLinkActive="active-link" routerLink="/plan-a-trip" class="std-btn" matButton="outlined">Plan A
+				 Trip</button>
+			 }
+			 @if (showMyTrips()) {
+			 <button routerLinkActive="active-link" routerLink="/my-trip" class="std-btn" matButton="outlined">My
+				 Trips</button>
+			 }
+			 @if (showFriends()) {
+			 <button routerLinkActive="active-link" routerLink="/friends" class="std-btn"
+				 matButton="outlined">Friends</button>
+			 }
+			 @if (showMyExpenses()) {
+			 <button routerLinkActive="active-link" routerLink="/my-expenses" class="std-btn" matButton="outlined">My
+				 Expenses</button>
+			 } 
+		</div>
+		@if (showSearch()) {
+		<mat-form-field appearance="outline" class="search">
+			<mat-icon matPrefix>search</mat-icon>
+			<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users" />
+			<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel">
+				@for (user of filteredUsers | async; track user) {
+				<mat-option [value]="user">
+					<div>
+						<span>{{user.displayName}}</span>
+					</div>
+				</mat-option>
+				}
+			</mat-autocomplete>
+		</mat-form-field>
+		}
+
+		<!-- LOGOUT BUTTON -->
+		@if (showLogout()) {
+		<button matButton="outlined" class="btn-logout std-btn" [matMenuTriggerFor]="menu">
+			<mat-icon>power_settings_new</mat-icon>
+		</button>
+
+		<mat-menu #menu="matMenu" yPosition="below" xPosition="after" class="centered-menu">
+			<button mat-menu-item>Account</button>
+			<button (click)="logout()" mat-menu-item>Logout</button>
+		</mat-menu>
+		}
+
+		<!-- LOGIN AND REGISTER BUTTONS -->
+		@if (showLogin()) {
+		<button class="std-btn login" (click)="openLogin()" mat-stroked-button>{{ 'auth.login' | transloco }}</button>
+		}
+		@if (showRegister()) {
+		<button class="std-btn register" (click)="openRegister()" mat-stroked-button>
+			{{ 'auth.register' | transloco }}
+		</button>
+		}
+
+		<!-- LANGUAGE BUTTON -->
+		@if (showLanguageSelector()) {
+		<app-language-button></app-language-button>
+		}
+	</div>
+>>>>>>> origin/feat/trips
 </nav>
