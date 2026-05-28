@@ -26,12 +26,17 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import {
   catchError,
-  firstValueFrom,
+  delay,
+  EMPTY,
+  exhaustMap,
+  finalize,
   from,
   map,
   Observable,
   of,
+  Subject,
   switchMap,
+  tap,
   timer,
 } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
@@ -75,6 +80,7 @@ export class RegisterComponent implements OnInit {
   protected readonly confirmPasswordVisible = signal(false);
   protected readonly submitting = signal(false);
   protected readonly passwordValue = signal('');
+  private readonly submitTrigger$ = new Subject<void>();
 
   constructor() {
     this.form.controls.username.statusChanges
@@ -100,9 +106,35 @@ export class RegisterComponent implements OnInit {
     }
 
     sessionStorage.setItem('auth_origin', 'register');
+
+    this.submitTrigger$
+      .pipe(
+        exhaustMap(() =>
+          from(this.apiAuthService.register(this.form.getRawValue())).pipe(
+            switchMap((result) => {
+              if (result.data) {
+                this.tokenStorage.saveAccessToken(result.data.token);
+                this.tokenStorage.saveRefreshToken(result.data.refreshToken);
+                return this.sessionService.loadMe();
+              }
+              return of(false);
+            }),
+            tap((ok) => {
+              this.dialogRef.close();
+              this.router.navigate([ok ? '/home' : '/login']);
+            }),
+            catchError(() => EMPTY),
+            finalize(() => this.submitting.set(false)),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
   }
 
-  private readonly validateUsername = (control: AbstractControl): Observable<ValidationErrors | null> => {
+  private readonly validateUsername = (
+    control: AbstractControl,
+  ): Observable<ValidationErrors | null> => {
     const value = (control.value ?? '').trim();
     if (!value) return of(null);
     return timer(400).pipe(
@@ -119,7 +151,9 @@ export class RegisterComponent implements OnInit {
     );
   };
 
-  private readonly validateUniqueEmail = (control: AbstractControl): Observable<ValidationErrors | null> => {
+  private readonly validateUniqueEmail = (
+    control: AbstractControl,
+  ): Observable<ValidationErrors | null> => {
     const value = (control.value ?? '').trim();
     if (!value) return of(null);
     return timer(400).pipe(
@@ -199,29 +233,10 @@ export class RegisterComponent implements OnInit {
     { validators: this.passwordMatches },
   );
 
-  async submit(): Promise<void> {
+  submit(): void {
+    if (this.form.invalid) return;
     this.showOAuthErrorMessage = false;
-    if (this.form.invalid || this.submitting()) return;
     this.submitting.set(true);
-    try {
-      const { username, email, password } = this.form.getRawValue();
-      const result = await this.apiAuthService.register({ username, email, password });
-      if (result.data) {
-        this.tokenStorage.saveAccessToken(result.data.token);
-        this.tokenStorage.saveRefreshToken(result.data.refreshToken);
-        const ok = await firstValueFrom(this.sessionService.loadMe());
-        if (ok) {
-          this.dialogRef.close();
-          this.router.navigate(['/home']);
-          return;
-        }
-      }
-      this.dialogRef.close();
-      this.router.navigate(['/login']);
-    } catch {
-      // registration failed
-    } finally {
-      this.submitting.set(false);
-    }
+    this.submitTrigger$.next();
   }
 }
