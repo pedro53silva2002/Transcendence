@@ -26,7 +26,7 @@ export class TripService extends BaseApiService {
   }
 
   //Update a trip (PUT)
-  public update (id: number,dto: UpdateTripDto): Observable<ApiResponse<TripDto>> {
+  public update (id: number, dto: UpdateTripDto): Observable<ApiResponse<TripDto>> {
     return this._put<TripDto>(`/api/trips/${id}`, dto);
   }
 

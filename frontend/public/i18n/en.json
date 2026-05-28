@@ -47,5 +47,13 @@
     "countries": "Visited Countries",
     "trips": "Trips Booked This Year",
     "countdown": "Days Until Next Trip"
+  },
+
+  "plan-a-trip": {
+	"title": "Plan your trip",
+	"trip-name": "trip name",
+	"trip-description": "trip description",
+	"start-date": "start date",
+	"end-date": "end date"
   }
 }
