@@ -15,3 +15,10 @@ export interface CreateTripMemberDto {
 export interface UpdateTripMemberDto {
   role: 'ADMIN' | 'MEMBER';
 }
+
+export type TripMemberSearchFieldsDto = {
+  tripId: number;
+  role: 'ADMIN' | 'MEMBER';
+};
+
+export type TripMemberOrderByDto = 'role' | 'userId';
