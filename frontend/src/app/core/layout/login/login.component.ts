@@ -64,7 +64,19 @@ export class LoginComponent implements OnInit {
 
   showOAuthErrorMessage = false;
 
-  constructor() {
+  constructor() {}
+
+  ngOnInit(): void {
+    if (sessionStorage.getItem('auth_origin') === 'login') {
+      if (this.authService.getOAuthResult() === false) {
+        this.showOAuthErrorMessage = true;
+      } else {
+        this.showOAuthErrorMessage = false;
+      }
+    }
+
+    sessionStorage.setItem('auth_origin', 'login');
+
     this.submitTrigger$
       .pipe(
         exhaustMap(() =>
@@ -95,18 +107,6 @@ export class LoginComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
-  }
-
-  ngOnInit(): void {
-    if (sessionStorage.getItem('auth_origin') === 'login') {
-      if (this.authService.getOAuthResult() === false) {
-        this.showOAuthErrorMessage = true;
-      } else {
-        this.showOAuthErrorMessage = false;
-      }
-    }
-
-    sessionStorage.setItem('auth_origin', 'login');
   }
 
   submit(): void {

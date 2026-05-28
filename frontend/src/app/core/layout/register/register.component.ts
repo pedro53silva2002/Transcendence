@@ -92,6 +92,20 @@ export class RegisterComponent implements OnInit {
     this.form.controls.password.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => this.passwordValue.set(value));
+  }
+
+  showOAuthErrorMessage = false;
+
+  ngOnInit(): void {
+    if (sessionStorage.getItem('auth_origin') === 'register') {
+      if (this.sessionService.getOAuthResult() === false) {
+        this.showOAuthErrorMessage = true;
+      } else {
+        this.showOAuthErrorMessage = false;
+      }
+    }
+
+    sessionStorage.setItem('auth_origin', 'register');
 
     this.submitTrigger$
       .pipe(
@@ -116,20 +130,6 @@ export class RegisterComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
-  }
-
-  showOAuthErrorMessage = false;
-
-  ngOnInit(): void {
-    if (sessionStorage.getItem('auth_origin') === 'register') {
-      if (this.sessionService.getOAuthResult() === false) {
-        this.showOAuthErrorMessage = true;
-      } else {
-        this.showOAuthErrorMessage = false;
-      }
-    }
-
-    sessionStorage.setItem('auth_origin', 'register');
   }
 
   private readonly validateUsername = (

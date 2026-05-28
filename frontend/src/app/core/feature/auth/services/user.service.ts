@@ -19,7 +19,7 @@ export class UserService extends BaseApiService {
     search: SearchParams<UserSearchFieldsDto, UserOrderByFieldsDto>,
   ): Observable<ApiResponse<CursorPage<UserDto>>> {
     const query = searchToQuery(search);
-    return this._getO<CursorPage<UserDto>>(`/users/search?q=${query}`);
+    return this._get<CursorPage<UserDto>>(`/users/search?q=${query}`);
   }
 
   public delete(id: number): Observable<ApiResponse<void>> {

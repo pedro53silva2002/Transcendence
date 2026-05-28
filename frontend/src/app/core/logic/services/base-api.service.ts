@@ -56,16 +56,10 @@ export abstract class BaseApiService {
    */
   protected _get<T>(path: string): Observable<ApiResponse<T>> {
     return this.http
-      .post<T>(this.apiUrl + path, { withCredentials: true })
+      .get<T>(this.apiUrl + path, { withCredentials: true })
       .pipe(map((data) => ({ status: 200, data })));
     // If the request fails, the errorInterceptor converts the error
     // to an ApiError before it reaches here. No try/catch needed.
-  }
-
-  protected _getO<T>(path: string): Observable<ApiResponse<T>> {
-    return this.http
-      .get<T>(this.apiUrl + path, { withCredentials: true })
-      .pipe(map((data) => ({ status: 200, data })));
   }
 
   /**

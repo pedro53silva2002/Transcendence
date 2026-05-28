@@ -25,7 +25,7 @@ export class AuthService extends BaseApiService {
    * @returns returns the Google URL for the user to be able to login with the Google account
    */
   public getGoogleRedirectUrl() {
-    return this._getO<{ authorizationUrl: string }>('/auth/google/url');
+    return this._get<{ authorizationUrl: string }>('/auth/google/url');
   }
 
   public logout(): Observable<ApiResponse<void>> {
