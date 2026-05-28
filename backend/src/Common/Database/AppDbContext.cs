@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Trippie.Modules.Auth.Model;
+using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 
 namespace Trippie.Common.Database;
@@ -14,5 +15,6 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+		modelBuilder.HasPostgresEnum<TripVisibility>("travel", "trip_visibility");
 	}
 }

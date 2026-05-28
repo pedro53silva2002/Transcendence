@@ -41,6 +41,13 @@ try
         Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? throw new InvalidOperationException("POSTGRES_PASSWORD not set"),
     }.ConnectionString;
 
+
+	//Add enum configuration for trips table, visibility column
+	//var datasourceduilder = new NpgsqlDataSourceBuilder(connectionString);
+	//datasourceduilder.MapEnum<TripVisibility>("trip_visibility");
+	//var datasource = datasourceduilder.Build();
+	//builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(datasource));
+
     builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(connectionString));
 
 
@@ -99,10 +106,6 @@ try
 	builder.Services.AddScoped<TripService>();
 
 
-	//Add enum configuration for trips table, visibility column
-	var datasourceduilder = new NpgsqlDataSourceBuilder(connectionString);
-	datasourceduilder.MapEnum<TripVisibility>("trip_visibility");
-	builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(connectionString, o => o.MapEnum<TripVisibility>("visibility", "trips")));
     var app = builder.Build();
 
     // ── Handle --migrate argument to run database migrations ────────────────────
