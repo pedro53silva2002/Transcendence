@@ -41,14 +41,13 @@ try
         Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? throw new InvalidOperationException("POSTGRES_PASSWORD not set"),
     }.ConnectionString;
 
-
-	//Add enum configuration for trips table, visibility column
-	//var datasourceduilder = new NpgsqlDataSourceBuilder(connectionString);
-	//datasourceduilder.MapEnum<TripVisibility>("trip_visibility");
-	//var datasource = datasourceduilder.Build();
-	//builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(datasource));
-
-    builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(connectionString));
+	//ADd enum to database recognize
+    var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+	dataSourceBuilder.MapEnum<trip_visibility>("trip_visibility");
+	var dataSource = dataSourceBuilder.Build();
+	builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(dataSource));
+	
+	//builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(connectionString));
 
 
     // Replace MS logging with Serilog (reads "Serilog" + "ErrorHandling" sections).

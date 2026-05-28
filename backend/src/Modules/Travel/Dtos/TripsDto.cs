@@ -3,11 +3,11 @@ using Trippie.Common.Services.Search.Model;
 
 namespace Trippie.Modules.Travel.Dtos;
 
-public enum TripVisibility
+public enum trip_visibility
 {
-	Private,
 	Public,
-	FriendsOnly
+	Friends,
+	Private
 }
 public sealed class CreatedTripDto
 {
@@ -17,7 +17,7 @@ public sealed class CreatedTripDto
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
-	public TripVisibility Visibility { get; set; }
+	public trip_visibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
 }
 
@@ -30,7 +30,7 @@ public sealed class TripDto
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
-	public TripVisibility Visibility { get; set; }
+	public trip_visibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
 	public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
@@ -45,5 +45,5 @@ public sealed class UpdateTripDto
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
-	public TripVisibility Visibility { get; set; }
+	public trip_visibility Visibility { get; set; }
 }

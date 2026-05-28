@@ -20,7 +20,7 @@ internal sealed class TripConfiguration : IEntityTypeConfiguration<Trip>
         b.Property(t => t.StartDate).HasColumnName("start_date").IsRequired();
         b.Property(t => t.EndDate).HasColumnName("end_date").IsRequired();
         b.Property(t => t.Budget).HasColumnName("budget");
-        b.Property(t => t.Visibility).HasColumnName("visibility").HasColumnType("travel.trip_visibility").IsRequired();
+        b.Property(t => t.Visibility).HasColumnName("visibility").HasColumnType("trip_visibility").IsRequired();
         b.Property(t => t.CreatedBy).HasColumnName("created_by");
         b.Property(t => t.CreatedAt).HasColumnName("created_at");
         b.Property(t => t.UpdatedAt).HasColumnName("updated_at");

@@ -18,7 +18,7 @@ public sealed class Trip
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
-	public TripVisibility Visibility { get; set; }
+	public trip_visibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
 	public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
