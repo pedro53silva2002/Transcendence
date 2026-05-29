@@ -29,9 +29,10 @@
 		color: var(--mat-sys-on-primary) !important;
 	}
 
-	/* 1. Forçar a estrutura do Material a dar 100% de largura aos wrappers desde o início */
+/* 1. Forçar a estrutura do Material a dar 100% de largura aos wrappers desde o início */
     .mat-date-range-input-wrapper {
         width: 100% !important;
     }
 
+	
 }
