@@ -90,7 +90,7 @@ CREATE TABLE "travel"."trips" (
     "visibility" trip_visibility NOT NULL DEFAULT 'private',
     "created_by" INT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    "updated_at" TIMESTAMPTZ
 );
 
 ALTER TABLE "travel"."trips" ADD CONSTRAINT "travel_trips_fk_created_by" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id") ON DELETE RESTRICT;

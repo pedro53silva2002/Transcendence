@@ -9,6 +9,7 @@ using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Travel.Dtos;
 
 namespace Trippie.Modules.Travel.Model;
+
 public sealed class Trip
 {
 	public required int Id { get; set; }
@@ -18,10 +19,10 @@ public sealed class Trip
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
-	public trip_visibility Visibility { get; set; }
+	public TripVisibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
 	public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+	public DateTime? UpdatedAt { get; set; }
 
 	public static TripDto ToDto(Trip t) => new()
 	{
@@ -93,6 +94,8 @@ public sealed class TripModel(AppDbContext db)
 		var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return null;
 
+		if (dto.TripName is not null) trip.TripName = dto.TripName;
+		if (dto.Visibility != trip.Visibility) trip.Visibility = dto.Visibility;
 		if (dto.Description is not null) trip.Description = dto.Description;
 		if (dto.StartDate != trip.StartDate) trip.StartDate = dto.StartDate;
 		if (dto.EndDate != trip.EndDate) trip.EndDate = dto.EndDate;

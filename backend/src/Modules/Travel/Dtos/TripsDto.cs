@@ -1,13 +1,17 @@
 
+using System.Text.Json.Serialization;
+using NpgsqlTypes;
 using Trippie.Common.Services.Search.Model;
 
 namespace Trippie.Modules.Travel.Dtos;
 
-public enum trip_visibility
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum TripVisibility
 {
-	Public,
-	Friends,
-	Private
+	[PgName("public")] Public,
+	[PgName("friends")] Friends,
+	[PgName("private")] Private
 }
 public sealed class CreatedTripDto
 {
@@ -17,7 +21,7 @@ public sealed class CreatedTripDto
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
-	public trip_visibility Visibility { get; set; }
+	public TripVisibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
 }
 
@@ -30,10 +34,10 @@ public sealed class TripDto
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
-	public trip_visibility Visibility { get; set; }
+	public TripVisibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
 	public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+	public DateTime? UpdatedAt { get; set; }
 }
 
 public sealed class UpdateTripDto
@@ -45,5 +49,5 @@ public sealed class UpdateTripDto
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
-	public trip_visibility Visibility { get; set; }
+	public TripVisibility Visibility { get; set; }
 }

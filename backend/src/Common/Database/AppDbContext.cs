@@ -15,6 +15,6 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
-		modelBuilder.HasPostgresEnum<trip_visibility>(name: "trip_visibility");
+		modelBuilder.HasPostgresEnum<TripVisibility>(name: "trip_visibility");
 	}
 }

@@ -28,7 +28,7 @@ public sealed class UserDto
 
 public sealed class UpdateUserDto
 {
-    public required int Id { get; set; }
+    //public required int Id { get; set; }
     public required string Email { get; set; }
     public required string Username { get; set; }
     public required string DisplayName { get; set; }
