@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Service;
 using System.Text;
@@ -6,11 +7,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Trippie.Common.Services.Search.Model;
 
-
 namespace Trippie.Modules.Auth.Router;
 
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route("api/countries")]
 public sealed class CountryRouter(CountryService service) : ControllerBase
 {
