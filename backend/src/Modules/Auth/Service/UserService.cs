@@ -50,8 +50,8 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         }
 
         var user = await userModel.UpdateAsync(id, dto, ct) ?? throw new NotFoundException($"User {id} not found.", id);
-
-        return User.ToDto(user);
+    
+        return user;
     }
 
     public async Task<UserDto?> GetByEmail(string email, CancellationToken ct = default)

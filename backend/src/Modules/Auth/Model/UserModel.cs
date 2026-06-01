@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.Security;
@@ -22,7 +20,7 @@ public sealed class User
     public required string OauthProvider { get; set; }
     public string? OauthId { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     public static UserDto ToDto(User u) => new()
     {
         Id = u.Id,
@@ -87,7 +85,7 @@ public sealed class UserModel(AppDbContext db)
         return res;
     }
 
-    public async Task<User?> UpdateAsync(int id, UpdateUserDto dto, CancellationToken ct = default)
+    public async Task<UserDto?> UpdateAsync(int id, UpdateUserDto dto, CancellationToken ct = default)
     {
         var user = await db.Users.FirstOrDefaultAsync(u => u.Id == id, ct);
         if (user is null) return null;
@@ -102,7 +100,7 @@ public sealed class UserModel(AppDbContext db)
         db.Users.Update(user);
         await db.SaveChangesAsync(ct);
 
-        return user;
+        return User.ToDto(user);
     }
 
     public async Task<UserDto?> GetByEmail(string email, CancellationToken ct = default)

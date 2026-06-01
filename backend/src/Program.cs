@@ -5,10 +5,11 @@ using Serilog;
 using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
-using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
+using Trippie.Modules.Travel.Model;
+using Trippie.Modules.Travel.Service;
 
 Env.TraversePath().Load();
 
@@ -92,6 +93,8 @@ try
     builder.Services.AddScoped<UserModel>();
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<AuthService>();
+    builder.Services.AddScoped<ItineraryModel>();
+    builder.Services.AddScoped<ItineraryService>();
 
     var app = builder.Build();
 
