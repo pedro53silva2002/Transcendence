@@ -47,6 +47,6 @@ public sealed class TripService(TripModel tripModel)
 	public async Task DeleteAsync(int id, CancellationToken ct = default)
 	{
 		var delete = await tripModel.DeleteAsync(id, ct);
-		if (!delete) throw new NotFoundException($"User {id} not found.", id);
+		if (!delete) throw new NotFoundException($"Trip {id} not found.", id);
 	}
 }
