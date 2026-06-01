@@ -24,11 +24,11 @@ public sealed class ItineraryService(ItineraryModel itineraryModel)
     public async Task<CursorPage<ItineraryDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
         => await itineraryModel.SearchAsync(payload, ct);
 
-    public async Task<ItineraryDto?> UpdateAsync(int userId, UpdateItineraryDto dto, CancellationToken ct = default)
+    public async Task<ItineraryDto?> UpdateAsync(int userId, int id, UpdateItineraryDto dto, CancellationToken ct = default)
     {
         ValidateItinerary(dto.Title, dto.ExpectedPrice, dto.Description);
 
-        var itinerary = await itineraryModel.UpdateAsync(userId, dto, ct) ?? throw new NotFoundException($"Itinerary {dto.Id} not found.", dto.Id);
+        var itinerary = await itineraryModel.UpdateAsync(userId, id, dto, ct) ?? throw new NotFoundException($"Itinerary {id} not found.", id);
         return itinerary;
     }
 
