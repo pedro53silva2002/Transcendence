@@ -3717,7 +3717,7 @@ JOIN (VALUES
     ('Maastricht'),
     ('Nijmegen'),
     ('Rotterdam'),
-    (''s-Hertogenbosch'),
+    ('s-Hertogenbosch'),
     ('The Hague'),
     ('Tilburg'),
     ('Utrecht'),
