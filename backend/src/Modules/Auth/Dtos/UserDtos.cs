@@ -1,5 +1,3 @@
-using Trippie.Common.Services.Search.Model;
-
 namespace Trippie.Modules.Auth.Dtos;
 
 public sealed class CreateUserDto

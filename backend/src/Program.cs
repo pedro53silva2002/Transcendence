@@ -5,7 +5,6 @@ using Serilog;
 using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
-using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
@@ -92,6 +91,10 @@ try
     builder.Services.AddScoped<UserModel>();
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<AuthService>();
+    builder.Services.AddScoped<CountryService>();
+    builder.Services.AddScoped<CountryModel>();
+
+     // Search service with our custom query compiler
 
     var app = builder.Build();
 

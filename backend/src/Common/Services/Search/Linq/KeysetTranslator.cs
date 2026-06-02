@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using System.Text.Json;
 using Trippie.Common.Services.Search.Compilation;
 using Trippie.Common.Services.Search.Exception;
 using Trippie.Common.Services.Search.Model;
