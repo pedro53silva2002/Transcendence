@@ -49,6 +49,12 @@
     "trip-description": "trip description",
     "start-date": "start date",
     "end-date": "end date",
-    "country": "country"
+    "country": "country",
+	"city": "city",
+	"privacy-text": "Would you like to allow friends/public to view your trip?",
+	"private-option": "private",
+	"friends-option": "friends",
+	"public-option": "public",
+	"create-trip": "Create Trip"
   }
 }

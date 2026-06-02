@@ -1,9 +1,11 @@
+
 .plan-form {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: start;
-	gap: 16px;
+	gap: 20px;
+	width: 590px;
 
 	::placeholder {
 		color: var(--mat-sys-on-primary) !important;
@@ -11,7 +13,19 @@
 	}
 }
 
+.name-and-dates, .country-and-city {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+
+}
+
 ::ng-deep .plan-form {
+
+	.mat-mdc-form-field {
+		width: 100%;
+	}
 
 	.mdc-notched-outline__leading,
 	.mdc-notched-outline__notch,
@@ -25,14 +39,25 @@
 		opacity: 0.7;
 	}
 
-	.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input, .mat-date-range-input-separator {
+	.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input,
+	.mat-date-range-input-separator {
 		color: var(--mat-sys-on-primary) !important;
 	}
 
-/* 1. Forçar a estrutura do Material a dar 100% de largura aos wrappers desde o início */
-    .mat-date-range-input-wrapper {
-        width: 100% !important;
-    }
+	/* 1. Forçar a estrutura do Material a dar 100% de largura aos wrappers desde o início */
+	.mat-date-range-input-wrapper {
+		width: 100% !important;
+	}
 
-	
+}
+
+.privacy-container {
+	width: 100%;
+
+	p {
+		color: var(--mat-sys-on-primary);
+		margin-bottom: 7px;
+		margin-top: 5px;
+		margin-left: 10px;
+	}
 }

@@ -1,40 +1,78 @@
 <form class="plan-form">
-    <mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
-        <input matInput placeholder="{{ 'plan-a-trip.trip-name' | transloco }}">
-    </mat-form-field>
+	<div class="name-and-dates">
+		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic" class="trip-name">
+			<input matInput placeholder="{{ 'plan-a-trip.trip-name' | transloco }}">
+		</mat-form-field>
+		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
+			<mat-date-range-input [formGroup]="range" [rangePicker]="calendar">
+				<input matStartDate formControlName="start" placeholder="{{ 'plan-a-trip.start-date' | transloco }}">
+				<input matEndDate formControlName="end" placeholder="{{ 'plan-a-trip.end-date' | transloco }}">
+			</mat-date-range-input>
+			<mat-datepicker-toggle matIconSuffix [for]="calendar"></mat-datepicker-toggle>
+			<mat-date-range-picker #calendar></mat-date-range-picker>
+			
+			<mat-error *ngIf="range.hasError('wrongDates')">
+				A data de fim tem de ser maior que a data de início.
+			</mat-error>
+		</mat-form-field>
+
+	</div>
 
     <mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
         <textarea matInput placeholder="{{ 'plan-a-trip.trip-description' | transloco }}"></textarea>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
-        <mat-date-range-input [formGroup]="range" [rangePicker]="calendar">
-            <input matStartDate formControlName="start" placeholder="{{ 'plan-a-trip.start-date' | transloco }}">
-            <input matEndDate formControlName="end" placeholder="{{ 'plan-a-trip.end-date' | transloco }}">
-        </mat-date-range-input>
-        <mat-datepicker-toggle matIconSuffix [for]="calendar"></mat-datepicker-toggle>
-        <mat-date-range-picker #calendar></mat-date-range-picker>
-        
-        <mat-error *ngIf="range.hasError('wrongDates')">
-            A data de fim tem de ser maior que a data de início.
-        </mat-error>
-    </mat-form-field>
 
-    <mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
-        <input type="text" 
-               matInput 
-               [formControl]="countryControl" 
-               [matAutocomplete]="autoCountry"
-               placeholder="{{ 'plan-a-trip.country' | transloco }}">
-        
-        <mat-autocomplete #autoCountry="matAutocomplete">
-            <mat-option *ngFor="let country of listOfCountries$ | async" [value]="country">
-                {{ country }}
-            </mat-option>
-        </mat-autocomplete>
-        
-        <mat-error *ngIf="countryControl.hasError('invalidCountry')">
-            Por favor, seleciona um país válido da lista.
-        </mat-error>
-    </mat-form-field>
+	<div class="country-and-city">
+		<!-- country field (ainda nao esta a funcionar) -->
+		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
+			<input type="text" 
+				   matInput 
+				   [formControl]="countryControl" 
+				   [matAutocomplete]="autoCountry"
+				   placeholder="{{ 'plan-a-trip.country' | transloco }}">
+			
+			<mat-autocomplete #autoCountry="matAutocomplete">
+				<mat-option *ngFor="let country of listOfCountries$ | async" [value]="country">
+					{{ country }}
+				</mat-option>
+			</mat-autocomplete>
+			
+			<mat-error *ngIf="countryControl.hasError('invalidCountry')">
+				Por favor, seleciona um país válido da lista.
+			</mat-error>
+		</mat-form-field>
+	
+		<!-- city field (ainda nao esta a funcionar) -->
+		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
+			<input type="text" 
+				   matInput 
+				   [formControl]="countryControl" 
+				   [matAutocomplete]="autoCountry"
+				   placeholder="{{ 'plan-a-trip.city' | transloco }}">
+			
+			<mat-autocomplete #autoCountry="matAutocomplete">
+				<mat-option *ngFor="let country of listOfCountries$ | async" [value]="country">
+					{{ country }}
+				</mat-option>
+			</mat-autocomplete>
+			
+			<mat-error *ngIf="countryControl.hasError('invalidCountry')">
+				Por favor, seleciona um país válido da lista.
+			</mat-error>
+		</mat-form-field>
+	</div>
+
+	<!-- select trip's privacy -->
+	 <div class="privacy-container">
+		 <p> {{ 'plan-a-trip.privacy-text' | transloco }}</p>
+		 <mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic" class="custom-privacy-select">
+			 <mat-select required panelClass="custom-privacy-panel">
+				 <option value="private">{{ 'plan-a-trip.private-option' | transloco }}</option>
+				 <option value="friends">{{ 'plan-a-trip.friends-option' | transloco }}</option>
+				 <option value="public">{{ 'plan-a-trip.public-option' | transloco }}</option>
+			 </mat-select>
+		 </mat-form-field>
+	 </div>
+
 </form>

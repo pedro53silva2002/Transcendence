@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
 
 import { AsyncPipe } from '@angular/common';
+import { MatSelectModule } from '@angular/material/select';
 
 //Defining the date format
 export const FORMAT_DMY = {
@@ -30,7 +31,8 @@ export const FORMAT_DMY = {
 		ReactiveFormsModule,
 		MatInputModule,
 		MatAutocompleteModule,
-		MatFormFieldModule
+		MatFormFieldModule,
+		MatSelectModule
 	],
 	templateUrl: './trip-form.component.html',
 	styleUrl: './trip-form.component.scss',
@@ -42,7 +44,7 @@ export const FORMAT_DMY = {
 })
 export class TripFormComponent implements OnInit {
 
-	private locationsService = inject(LocationsService);
+	private readonly locationsService = inject(LocationsService);
 
 	//date picker
 	readonly range = new FormGroup({
