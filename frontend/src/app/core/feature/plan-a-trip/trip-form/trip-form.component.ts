@@ -5,11 +5,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field'; // <-- Confirma esta linha
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { CommonModule } from '@angular/common';
 import { TranslocoModule } from '@jsverse/transloco';
 import { LocationsService } from '../services/locations.service';
-import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
+import { Observable, debounceTime, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
 
 import { AsyncPipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
