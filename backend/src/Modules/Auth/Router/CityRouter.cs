@@ -11,8 +11,8 @@ namespace Trippie.Modules.Auth.Router;
 
 [ApiController]
 //[Authorize]
-[Route("api/countries")]
-public sealed class CountryRouter(CountryService service) : ControllerBase
+[Route("api/cities")]
+public sealed class CityRouter(CityService service) : ControllerBase
 {
     private static readonly JsonSerializerOptions SearchJsonOptions = new()
     {
@@ -21,11 +21,11 @@ public sealed class CountryRouter(CountryService service) : ControllerBase
     };
     
     [HttpGet("search")]
-    public async Task<ActionResult<List<CountryDto>>> SearchCountries([FromQuery] string query, CancellationToken ct)
+    public async Task<ActionResult<List<CityDto>>> SearchCities([FromQuery] string query, CancellationToken ct)
     {
         var json = Encoding.UTF8.GetString(Convert.FromBase64String(query));
         var payload = JsonSerializer.Deserialize<SearchPayload>(json, SearchJsonOptions) ?? new SearchPayload();
-        var countries = await service.SearchCountriesAsync(payload, ct);
-        return Ok(countries);
+        var cities = await service.SearchCitiesAsync(payload, ct);
+        return Ok(cities);
     }
 }

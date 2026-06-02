@@ -3811,3 +3811,1935 @@ JOIN (VALUES
     ('Zinder')
 ) AS v(name) ON c.code = 'NE'
 ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Nigeria (NG)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Aba'),
+    ('Abeokuta'),
+    ('Abuja'),
+    ('Ado-Ekiti'),
+    ('Akure'),
+    ('Asaba'),
+    ('Awka'),
+    ('Bauchi'),
+    ('Benin City'),
+    ('Birnin Kebbi'),
+    ('Calabar'),
+    ('Damaturu'),
+    ('Dutse'),
+    ('Ekpoma'),
+    ('Enugu'),
+    ('Gombe'),
+    ('Gusau'),
+    ('Ibadan'),
+    ('Ilorin'),
+    ('Jos'),
+    ('Kaduna'),
+    ('Kano'),
+    ('Katsina'),
+    ('Lagos'),
+    ('Lafia'),
+    ('Lokoja'),
+    ('Maiduguri'),
+    ('Makurdi'),
+    ('Minna'),
+    ('Ogbomosho'),
+    ('Onitsha'),
+    ('Oshogbo'),
+    ('Owerri'),
+    ('Port Harcourt'),
+    ('Sokoto'),
+    ('Umuahia'),
+    ('Uyo'),
+    ('Warri'),
+    ('Yenagoa'),
+    ('Yola'),
+    ('Zaria')
+) AS v(name) ON c.code = 'NG'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- North Korea (KP)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Anju'),
+    ('Chongjin'),
+    ('Haeju'),
+    ('Hamhung'),
+    ('Hyesan'),
+    ('Kaechon'),
+    ('Kaesong'),
+    ('Kanggye'),
+    ('Kimchaek'),
+    ('Kosong'),
+    ('Nampo'),
+    ('Pyongyang'),
+    ('Rason'),
+    ('Sariwon'),
+    ('Sinuiju'),
+    ('Songnim'),
+    ('Tanchon'),
+    ('Wonsan')
+) AS v(name) ON c.code = 'KP'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- North Macedonia (MK)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Bitola'),
+    ('Debar'),
+    ('Delcevo'),
+    ('Gevgelija'),
+    ('Gostivar'),
+    ('Kavadarci'),
+    ('Kicevo'),
+    ('Kocani'),
+    ('Kratovo'),
+    ('Kumanovo'),
+    ('Negotino'),
+    ('Ohrid'),
+    ('Prilep'),
+    ('Probistip'),
+    ('Radovis'),
+    ('Skopje'),
+    ('Stip'),
+    ('Struga'),
+    ('Strumica'),
+    ('Sveti Nikole'),
+    ('Tetovo'),
+    ('Valandovo'),
+    ('Veles'),
+    ('Vinica')
+) AS v(name) ON c.code = 'MK'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Norway (NO)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Alesund'),
+    ('Alta'),
+    ('Bergen'),
+    ('Bodo'),
+    ('Drammen'),
+    ('Fredrikstad'),
+    ('Hamar'),
+    ('Haugesund'),
+    ('Kristiansand'),
+    ('Kristiansund'),
+    ('Larvik'),
+    ('Lillehammer'),
+    ('Mo i Rana'),
+    ('Moss'),
+    ('Narvik'),
+    ('Oslo'),
+    ('Porsgrunn'),
+    ('Sandefjord'),
+    ('Sandnes'),
+    ('Sarpsborg'),
+    ('Skien'),
+    ('Stavanger'),
+    ('Tonsberg'),
+    ('Tromso'),
+    ('Trondheim')
+) AS v(name) ON c.code = 'NO'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Oman (OM)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Adam'),
+    ('Al Buraymi'),
+    ('Bahla'),
+    ('Ibra'),
+    ('Ibri'),
+    ('Khasab'),
+    ('Muscat'),
+    ('Nizwa'),
+    ('Ruwi'),
+    ('Salalah'),
+    ('Sohar'),
+    ('Sur'),
+    ('Thumrait')
+) AS v(name) ON c.code = 'OM'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Pakistan (PK)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Abbottabad'),
+    ('Bahawalpur'),
+    ('Bhimber'),
+    ('Dera Ghazi Khan'),
+    ('Faisalabad'),
+    ('Gujranwala'),
+    ('Gujrat'),
+    ('Hyderabad'),
+    ('Islamabad'),
+    ('Jhang'),
+    ('Jhelum'),
+    ('Karachi'),
+    ('Kasur'),
+    ('Khanewal'),
+    ('Khushab'),
+    ('Lahore'),
+    ('Larkana'),
+    ('Mardan'),
+    ('Mingora'),
+    ('Mirpur Khas'),
+    ('Multan'),
+    ('Muzaffarabad'),
+    ('Nawabshah'),
+    ('Okara'),
+    ('Peshawar'),
+    ('Quetta'),
+    ('Rahimyar Khan'),
+    ('Rawalpindi'),
+    ('Sahiwal'),
+    ('Sargodha'),
+    ('Sheikhupura'),
+    ('Sialkot'),
+    ('Sibi'),
+    ('Sukkur'),
+    ('Wah Cantonment')
+) AS v(name) ON c.code = 'PK'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Palau (PW)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Airai'),
+    ('Kloulklubed'),
+    ('Koror'),
+    ('Meyungs'),
+    ('Ngeraard'),
+    ('Ngerulmud'),
+    ('Ngchesar')
+) AS v(name) ON c.code = 'PW'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Palestine (PS)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Bethlehem'),
+    ('Gaza'),
+    ('Hebron'),
+    ('Jericho'),
+    ('Jenin'),
+    ('Khan Yunis'),
+    ('Nablus'),
+    ('Qalqilya'),
+    ('Rafah'),
+    ('Ramallah'),
+    ('Salfit'),
+    ('Tulkarm')
+) AS v(name) ON c.code = 'PS'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Panama (PA)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Arraijan'),
+    ('Chitre'),
+    ('Colon'),
+    ('David'),
+    ('La Chorrera'),
+    ('Las Tablas'),
+    ('Panama City'),
+    ('Penonome'),
+    ('San Miguelito'),
+    ('Santiago')
+) AS v(name) ON c.code = 'PA'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Papua New Guinea (PG)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Arawa'),
+    ('Daru'),
+    ('Goroka'),
+    ('Kavieng'),
+    ('Kerema'),
+    ('Kimbe'),
+    ('Kokopo'),
+    ('Kundiawa'),
+    ('Lae'),
+    ('Lorengau'),
+    ('Madang'),
+    ('Mendi'),
+    ('Mount Hagen'),
+    ('Popondetta'),
+    ('Port Moresby'),
+    ('Rabaul'),
+    ('Vanimo'),
+    ('Wabag'),
+    ('Wewak')
+) AS v(name) ON c.code = 'PG'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Paraguay (PY)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Areguá'),
+    ('Asunción'),
+    ('Caaguazú'),
+    ('Caazapá'),
+    ('Capiatá'),
+    ('Ciudad del Este'),
+    ('Concepción'),
+    ('Coronel Oviedo'),
+    ('Encarnación'),
+    ('Fernando de la Mora'),
+    ('Hernandarias'),
+    ('Lambaré'),
+    ('Limpio'),
+    ('Luque'),
+    ('Mariano Roque Alonso'),
+    ('Nemby'),
+    ('Pedro Juan Caballero'),
+    ('Pilar'),
+    ('Presidente Franco'),
+    ('San Lorenzo'),
+    ('Villa Hayes'),
+    ('Villarrica')
+) AS v(name) ON c.code = 'PY'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Peru (PE)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Arequipa'),
+    ('Ayacucho'),
+    ('Cajamarca'),
+    ('Callao'),
+    ('Chiclayo'),
+    ('Chimbote'),
+    ('Cusco'),
+    ('Huancayo'),
+    ('Huánuco'),
+    ('Ica'),
+    ('Iquitos'),
+    ('Juliaca'),
+    ('Lima'),
+    ('Piura'),
+    ('Pucallpa'),
+    ('Sullana'),
+    ('Tacna'),
+    ('Tarapoto'),
+    ('Trujillo')
+) AS v(name) ON c.code = 'PE'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Philippines (PH)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Angeles'),
+    ('Antipolo'),
+    ('Bacolod'),
+    ('Baguio'),
+    ('Batangas'),
+    ('Butuan'),
+    ('Cabanatuan'),
+    ('Cagayan de Oro'),
+    ('Caloocan'),
+    ('Cebu City'),
+    ('Cotabato'),
+    ('Dagupan'),
+    ('Davao'),
+    ('General Santos'),
+    ('Iligan'),
+    ('Iloilo City'),
+    ('Las Piñas'),
+    ('Lapu-Lapu'),
+    ('Legaspi'),
+    ('Lucena'),
+    ('Makati'),
+    ('Malabon'),
+    ('Mandaluyong'),
+    ('Mandaue'),
+    ('Manila'),
+    ('Marikina'),
+    ('Muntinlupa'),
+    ('Navotas'),
+    ('Olongapo'),
+    ('Ormoc'),
+    ('Paranaque'),
+    ('Pasay'),
+    ('Pasig'),
+    ('Quezon City'),
+    ('San Jose del Monte'),
+    ('San Juan'),
+    ('San Pablo'),
+    ('Santa Rosa'),
+    ('Taguig'),
+    ('Valenzuela'),
+    ('Zamboanga')
+) AS v(name) ON c.code = 'PH'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Poland (PL)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Białystok'),
+    ('Bielsko-Biała'),
+    ('Bydgoszcz'),
+    ('Bytom'),
+    ('Chorzów'),
+    ('Częstochowa'),
+    ('Dąbrowa Górnicza'),
+    ('Elbląg'),
+    ('Gdańsk'),
+    ('Gdynia'),
+    ('Gliwice'),
+    ('Gorzów Wielkopolski'),
+    ('Katowice'),
+    ('Kielce'),
+    ('Kraków'),
+    ('Legnica'),
+    ('Lublin'),
+    ('Łódź'),
+    ('Olsztyn'),
+    ('Opole'),
+    ('Płock'),
+    ('Poznań'),
+    ('Radom'),
+    ('Ruda Śląska'),
+    ('Rzeszów'),
+    ('Sosnowiec'),
+    ('Szczecin'),
+    ('Toruń'),
+    ('Tychy'),
+    ('Warsaw'),
+    ('Włocławek'),
+    ('Wrocław'),
+    ('Zabrze'),
+    ('Zielona Góra')
+) AS v(name) ON c.code = 'PL'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Portugal (PT)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Almada'),
+    ('Amadora'),
+    ('Aveiro'),
+    ('Barcelos'),
+    ('Barreiro'),
+    ('Braga'),
+    ('Bragança'),
+    ('Cascais'),
+    ('Castelo Branco'),
+    ('Coimbra'),
+    ('Évora'),
+    ('Faro'),
+    ('Figueira da Foz'),
+    ('Funchal'),
+    ('Gondomar'),
+    ('Guimarães'),
+    ('Leiria'),
+    ('Lisbon'),
+    ('Loures'),
+    ('Matosinhos'),
+    ('Odivelas'),
+    ('Oeiras'),
+    ('Ponta Delgada'),
+    ('Portimão'),
+    ('Porto'),
+    ('Póvoa de Varzim'),
+    ('Queluz'),
+    ('Santarém'),
+    ('Seixal'),
+    ('Setúbal'),
+    ('Sintra'),
+    ('Viana do Castelo'),
+    ('Vila Franca de Xira'),
+    ('Vila Nova de Gaia'),
+    ('Viseu')
+) AS v(name) ON c.code = 'PT'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Qatar (QA)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Al Khor'),
+    ('Al Rayyan'),
+    ('Al Wakrah'),
+    ('Doha'),
+    ('Dukhan'),
+    ('Lusail'),
+    ('Madinat ash Shamal'),
+    ('Mesaieed'),
+    ('Umm Salal')
+) AS v(name) ON c.code = 'QA'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Romania (RO)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Arad'),
+    ('Bacău'),
+    ('Baia Mare'),
+    ('Bistrița'),
+    ('Botoșani'),
+    ('Brăila'),
+    ('Brașov'),
+    ('Bucharest'),
+    ('Buzău'),
+    ('Cluj-Napoca'),
+    ('Constanța'),
+    ('Craiova'),
+    ('Deva'),
+    ('Drobeta-Turnu Severin'),
+    ('Focșani'),
+    ('Galați'),
+    ('Iași'),
+    ('Oradea'),
+    ('Piatra Neamț'),
+    ('Pitești'),
+    ('Ploiești'),
+    ('Râmnicu Vâlcea'),
+    ('Reșița'),
+    ('Satu Mare'),
+    ('Sfântu Gheorghe'),
+    ('Sibiu'),
+    ('Slatina'),
+    ('Slobozia'),
+    ('Suceava'),
+    ('Târgoviște'),
+    ('Târgu Jiu'),
+    ('Târgu Mureș'),
+    ('Timișoara'),
+    ('Tulcea'),
+    ('Vaslui'),
+    ('Zalău'),
+    ('Alexandria')
+) AS v(name) ON c.code = 'RO'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Russia (RU)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Arkhangelsk'),
+    ('Astrakhan'),
+    ('Barnaul'),
+    ('Bryansk'),
+    ('Chelyabinsk'),
+    ('Chita'),
+    ('Irkutsk'),
+    ('Ivanovo'),
+    ('Izhevsk'),
+    ('Kazan'),
+    ('Kemerovo'),
+    ('Khabarovsk'),
+    ('Kirov'),
+    ('Krasnodar'),
+    ('Krasnoyarsk'),
+    ('Kursk'),
+    ('Lipetsk'),
+    ('Magnitogorsk'),
+    ('Moscow'),
+    ('Murmansk'),
+    ('Naberezhnye Chelny'),
+    ('Nizhny Novgorod'),
+    ('Novokuznetsk'),
+    ('Novosibirsk'),
+    ('Omsk'),
+    ('Orenburg'),
+    ('Penza'),
+    ('Perm'),
+    ('Rostov-on-Don'),
+    ('Ryazan'),
+    ('Saint Petersburg'),
+    ('Samara'),
+    ('Saratov'),
+    ('Stavropol'),
+    ('Tolyatti'),
+    ('Tomsk'),
+    ('Tula'),
+    ('Tver'),
+    ('Tyumen'),
+    ('Ufa'),
+    ('Ulyanovsk'),
+    ('Vladivostok'),
+    ('Volgograd'),
+    ('Voronezh'),
+    ('Yakutsk'),
+    ('Yaroslavl'),
+    ('Yekaterinburg')
+) AS v(name) ON c.code = 'RU'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Rwanda (RW)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Butare'),
+    ('Byumba'),
+    ('Cyangugu'),
+    ('Gisenyi'),
+    ('Gitarama'),
+    ('Kibungo'),
+    ('Kibuye'),
+    ('Kigali'),
+    ('Musanze'),
+    ('Ruhengeri')
+) AS v(name) ON c.code = 'RW'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Saint Kitts and Nevis (KN)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Basseterre'),
+    ('Charlestown'),
+    ('Dieppe Bay Town'),
+    ('Gingerland'),
+    ('Nicola Town'),
+    ('Sandy Point Town')
+) AS v(name) ON c.code = 'KN'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Saint Lucia (LC)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Anse La Raye'),
+    ('Canaries'),
+    ('Castries'),
+    ('Choiseul'),
+    ('Dennery'),
+    ('Gros Islet'),
+    ('Laborie'),
+    ('Micoud'),
+    ('Soufrière'),
+    ('Vieux Fort')
+) AS v(name) ON c.code = 'LC'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Saint Vincent and the Grenadines (VC)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Barrouallie'),
+    ('Chateaubelair'),
+    ('Georgetown'),
+    ('Kingstown'),
+    ('Layou'),
+    ('Mesopotamia'),
+    ('Port Elizabeth')
+) AS v(name) ON c.code = 'VC'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Samoa (WS)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Apia'),
+    ('Asau'),
+    ('Mulifanua'),
+    ('Safotu'),
+    ('Salelologa')
+) AS v(name) ON c.code = 'WS'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- San Marino (SM)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Acquaviva'),
+    ('Borgo Maggiore'),
+    ('Chiesanuova'),
+    ('Domagnano'),
+    ('Faetano'),
+    ('Fiorentino'),
+    ('Montegiardino'),
+    ('San Marino'),
+    ('Serravalle')
+) AS v(name) ON c.code = 'SM'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Sao Tome and Principe (ST)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Neves'),
+    ('Santana'),
+    ('Santo António'),
+    ('São Tomé'),
+    ('Trinidade')
+) AS v(name) ON c.code = 'ST'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Saudi Arabia (SA)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Abha'),
+    ('Al Hufuf'),
+    ('Al Jubayl'),
+    ('Al Khobar'),
+    ('Al Qatif'),
+    ('Buraydah'),
+    ('Dammam'),
+    ('Hail'),
+    ('Jeddah'),
+    ('Jizan'),
+    ('Khamis Mushait'),
+    ('Mecca'),
+    ('Medina'),
+    ('Najran'),
+    ('Riyadh'),
+    ('Sakaka'),
+    ('Tabuk'),
+    ('Taif'),
+    ('Yanbu')
+) AS v(name) ON c.code = 'SA'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Senegal (SN)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Dakar'),
+    ('Diourbel'),
+    ('Fatick'),
+    ('Kaolack'),
+    ('Kolda'),
+    ('Louga'),
+    ('Matam'),
+    ('Mbour'),
+    ('Richard-Toll'),
+    ('Saint-Louis'),
+    ('Tambacounda'),
+    ('Thiès'),
+    ('Touba'),
+    ('Ziguinchor')
+) AS v(name) ON c.code = 'SN'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Serbia (RS)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Belgrade'),
+    ('Čačak'),
+    ('Kragujevac'),
+    ('Kruševac'),
+    ('Leskovac'),
+    ('Niš'),
+    ('Novi Pazar'),
+    ('Novi Sad'),
+    ('Pančevo'),
+    ('Pirot'),
+    ('Požarevac'),
+    ('Priština'),
+    ('Smederevo'),
+    ('Šabac'),
+    ('Subotica'),
+    ('Užice'),
+    ('Valjevo'),
+    ('Vranje'),
+    ('Zaječar'),
+    ('Zrenjanin')
+) AS v(name) ON c.code = 'RS'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Seychelles (SC)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Anse Boileau'),
+    ('Beau Vallon'),
+    ('Bel Ombre'),
+    ('Cascade'),
+    ('Glacis'),
+    ('Grand Anse'),
+    ('Port Glaud'),
+    ('Takamaka'),
+    ('Victoria')
+) AS v(name) ON c.code = 'SC'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Sierra Leone (SL)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Bo'),
+    ('Bonthe'),
+    ('Freetown'),
+    ('Kabala'),
+    ('Kenema'),
+    ('Koidu'),
+    ('Lunsar'),
+    ('Magburaka'),
+    ('Makeni'),
+    ('Port Loko'),
+    ('Waterloo')
+) AS v(name) ON c.code = 'SL'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Singapore (SG)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Singapore')
+) AS v(name) ON c.code = 'SG'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Slovakia (SK)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Banská Bystrica'),
+    ('Bratislava'),
+    ('Košice'),
+    ('Martin'),
+    ('Nitra'),
+    ('Poprad'),
+    ('Prešov'),
+    ('Ružomberok'),
+    ('Trenčín'),
+    ('Trnava'),
+    ('Žilina'),
+    ('Zvolen')
+) AS v(name) ON c.code = 'SK'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Slovenia (SI)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Celje'),
+    ('Koper'),
+    ('Kranj'),
+    ('Ljubljana'),
+    ('Maribor'),
+    ('Murska Sobota'),
+    ('Nova Gorica'),
+    ('Novo Mesto'),
+    ('Ptuj'),
+    ('Velenje')
+) AS v(name) ON c.code = 'SI'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Solomon Islands (SB)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Auki'),
+    ('Gizo'),
+    ('Honiara'),
+    ('Kirakira'),
+    ('Lata'),
+    ('Tulagi')
+) AS v(name) ON c.code = 'SB'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Somalia (SO)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Baidoa'),
+    ('Balcad'),
+    ('Berbera'),
+    ('Bosaso'),
+    ('Burao'),
+    ('Galkayo'),
+    ('Hargeysa'),
+    ('Jawhar'),
+    ('Kismayo'),
+    ('Luuq'),
+    ('Marka'),
+    ('Mogadishu')
+) AS v(name) ON c.code = 'SO'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- South Africa (ZA)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Benoni'),
+    ('Bloemfontein'),
+    ('Cape Town'),
+    ('Durban'),
+    ('East London'),
+    ('Ekurhuleni'),
+    ('George'),
+    ('Johannesburg'),
+    ('Kimberley'),
+    ('Krugersdorp'),
+    ('Mangaung'),
+    ('Midrand'),
+    ('Nelspruit'),
+    ('Pietermaritzburg'),
+    ('Polokwane'),
+    ('Port Elizabeth'),
+    ('Pretoria'),
+    ('Rustenburg'),
+    ('Soweto'),
+    ('Stellenbosch'),
+    ('Tembisa'),
+    ('Welkom')
+) AS v(name) ON c.code = 'ZA'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- South Korea (KR)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Ansan'),
+    ('Anyang'),
+    ('Bucheon'),
+    ('Busan'),
+    ('Changwon'),
+    ('Cheongju'),
+    ('Chuncheon'),
+    ('Daegu'),
+    ('Daejeon'),
+    ('Gangneung'),
+    ('Gimhae'),
+    ('Goyang'),
+    ('Gwangju'),
+    ('Hwaseong'),
+    ('Incheon'),
+    ('Jeonju'),
+    ('Masan'),
+    ('Pohang'),
+    ('Seongnam'),
+    ('Seoul'),
+    ('Suwon'),
+    ('Ulsan'),
+    ('Usan'),
+    ('Wonju'),
+    ('Yongin')
+) AS v(name) ON c.code = 'KR'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- South Sudan (SS)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Aweil'),
+    ('Bentiu'),
+    ('Bor'),
+    ('Juba'),
+    ('Malakal'),
+    ('Rumbek'),
+    ('Torit'),
+    ('Wau'),
+    ('Yambio'),
+    ('Yei')
+) AS v(name) ON c.code = 'SS'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Spain (ES)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Alcalá de Henares'),
+    ('Alcorcón'),
+    ('Alicante'),
+    ('Almería'),
+    ('Badajoz'),
+    ('Badalona'),
+    ('Barcelona'),
+    ('Bilbao'),
+    ('Burgos'),
+    ('Cartagena'),
+    ('Castellón de la Plana'),
+    ('Córdoba'),
+    ('Elche'),
+    ('Getafe'),
+    ('Gijón'),
+    ('Granada'),
+    ('Hospitalet de Llobregat'),
+    ('Huelva'),
+    ('Jaén'),
+    ('Jerez de la Frontera'),
+    ('La Coruña'),
+    ('Las Palmas de Gran Canaria'),
+    ('Leganés'),
+    ('León'),
+    ('Logroño'),
+    ('Madrid'),
+    ('Málaga'),
+    ('Móstoles'),
+    ('Murcia'),
+    ('Oviedo'),
+    ('Palma'),
+    ('Pamplona'),
+    ('Sabadell'),
+    ('Salamanca'),
+    ('San Sebastián'),
+    ('Santa Cruz de Tenerife'),
+    ('Santander'),
+    ('Seville'),
+    ('Tarragona'),
+    ('Terrassa'),
+    ('Toledo'),
+    ('Valencia'),
+    ('Valladolid'),
+    ('Vigo'),
+    ('Vitoria-Gasteiz'),
+    ('Zaragoza')
+) AS v(name) ON c.code = 'ES'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Sri Lanka (LK)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Anuradhapura'),
+    ('Badulla'),
+    ('Batticaloa'),
+    ('Colombo'),
+    ('Galle'),
+    ('Jaffna'),
+    ('Kandy'),
+    ('Kurunegala'),
+    ('Matara'),
+    ('Moratuwa'),
+    ('Negombo'),
+    ('Nuwara Eliya'),
+    ('Ratnapura'),
+    ('Sri Jayawardenepura Kotte'),
+    ('Trincomalee')
+) AS v(name) ON c.code = 'LK'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Sudan (SD)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Al Fashir'),
+    ('Al Qadarif'),
+    ('Atbara'),
+    ('Geneina'),
+    ('Kassala'),
+    ('Khartoum'),
+    ('Kosti'),
+    ('Nyala'),
+    ('Omdurman'),
+    ('Port Sudan'),
+    ('Sennar'),
+    ('Wad Madani')
+) AS v(name) ON c.code = 'SD'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Suriname (SR)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Albina'),
+    ('Lelydorp'),
+    ('Moengo'),
+    ('Nieuw Nickerie'),
+    ('Paramaribo'),
+    ('Wanica')
+) AS v(name) ON c.code = 'SR'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Sweden (SE)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Borås'),
+    ('Eskilstuna'),
+    ('Gävle'),
+    ('Gothenburg'),
+    ('Helsingborg'),
+    ('Jönköping'),
+    ('Karlstad'),
+    ('Linköping'),
+    ('Luleå'),
+    ('Lund'),
+    ('Malmö'),
+    ('Norrköping'),
+    ('Örebro'),
+    ('Stockholm'),
+    ('Södertälje'),
+    ('Umeå'),
+    ('Uppsala'),
+    ('Västerås'),
+    ('Växjö')
+) AS v(name) ON c.code = 'SE'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Switzerland (CH)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Basel'),
+    ('Bern'),
+    ('Biel/Bienne'),
+    ('Fribourg'),
+    ('Geneva'),
+    ('Lausanne'),
+    ('Lucerne'),
+    ('Lugano'),
+    ('Schaffhausen'),
+    ('Sion'),
+    ('St. Gallen'),
+    ('Thun'),
+    ('Winterthur'),
+    ('Zurich')
+) AS v(name) ON c.code = 'CH'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Syria (SY)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Al Bab'),
+    ('Al Hasakah'),
+    ('Al Qamishli'),
+    ('Aleppo'),
+    ('Ar Raqqah'),
+    ('Baniyas'),
+    ('Damascus'),
+    ('Dar''a'),
+    ('Dayr az Zawr'),
+    ('Hama'),
+    ('Homs'),
+    ('Idlib'),
+    ('Latakia'),
+    ('Manbij'),
+    ('Tartus')
+) AS v(name) ON c.code = 'SY'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Taiwan (TW)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Banqiao'),
+    ('Changhua'),
+    ('Chiayi'),
+    ('Hsinchu'),
+    ('Hualien'),
+    ('Jilung'),
+    ('Kaohsiung'),
+    ('Pingtung'),
+    ('Taichung'),
+    ('Tainan'),
+    ('Taipei'),
+    ('Taitung'),
+    ('Taoyuan'),
+    ('Xinzhuang'),
+    ('Yilan'),
+    ('Zhongli')
+) AS v(name) ON c.code = 'TW'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Tajikistan (TJ)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Buston'),
+    ('Danghara'),
+    ('Dushanbe'),
+    ('Hisor'),
+    ('Isfara'),
+    ('Istaravshan'),
+    ('Khujand'),
+    ('Kulob'),
+    ('Norak'),
+    ('Panjakent'),
+    ('Qurghonteppa'),
+    ('Tursunzoda')
+) AS v(name) ON c.code = 'TJ'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Tanzania (TZ)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Arusha'),
+    ('Bukoba'),
+    ('Dar es Salaam'),
+    ('Dodoma'),
+    ('Iringa'),
+    ('Kigoma'),
+    ('Lindi'),
+    ('Mbeya'),
+    ('Morogoro'),
+    ('Moshi'),
+    ('Mtwara'),
+    ('Musoma'),
+    ('Mwanza'),
+    ('Shinyanga'),
+    ('Singida'),
+    ('Sumbawanga'),
+    ('Tabora'),
+    ('Tanga'),
+    ('Zanzibar City')
+) AS v(name) ON c.code = 'TZ'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Thailand (TH)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Bangkok'),
+    ('Chiang Mai'),
+    ('Chiang Rai'),
+    ('Chonburi'),
+    ('Hat Yai'),
+    ('Khon Kaen'),
+    ('Lampang'),
+    ('Nakhon Ratchasima'),
+    ('Nakhon Sawan'),
+    ('Nakhon Si Thammarat'),
+    ('Nonthaburi'),
+    ('Pak Kret'),
+    ('Pattaya'),
+    ('Phitsanulok'),
+    ('Phuket'),
+    ('Samut Prakan'),
+    ('Songkhla'),
+    ('Surat Thani'),
+    ('Ubon Ratchathani'),
+    ('Udon Thani')
+) AS v(name) ON c.code = 'TH'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Timor-Leste (TL)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Aileu'),
+    ('Ainaro'),
+    ('Baucau'),
+    ('Dili'),
+    ('Ermera'),
+    ('Liquiçá'),
+    ('Maliana'),
+    ('Manatuto'),
+    ('Same'),
+    ('Suai'),
+    ('Viqueque')
+) AS v(name) ON c.code = 'TL'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Togo (TG)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Aného'),
+    ('Atakpamé'),
+    ('Bassar'),
+    ('Dapaong'),
+    ('Kara'),
+    ('Lomé'),
+    ('Notsé'),
+    ('Sokodé'),
+    ('Tsévié')
+) AS v(name) ON c.code = 'TG'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Tonga (TO)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Haveluloto'),
+    ('Neiafu'),
+    ('Nuku''alofa'),
+    ('Pangai'),
+    ('Vaini')
+) AS v(name) ON c.code = 'TO'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Trinidad and Tobago (TT)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Arima'),
+    ('Chaguanas'),
+    ('Port of Spain'),
+    ('San Fernando'),
+    ('Scarborough'),
+    ('Siparia'),
+    ('Tunapuna')
+) AS v(name) ON c.code = 'TT'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Tunisia (TN)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Ariana'),
+    ('Ben Arous'),
+    ('Béja'),
+    ('Bizerte'),
+    ('Gabès'),
+    ('Gafsa'),
+    ('Jendouba'),
+    ('Kairouan'),
+    ('Kasserine'),
+    ('Kebili'),
+    ('La Manouba'),
+    ('Médenine'),
+    ('Monastir'),
+    ('Nabeul'),
+    ('Sfax'),
+    ('Sidi Bouzid'),
+    ('Siliana'),
+    ('Sousse'),
+    ('Tataouine'),
+    ('Tozeur'),
+    ('Tunis'),
+    ('Zaghouan')
+) AS v(name) ON c.code = 'TN'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Turkey (TR)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Adana'),
+    ('Ankara'),
+    ('Antalya'),
+    ('Balıkesir'),
+    ('Bursa'),
+    ('Denizli'),
+    ('Diyarbakır'),
+    ('Elazığ'),
+    ('Erzurum'),
+    ('Eskişehir'),
+    ('Gaziantep'),
+    ('Istanbul'),
+    ('İzmir'),
+    ('Kahramanmaraş'),
+    ('Kayseri'),
+    ('Kocaeli'),
+    ('Konya'),
+    ('Malatya'),
+    ('Manisa'),
+    ('Mersin'),
+    ('Ordu'),
+    ('Sakarya'),
+    ('Samsun'),
+    ('Şanlıurfa'),
+    ('Sivas'),
+    ('Tekirdağ'),
+    ('Trabzon'),
+    ('Van')
+) AS v(name) ON c.code = 'TR'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Turkmenistan (TM)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Ashgabat'),
+    ('Balkanabat'),
+    ('Bayramaly'),
+    ('Daşoguz'),
+    ('Mary'),
+    ('Türkmenabat'),
+    ('Türkmenbaşy')
+) AS v(name) ON c.code = 'TM'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Tuvalu (TV)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Funafuti'),
+    ('Savave'),
+    ('Tanrake'),
+    ('Toga'),
+    ('Tumaseu')
+) AS v(name) ON c.code = 'TV'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Uganda (UG)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Arua'),
+    ('Entebbe'),
+    ('Fort Portal'),
+    ('Gulu'),
+    ('Jinja'),
+    ('Kampala'),
+    ('Kasese'),
+    ('Lira'),
+    ('Masaka'),
+    ('Mbale'),
+    ('Mbarara'),
+    ('Soroti')
+) AS v(name) ON c.code = 'UG'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Ukraine (UA)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Bila Tserkva'),
+    ('Cherkasy'),
+    ('Chernihiv'),
+    ('Chernivtsi'),
+    ('Dnipro'),
+    ('Donetsk'),
+    ('Ivano-Frankivsk'),
+    ('Kharkiv'),
+    ('Kherson'),
+    ('Khmelnytskyi'),
+    ('Kropyvnytskyi'),
+    ('Kremenchuk'),
+    ('Kyiv'),
+    ('Luhansk'),
+    ('Lutsk'),
+    ('Lviv'),
+    ('Mariupol'),
+    ('Mykolaiv'),
+    ('Odessa'),
+    ('Poltava'),
+    ('Rivne'),
+    ('Sumy'),
+    ('Ternopil'),
+    ('Uzhhorod'),
+    ('Vinnytsia'),
+    ('Zaporizhzhia'),
+    ('Zhytomyr')
+) AS v(name) ON c.code = 'UA'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- United Arab Emirates (AE)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Abu Dhabi'),
+    ('Ajman'),
+    ('Al Ain'),
+    ('Dubai'),
+    ('Fujairah'),
+    ('Ras al-Khaimah'),
+    ('Sharjah'),
+    ('Umm al-Quwain')
+) AS v(name) ON c.code = 'AE'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- United Kingdom (GB)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Aberdeen'),
+    ('Bath'),
+    ('Birmingham'),
+    ('Bradford'),
+    ('Brighton'),
+    ('Bristol'),
+    ('Cambridge'),
+    ('Canterbury'),
+    ('Cardiff'),
+    ('Carlisle'),
+    ('Chelmsford'),
+    ('Chester'),
+    ('Chichester'),
+    ('Coventry'),
+    ('Derby'),
+    ('Durham'),
+    ('Edinburgh'),
+    ('Ely'),
+    ('Exeter'),
+    ('Glasgow'),
+    ('Gloucester'),
+    ('Hereford'),
+    ('Kingston upon Hull'),
+    ('Lancaster'),
+    ('Leeds'),
+    ('Leicester'),
+    ('Lichfield'),
+    ('Lincoln'),
+    ('Liverpool'),
+    ('London'),
+    ('Manchester'),
+    ('Newcastle upon Tyne'),
+    ('Norwich'),
+    ('Nottingham'),
+    ('Oxford'),
+    ('Peterborough'),
+    ('Plymouth'),
+    ('Portsmouth'),
+    ('Preston'),
+    ('Ripon'),
+    ('Salford'),
+    ('Salisbury'),
+    ('Sheffield'),
+    ('Southampton'),
+    ('Stoke-on-Trent'),
+    ('Sunderland'),
+    ('Truro'),
+    ('Wakefield'),
+    ('Wells'),
+    ('Westminster'),
+    ('Winchester'),
+    ('Wolverhampton'),
+    ('Worcester'),
+    ('York')
+) AS v(name) ON c.code = 'GB'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- United States (US)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Albuquerque'),
+    ('Anchorage'),
+    ('Atlanta'),
+    ('Austin'),
+    ('Baltimore'),
+    ('Boston'),
+    ('Charlotte'),
+    ('Chicago'),
+    ('Cleveland'),
+    ('Colorado Springs'),
+    ('Columbus'),
+    ('Dallas'),
+    ('Denver'),
+    ('Detroit'),
+    ('El Paso'),
+    ('Fort Worth'),
+    ('Fresno'),
+    ('Honolulu'),
+    ('Houston'),
+    ('Indianapolis'),
+    ('Jacksonville'),
+    ('Kansas City'),
+    ('Las Vegas'),
+    ('Long Beach'),
+    ('Los Angeles'),
+    ('Louisville'),
+    ('Memphis'),
+    ('Mesa'),
+    ('Miami'),
+    ('Milwaukee'),
+    ('Minneapolis'),
+    ('Nashville'),
+    ('New Orleans'),
+    ('New York City'),
+    ('Oakland'),
+    ('Oklahoma City'),
+    ('Omaha'),
+    ('Philadelphia'),
+    ('Phoenix'),
+    ('Portland'),
+    ('Raleigh'),
+    ('Sacramento'),
+    ('San Antonio'),
+    ('San Diego'),
+    ('San Francisco'),
+    ('San Jose'),
+    ('Seattle'),
+    ('Tucson'),
+    ('Tulsa'),
+    ('Virginia Beach'),
+    ('Washington')
+) AS v(name) ON c.code = 'US'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Uruguay (UY)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Artigas'),
+    ('Canelones'),
+    ('Ciudad de la Costa'),
+    ('Colonia del Sacramento'),
+    ('Durazno'),
+    ('Florida'),
+    ('Las Piedras'),
+    ('Maldonado'),
+    ('Mercedes'),
+    ('Minas'),
+    ('Montevideo'),
+    ('Paysandú'),
+    ('Rivera'),
+    ('Rocha'),
+    ('Salto'),
+    ('San José de Mayo'),
+    ('Tacuarembó'),
+    ('Treinta y Tres')
+) AS v(name) ON c.code = 'UY'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Uzbekistan (UZ)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Andijon'),
+    ('Buxoro'),
+    ('Chirchiq'),
+    ('Farg''ona'),
+    ('Guliston'),
+    ('Jizzax'),
+    ('Namangan'),
+    ('Navoiy'),
+    ('Nukus'),
+    ('Qarshi'),
+    ('Samarqand'),
+    ('Tashkent'),
+    ('Termiz'),
+    ('Urganch')
+) AS v(name) ON c.code = 'UZ'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Vanuatu (VU)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Isangel'),
+    ('Lakatoro'),
+    ('Luganville'),
+    ('Port Vila'),
+    ('Sola'),
+    ('Xanur')
+) AS v(name) ON c.code = 'VU'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Venezuela (VE)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Barcelona'),
+    ('Barinas'),
+    ('Barquisimeto'),
+    ('Cabimas'),
+    ('Caracas'),
+    ('Ciudad Bolívar'),
+    ('Ciudad Guayana'),
+    ('Coro'),
+    ('Cumana'),
+    ('Los Teques'),
+    ('Maracaibo'),
+    ('Maracay'),
+    ('Maturín'),
+    ('Mérida'),
+    ('Petare'),
+    ('Puerto La Cruz'),
+    ('San Cristóbal'),
+    ('San Fernando de Apure'),
+    ('Turmero'),
+    ('Valencia')
+) AS v(name) ON c.code = 'VE'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Vietnam (VN)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Biên Hòa'),
+    ('Buôn Ma Thuột'),
+    ('Cần Thơ'),
+    ('Đà Lạt'),
+    ('Đà Nẵng'),
+    ('Hải Dương'),
+    ('Hải Phòng'),
+    ('Hạ Long'),
+    ('Hanoi'),
+    ('Ho Chi Minh City'),
+    ('Huế'),
+    ('Long Xuyên'),
+    ('Mỹ Tho'),
+    ('Nam Định'),
+    ('Nha Trang'),
+    ('Phủ Lý'),
+    ('Phan Thiết'),
+    ('Pleiku'),
+    ('Quy Nhơn'),
+    ('Rạch Giá'),
+    ('Thái Nguyên'),
+    ('Thanh Hóa'),
+    ('Thủ Dầu Một'),
+    ('Vinh'),
+    ('Vũng Tàu')
+) AS v(name) ON c.code = 'VN'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Yemen (YE)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Aden'),
+    ('Al Hudaydah'),
+    ('Al Mukalla'),
+    ('Dhamar'),
+    ('Ibb'),
+    ('Marib'),
+    ('Saada'),
+    ('Sanaa'),
+    ('Taiz'),
+    ('Zinjibar')
+) AS v(name) ON c.code = 'YE'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Zambia (ZM)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Chingola'),
+    ('Chipata'),
+    ('Kabwe'),
+    ('Kafue'),
+    ('Kasama'),
+    ('Kitwe'),
+    ('Livingstone'),
+    ('Luanshya'),
+    ('Lusaka'),
+    ('Mongu'),
+    ('Mufulira'),
+    ('Ndola'),
+    ('Solwezi')
+) AS v(name) ON c.code = 'ZM'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Zimbabwe (ZW)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Bindura'),
+    ('Bulawayo'),
+    ('Chinhoyi'),
+    ('Chiredzi'),
+    ('Gweru'),
+    ('Harare'),
+    ('Hwange'),
+    ('Kadoma'),
+    ('Kwekwe'),
+    ('Marondera'),
+    ('Masvingo'),
+    ('Mutare'),
+    ('Norton'),
+    ('Rusape'),
+    ('Victoria Falls')
+) AS v(name) ON c.code = 'ZW'
+ON CONFLICT (name, country_id) DO NOTHING;
