@@ -19,13 +19,28 @@ public sealed class CityRouter(CityService service) : ControllerBase
         PropertyNameCaseInsensitive = true,
         Converters = { new JsonStringEnumConverter() }
     };
-    
+
     [HttpGet("search")]
     public async Task<ActionResult<List<CityDto>>> SearchCities([FromQuery] string query, CancellationToken ct)
     {
-        var json = Encoding.UTF8.GetString(Convert.FromBase64String(query));
-        var payload = JsonSerializer.Deserialize<SearchPayload>(json, SearchJsonOptions) ?? new SearchPayload();
-        var cities = await service.SearchCitiesAsync(payload, ct);
-        return Ok(cities);
+        try
+        {
+            var json = Encoding.UTF8.GetString(Convert.FromBase64String(query));
+            var payload = JsonSerializer.Deserialize<SearchPayload>(json, SearchJsonOptions) ?? new SearchPayload();
+
+            if (payload is null)
+                return BadRequest("Invalid payload");
+
+            var cities = await service.SearchCitiesAsync(payload, ct);
+            return Ok(cities);
+        }
+        catch (FormatException)
+        {
+            return BadRequest("Invalid Base64 query");
+        }
+        catch (JsonException)
+        {
+            return BadRequest("Invalid JSON payload");
+        }
     }
 }

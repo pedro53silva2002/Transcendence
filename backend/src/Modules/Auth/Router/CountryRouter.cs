@@ -19,13 +19,28 @@ public sealed class CountryRouter(CountryService service) : ControllerBase
         PropertyNameCaseInsensitive = true,
         Converters = { new JsonStringEnumConverter() }
     };
-    
+
     [HttpGet("search")]
     public async Task<ActionResult<List<CountryDto>>> SearchCountries([FromQuery] string query, CancellationToken ct)
     {
-        var json = Encoding.UTF8.GetString(Convert.FromBase64String(query));
-        var payload = JsonSerializer.Deserialize<SearchPayload>(json, SearchJsonOptions) ?? new SearchPayload();
-        var countries = await service.SearchCountriesAsync(payload, ct);
-        return Ok(countries);
+        try
+        {
+            var json = Encoding.UTF8.GetString(Convert.FromBase64String(query));
+            var payload = JsonSerializer.Deserialize<SearchPayload>(json,SearchJsonOptions);
+
+            if (payload is null)
+                return BadRequest("Invalid payload");
+
+            var countries = await service.SearchCountriesAsync(payload, ct);
+            return Ok(countries);
+        }
+        catch (FormatException)
+        {
+            return BadRequest("Invalid Base64 query");
+        }
+        catch (JsonException)
+        {
+            return BadRequest("Invalid JSON payload");
+        }
     }
 }
