@@ -8,6 +8,7 @@ using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
+using System.Threading.RateLimiting;
 
 Env.TraversePath().Load();
 
@@ -94,6 +95,23 @@ try
     builder.Services.AddScoped<CountryService>();
     builder.Services.AddScoped<CountryModel>();
 
+
+	//Add Http request limiter
+	//TODO: SEE POLITICS OF COORS
+	builder.Services.AddRateLimiter(options =>
+	{
+		options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+			RateLimitPartition.GetFixedWindowLimiter(
+				partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+				factory: partition => new FixedWindowRateLimiterOptions
+				{
+					AutoReplenishment = true,
+					PermitLimit = 10,
+					QueueLimit = 0,
+					Window = TimeSpan.FromMinutes(1)
+				}));
+	});
+
      // Search service with our custom query compiler
 
     var app = builder.Build();
@@ -166,7 +184,9 @@ try
         });
     }
     app.MapHealthChecks("/health");
-    app.UseCors();
+    //to Delete? app.UseCors();
+	//add ratelimiter
+	app.UseRateLimiter();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
