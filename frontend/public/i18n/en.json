@@ -56,6 +56,7 @@
 	"friends-option": "friends",
 	"public-option": "public",
 	"create-trip": "Create Trip",
+	"update-trip": "Update Trip",
 	"name-error": "The trip's name is required.",
 	"name-min-length-error": "The trip's name must be at least 3 characters long.",
 	"name-max-length-error": "The trip's name can't be more than 25 characters long.",

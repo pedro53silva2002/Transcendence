@@ -1,21 +1,28 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TripFormComponent } from "./trip-form/trip-form.component";
 import { TranslocoModule } from '@jsverse/transloco';
 import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TripService } from './services/trip.service';
 import { CreateTripDto, TripVisibility } from './dtos/trip.dto';
+import { Router, RouterModule } from '@angular/router';
+import { TripStateService } from './services/trip-state.service';
 
 @Component({
 	selector: 'app-plan-a-trip',
-	imports: [TripFormComponent, TranslocoModule, MatButtonModule, ReactiveFormsModule],
+	imports: [TripFormComponent, TranslocoModule, MatButtonModule, ReactiveFormsModule, RouterModule],
 	templateUrl: './plan-a-trip.component.html',
 	styleUrl: './plan-a-trip.component.scss',
 })
-export class PlanATripComponent {
+export class PlanATripComponent implements OnInit {
+
 	private readonly formBuilder = inject(FormBuilder);
 	private readonly tripService = inject(TripService);
-
+	private readonly router = inject(Router);
+	private readonly tripStateService = inject(TripStateService);
+	
+	public isEditMode = false;
+	
 	planATripForm = this.formBuilder.nonNullable.group({
 		trip: this.formBuilder.nonNullable.group({
 			tripName: ['', [Validators.required, Validators.maxLength(25), Validators.minLength(3)]],
@@ -31,6 +38,10 @@ export class PlanATripComponent {
 			members: [[] as number[]]
 		})
 	});
+	
+	ngOnInit(): void {
+		this.isEditMode = this.router.url.includes('edit');
+	}
 
 	submitTrip() {
 
@@ -50,16 +61,21 @@ export class PlanATripComponent {
 				members: formValue.crew.members
 			};
 
+			//http post to create trip
 			this.tripService.create(dto).subscribe({
 				next: (response) => {
-					console.log('Viagem criada com sucesso!', response.data);
-					//navegar para a dashboard da trip criada
+					if (response.data !== undefined)
+						this.tripStateService.setTrip(response.data);
+					console.log('Trip created!', response.data);
+					this.router.navigate(['/trip-dashboard', response.data?.id]);
 				},
 				error: (error) => {
-					console.error('Erro ao criar viagem:', error);
+					console.error('Error creating trip:', error);
 				}
 			});
 		}
 
 	}
+
+	
 }
