@@ -72,6 +72,7 @@ public sealed class TripModel(AppDbContext db)
 				"startdate" => x => x.StartDate,
 				"createdat" => x => x.CreatedAt,
 				"id" => x => x.Id,
+				"visibility" => x => x.Visibility,
 				_ => throw new SearchValidationException($"Unknown filter field '{field}'."),
 			})
 			.SetOrderBy(payload.Sort, field => field.ToLowerInvariant() switch
@@ -89,10 +90,12 @@ public sealed class TripModel(AppDbContext db)
 		return res;
 	}
 
-	public async Task<Trip?> UpdateAsync(int id, UpdateTripDto dto, CancellationToken ct = default)
+	public async Task<TripDto?> UpdateAsync(int id, UpdateTripDto dto, CancellationToken ct = default)
 	{
+		var userId = userContext.Require().Id;
 		var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return null;
+		if (trip.CreatedBy != userId && db.Set<TripMember>().AnyAsync(tm.Role != MemberRole.Admin)) throw new UnauthorizedException("user", "Unauthorized user.");
 
 		if (dto.TripName is not null) trip.TripName = dto.TripName;
 		if (dto.Visibility != trip.Visibility) trip.Visibility = dto.Visibility;
@@ -106,7 +109,7 @@ public sealed class TripModel(AppDbContext db)
 		db.Trips.Update(trip);
 		await db.SaveChangesAsync(ct);
 
-		return trip;
+		return Trip.ToDto(trip);
 	}
 
 	public async Task<TripDto?> GetById(int id, CancellationToken ct = default)
@@ -119,6 +122,7 @@ public sealed class TripModel(AppDbContext db)
 
 	public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
 	{
+		if (trip.CreatedBy != userId && db.Set<TripMember>().AnyAsync(tm.Role != MemberRole.Admin)) throw new UnauthorizedException("user", "Unauthorized user.");
 		var rows = await db.Trips.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
 		return rows > 0;
 	}

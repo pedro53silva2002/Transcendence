@@ -8,13 +8,10 @@ using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
-<<<<<<< HEAD
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 using Trippie.Modules.Travel.Service;
-=======
 using System.Threading.RateLimiting;
->>>>>>> trips
 
 Env.TraversePath().Load();
 
@@ -51,7 +48,6 @@ try
 	builder.Services.AddDbContext<AppDbContext>(opts =>
 		opts.UseNpgsql(dataSource, npgsqlOptions => npgsqlOptions.MapEnum<TripVisibility>("trip_visibility")));
 
-	//builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(connectionString));
 
 
 	// Replace MS logging with Serilog (reads "Serilog" + "ErrorHandling" sections).
