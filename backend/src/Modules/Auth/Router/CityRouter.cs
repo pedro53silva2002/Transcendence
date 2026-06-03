@@ -10,7 +10,7 @@ using Trippie.Common.Services.Search.Model;
 namespace Trippie.Modules.Auth.Router;
 
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route("api/cities")]
 public sealed class CityRouter(CityService service) : ControllerBase
 {
