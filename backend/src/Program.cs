@@ -9,6 +9,7 @@ using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 
 Env.TraversePath().Load();
 
@@ -101,7 +102,12 @@ try
 	builder.Services.AddRateLimiter(options =>
 	{
 		options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-			RateLimitPartition.GetFixedWindowLimiter(
+		{
+			// skip global limiter for register
+			if (httpContext.Request.Path.StartsWithSegments("/api/auth/register"))
+				return RateLimitPartition.GetNoLimiter("no-limit");
+
+			return RateLimitPartition.GetFixedWindowLimiter(
 				partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
 				factory: partition => new FixedWindowRateLimiterOptions
 				{
@@ -109,12 +115,23 @@ try
 					PermitLimit = 10,
 					QueueLimit = 0,
 					Window = TimeSpan.FromMinutes(1)
-				}));
+				});
+		});
+		options.AddFixedWindowLimiter("fixed", opt =>
+		{
+			opt.PermitLimit = 4;
+			opt.Window = TimeSpan.FromSeconds(12);
+			opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+			opt.QueueLimit = 0;
+		});
 	});
 
      // Search service with our custom query compiler
 
     var app = builder.Build();
+
+	app.MapGet("/api/auth/register", () => "This endpoint is rate limited")
+		.RequireRateLimiting("fixed");
 
     // ── Handle --migrate argument to run database migrations ────────────────────
     if (args.Contains("--migrate"))

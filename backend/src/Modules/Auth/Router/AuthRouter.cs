@@ -5,6 +5,7 @@ using Trippie.Common.Services.Authentication.Extensions;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Service;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Trippie.Modules.Auth.Router;
 
@@ -14,6 +15,8 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
 {
     private readonly GoogleOAuthOptions _googleOAuthOptions = googleOAuthOptions.Value;
 
+	//[DisableRateLimiting]
+	[EnableRateLimiting("fixed")]
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponseDto>> Register([FromBody] RegisterDto dto, CancellationToken ct)
     {
