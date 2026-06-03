@@ -5,13 +5,16 @@ using Serilog;
 using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
-using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
+<<<<<<< HEAD
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 using Trippie.Modules.Travel.Service;
+=======
+using System.Threading.RateLimiting;
+>>>>>>> trips
 
 Env.TraversePath().Load();
 
@@ -98,12 +101,32 @@ try
 	});
 	builder.Services.AddHttpClient<GoogleOAuthService>();
 
-	//Add dependency injection for model and service
-	builder.Services.AddScoped<UserModel>();
+    //Add dependency injection for model and service
+    builder.Services.AddScoped<UserModel>();
+    builder.Services.AddScoped<UserService>();
+    builder.Services.AddScoped<AuthService>();
+    builder.Services.AddScoped<CountryService>();
+    builder.Services.AddScoped<CountryModel>();
 	builder.Services.AddScoped<TripModel>();
-	builder.Services.AddScoped<UserService>();
-	builder.Services.AddScoped<AuthService>();
 	builder.Services.AddScoped<TripService>();
+
+	//Add Http request limiter
+	//TODO: SEE POLITICS OF COORS
+	builder.Services.AddRateLimiter(options =>
+	{
+		options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+			RateLimitPartition.GetFixedWindowLimiter(
+				partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+				factory: partition => new FixedWindowRateLimiterOptions
+				{
+					AutoReplenishment = true,
+					PermitLimit = 10,
+					QueueLimit = 0,
+					Window = TimeSpan.FromMinutes(1)
+				}));
+	});
+
+     // Search service with our custom query compiler
 
 
 	var app = builder.Build();
@@ -163,8 +186,22 @@ try
 	//    (auth, static files, endpoints).
 	app.UseExceptionHandling();
 
-	// 2.5. CORS middleware
-	app.UseCors();
+    // 3. Standard pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/openapi/v1.json", "Trippie v1");
+        });
+    }
+    app.MapHealthChecks("/health");
+    //to Delete? app.UseCors();
+	//add ratelimiter
+	app.UseRateLimiter();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapControllers();
 
 	// 3. Standard pipeline.
 	if (app.Environment.IsDevelopment())
