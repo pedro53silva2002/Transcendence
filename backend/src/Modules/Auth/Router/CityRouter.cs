@@ -10,7 +10,7 @@ using Trippie.Common.Services.Search.Model;
 namespace Trippie.Modules.Auth.Router;
 
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/cities")]
 public sealed class CityRouter(CityService service) : ControllerBase
 {
@@ -21,11 +21,11 @@ public sealed class CityRouter(CityService service) : ControllerBase
     };
 
     [HttpGet("search")]
-    public async Task<ActionResult<List<CityDto>>> SearchCities([FromQuery] string query, CancellationToken ct)
+    public async Task<ActionResult<List<CityDto>>> SearchCities([FromQuery(Name = "q")] string q, CancellationToken ct)
     {
         try
         {
-            var json = Encoding.UTF8.GetString(Convert.FromBase64String(query));
+            var json = Encoding.UTF8.GetString(Convert.FromBase64String(q));
             var payload = JsonSerializer.Deserialize<SearchPayload>(json, SearchJsonOptions) ?? new SearchPayload();
 
             if (payload is null)
