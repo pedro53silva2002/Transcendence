@@ -1,11 +1,12 @@
-<div class="main-container">
+<form class="main-container" [formGroup]="planATripForm">
 	<div>
 		<h1>{{ 'plan-a-trip.title' | transloco }}</h1>
-		<app-trip-form></app-trip-form>
+		<app-trip-form [tripGroup]="planATripForm.controls['trip']"></app-trip-form>
 	</div>
 	<div>
 		<!-- componente da crew -->
-		<button type="button" class="tertiary-btn create-btn" matButton="filled">{{ 'plan-a-trip.create-trip' | transloco }}</button>
+		<button type="button" class="tertiary-btn create-btn" matButton="filled" [disabled]="planATripForm.invalid" 
+		(click)="submitTrip()">{{ 'plan-a-trip.create-trip' | transloco }}</button>
 	</div>
-</div>
+</form>
 

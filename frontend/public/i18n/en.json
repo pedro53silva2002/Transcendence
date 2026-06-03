@@ -55,6 +55,15 @@
 	"private-option": "private",
 	"friends-option": "friends",
 	"public-option": "public",
-	"create-trip": "Create Trip"
+	"create-trip": "Create Trip",
+	"name-error": "The trip's name is required.",
+	"name-min-length-error": "The trip's name must be at least 3 characters long.",
+	"name-max-length-error": "The trip's name can't be more than 25 characters long.",
+	"date-error": "Selecting the start and end dates for your trip is required.",
+	"description-max-length-error": "The trip's description can't be more than 256 characters long.",
+	"country-error": "A country's selection is required.",
+	"trip-budget": "budget (€)",
+	"budget-error": "A budget is required.",
+	"budget-numbers-error": "A budget can only contain numbers."
   }
 }

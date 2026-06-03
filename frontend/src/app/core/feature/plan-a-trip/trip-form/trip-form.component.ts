@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { Component, inject, input, OnInit } from '@angular/core';
+import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators, FormBuilder } from '@angular/forms';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field'; // <-- Confirma esta linha
@@ -7,10 +7,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TranslocoModule } from '@jsverse/transloco';
 import { LocationsService } from '../services/locations.service';
-import { Observable, debounceTime, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
+import { Observable, debounceTime, delay, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
 
 import { AsyncPipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
+import { TripVisibility } from '../dtos/trip.dto';
 
 //Defining the date format
 export const FORMAT_DMY = {
@@ -20,7 +21,7 @@ export const FORMAT_DMY = {
 
 @Component({
 	selector: 'app-trip-form',
-	imports: [ AsyncPipe,
+	imports: [AsyncPipe,
 		MatFormFieldModule,
 		TranslocoModule,
 		MatDatepickerModule,
@@ -30,7 +31,7 @@ export const FORMAT_DMY = {
 		MatInputModule,
 		MatAutocompleteModule,
 		MatFormFieldModule,
-		MatSelectModule
+		MatSelectModule,
 	],
 	templateUrl: './trip-form.component.html',
 	styleUrl: './trip-form.component.scss',
@@ -42,65 +43,64 @@ export const FORMAT_DMY = {
 })
 export class TripFormComponent implements OnInit {
 
+	tripGroup = input.required<FormGroup>();
+	protected readonly TripVisibility = TripVisibility;
+
 	private readonly locationsService = inject(LocationsService);
-
-	//date picker
-	readonly range = new FormGroup({
-		start: new FormControl<Date | null>(null),
-		end: new FormControl<Date | null>(null),
-	}, { validators: (control) => this.dateRangeValidator(control) });
-
-	//country
-	readonly countryControl = new FormControl<string>('', [Validators.required]);
-
 	listOfCountries$!: Observable<string[]>;
-
 	private lastSuggestedCountries: string[] = [];
+	listaPaises: string[] = ["Portugal", "Porto Rico", "Polónia"];
 
 	ngOnInit(): void {
-        this.countryControl.setValidators([Validators.required, this.validateCountry()]);
 
-        this.listOfCountries$ = this.countryControl.valueChanges.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            switchMap(value => {
-                const input = value || '';
+		// //a customized validator
+		// this.country.addValidators(this.validateCountry());
+		// this.country.updateValueAndValidity();
 
-                if (input.length < 2) {
-                    this.lastSuggestedCountries = [];
-                    return of([]);
-                }
 
-                return this.locationsService.searchCountries(input).pipe(
-                    tap((response: any) => {
-                        this.lastSuggestedCountries = response.data || [];
-                    }),
-                    // 3. CORREÇÃO DE SINTAXE AQUI: O operador || [] fica dentro do map
-                    map((response: any) => response.data || [])
-                );
-            })
-        );
-    }
+		this.listOfCountries$ = this.country.valueChanges.pipe(
+			debounceTime(300),
+			distinctUntilChanged(),
+			switchMap((userInput: string | null) => { //muda de um observable para outro cancelando o que estiver em execuçao (O switch é o responsavel por cancelar o anterior caso outro observable seja emitido pelo 1º observable)
+				const input = userInput || '';
 
-	private dateRangeValidator(range: AbstractControl) {
-
-		const startDate = range.get('start')?.value;
-		const endDate = range.get('end')?.value;
-
-		if (startDate && endDate) {
-			if (endDate <= startDate)
-				return { wrongDates: true };
-		}
-
-		return null;
-	}
-
-	private validateCountry() {
-		return (control: AbstractControl): ValidationErrors | null => {
-			return (control.value && !this.lastSuggestedCountries.includes(control.value)) ? { invalidCountry: true } : null;
-		}
+				if (input.length < 2) {
+					this.lastSuggestedCountries = [];
+					return of([]);
+				}
+				return this.simulacaoBackend(input);
+			})
+		)
 	}
 
 
+	private simulacaoBackend(textoUser: string) {
+		return of(this.listaPaises).pipe(
+			delay(1000)
+		)
+	}
 
+	// private validateCountry() {
+	// 	return (control: AbstractControl): ValidationErrors | null => {
+	// 		const valorEscrito = control.value;
+
+	// 		if (!valorEscrito) return null;
+
+	// 		// Verifica se o texto escrito bate com a propriedade 'name' de algum objeto da lista
+	// 		const existeNaLista = this.lastSuggestedCountries.some(
+	// 			(countryName: string) => countryName.toLowerCase() === valorEscrito.toLowerCase()
+	// 		);
+
+	// 		return !existeNaLista ? { invalidCountry: true } : null;
+	// 	};
+	// }
+
+	get tripName() { return this.tripGroup().controls['tripName']; }
+	get startDate() { return this.tripGroup().controls['startDate']; }
+	get endDate() { return this.tripGroup().controls['endDate']; }
+	get description() { return this.tripGroup().controls['description']; }
+	get country() { return this.tripGroup().controls['country']; }
+	get city() { return this.tripGroup().controls['city']; }
+	get visibility() { return this.tripGroup().controls['visibility']; }
+	get budget() { return this.tripGroup().controls['budget']; }
 }

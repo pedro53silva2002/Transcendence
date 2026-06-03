@@ -28,6 +28,7 @@
 		background-color: var(--mat-sys-on-primary) !important;
 		color: var(--mat-sys-primary-container) !important;
 	}
+
 }
 
 .tertiary-btn {
@@ -40,6 +41,11 @@
 	&:hover {
 		background-color: var(--mat-sys-secondary) !important;
 		color: var(--mat-sys-primary-container) !important;
+	}
+
+	&:disabled {
+		opacity: 0.6 !important;
+		cursor: not-allowed;
 	}
 }
 
