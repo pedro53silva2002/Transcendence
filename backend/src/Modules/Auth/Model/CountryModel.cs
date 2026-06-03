@@ -46,6 +46,4 @@ public sealed class CountryModel(AppDbContext db)
 
         return res;
     }
-
-    
 }

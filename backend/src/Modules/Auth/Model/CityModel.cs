@@ -25,6 +25,12 @@ public sealed class CityModel(AppDbContext db)
 {
     public async Task<CursorPage<CityDto>> SearchCitiesAsync(SearchPayload payload, CancellationToken ct = default)
     {
+        if (payload.Filters.Any(f => f.Column.ToLowerInvariant() == "name") && 
+            !payload.Filters.Any(f => f.Column.ToLowerInvariant() == "country_id"))
+        {
+            throw new SearchValidationException("Filtering by city name requires a country filter.");
+        }
+
         var res = await new SearchQueryBuilder<City>(db.Cities)
             .WithKey("id", x => x.Id)
             .AddFilters(payload.Filters, field => field.ToLowerInvariant() switch

@@ -31,6 +31,13 @@ public sealed class CityRouter(CityService service) : ControllerBase
             if (payload is null)
                 return BadRequest("Invalid payload");
 
+            if (payload.Filters != null && 
+                payload.Filters.Any(f => f.Column.ToLowerInvariant() == "name") && 
+                !payload.Filters.Any(f => f.Column.ToLowerInvariant() == "country_id"))
+            {
+                return BadRequest("Filtering by city name requires a country filter.");
+            }
+
             var cities = await service.SearchCitiesAsync(payload, ct);
             return Ok(cities);
         }
