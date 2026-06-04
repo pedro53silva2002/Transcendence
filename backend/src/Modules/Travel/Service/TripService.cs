@@ -47,7 +47,7 @@ public sealed class TripService(TripModel tripModel)
 	private void ValidateTrip(string tripName, string description, int budget, DateTime startDate, DateTime endDate)
 	{
 		if (string.IsNullOrWhiteSpace(tripName)) throw new ValidationException("tripname", "Trip name is required");
-		if (tripName.Length > 25) throw new ValidationException("tripname", "Trip name cannot be longer than 25 characters.");	
+		if (tripName.Length > 25 || tripName.Length < 3) throw new ValidationException("tripname", "Trip name must be between 3 and 25 characters.");	
 		if (startDate == default(DateTime)) throw new ValidationException("startdate", "Start date is required");
 		if (endDate == default(DateTime)) throw new ValidationException("enddate", "End date is required");
 		if (endDate < startDate) throw new ValidationException("endDate, startDate", "End date cannot be before start date.");
