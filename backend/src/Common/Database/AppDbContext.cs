@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Trippie.Modules.Auth.Model;
+using Trippie.Modules.Travel.Model;
 
 namespace Trippie.Common.Database;
 
@@ -10,6 +11,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Country> Countries => Set<Country>();
     public DbSet<City> Cities => Set<City>();
+	public DbSet<TripCountry> TripCountries => Set<TripCountry>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
