@@ -25,8 +25,8 @@ public sealed class CityModel(AppDbContext db)
 {
     public async Task<CursorPage<CityDto>> SearchCitiesAsync(SearchPayload payload, CancellationToken ct = default)
     {
-        if (payload.Filters.Any(f => f.Column.ToLowerInvariant() == "name") && 
-            !payload.Filters.Any(f => f.Column.ToLowerInvariant() == "country_id"))
+        if ((payload.Filters?.Any(f => f.Column.Equals("name", StringComparison.OrdinalIgnoreCase)) ?? false) && 
+            !(payload.Filters?.Any(f => f.Column.Equals("country_id", StringComparison.OrdinalIgnoreCase)) ?? false))
         {
             throw new SearchValidationException("Filtering by city name requires a country filter.");
         }
@@ -52,6 +52,4 @@ public sealed class CityModel(AppDbContext db)
 
         return res;
     }
-
-    
 }

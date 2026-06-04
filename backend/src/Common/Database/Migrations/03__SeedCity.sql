@@ -4281,6 +4281,7 @@ FROM auth.countries c
 JOIN (VALUES
     ('Almada'),
     ('Amadora'),
+    ('Angra do Heroísmo'),
     ('Aveiro'),
     ('Barcelos'),
     ('Barreiro'),

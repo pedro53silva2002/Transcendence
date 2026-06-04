@@ -10,7 +10,7 @@ using Trippie.Common.Services.Search.Model;
 namespace Trippie.Modules.Auth.Router;
 
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route("api/cities")]
 public sealed class CityRouter(CityService service) : ControllerBase
 {
@@ -32,8 +32,8 @@ public sealed class CityRouter(CityService service) : ControllerBase
                 return BadRequest("Invalid payload");
 
             if (payload.Filters != null && 
-                payload.Filters.Any(f => f.Column.ToLowerInvariant() == "name") && 
-                !payload.Filters.Any(f => f.Column.ToLowerInvariant() == "country_id"))
+                payload.Filters.Any(f => f.Column.Equals("name", StringComparison.OrdinalIgnoreCase)) && 
+                !payload.Filters.Any(f => f.Column.Equals("country_id", StringComparison.OrdinalIgnoreCase)))
             {
                 return BadRequest("Filtering by city name requires a country filter.");
             }
