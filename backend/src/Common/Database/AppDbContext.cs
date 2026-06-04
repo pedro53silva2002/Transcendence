@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Trippie.Modules.Auth.Model;
+<<<<<<< HEAD
 using Trippie.Modules.Travel.Dtos;
+=======
+>>>>>>> trips
 using Trippie.Modules.Travel.Model;
 
 namespace Trippie.Common.Database;
@@ -13,7 +16,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<Country> Countries => Set<Country>();
 	public DbSet<Trip> Trips => Set<Trip>();
 	public DbSet<City> Cities => Set<City>();
-
+	public DbSet<TripCountry> TripCountries => Set<TripCountry>();
+    public DbSet<TripCity> TripCities => Set<TripCity>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
