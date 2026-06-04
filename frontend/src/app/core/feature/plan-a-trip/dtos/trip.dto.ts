@@ -8,7 +8,7 @@ export enum TripVisibility {
 export interface CreateTripDto {
     tripName: string;
     description?: string;
-    country: string[];
+    country: string;
 	city?: string[];
     startDate: string;
     endDate: string;
@@ -23,7 +23,7 @@ export interface TripDto {
     id: number;
     tripName: string;
     description?: string;
-    country: string[];
+    country: string;
 	city?: string[];
     startDate: string;
     endDate: string;
@@ -40,7 +40,7 @@ export interface UpdateTripDto {
     id: number;
     tripName: string;
     description?: string;
-    country: string[];
+    country: string;
 	city?: string[];
     startDate: string;
     endDate: string;
@@ -51,7 +51,7 @@ export interface UpdateTripDto {
 //what i receive in http get when i search for trips
 export type TripSearchFieldsDto = {
     tripName?: string;
-    country: string[];
+    country: string;
 	city?: string[];
 }
 

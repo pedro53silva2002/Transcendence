@@ -24,6 +24,8 @@ export class TripStateService {
 		this.tripSignal.set(trip);
 	}
 
+	//ver se é preciso fazer um update trip por causa de guardar despesas + itinerario
+
 	// useful method to clear the state when the user leaves the trip dashboard
 	clearTrip(): void {
 		this.tripSignal.set(null);

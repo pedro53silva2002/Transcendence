@@ -21,6 +21,7 @@ export const FORMAT_DMY = {
 
 @Component({
 	selector: 'app-trip-form',
+	standalone: true,
 	imports: [AsyncPipe,
 		MatFormFieldModule,
 		TranslocoModule,
