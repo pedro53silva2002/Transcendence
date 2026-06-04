@@ -14,6 +14,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 	public DbSet<Trip> Trips => Set<Trip>();
 	public DbSet<City> Cities => Set<City>();
 
+
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

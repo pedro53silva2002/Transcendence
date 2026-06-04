@@ -1,10 +1,8 @@
-
 using System.Text.Json.Serialization;
 using NpgsqlTypes;
 using Trippie.Common.Services.Search.Model;
 
 namespace Trippie.Modules.Travel.Dtos;
-
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TripVisibility
@@ -13,6 +11,7 @@ public enum TripVisibility
 	[PgName("friends")] Friends,
 	[PgName("private")] Private
 }
+
 public sealed class CreatedTripDto
 {
 	public required string TripName { get; set; }
@@ -23,6 +22,8 @@ public sealed class CreatedTripDto
 	public int Budget { get; set; }
 	public TripVisibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
+	public required int CountryId { get; set; }
+	public List<int> CityIds { get; set; } = [];	 
 }
 
 public sealed class TripDto
@@ -38,6 +39,8 @@ public sealed class TripDto
 	public required int CreatedBy { get; set; }
 	public DateTime CreatedAt { get; set; }
 	public DateTime? UpdatedAt { get; set; }
+	public int CountryId { get; set; }	
+	public List<int> CityIds { get; set; } = [];	
 }
 
 public sealed class UpdateTripDto
@@ -50,4 +53,6 @@ public sealed class UpdateTripDto
 	public required DateTime EndDate { get; set; }
 	public int Budget { get; set; }
 	public TripVisibility Visibility { get; set; }
+	public required int CountryId { get; set; }	
+	public List<int> CityIds { get; set; } = [];
 }
