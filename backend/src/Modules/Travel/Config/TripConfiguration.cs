@@ -16,7 +16,7 @@ internal sealed class TripConfiguration : IEntityTypeConfiguration<Trip>
         b.Property(t => t.Id).HasColumnName("id").ValueGeneratedOnAdd();
         b.Property(t => t.TripName).HasColumnName("name").IsRequired();
         b.Property(t => t.Description).HasColumnName("description");
-        b.Property(t => t.Destination).HasColumnName("destination");
+        b.Property(t => t.Duration).HasColumnName("duration");
         b.Property(t => t.StartDate).HasColumnName("start_date").IsRequired();
         b.Property(t => t.EndDate).HasColumnName("end_date").IsRequired();
         b.Property(t => t.Budget).HasColumnName("budget");
