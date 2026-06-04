@@ -1,9 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Trippie.Modules.Auth.Model;
-<<<<<<< HEAD
 using Trippie.Modules.Travel.Dtos;
-=======
->>>>>>> trips
 using Trippie.Modules.Travel.Model;
 
 namespace Trippie.Common.Database;

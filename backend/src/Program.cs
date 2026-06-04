@@ -202,7 +202,7 @@ try
     app.UseAuthorization();
     app.MapControllers();
 
-	// 3. Standard pipeline.
+	/*// 3. Standard pipeline.
 	if (app.Environment.IsDevelopment())
 	{
 		app.MapOpenApi();
@@ -215,7 +215,7 @@ try
 	app.UseCors();
 	app.UseAuthentication();
 	app.UseAuthorization();
-	app.MapControllers();
+	app.MapControllers();*/
 
 	app.Run();
 }

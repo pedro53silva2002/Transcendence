@@ -94,8 +94,9 @@ public sealed class TripModel(AppDbContext db)
                 "id"          => x => x.Id,
                 _ => throw new SearchValidationException($"Unsortable field '{field}'."),
             })
+
             .SetCursorPagination(payload.Page)
-            .RunAsync(x => Trip.ToDto(x, 0, []), ct);  // join data not loaded in search results
+            .RunAsync(x => Trip.ToDto(x, 0, new List<int>()), ct);  // join data not loaded in search results
 
         return res;
     }
@@ -143,10 +144,11 @@ public sealed class TripModel(AppDbContext db)
             .Select(tc => tc.CountryId)
             .FirstOrDefaultAsync(ct);
 
-        var cityIds = await db.TripCities
+			var cityIds = await db.TripCities
             .Where(tc => tc.TripId == id)
             .Select(tc => tc.CityId)
             .ToListAsync(ct);
+			if (cityIds is null) cityIds = new List<int>();
 
         return Trip.ToDto(trip, countryId, cityIds);
     }
