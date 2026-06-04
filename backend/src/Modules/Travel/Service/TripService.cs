@@ -14,7 +14,7 @@ public sealed class TripService(TripModel tripModel)
 {
 	public async Task<TripDto> CreateAsync(CreatedTripDto dto, CancellationToken ct = default)
 	{
-		ValidateTrip(dto.TripName, dto.Description, dto.budget, dto.StartDate, dto.EndDate);
+		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
 		var trip = await tripModel.CreateAsync(dto, ct);
 		return trip;
 	}
@@ -22,12 +22,12 @@ public sealed class TripService(TripModel tripModel)
 	public async Task<CursorPage<TripDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
 	=> await tripModel.SearchAsync(payload, ct);
 
-	public async Task<TripDto> UpdateAsync(int id, UpdateTripDto dto, CancellationToken ct = default)
+	public async Task<TripDto> UpdateAsync(int userId, int id, UpdateTripDto dto, CancellationToken ct = default)
 	{
-		ValidateTrip(dto.TripName, dto.Description, dto.budget, dto.StartDate, dto.EndDate);
-		var trip = await tripModel.UpdateAsync(id, dto, ct) ?? throw new NotFoundException($"Trip {id} not found.", id);
+		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
+		var trip = await tripModel.UpdateAsync(userId, id, dto, ct) ?? throw new NotFoundException($"Trip {id} not found.", id);
 
-		return Trip.ToDto(trip);
+		return trip;
 	}
 
 	public async Task<TripDto?> GetById(int id, CancellationToken ct = default)
@@ -38,19 +38,20 @@ public sealed class TripService(TripModel tripModel)
 		return res;
 	}
 
-	public async Task DeleteAsync(int id, CancellationToken ct = default)
+	public async Task DeleteAsync(int userId,int id, CancellationToken ct = default)
 	{
-		var delete = await tripModel.DeleteAsync(id, ct);
+		var delete = await tripModel.DeleteAsync(userId,id, ct);
 		if (!delete) throw new NotFoundException($"Trip {id} not found.", id);
 	}
 
-	private void ValidateTrip(string tripname, string description, int budget, DateTime startDate, DateTime endDate)
+	private void ValidateTrip(string tripName, string description, int budget, DateTime startDate, DateTime endDate)
 	{
 		if (string.IsNullOrWhiteSpace(tripName)) throw new ValidationException("tripname", "Trip name is required");
-		if (startDate == default(DateTime)) throw new ValidationException("startdate", "Start date is required");
+		if (tripName.Length > 25) throw new ValidationException("tripname", "Trip name cannot be longer than 25 characters.");	
 		if (startDate == default(DateTime)) throw new ValidationException("startdate", "Start date is required");
 		if (endDate == default(DateTime)) throw new ValidationException("enddate", "End date is required");
-		if (budget < 0) throw new ValidationException("budget", "Budget value invalid.");
 		if (endDate < startDate) throw new ValidationException("endDate, startDate", "End date cannot be before start date.");
+		if (budget < 0) throw new ValidationException("budget", "Budget value invalid.");
+		if (description != null && description.Length > 250) throw new ValidationException("description", "Description cannot be longer than 250 characters.");
 	}
 }

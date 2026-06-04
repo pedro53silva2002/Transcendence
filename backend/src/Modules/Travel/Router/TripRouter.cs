@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Trippie.Common.Services.Authentication.Context;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Service;
@@ -13,7 +14,7 @@ namespace Trippie.Modules.Travel.Router;
 [ApiController]
 //[Authorize]
 [Route("api/trips")]
-public sealed class TripRouter(TripService service) : ControllerBase
+public sealed class TripRouter(TripService service, IUserContext userContext) : ControllerBase
 {
 	private static readonly JsonSerializerOptions SearchJsonOptions = new()
     {
@@ -48,14 +49,16 @@ public sealed class TripRouter(TripService service) : ControllerBase
 	[HttpPut("{id}")]
 	public async Task<ActionResult<TripDto>> Update(int id, [FromBody]UpdateTripDto dto, CancellationToken ct)
 	{
-		var trip = await service.UpdateAsync(id, dto, ct);
+		var userId = userContext.Require().UserId;
+		var trip = await service.UpdateAsync(userId, id, dto, ct);
 		return Ok(trip);
 	}
 
 	[HttpDelete("{id}")]
 	public async Task<ActionResult<TripDto>> Delete(int id, CancellationToken ct)
 	{
-		await service.DeleteAsync(id, ct);
+		var userId = userContext.Require().UserId;
+		await service.DeleteAsync(userId, id, ct);
 		return NoContent();
 	}
 }

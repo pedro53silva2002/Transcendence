@@ -3,6 +3,7 @@ using System.Xml;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.Internal.Postgres;
 using Trippie.Common.Database;
+using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Exception;
 using Trippie.Common.Services.Search.Linq;
 using Trippie.Common.Services.Search.Model;
@@ -10,7 +11,7 @@ using Trippie.Modules.Travel.Dtos;
 
 namespace Trippie.Modules.Travel.Model;
 
-public sealed class Trip
+public sealed class Trip(AppDbContext db)
 {
 	public required int Id { get; set; }
 	public required string TripName { get; set; }
@@ -44,7 +45,7 @@ public sealed class TripModel(AppDbContext db)
 {
 	public async Task<TripDto> CreateAsync(CreatedTripDto dto, CancellationToken ct = default)
 	{
-		var trip = new Trip
+		var trip = new Trip(db)
 		{
 			Id = 0,
 			TripName = dto.TripName,
@@ -53,7 +54,7 @@ public sealed class TripModel(AppDbContext db)
 			StartDate = dto.StartDate,
 			EndDate = dto.EndDate,
 			Budget = dto.Budget,
-			Visibility = dto.Visibility,
+			Visibility = dto.Visibility == 0 ? TripVisibility.Public : dto.Visibility,
 			CreatedBy = dto.CreatedBy,
 		};
 		db.Trips.Add(trip);
@@ -90,12 +91,12 @@ public sealed class TripModel(AppDbContext db)
 		return res;
 	}
 
-	public async Task<TripDto?> UpdateAsync(int id, UpdateTripDto dto, CancellationToken ct = default)
+	public async Task<TripDto?> UpdateAsync(int userId, int id, UpdateTripDto dto, CancellationToken ct = default)
 	{
-		var userId = userContext.Require().Id;
 		var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return null;
-		if (trip.CreatedBy != userId && db.Set<TripMember>().AnyAsync(tm.Role != MemberRole.Admin)) throw new UnauthorizedException("user", "Unauthorized user.");
+		/*if (db.Set<TripMember>().AnyAsync(tm.Role != MemberRole.Admin))
+			throw new UnauthorizedException($"User Unauthorized '{userId}'.");*/
 
 		if (dto.TripName is not null) trip.TripName = dto.TripName;
 		if (dto.Visibility != trip.Visibility) trip.Visibility = dto.Visibility;
@@ -120,9 +121,12 @@ public sealed class TripModel(AppDbContext db)
 		return null;
 	}
 
-	public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
+	public async Task<bool> DeleteAsync(int userId, int id, CancellationToken ct = default)
 	{
-		if (trip.CreatedBy != userId && db.Set<TripMember>().AnyAsync(tm.Role != MemberRole.Admin)) throw new UnauthorizedException("user", "Unauthorized user.");
+		var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
+		if (trip is null) return false;
+		/*if (db.Set<TripMember>().AnyAsync(tm.Role != MemberRole.Admin))
+			throw new UnauthorizedException($"User Unauthorized '{userId}'.");*/
 		var rows = await db.Trips.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
 		return rows > 0;
 	}
