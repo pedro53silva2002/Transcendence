@@ -6,9 +6,11 @@ import {
   UpdateTripMemberDto,
 } from './../../dtos/trip/Member';
 import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { buildSearchUrl, SearchParams } from '../../../logic/services/search.service';
 
+@Injectable({ providedIn: 'root' })
 export class TripMemberService extends BaseApiService {
   public create(dto: CreateTripMemberDto): Observable<ApiResponse<TripMemberDto>> {
     const res = this._post<TripMemberDto>(`/trips/members`, dto);

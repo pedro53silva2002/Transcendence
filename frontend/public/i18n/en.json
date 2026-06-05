@@ -47,5 +47,21 @@
     "countries": "Visited Countries",
     "trips": "Trips Booked This Year",
     "countdown": "Days Until Next Trip"
+  },
+
+  "trips": {
+    "members": {
+      "title": "Choose Your Crew",
+      "addMember": "Friends"
+    }
+  },
+
+  "crew": {
+    "noMembers": "No members yet",
+    "roleFor": "Role for {{ name }}",
+    "role": {
+      "member": "Member",
+      "admin": "Admin"
+    }
   }
 }

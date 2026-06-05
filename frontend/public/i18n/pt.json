@@ -33,5 +33,21 @@
 		"countries": "Paises Visitados",
 		"trips": "Viagens Este Ano",
 		"countdown": "Dias Para Viagem"
-	}
+	},
+
+  "trips": {
+    "members": {
+      "title": "Escolhe a Tua Equipa",
+      "addMember": "Amigos"
+    }
+  },
+
+  "crew": {
+    "noMembers": "Ainda sem membros",
+    "roleFor": "Papel de {{ name }}",
+    "role": {
+      "member": "Membro",
+      "admin": "Admin"
+    }
+  }
 }

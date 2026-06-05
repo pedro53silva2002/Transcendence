@@ -1,14 +1,16 @@
 export interface TripMemberDto {
   id: number;
-  trip_id: number;
-  user_id: number;
+  tripId: number;
+  userId: number;
+  displayName: string;
+  profilePicture: string | null;
   role: 'ADMIN' | 'MEMBER';
-  joined_at: string;
+  joinedAt: string;
 }
 
 export interface CreateTripMemberDto {
-  trip_id: number;
-  user_id: number;
+  tripId: number;
+  userId: number;
   role: 'ADMIN' | 'MEMBER';
 }
 
@@ -19,6 +21,7 @@ export interface UpdateTripMemberDto {
 export type TripMemberSearchFieldsDto = {
   tripId: number;
   role: 'ADMIN' | 'MEMBER';
+  displayName: string;
 };
 
-export type TripMemberOrderByDto = 'role' | 'userId';
+export type TripMemberOrderByDto = 'role' | 'userId' | 'displayName';
