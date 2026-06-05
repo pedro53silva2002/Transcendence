@@ -166,7 +166,7 @@ public sealed class TripModel(AppDbContext db)
     {
         var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
         if (trip is null) return false;
-		// Only allow deletion if user is creator of trip or if trip is public (admin can delete public trips)
+		// Only allow deletion if user is creator of trip
         var rows = await db.Trips.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
         return rows > 0;
     }

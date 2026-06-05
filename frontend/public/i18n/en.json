@@ -1,0 +1,70 @@
+{
+  "auth": {
+    "register": "Register",
+    "login": "Login",
+    "password": "password",
+    "google": "Sign In with",
+    "username": "username",
+    "password-confirmation": "confirm password",
+    "email": "email",
+    "usernameTaken": "This username is already taken.",
+    "invalidEmail": "Invalid e-mail.",
+    "emailTaken": "This email is already used.",
+    "passwordMismatch": "The passwords does not match",
+    "passwordRules": {
+      "length": "8-20 characters long",
+      "lowercase": "1 lowercase character",
+      "uppercase": "1 uppercase character",
+      "special": "1 special character",
+      "digits": "1 digit"
+    },
+    "error-login": "Invalid username or password.",
+    "error-oauth": "Google Authentication failed."
+  },
+  "navbar": {
+    "profile": "Profile",
+    "trip": "Plan a Trip",
+    "my-trips": "My Trips",
+    "my-friends": "My Friends",
+    "my-expenses": "My Expenses"
+  },
+  "card": {
+    "trip-description": "Click here to start planning your next trip.",
+    "my-trips-description": "Click here to view your past, present and future trips.",
+    "my-friends-description": "Click here to view your list of friends.",
+    "my-expenses-description": "Click here to check where your money wandered."
+  },
+  "dashboard": {
+    "greet": "Hello, ",
+    "intro": "Ready for your next adventure?"
+  },
+  "stats": {
+    "countries": "Visited Countries",
+    "trips": "Trips Booked This Year",
+    "countdown": "Days Until Next Trip"
+  },
+  "plan-a-trip": {
+    "title": "Plan your trip",
+    "trip-name": "trip name",
+    "trip-description": "trip description",
+    "start-date": "start date",
+    "end-date": "end date",
+    "country": "country",
+	"city": "city",
+	"privacy-text": "Would you like to allow friends/public to view your trip?",
+	"private-option": "private",
+	"friends-option": "friends",
+	"public-option": "public",
+	"create-trip": "Create Trip",
+	"update-trip": "Update Trip",
+	"name-error": "The trip's name is required.",
+	"name-min-length-error": "The trip's name must be at least 3 characters long.",
+	"name-max-length-error": "The trip's name can't be more than 25 characters long.",
+	"date-error": "Selecting the start and end dates for your trip is required.",
+	"description-max-length-error": "The trip's description can't be more than 256 characters long.",
+	"country-error": "A country's selection is required.",
+	"trip-budget": "budget (€)",
+	"budget-error": "A budget is required.",
+	"budget-numbers-error": "A budget can only contain numbers."
+  }
+}

@@ -1,0 +1,44 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+@import url('https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=BBH+Hegarty&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=BBH+Bogle&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
+
+$my-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+  ),
+  typography: (
+    brand-family: 'ADLaM Display',
+    plain-family: 'ADLaM Display',
+  ),
+));
+
+html {
+  font-family: "ADLaM Display", system-ui;
+
+  height: 100%;
+  @include mat.all-component-themes($my-theme);
+  @include mat.system-level-colors($my-theme);
+  @include mat.system-level-typography($my-theme);
+
+  --mat-sys-primary: #FFD372;
+  --mat-sys-on-primary: #422E00;
+  --mat-sys-primary-container: #FFEABA;
+  --mat-sys-on-primary-container: #E87C00;
+  
+  --mat-sys-secondary: #FF8800;
+  --mat-sys-tertiary: #558E86;
+  --mat-sys-forth: #ADA864;
+
+  --mat-sys-error: rgb(167, 0, 0);
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary-container);
+}
