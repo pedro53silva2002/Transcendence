@@ -1,16 +1,1 @@
-<form class="main-container" [formGroup]="planATripForm" (submit)="submitTrip()">
-	<div>
-		<h1>{{ 'plan-a-trip.title' | transloco }}</h1>
-		<app-trip-form [tripGroup]="planATripForm.controls['trip']"></app-trip-form>
-	</div>
-	<div>
-		<!-- componente da crew -->
-		<button type="submit" class="tertiary-btn create-btn" matButton="filled" [disabled]="planATripForm.invalid">
-			@if (!isEditMode) {
-			{{ 'plan-a-trip.create-trip' | transloco }}
-			} @else {
-			{{ 'plan-a-trip.update-trip' | transloco }}
-			}
-		</button>
-	</div>
-</form>
+<p>plan-a-trip works!</p>
