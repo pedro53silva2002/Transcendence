@@ -23,5 +23,10 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'itinerary',
+    loadComponent: () => import('./core/feature/itinerary/itinerary.component'),
+    canActivate: [authGuard],
+  },
   { path: '**', redirectTo: '' },
 ];
