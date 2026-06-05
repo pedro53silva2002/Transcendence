@@ -21,7 +21,9 @@ public sealed class Trip(AppDbContext db)
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
-    public static TripDto ToDto(Trip t, int countryId, List<int> cityIds) => new()
+	public ICollection<TripCountry> TripCountries { get; set; } = [];
+    public ICollection<TripCity> TripCities { get; set; } = [];
+    public static TripDto ToDto(Trip t) => new()
     {
         Id = t.Id,
         TripName = t.TripName,
@@ -34,8 +36,8 @@ public sealed class Trip(AppDbContext db)
         CreatedBy = t.CreatedBy,
         CreatedAt = t.CreatedAt,
         UpdatedAt = t.UpdatedAt,
-        CountryId = countryId,   // added
-        CityIds = cityIds,        // added
+        CountryId = t.TripCountries.FirstOrDefault()?.CountryId ?? 0,
+        CityIds = t.TripCities.Select(tc => tc.CityId).ToList(),
     };
 }
 
@@ -50,7 +52,7 @@ public sealed class TripModel(AppDbContext db)
             Id = 0,
             TripName = dto.TripName,
             Description = dto.Description,
-            Duration = dto.Duration,
+            Duration = (dto.EndDate - dto.StartDate).Days,
             StartDate = dto.StartDate,
             EndDate = dto.EndDate,
             Budget = dto.Budget,
@@ -63,18 +65,24 @@ public sealed class TripModel(AppDbContext db)
 
         db.TripCountries.Add(new TripCountry { TripId = trip.Id, CountryId = dto.CountryId });
 
+		await db.SaveChangesAsync(ct);
+
         foreach (var cityId in dto.CityIds)
             db.TripCities.Add(new TripCity { TripId = trip.Id, CityId = cityId });
 
         await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
 
-        return Trip.ToDto(trip, dto.CountryId, dto.CityIds);
+        return Trip.ToDto(trip);
     }
 
     public async Task<CursorPage<TripDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
     {
-        var res = await new SearchQueryBuilder<Trip>(db.Trips)
+		var query = db.Trips
+			.Include(t => t.TripCountries)
+			.Include(t => t.TripCities);
+
+        var res = await new SearchQueryBuilder<Trip>(query)
             .WithKey("id", x => x.Id)
             .AddFilters(payload.Filters, field => field.ToLowerInvariant() switch
             {
@@ -94,9 +102,8 @@ public sealed class TripModel(AppDbContext db)
                 "id"          => x => x.Id,
                 _ => throw new SearchValidationException($"Unsortable field '{field}'."),
             })
-
             .SetCursorPagination(payload.Page)
-            .RunAsync(x => Trip.ToDto(x, 0, new List<int>()), ct);  // join data not loaded in search results
+            .RunAsync(x => Trip.ToDto(x), ct);  // join data not loaded in search results
 
         return res;
     }
@@ -104,8 +111,10 @@ public sealed class TripModel(AppDbContext db)
     public async Task<TripDto?> UpdateAsync(int userId, int id, UpdateTripDto dto, CancellationToken ct = default)
     {
         await using var tx = await db.Database.BeginTransactionAsync(ct);
-
-        var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
+		var query = db.Trips
+					.Include(t => t.TripCountries)
+					.Include(t => t.TripCities);
+        var trip = await query.FirstOrDefaultAsync(t => t.Id == id, ct);
         if (trip is null) return null;
 
         if (dto.TripName is not null) trip.TripName = dto.TripName;
@@ -113,44 +122,44 @@ public sealed class TripModel(AppDbContext db)
         if (dto.Description is not null) trip.Description = dto.Description;
         if (dto.StartDate != trip.StartDate) trip.StartDate = dto.StartDate;
         if (dto.EndDate != trip.EndDate) trip.EndDate = dto.EndDate;
-        if (dto.Duration != trip.Duration) trip.Duration = dto.Duration;
+        if ((dto.EndDate - dto.StartDate).Days != trip.Duration) trip.Duration = (dto.EndDate - dto.StartDate).Days;
         if (dto.Budget is not 0) trip.Budget = dto.Budget;
         trip.UpdatedAt = DateTime.UtcNow;
 
         db.Trips.Update(trip);
 
         // Full replace of join records
-        await db.TripCountries.Where(tc => tc.TripId == id).ExecuteDeleteAsync(ct);
-        await db.TripCities.Where(tc => tc.TripId == id).ExecuteDeleteAsync(ct);
+		if (trip.TripCountries.FirstOrDefault()?.CountryId != dto.CountryId)
+		{
+			await db.TripCountries.Where(tc => tc.TripId == id).ExecuteDeleteAsync(ct);
+	        await db.TripCities.Where(tc => tc.TripId == id).ExecuteDeleteAsync(ct);
 
-        db.TripCountries.Add(new TripCountry { TripId = id, CountryId = dto.CountryId });
+	        db.TripCountries.Add(new TripCountry { TripId = id, CountryId = dto.CountryId });
 
-        foreach (var cityId in dto.CityIds)
-            db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
+	        foreach (var cityId in dto.CityIds)
+	            db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });	
+		}
+		foreach (var cityId in dto.CityIds)
+		{
+			if (!trip.TripCities.Any(tc => tc.CityId == cityId))
+				db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
+		}
 
         await db.SaveChangesAsync(ct);
         await tx.CommitAsync(ct);
 
-        return Trip.ToDto(trip, dto.CountryId, dto.CityIds);
+        return Trip.ToDto(trip);
     }
 
     public async Task<TripDto?> GetById(int id, CancellationToken ct = default)
     {
-        var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
-        if (trip is null) return null;
+		var trip = await db.Trips
+        .Include(t => t.TripCountries)
+        .Include(t => t.TripCities)
+        .FirstOrDefaultAsync(t => t.Id == id, ct);
+		if (trip is null) return null;
 
-        var countryId = await db.TripCountries
-            .Where(tc => tc.TripId == id)
-            .Select(tc => tc.CountryId)
-            .FirstOrDefaultAsync(ct);
-
-			var cityIds = await db.TripCities
-            .Where(tc => tc.TripId == id)
-            .Select(tc => tc.CityId)
-            .ToListAsync(ct);
-			if (cityIds is null) cityIds = new List<int>();
-
-        return Trip.ToDto(trip, countryId, cityIds);
+        return Trip.ToDto(trip);
     }
 
     public async Task<bool> DeleteAsync(int userId, int id, CancellationToken ct = default)
@@ -158,7 +167,6 @@ public sealed class TripModel(AppDbContext db)
         var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
         if (trip is null) return false;
 
-        // TripCountries and TripCities are cleaned up automatically via ON DELETE CASCADE
         var rows = await db.Trips.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
         return rows > 0;
     }

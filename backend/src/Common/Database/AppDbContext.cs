@@ -20,5 +20,31 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 	{
 		modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 		modelBuilder.HasPostgresEnum<TripVisibility>(name: "trip_visibility");
+		
+		modelBuilder.Entity<TripCountry>(e =>
+		{
+			e.HasKey(tc => new { tc.TripId, tc.CountryId });
+
+			e.HasOne(tc => tc.Trip)
+			.WithMany(t => t.TripCountries)
+			.HasForeignKey(tc => tc.TripId);
+
+			e.HasOne(tc => tc.Country)
+			.WithMany()
+			.HasForeignKey(tc => tc.CountryId);
+		});
+
+		modelBuilder.Entity<TripCity>(e =>
+		{
+			e.HasKey(tc => new { tc.TripId, tc.CityId });
+
+			e.HasOne(tc => tc.Trip)
+			.WithMany(t => t.TripCities)
+			.HasForeignKey(tc => tc.TripId);
+
+			e.HasOne(tc => tc.City)
+			.WithMany()
+			.HasForeignKey(tc => tc.CityId);
+		});
 	}
 }
