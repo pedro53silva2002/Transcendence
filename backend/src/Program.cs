@@ -1,5 +1,6 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using Serilog;
 using Trippie.Common.Database;
@@ -93,6 +94,8 @@ try
     builder.Services.AddScoped<AuthService>();
     builder.Services.AddScoped<CountryService>();
     builder.Services.AddScoped<CountryModel>();
+    builder.Services.AddScoped<CityService>();
+    builder.Services.AddScoped<CityModel>();
 
      // Search service with our custom query compiler
 

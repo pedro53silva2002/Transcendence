@@ -6,43 +6,49 @@ using Trippie.Common.Services.Search.Exception;
 
 namespace Trippie.Modules.Auth.Model;
 
-public sealed class Country
+public sealed class City
 {
     public required int Id { get; set; }
     public required string Name { get; set; }
-    public required string Code { get; set; }
+    public required int CountryId { get; set; }
+    public Country? Country { get; set; }
 
-    public ICollection<City> Cities { get; set; } = new List<City>();
-
-    public static CountryDto ToDto(Country c) => new()
+    public static CityDto ToDto(City c) => new()
     {
         Id = c.Id,
         Name = c.Name,
-        Code = c.Code
+        CountryId = c.CountryId
     };
 }
 
-public sealed class CountryModel(AppDbContext db)
+public sealed class CityModel(AppDbContext db)
 {
-    public async Task<CursorPage<CountryDto>> SearchCountriesAsync(SearchPayload payload, CancellationToken ct = default)
+    public async Task<CursorPage<CityDto>> SearchCitiesAsync(SearchPayload payload, CancellationToken ct = default)
     {
-        var res = await new SearchQueryBuilder<Country>(db.Countries)
+        if ((payload.Filters?.Any(f => f.Column.Equals("name", StringComparison.OrdinalIgnoreCase)) ?? false) && 
+            !(payload.Filters?.Any(f => f.Column.Equals("country_id", StringComparison.OrdinalIgnoreCase)) ?? false))
+        {
+            throw new SearchValidationException("Filtering by city name requires a country filter.");
+        }
+
+        var res = await new SearchQueryBuilder<City>(db.Cities)
             .WithKey("id", x => x.Id)
             .AddFilters(payload.Filters, field => field.ToLowerInvariant() switch
             {
-                "id" => x => x.Id,
+				"id" => x => x.Id,
                 "name" => x => x.Name,
-                "code" => x => x.Code,
+                "country_id" => x => x.CountryId,
                 _ => throw new SearchValidationException($"Unknown filter field '{field}'."),
             })
             .SetOrderBy(payload.Sort, field => field.ToLowerInvariant() switch
             {
-                "id" => x => x.Id,
+				"id" => x => x.Id,
                 "name" => x => x.Name,
+				"country_id" => x => x.CountryId,
                 _ => throw new SearchValidationException($"Unsortable field '{field}'."),
             })
             .SetCursorPagination(payload.Page)
-            .RunAsync(x => Country.ToDto(x), ct);
+            .RunAsync(x => City.ToDto(x), ct);
 
         return res;
     }
