@@ -27,7 +27,6 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
 			e.HasOne(tc => tc.Trip)
 			.WithOne(t => t.TripCountries);
-			//.HasForeignKey(tc => tc.TripId);
 
 			e.HasOne(tc => tc.Country)
 			.WithMany()
