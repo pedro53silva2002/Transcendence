@@ -11,8 +11,6 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Country> Countries => Set<Country>();
     public DbSet<City> Cities => Set<City>();
-	public DbSet<TripCountry> TripCountries => Set<TripCountry>();
-    public DbSet<TripCity> TripCities => Set<TripCity>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
