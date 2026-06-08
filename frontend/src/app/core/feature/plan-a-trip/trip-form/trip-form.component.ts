@@ -15,6 +15,7 @@ import { CountryDto } from '../dtos/country.dto';
 import { MatChipsModule } from '@angular/material/chips';
 import { ImportsNotUsedAsValues } from 'typescript';
 import { MatIconModule } from '@angular/material/icon';
+import { CityDto } from '../dtos/city.dto';
 
 //Defining the date format
 export const FORMAT_DMY = {
@@ -54,7 +55,7 @@ export class TripFormComponent implements OnInit {
 
 	private readonly locationsService = inject(LocationsService);
 	listOfCountries$!: Observable<CountryDto[]>;
-	listOfCities$!: Observable<string[]>;
+	listOfCities$!: Observable<CityDto[]>;
 
 	cityInput = viewChild<ElementRef<HTMLInputElement>>('cityInput');
 
@@ -62,6 +63,18 @@ export class TripFormComponent implements OnInit {
 	selectedCities = signal<string[]>([]);
 
 	ngOnInit(): void {
+
+		//check if country already exists in the form
+		const existingCountry = this.country.value;
+		if (existingCountry) {
+			this.selectedCountryId.set(existingCountry);
+		}
+
+		//check if cities are already filled in the form
+		const existingCities = this.city.value;
+		if (Array.isArray(existingCities)) {
+			this.selectedCities.set(existingCities);
+		}
 
 		this.listOfCountries$ = this.country.valueChanges.pipe(
 			debounceTime(300),
@@ -83,9 +96,11 @@ export class TripFormComponent implements OnInit {
 			switchMap((userInput: any) => {
 				const input = userInput || '';
 
+				console.log('City input changed:', input);
+
 				const countryId = this.selectedCountryId();
 
-				if (input.length < 1  || !countryId) {
+				if (input.length < 1 || !countryId) {
 					return of([]);
 				}
 				return this.locationsService.searchCities(input, countryId);
@@ -107,8 +122,9 @@ export class TripFormComponent implements OnInit {
 		const cityValue = event.option.viewValue;
 
 		if (cityValue && !this.selectedCities().includes(cityValue)) {
-			//update the signal
-			this.selectedCities.update(cities => [...cities, cityValue]);
+			const updatedCities = [...this.selectedCities(), cityValue];
+			this.selectedCities.set(updatedCities);
+			this.city.setValue(updatedCities);
 		}
 
 		//cleans the input text for next search
@@ -116,13 +132,16 @@ export class TripFormComponent implements OnInit {
 		if (inputEl) {
 			inputEl.value = '';
 		}
-
-		this.city.setValue('', {emitEvent: false});
 	}
 
 	//when a user clicks to remove a city
 	removeCity(cityName: string): void {
 		this.selectedCities.update(cities => cities.filter(city => city !== cityName));
+	}
+
+	//to customize the display of the country in the autocomplete input
+	displayCountryFn(country: CountryDto | null): string {
+		return country && country.name ? country.name : '';
 	}
 
 	get tripName() { return this.tripGroup().controls['tripName']; }

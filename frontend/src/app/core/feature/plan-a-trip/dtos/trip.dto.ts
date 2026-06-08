@@ -1,3 +1,6 @@
+import { CityDto } from "./city.dto";
+import { CountryDto } from "./country.dto";
+
 export enum TripVisibility {
     Private = 0,
     Public = 1,
@@ -8,8 +11,8 @@ export enum TripVisibility {
 export interface CreateTripDto {
     tripName: string;
     description?: string;
-    country: string;
-	city?: string[];
+    country: CountryDto;
+	city?: CityDto[];
     startDate: string;
     endDate: string;
     budget: number;
@@ -23,8 +26,8 @@ export interface TripDto {
     id: number;
     tripName: string;
     description?: string;
-    country: string;
-	city?: string[];
+    country: CountryDto;
+	city?: CityDto[];
     startDate: string;
     endDate: string;
     budget: number;
@@ -40,8 +43,8 @@ export interface UpdateTripDto {
     id: number;
     tripName: string;
     description?: string;
-    country: string;
-	city?: string[];
+    country: CountryDto;
+	city?: CityDto[];
     startDate: string;
     endDate: string;
     budget: number;
@@ -51,8 +54,8 @@ export interface UpdateTripDto {
 //what i receive in http get when i search for trips
 export type TripSearchFieldsDto = {
     tripName?: string;
-    country: string;
-	city?: string[];
+    country: CountryDto;
+	city?: CityDto[];
 }
 
 export type TripOrderByFieldsDto = 'startDate' | 'createdAt' | 'tripName';

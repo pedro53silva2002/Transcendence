@@ -2,16 +2,14 @@
 	<div class="trip-details">
 		<h1>{{ tripStateService.trip()?.tripName }}</h1>
 		<h2>
-			@if (!tripStateService.trip()?.city) {
-				@for (country of tripStateService.trip()?.country; track country; let last = $last) {
-					<span>{{ country }}{{ !last ? ',   ' : '' }}</span>
-				}
-			}
-			@else {
+			@if (tripStateService.trip()?.city) {
 				@for (city of tripStateService.trip()?.city; track city; let last = $last) {
 					<span>{{ city }}{{ !last ? ', ' : '' }}</span>
 				}
 			}
+			<!-- @else {
+				<span>{{ tripStateService.trip()?.country }}</span>
+			} -->
 		</h2>
 		<p>{{ tripStateService.trip()?.description }}</p>
 	</div>

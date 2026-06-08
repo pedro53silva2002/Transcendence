@@ -2,11 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { TripFormComponent } from "./trip-form/trip-form.component";
 import { TranslocoModule } from '@jsverse/transloco';
 import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { TripService } from './services/trip.service';
 import { CreateTripDto, TripDto, TripVisibility, UpdateTripDto } from './dtos/trip.dto';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TripStateService } from './services/trip-state.service';
+import { CountryDto } from './dtos/country.dto';
+import { CityDto } from './dtos/city.dto';
 
 @Component({
 	selector: 'app-plan-a-trip',
@@ -28,8 +30,8 @@ export class PlanATripComponent implements OnInit {
 		trip: this.formBuilder.nonNullable.group({
 			tripName: ['', [Validators.required, Validators.maxLength(25), Validators.minLength(3)]],
 			description: ['', [Validators.maxLength(250)]],
-			country: ['', [Validators.required]],
-			city: [[] as string[]],
+			country: [null as unknown as CountryDto, [Validators.required, PlanATripComponent.countryValidator]],
+			city: [[] as CityDto[]],
 			startDate: ['', [Validators.required]],
 			endDate: ['', [Validators.required]],
 			budget: [null as unknown as number, [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]], // Aceita apenas números inteiros
@@ -42,9 +44,6 @@ export class PlanATripComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.isEditMode = this.router.url.includes('edit');
-
-		console.log('Modo de Edição:', this.isEditMode);
-		console.log('Dados no Estado:', this.tripStateService.trip());
 
 		if (this.isEditMode) {
 			const currentTrip = this.tripStateService.trip(); //reads the value of the tripStateService
@@ -92,8 +91,7 @@ export class PlanATripComponent implements OnInit {
 					tripName: formValue.trip.tripName,
 					description: formValue.trip.description || undefined,
 					country: formValue.trip.country,
-					city: ["lisboa", "porto", "vila real"],
-					// city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
+					city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
 					startDate: formValue.trip.startDate,
 					endDate: formValue.trip.endDate,
 					budget: formValue.trip.budget,
@@ -142,8 +140,7 @@ export class PlanATripComponent implements OnInit {
 					tripName: formValue.trip.tripName,
 					description: formValue.trip.description || undefined,
 					country: formValue.trip.country,
-					city: ["lisboa", "porto", "vila real"],
-					// city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
+					city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
 					startDate: formValue.trip.startDate,
 					endDate: formValue.trip.endDate,
 					budget: formValue.trip.budget,
@@ -177,5 +174,20 @@ export class PlanATripComponent implements OnInit {
 
 	}
 
+	static countryValidator(control: AbstractControl): ValidationErrors | null {
+		const value = control.value;
+		
+		if (!value)
+			return null;
+
+		if (typeof value === 'string') {
+			return {countryNotSelected: true};
+		}
+
+		if (typeof value === 'object' && !value.id)	{
+			return { countryNotSelected: true };
+		}
+		return null;
+	}
 
 }

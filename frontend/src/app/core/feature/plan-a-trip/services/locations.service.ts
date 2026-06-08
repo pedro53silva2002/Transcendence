@@ -24,7 +24,7 @@ export class LocationsService extends BaseApiService {
 		);
 	}
 
-	searchCities(city: string, countryId: number): Observable<string[]> {
+	searchCities(city: string, countryId: number): Observable<CityDto[]> {
 		const searchOptions: SearchParams<Record<string, unknown>, string> = {
 			search: {
 				name: { op: 'STARTSWITH', value: city },
@@ -34,8 +34,7 @@ export class LocationsService extends BaseApiService {
 		const searchOptionsBase64 = searchToQuery(searchOptions);
 		return this._get<{ content: CityDto[] }>(`/cities/search?q=${searchOptionsBase64}`).pipe(
 			map(response => {
-				const list = response?.data?.content || [];
-				return list.map(city => city.name);
+				return response?.data?.content || [];
 			})
 		);
 	}

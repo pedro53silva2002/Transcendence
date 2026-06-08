@@ -52,9 +52,9 @@
 			<input formControlName="country" type="text" matInput [matAutocomplete]="autoCountry"
 				placeholder="{{ 'plan-a-trip.country' | transloco }}">
 
-			<mat-autocomplete #autoCountry="matAutocomplete">
+			<mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayCountryFn">
 				@for (country of listOfCountries$ | async; track country.name) {
-				<mat-option [value]="country.name" (onSelectionChange)="onCountrySelected(country)">
+				<mat-option [value]="country" (onSelectionChange)="onCountrySelected(country)">
 					{{ country.name }}
 				</mat-option>
 				}
@@ -62,6 +62,9 @@
 
 			@if (country.errors?.['required']) {
 			<mat-error>{{ 'plan-a-trip.country-error' | transloco }}</mat-error>
+			}
+			@if (country.hasError('countryNotSelected') && country.touched) {
+			<mat-error>{{ 'plan-a-trip.country-string-error' | transloco }}</mat-error>
 			}
 		</mat-form-field>
 
@@ -81,9 +84,9 @@
 				[disabled]="!selectedCountryId()" placeholder="{{ 'plan-a-trip.city' | transloco }}">
 
 			<mat-autocomplete #autoCity="matAutocomplete" (optionSelected)="selectedCity($event)">
-				@for (cityName of listOfCities$ | async; track cityName) {
-					<mat-option [value]="cityName">
-						{{ cityName }}
+				@for (city of listOfCities$ | async; track city.name) {
+					<mat-option [value]="city.name">
+						{{ city.name }}
 					</mat-option>
 				}
 			</mat-autocomplete>
