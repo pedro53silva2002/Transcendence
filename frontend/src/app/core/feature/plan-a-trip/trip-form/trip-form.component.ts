@@ -96,8 +96,6 @@ export class TripFormComponent implements OnInit {
 			switchMap((userInput: any) => {
 				const input = userInput || '';
 
-				console.log('City input changed:', input);
-
 				const countryId = this.selectedCountryId();
 
 				if (input.length < 1 || !countryId) {

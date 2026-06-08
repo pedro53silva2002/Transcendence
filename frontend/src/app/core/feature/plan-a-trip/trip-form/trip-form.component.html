@@ -49,8 +49,7 @@
 	<div class="country-and-city">
 		<!-- country field -->
 		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
-			<input formControlName="country" type="text" matInput [matAutocomplete]="autoCountry"
-				placeholder="{{ 'plan-a-trip.country' | transloco }}">
+			<input formControlName="country" type="text" matInput [matAutocomplete]="autoCountry" placeholder="{{ 'plan-a-trip.country' | transloco }}">
 
 			<mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayCountryFn">
 				@for (country of listOfCountries$ | async; track country.name) {
@@ -69,7 +68,8 @@
 		</mat-form-field>
 
 		<!-- city field -->
-		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
+		<mat-form-field class="cities-input-field" appearance="outline" [hideRequiredMarker]="true"
+			subscriptSizing="dynamic">
 			<mat-chip-grid #chipGrid>
 				@for (city of selectedCities(); track city) {
 				<mat-chip-row (removed)="removeCity(city)">
@@ -80,20 +80,21 @@
 				</mat-chip-row>
 				}
 			</mat-chip-grid>
-			<input type="text" #cityInput matInput formControlName="city" [matChipInputFor]="chipGrid" [matAutocomplete]="autoCity"
-				[disabled]="!selectedCountryId()" placeholder="{{ 'plan-a-trip.city' | transloco }}">
+			<input type="text" #cityInput matInput formControlName="city" [matChipInputFor]="chipGrid"
+				[matAutocomplete]="autoCity" [disabled]="!selectedCountryId()"
+				[placeholder]="selectedCities().length > 0 ? '' : ('plan-a-trip.city' | transloco)">
 
 			<mat-autocomplete #autoCity="matAutocomplete" (optionSelected)="selectedCity($event)">
 				@for (city of listOfCities$ | async; track city.name) {
-					<mat-option [value]="city.name">
-						{{ city.name }}
-					</mat-option>
+				<mat-option [value]="city.name">
+					{{ city.name }}
+				</mat-option>
 				}
 			</mat-autocomplete>
 
 			@if (city.hasError('cityNotSelected') && city.touched) {
-				<mat-error>{{ 'plan-a-trip.city-string-error' | transloco }}</mat-error>
-				}
+			<mat-error>{{ 'plan-a-trip.city-string-error' | transloco }}</mat-error>
+			}
 
 		</mat-form-field>
 	</div>

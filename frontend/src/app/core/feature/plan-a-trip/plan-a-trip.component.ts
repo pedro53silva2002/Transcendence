@@ -85,40 +85,42 @@ export class PlanATripComponent implements OnInit {
 						createdBy: 0, // ver com o diogo se precisamos disto
 						members: formValue.crew.members
 					};
+
+					//http post to create trip
+					this.tripService.create(dto).subscribe({
+						next: (response) => {
+							if (response.data !== undefined)
+								this.tripStateService.setTrip(response.data);
+							console.log('Trip created!', response.data);
+							this.router.navigate(['/trip-dashboard', response.data?.id]);
+						},
+						error: (error) => {
+							console.error('Error creating trip:', error);
+						}
+					});
 				}
 	
 				//just for testing if the tripStateService is storing the info about the created trip
-				if (formValue.trip.country) {
-					const tripDto: TripDto = {
-						id: 120,
-						tripName: formValue.trip.tripName,
-						description: formValue.trip.description || undefined,
-						country: formValue.trip.country,
-						city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
-						startDate: formValue.trip.startDate,
-						endDate: formValue.trip.endDate,
-						budget: formValue.trip.budget,
-						visibility: formValue.trip.visibility,
-						createdBy: 0, // ver com o diogo se precisamos disto
-						createdAt: '',
-						members: formValue.crew.members
-					};
-					this.tripStateService.setTrip(tripDto);
-					this.router.navigate(['/trip-dashboard', tripDto.id]);
-				}
+				// if (formValue.trip.country) {
+				// 	const tripDto: TripDto = {
+				// 		id: 120,
+				// 		tripName: formValue.trip.tripName,
+				// 		description: formValue.trip.description || undefined,
+				// 		country: formValue.trip.country,
+				// 		city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
+				// 		startDate: formValue.trip.startDate,
+				// 		endDate: formValue.trip.endDate,
+				// 		budget: formValue.trip.budget,
+				// 		visibility: formValue.trip.visibility,
+				// 		createdBy: 0, // ver com o diogo se precisamos disto
+				// 		createdAt: '',
+				// 		members: formValue.crew.members
+				// 	};
+				// 	this.tripStateService.setTrip(tripDto);
+				// 	this.router.navigate(['/trip-dashboard', tripDto.id]);
+				// }
 
-				// 	//http post to create trip
-				// 	this.tripService.create(dto).subscribe({
-				// 		next: (response) => {
-				// 			if (response.data !== undefined)
-				// 				this.tripStateService.setTrip(response.data);
-				// 			console.log('Trip created!', response.data);
-				// 			this.router.navigate(['/trip-dashboard', response.data?.id]);
-				// 		},
-				// 		error: (error) => {
-				// 			console.error('Error creating trip:', error);
-				// 		}
-				// 	});
+
 			} else {
 				const tripId = this.route.snapshot.paramMap.get('id');
 
@@ -138,25 +140,25 @@ export class PlanATripComponent implements OnInit {
 						}
 
 					//just for testing if the tripStateService is storing the info about the updated trip
-					if (formValue.trip.country) {
-						const tripDto: TripDto = {
-						id: 120,
-						tripName: formValue.trip.tripName,
-						description: formValue.trip.description || undefined,
-						country: formValue.trip.country,
-						city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
-						startDate: formValue.trip.startDate,
-						endDate: formValue.trip.endDate,
-						budget: formValue.trip.budget,
-						visibility: formValue.trip.visibility,
-						createdBy: 0, // ver com o diogo se precisamos disto
-						createdAt: '',
-						members: formValue.crew.members
-					};
+					// if (formValue.trip.country) {
+					// 	const tripDto: TripDto = {
+					// 	id: 120,
+					// 	tripName: formValue.trip.tripName,
+					// 	description: formValue.trip.description || undefined,
+					// 	country: formValue.trip.country,
+					// 	city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
+					// 	startDate: formValue.trip.startDate,
+					// 	endDate: formValue.trip.endDate,
+					// 	budget: formValue.trip.budget,
+					// 	visibility: formValue.trip.visibility,
+					// 	createdBy: 0, // ver com o diogo se precisamos disto
+					// 	createdAt: '',
+					// 	members: formValue.crew.members
+					// };
 	
-					this.tripStateService.setTrip(tripDto);
-					this.router.navigate(['/trip-dashboard', tripDto.id]);
-					}
+					// this.tripStateService.setTrip(tripDto);
+					// this.router.navigate(['/trip-dashboard', tripDto.id]);
+					// }
 	
 					this.tripService.update(updateDto.id, updateDto).subscribe({
 						next: (response) => {
