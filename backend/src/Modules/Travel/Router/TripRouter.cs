@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -12,7 +11,7 @@ using Trippie.Modules.Travel.Service;
 namespace Trippie.Modules.Travel.Router;
 
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route("api/trips")]
 public sealed class TripRouter(TripService service, IUserContext userContext) : ControllerBase
 {
@@ -49,8 +48,7 @@ public sealed class TripRouter(TripService service, IUserContext userContext) : 
 	[HttpPut("{id}")]
 	public async Task<ActionResult<TripDto>> Update(int id, [FromBody]UpdateTripDto dto, CancellationToken ct)
 	{
-		//var userId = userContext.Require().UserId;
-		var userId = 1; // --- IGNORE ---
+		var userId = userContext.Require().UserId;
 		var trip = await service.UpdateAsync(userId, id, dto, ct);
 		return Ok(trip);
 	}
@@ -58,8 +56,7 @@ public sealed class TripRouter(TripService service, IUserContext userContext) : 
 	[HttpDelete("{id}")]
 	public async Task<ActionResult<TripDto>> Delete(int id, CancellationToken ct)
 	{
-		//var userId = userContext.Require().UserId;
-		var userId = 1; // --- IGNORE ---
+		var userId = userContext.Require().UserId;
 		await service.DeleteAsync(userId, id, ct);
 		return NoContent();
 	}

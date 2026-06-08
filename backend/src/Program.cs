@@ -49,8 +49,6 @@ try
 	builder.Services.AddDbContext<AppDbContext>(opts =>
 		opts.UseNpgsql(dataSource, npgsqlOptions => npgsqlOptions.MapEnum<TripVisibility>("trip_visibility")));
 
-
-
 	// Replace MS logging with Serilog (reads "Serilog" + "ErrorHandling" sections).
 	builder.Host.UseAppSerilog();
 
@@ -195,28 +193,12 @@ try
         });
     }
     app.MapHealthChecks("/health");
-    //to Delete? app.UseCors();
+    app.UseCors();
 	//add ratelimiter
 	app.UseRateLimiter();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
-
-	/*// 3. Standard pipeline.
-	if (app.Environment.IsDevelopment())
-	{
-		app.MapOpenApi();
-		app.UseSwaggerUI(options =>
-		{
-			options.SwaggerEndpoint("/openapi/v1.json", "Trippie v1");
-		});
-	}
-	app.MapHealthChecks("/health");
-	app.UseCors();
-	app.UseAuthentication();
-	app.UseAuthorization();
-	app.MapControllers();*/
-
 	app.Run();
 }
 catch (System.Exception ex)
