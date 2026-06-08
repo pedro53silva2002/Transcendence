@@ -67,7 +67,7 @@ export class TripFormComponent implements OnInit {
 		//check if country already exists in the form
 		const existingCountry = this.country.value;
 		if (existingCountry) {
-			this.selectedCountryId.set(existingCountry);
+			this.selectedCountryId.set(existingCountry.id);
 		}
 
 		//check if cities are already filled in the form
@@ -122,9 +122,11 @@ export class TripFormComponent implements OnInit {
 		const cityValue = event.option.viewValue;
 
 		if (cityValue && !this.selectedCities().includes(cityValue)) {
-			const updatedCities = [...this.selectedCities(), cityValue];
-			this.selectedCities.set(updatedCities);
-			this.city.setValue(updatedCities);
+			this.selectedCities.update(cities => {
+				const updated = [...cities, cityValue];
+				this.city.setValue(updated, { emitEvent: false });
+				return updated;
+			})
 		}
 
 		//cleans the input text for next search
@@ -136,7 +138,11 @@ export class TripFormComponent implements OnInit {
 
 	//when a user clicks to remove a city
 	removeCity(cityName: string): void {
-		this.selectedCities.update(cities => cities.filter(city => city !== cityName));
+		this.selectedCities.update(cities => {
+			const updated = cities.filter(city => city !== cityName);
+			this.city.setValue(updated, { emitEvent: false }); //to prevent it from triggering an API request
+			return updated;
+		});
 	}
 
 	//to customize the display of the country in the autocomplete input

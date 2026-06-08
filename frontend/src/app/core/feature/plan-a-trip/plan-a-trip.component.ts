@@ -30,8 +30,8 @@ export class PlanATripComponent implements OnInit {
 		trip: this.formBuilder.nonNullable.group({
 			tripName: ['', [Validators.required, Validators.maxLength(25), Validators.minLength(3)]],
 			description: ['', [Validators.maxLength(250)]],
-			country: [null as unknown as CountryDto, [Validators.required, PlanATripComponent.countryValidator]],
-			city: [[] as CityDto[]],
+			country: [ null as CountryDto | null, [Validators.required, PlanATripComponent.countryValidator]],
+			city: [[] as CityDto[] , [PlanATripComponent.cityValidator]],
 			startDate: ['', [Validators.required]],
 			endDate: ['', [Validators.required]],
 			budget: [null as unknown as number, [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]], // Aceita apenas números inteiros
@@ -72,37 +72,40 @@ export class PlanATripComponent implements OnInit {
 			const formValue = this.planATripForm.getRawValue();
 
 			if (!this.isEditMode) {
-				const dto: CreateTripDto = {
-					tripName: formValue.trip.tripName,
-					description: formValue.trip.description || undefined,
-					country: formValue.trip.country,
-					city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
-					startDate: formValue.trip.startDate,
-					endDate: formValue.trip.endDate,
-					budget: formValue.trip.budget,
-					visibility: formValue.trip.visibility,
-					createdBy: 0, // ver com o diogo se precisamos disto
-					members: formValue.crew.members
-				};
+				if (formValue.trip.country) {
+					const dto: CreateTripDto = {
+						tripName: formValue.trip.tripName,
+						description: formValue.trip.description || undefined,
+						country: formValue.trip.country,
+						city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
+						startDate: formValue.trip.startDate,
+						endDate: formValue.trip.endDate,
+						budget: formValue.trip.budget,
+						visibility: formValue.trip.visibility,
+						createdBy: 0, // ver com o diogo se precisamos disto
+						members: formValue.crew.members
+					};
+				}
 	
 				//just for testing if the tripStateService is storing the info about the created trip
-				const tripDto: TripDto = {
-					id: 120,
-					tripName: formValue.trip.tripName,
-					description: formValue.trip.description || undefined,
-					country: formValue.trip.country,
-					city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
-					startDate: formValue.trip.startDate,
-					endDate: formValue.trip.endDate,
-					budget: formValue.trip.budget,
-					visibility: formValue.trip.visibility,
-					createdBy: 0, // ver com o diogo se precisamos disto
-					createdAt: '',
-					members: formValue.crew.members
-				};
-	
-				this.tripStateService.setTrip(tripDto);
-				this.router.navigate(['/trip-dashboard', tripDto.id]);
+				if (formValue.trip.country) {
+					const tripDto: TripDto = {
+						id: 120,
+						tripName: formValue.trip.tripName,
+						description: formValue.trip.description || undefined,
+						country: formValue.trip.country,
+						city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
+						startDate: formValue.trip.startDate,
+						endDate: formValue.trip.endDate,
+						budget: formValue.trip.budget,
+						visibility: formValue.trip.visibility,
+						createdBy: 0, // ver com o diogo se precisamos disto
+						createdAt: '',
+						members: formValue.crew.members
+					};
+					this.tripStateService.setTrip(tripDto);
+					this.router.navigate(['/trip-dashboard', tripDto.id]);
+				}
 
 				// 	//http post to create trip
 				// 	this.tripService.create(dto).subscribe({
@@ -120,38 +123,40 @@ export class PlanATripComponent implements OnInit {
 				const tripId = this.route.snapshot.paramMap.get('id');
 
 				//checks if tripId is valid
-				if (tripId) {
+				if (tripId && formValue.trip.country) {
 					//builds the dto to send to backend
-					const updateDto: UpdateTripDto = {
-						id: Number(tripId),
+						const updateDto: UpdateTripDto = {
+							id: Number(tripId),
+							tripName: formValue.trip.tripName,
+							description: formValue.trip.description || undefined,
+							country: formValue.trip.country,
+							city: formValue.trip.city,
+							startDate: formValue.trip.startDate,
+							endDate: formValue.trip.endDate,
+							budget: formValue.trip.budget,
+							visibility: formValue.trip.visibility,
+						}
+
+					//just for testing if the tripStateService is storing the info about the updated trip
+					if (formValue.trip.country) {
+						const tripDto: TripDto = {
+						id: 120,
 						tripName: formValue.trip.tripName,
 						description: formValue.trip.description || undefined,
 						country: formValue.trip.country,
-						city: formValue.trip.city,
+						city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
 						startDate: formValue.trip.startDate,
 						endDate: formValue.trip.endDate,
 						budget: formValue.trip.budget,
 						visibility: formValue.trip.visibility,
+						createdBy: 0, // ver com o diogo se precisamos disto
+						createdAt: '',
+						members: formValue.crew.members
+					};
+	
+					this.tripStateService.setTrip(tripDto);
+					this.router.navigate(['/trip-dashboard', tripDto.id]);
 					}
-
-					//just for testing if the tripStateService is storing the info about the updated trip
-					const tripDto: TripDto = {
-					id: 120,
-					tripName: formValue.trip.tripName,
-					description: formValue.trip.description || undefined,
-					country: formValue.trip.country,
-					city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
-					startDate: formValue.trip.startDate,
-					endDate: formValue.trip.endDate,
-					budget: formValue.trip.budget,
-					visibility: formValue.trip.visibility,
-					createdBy: 0, // ver com o diogo se precisamos disto
-					createdAt: '',
-					members: formValue.crew.members
-				};
-
-				this.tripStateService.setTrip(tripDto);
-				this.router.navigate(['/trip-dashboard', tripDto.id]);
 	
 					this.tripService.update(updateDto.id, updateDto).subscribe({
 						next: (response) => {
@@ -166,12 +171,7 @@ export class PlanATripComponent implements OnInit {
 				}
 
 			}
-
-
-
-
 		}
-
 	}
 
 	static countryValidator(control: AbstractControl): ValidationErrors | null {
@@ -190,4 +190,16 @@ export class PlanATripComponent implements OnInit {
 		return null;
 	}
 
+	static cityValidator(control: AbstractControl): ValidationErrors | null {
+		const value = control.value;
+
+		if (!value || (Array.isArray(value) && value.length === 0) || (typeof value === 'string' && value.trim() === '')) {
+			return null;
+		}
+
+		if (typeof value === 'string') {
+			return { cityNotSelected: true };
+		}
+		return null;
+	}
 }

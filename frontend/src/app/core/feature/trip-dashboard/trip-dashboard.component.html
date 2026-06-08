@@ -7,9 +7,9 @@
 					<span>{{ city }}{{ !last ? ', ' : '' }}</span>
 				}
 			}
-			<!-- @else {
-				<span>{{ tripStateService.trip()?.country }}</span>
-			} -->
+			@else {
+				<span>{{ tripStateService.trip()?.country?.name }}</span>
+			}
 		</h2>
 		<p>{{ tripStateService.trip()?.description }}</p>
 	</div>

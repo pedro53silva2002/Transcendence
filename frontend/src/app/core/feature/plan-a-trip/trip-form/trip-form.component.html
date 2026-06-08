@@ -91,6 +91,10 @@
 				}
 			</mat-autocomplete>
 
+			@if (city.hasError('cityNotSelected') && city.touched) {
+				<mat-error>{{ 'plan-a-trip.city-string-error' | transloco }}</mat-error>
+				}
+
 		</mat-form-field>
 	</div>
 

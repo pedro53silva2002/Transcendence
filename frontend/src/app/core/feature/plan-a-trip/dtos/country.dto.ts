@@ -3,9 +3,3 @@ export interface CountryDto {
 	name: string;
 	code: string;
 }
-
-export interface CountrySearchFieldsDto {
-	id: number;
-	name: string;
-	code: string;
-}

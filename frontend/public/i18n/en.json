@@ -64,6 +64,7 @@
 	"description-max-length-error": "The trip's description can't be more than 256 characters long.",
 	"country-error": "A country's selection is required.",
 	"country-string-error": "Please select a valid country.",
+	"city-string-error": "Please select a valid city.",
 	"trip-budget": "budget (€)",
 	"budget-error": "A budget is required.",
 	"budget-numbers-error": "A budget can only contain numbers."
