@@ -66,7 +66,9 @@ public sealed class TripMembersModel(AppDbContext db)
 		return members.Select(TripMembers.ToDto).ToList();
 	}
 
-	public async Task 
+	public async Task<CursorPage<TripMembersDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
+	{
+		
 }
 
 // validate if more than 1 admin exists in the trip before changing role permission

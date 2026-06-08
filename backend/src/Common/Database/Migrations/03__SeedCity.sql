@@ -4297,7 +4297,7 @@ JOIN (VALUES
     ('Gondomar'),
     ('Guimarães'),
     ('Leiria'),
-    ('Lisbon'),
+    ('Lisboa'),
     ('Loures'),
     ('Matosinhos'),
     ('Odivelas'),
@@ -4314,6 +4314,7 @@ JOIN (VALUES
     ('Viana do Castelo'),
     ('Vila Franca de Xira'),
     ('Vila Nova de Gaia'),
+	('Vila Real'),
     ('Viseu')
 ) AS v(name) ON c.code = 'PT'
 ON CONFLICT (name, country_id) DO NOTHING;
