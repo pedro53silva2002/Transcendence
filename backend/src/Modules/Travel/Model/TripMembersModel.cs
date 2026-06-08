@@ -65,6 +65,8 @@ public sealed class TripMembersModel(AppDbContext db)
 		await db.BulkInsertAsync(members, cancellationToken: ct);
 		return members.Select(TripMembers.ToDto).ToList();
 	}
+
+	public async Task 
 }
 
 // validate if more than 1 admin exists in the trip before changing role permission
