@@ -15,8 +15,6 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
 {
     private readonly GoogleOAuthOptions _googleOAuthOptions = googleOAuthOptions.Value;
 
-	//[DisableRateLimiting]
-	[EnableRateLimiting("fixed")]
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponseDto>> Register([FromBody] RegisterDto dto, CancellationToken ct)
     {

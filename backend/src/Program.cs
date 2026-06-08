@@ -97,76 +97,37 @@ try
 	});
 	builder.Services.AddHttpClient<GoogleOAuthService>();
 
-    //Add dependency injection for model and service
-    builder.Services.AddScoped<UserModel>();
-    builder.Services.AddScoped<UserService>();
-    builder.Services.AddScoped<AuthService>();
-    builder.Services.AddScoped<CountryService>();
-    builder.Services.AddScoped<CountryModel>();
+	//Add dependency injection for model and service
+	builder.Services.AddScoped<UserModel>();
+	builder.Services.AddScoped<UserService>();
+	builder.Services.AddScoped<AuthService>();
+	builder.Services.AddScoped<CountryService>();
+	builder.Services.AddScoped<CountryModel>();
 	builder.Services.AddScoped<TripModel>();
 	builder.Services.AddScoped<TripService>();
 	builder.Services.AddScoped<CityService>();
-    builder.Services.AddScoped<CityModel>();
-
-	//Add Http request limiter
-	//TODO: SEE POLITICS OF COORS
-	builder.Services.AddRateLimiter(options =>
-	{
-		options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-			RateLimitPartition.GetFixedWindowLimiter(
-				partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
-				factory: partition => new FixedWindowRateLimiterOptions
-				{
-					AutoReplenishment = true,
-					PermitLimit = 10,
-					QueueLimit = 0,
-					Window = TimeSpan.FromMinutes(1)
-				}));
-	});
+	builder.Services.AddScoped<CityModel>();
 
 
 	//Add Http request limiter
-	//TODO: SEE POLITICS OF COORS
 	builder.Services.AddRateLimiter(options =>
 	{
 		options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
 		{
-			// skip global limiter for register
-			if (httpContext.Request.Path.StartsWithSegments("/api/auth/register"))
-				return RateLimitPartition.GetNoLimiter("no-limit");
-
 			return RateLimitPartition.GetFixedWindowLimiter(
-				partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+				partitionKey: $"{httpContext.Request.Path}-{httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString()}",
 				factory: partition => new FixedWindowRateLimiterOptions
 				{
 					AutoReplenishment = true,
-					PermitLimit = 10,
+					PermitLimit = 20,
 					QueueLimit = 0,
 					Window = TimeSpan.FromMinutes(1)
 				});
 		});
-		options.AddFixedWindowLimiter("fixed", opt =>
-		{
-			opt.PermitLimit = 4;
-			opt.Window = TimeSpan.FromSeconds(12);
-			opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-			opt.QueueLimit = 0;
-		});
 	});
-
-     // Search service with our custom query compiler
 
 	var app = builder.Build();
 
-	/*app.MapGet("/api/auth/register", () => "This endpoint is rate limited")
-		.RequireRateLimiting("fixed");
-
-    // ── Handle --migrate argument to run database migrations ────────────────────
-    if (args.Contains("--migrate"))
-    {
-        Log.Information("Running database migrations");
-        using var scope = app.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();*/
 	// ── Handle --migrate argument to run database migrations ────────────────────
 	if (args.Contains("--migrate"))
 	{
@@ -222,22 +183,22 @@ try
 	//    (auth, static files, endpoints).
 	app.UseExceptionHandling();
 
-    // 3. Standard pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.MapOpenApi();
-        app.UseSwaggerUI(options =>
-        {
-            options.SwaggerEndpoint("/openapi/v1.json", "Trippie v1");
-        });
-    }
-    app.MapHealthChecks("/health");
-    app.UseCors();
+	// 3. Standard pipeline.
+	if (app.Environment.IsDevelopment())
+	{
+		app.MapOpenApi();
+		app.UseSwaggerUI(options =>
+		{
+			options.SwaggerEndpoint("/openapi/v1.json", "Trippie v1");
+		});
+	}
+	app.MapHealthChecks("/health");
+	app.UseCors();
 	//add ratelimiter
 	app.UseRateLimiter();
-    app.UseAuthentication();
-    app.UseAuthorization();
-    app.MapControllers();
+	app.UseAuthentication();
+	app.UseAuthorization();
+	app.MapControllers();
 	app.Run();
 }
 catch (System.Exception ex)
