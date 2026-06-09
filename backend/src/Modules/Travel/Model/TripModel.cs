@@ -195,25 +195,19 @@ public sealed class TripModel(AppDbContext db)
 
 		db.Trips.Update(trip);
 
-		// Full replace of join records
-		if (trip.TripCountries?.CountryId != dto.Country.Id)
-		{
-			await db.TripCountries.Where(tc => tc.TripId == id).ExecuteDeleteAsync(ct);
-			await db.TripCities.Where(tc => tc.TripId == id).ExecuteDeleteAsync(ct);
+		if (trip.TripCountries is not null)
+			db.TripCountries.Remove(trip.TripCountries);
+		if (trip.TripCities.Count > 0)
+			db.TripCities.RemoveRange(trip.TripCities);
 
-			db.TripCountries.Add(new TripCountry { TripId = id, CountryId = dto.Country.Id });
+		await db.SaveChangesAsync(ct);
 
-			foreach (var cityId in dto.Cities.Select(c => c.Id))
-				db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
-		}
-		else
-		{
-			foreach (var cityId in dto.Cities.Select(c => c.Id))
-			{
-				if (!trip.TripCities.Any(tc => tc.CityId == cityId))
-					db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
-			}
-		}
+		await db.TripCountries.AddAsync(new TripCountry { TripId = id, CountryId = dto.Country.Id }, ct);
+
+		await db.SaveChangesAsync(ct);
+
+		foreach (var cityId in dto.Cities.Select(c => c.Id))
+			db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
 
 		await db.SaveChangesAsync(ct);
 
