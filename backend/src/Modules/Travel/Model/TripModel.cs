@@ -82,7 +82,7 @@ public sealed class TripModel(AppDbContext db)
 			Budget = dto.Budget == 0 ? 0 : dto.Budget, // --- IGNORE ---
 			Visibility = dto.Visibility == 0 ? TripVisibility.Public : dto.Visibility,
 			CreatedBy = userId,
-			CreatedAt = DateTime.UtcNow,
+			CreatedAt = DateTime.UtcNow
 		};
 
 		db.Trips.Add(trip);
@@ -96,15 +96,20 @@ public sealed class TripModel(AppDbContext db)
 			db.TripCities.Add(new TripCity { TripId = trip.Id, CityId = cityId });
 
 		await db.SaveChangesAsync(ct);
-		return Trip.ToDto(trip);
+
+
+		var createdTrip = await db.Trips
+			.Include(t => t.TripCountries)
+				.ThenInclude(tc => tc.Country)
+			.Include(t => t.TripCities)
+				.ThenInclude(tc => tc.City)
+			.FirstAsync(t => t.Id == trip.Id, ct);
+
+		return Trip.ToDto(createdTrip);
 	}
 
 	public async Task<CursorPage<TripDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
 	{
-		// var query = db.Trips
-		// 	.Include(t => t.TripCountries)
-		// 		.ThenInclude(tc => tc ? tc.Country : null)
-		// 	.Include(t => t.TripCities);
 
 		var country = db.TripCountries.Include(tc => tc.Country);
 		var cities = db.TripCities.Include(tc => tc.City);
@@ -114,7 +119,6 @@ public sealed class TripModel(AppDbContext db)
 		.AddFilters(payload.Filters, field => field.ToLowerInvariant() switch
 		{
 			"tripname" => x => x.TripName,
-			"startdate" => x => x.StartDate,
 			"createdat" => x => x.CreatedAt,
 			"id" => x => x.Id,
 			"visibility" => x => x.Visibility,
@@ -211,7 +215,14 @@ public sealed class TripModel(AppDbContext db)
 
 		await db.SaveChangesAsync(ct);
 
-		return Trip.ToDto(trip);
+		var updatedTrip = await db.Trips
+			.Include(t => t.TripCountries)
+				.ThenInclude(tc => tc.Country)
+			.Include(t => t.TripCities)
+				.ThenInclude(tc => tc.City)
+			.FirstAsync(t => t.Id == id, ct);
+
+		return Trip.ToDto(updatedTrip);
 	}
 
 	public async Task<TripDto?> GetById(int id, CancellationToken ct = default)
