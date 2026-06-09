@@ -2,9 +2,9 @@
 	<div class="trip-details">
 		<h1>{{ tripStateService.trip()?.tripName }}</h1>
 		<h2>
-			@if (tripStateService.trip()?.city) {
+			@if (tripStateService.trip()?.city && tripStateService.trip()!.city!.length > 0) {
 				@for (city of tripStateService.trip()?.city; track city; let last = $last) {
-					<span>{{ city }}{{ !last ? ', ' : '' }}</span>
+					<span>{{ city.name }}{{ !last ? ', ' : '' }}</span>
 				}
 			}
 			@else {

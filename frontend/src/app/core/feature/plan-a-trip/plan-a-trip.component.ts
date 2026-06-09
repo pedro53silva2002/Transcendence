@@ -75,7 +75,6 @@ export class PlanATripComponent implements OnInit {
 
 			if (!this.isEditMode) {
 				if (formValue.trip.country) {
-					console.log(formValue.trip.city.map(( cities => cities.id )));
 					const dto: CreateTripDto = {
 						tripName: formValue.trip.tripName,
 						description: formValue.trip.description || undefined,
@@ -85,7 +84,6 @@ export class PlanATripComponent implements OnInit {
 						endDate: formValue.trip.endDate,
 						budget: formValue.trip.budget,
 						visibility: formValue.trip.visibility,
-						// createdBy: 1, // ver com o diogo se precisamos disto, não é arriscado este parâmetro não ser identificado no backend?
 						// members: formValue.crew.members
 					};
 
@@ -95,33 +93,13 @@ export class PlanATripComponent implements OnInit {
 							if (response.data !== undefined)
 								this.tripStateService.setTrip(response.data);
 							console.log('Trip created!', response.data);
-							// this.router.navigate(['/trip-dashboard', response.data?.id]);
+							this.router.navigate(['/trip-dashboard', response.data?.id]);
 						},
 						error: (error) => {
 							console.error('Error creating trip:', error);
 						}
 					});
 				}
-	
-				//just for testing if the tripStateService is storing the info about the created trip
-				// if (formValue.trip.country) {
-				// 	const tripDto: TripDto = {
-				// 		id: 120,
-				// 		tripName: formValue.trip.tripName,
-				// 		description: formValue.trip.description || undefined,
-				// 		country: formValue.trip.country,
-				// 		city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
-				// 		startDate: formValue.trip.startDate,
-				// 		endDate: formValue.trip.endDate,
-				// 		budget: formValue.trip.budget,
-				// 		visibility: formValue.trip.visibility,
-				// 		createdBy: 0, // ver com o diogo se precisamos disto
-				// 		createdAt: '',
-				// 		members: formValue.crew.members
-				// 	};
-				// 	this.tripStateService.setTrip(tripDto);
-				// 	this.router.navigate(['/trip-dashboard', tripDto.id]);
-				// }
 
 
 			} else {
@@ -142,27 +120,6 @@ export class PlanATripComponent implements OnInit {
 							visibility: formValue.trip.visibility,
 						}
 
-					//just for testing if the tripStateService is storing the info about the updated trip
-					// if (formValue.trip.country) {
-					// 	const tripDto: TripDto = {
-					// 	id: 120,
-					// 	tripName: formValue.trip.tripName,
-					// 	description: formValue.trip.description || undefined,
-					// 	country: formValue.trip.country,
-					// 	city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
-					// 	startDate: formValue.trip.startDate,
-					// 	endDate: formValue.trip.endDate,
-					// 	budget: formValue.trip.budget,
-					// 	visibility: formValue.trip.visibility,
-					// 	createdBy: 0, // ver com o diogo se precisamos disto
-					// 	createdAt: '',
-					// 	members: formValue.crew.members
-					// };
-	
-					// this.tripStateService.setTrip(tripDto);
-					// this.router.navigate(['/trip-dashboard', tripDto.id]);
-					// }
-	
 					this.tripService.update(updateDto.id, updateDto).subscribe({
 						next: (response) => {
 							if (response.data !== undefined)
