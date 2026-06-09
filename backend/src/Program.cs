@@ -9,10 +9,11 @@ using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 using Trippie.Modules.Travel.Service;
-using System.Threading.RateLimiting;
 
 Env.TraversePath().Load();
 
@@ -96,35 +97,34 @@ try
 	});
 	builder.Services.AddHttpClient<GoogleOAuthService>();
 
-    //Add dependency injection for model and service
-    builder.Services.AddScoped<UserModel>();
-    builder.Services.AddScoped<UserService>();
-    builder.Services.AddScoped<AuthService>();
-    builder.Services.AddScoped<CountryService>();
-    builder.Services.AddScoped<CountryModel>();
+	//Add dependency injection for model and service
+	builder.Services.AddScoped<UserModel>();
+	builder.Services.AddScoped<UserService>();
+	builder.Services.AddScoped<AuthService>();
+	builder.Services.AddScoped<CountryService>();
+	builder.Services.AddScoped<CountryModel>();
 	builder.Services.AddScoped<TripModel>();
 	builder.Services.AddScoped<TripService>();
 	builder.Services.AddScoped<CityService>();
-    builder.Services.AddScoped<CityModel>();
+	builder.Services.AddScoped<CityModel>();
+
 
 	//Add Http request limiter
-	//TODO: SEE POLITICS OF COORS
 	builder.Services.AddRateLimiter(options =>
 	{
 		options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-			RateLimitPartition.GetFixedWindowLimiter(
-				partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+		{
+			return RateLimitPartition.GetFixedWindowLimiter(
+				partitionKey: $"{httpContext.Request.Path}-{httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString()}",
 				factory: partition => new FixedWindowRateLimiterOptions
 				{
 					AutoReplenishment = true,
-					PermitLimit = 10,
+					PermitLimit = 20,
 					QueueLimit = 0,
 					Window = TimeSpan.FromMinutes(1)
-				}));
+				});
+		});
 	});
-
-     // Search service with our custom query compiler
-
 
 	var app = builder.Build();
 
@@ -183,22 +183,22 @@ try
 	//    (auth, static files, endpoints).
 	app.UseExceptionHandling();
 
-    // 3. Standard pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.MapOpenApi();
-        app.UseSwaggerUI(options =>
-        {
-            options.SwaggerEndpoint("/openapi/v1.json", "Trippie v1");
-        });
-    }
-    app.MapHealthChecks("/health");
-    app.UseCors();
+	// 3. Standard pipeline.
+	if (app.Environment.IsDevelopment())
+	{
+		app.MapOpenApi();
+		app.UseSwaggerUI(options =>
+		{
+			options.SwaggerEndpoint("/openapi/v1.json", "Trippie v1");
+		});
+	}
+	app.MapHealthChecks("/health");
+	app.UseCors();
 	//add ratelimiter
 	app.UseRateLimiter();
-    app.UseAuthentication();
-    app.UseAuthorization();
-    app.MapControllers();
+	app.UseAuthentication();
+	app.UseAuthorization();
+	app.MapControllers();
 	app.Run();
 }
 catch (System.Exception ex)
