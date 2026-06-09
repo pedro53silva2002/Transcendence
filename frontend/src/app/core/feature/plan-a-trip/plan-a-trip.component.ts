@@ -95,7 +95,7 @@ export class PlanATripComponent implements OnInit {
 							if (response.data !== undefined)
 								this.tripStateService.setTrip(response.data);
 							console.log('Trip created!', response.data);
-							this.router.navigate(['/trip-dashboard', response.data?.id]);
+							// this.router.navigate(['/trip-dashboard', response.data?.id]);
 						},
 						error: (error) => {
 							console.error('Error creating trip:', error);
