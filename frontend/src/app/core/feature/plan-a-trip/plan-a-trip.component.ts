@@ -4,12 +4,11 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { MatButtonModule } from '@angular/material/button';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { TripService } from './services/trip.service';
-import { CreateTripDto, TripDto, TripVisibility, UpdateTripDto } from './dtos/trip.dto';
+import { CreateTripDto, TripVisibility, UpdateTripDto } from './dtos/trip.dto';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TripStateService } from './services/trip-state.service';
 import { CountryDto } from './dtos/country.dto';
 import { CityDto } from './dtos/city.dto';
-import { SessionService } from '../../logic/services/session.service';
 
 @Component({
 	selector: 'app-plan-a-trip',
@@ -26,8 +25,7 @@ export class PlanATripComponent implements OnInit {
 	private readonly router = inject(Router);
 	private readonly tripStateService = inject(TripStateService);
 	private readonly route = inject(ActivatedRoute);
-	private readonly userSession = inject(SessionService);
-
+	
 	public isEditMode = false;
 
 	planATripForm = this.formBuilder.nonNullable.group({
