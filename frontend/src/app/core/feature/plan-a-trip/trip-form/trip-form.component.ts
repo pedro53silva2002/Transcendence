@@ -60,7 +60,7 @@ export class TripFormComponent implements OnInit {
 	cityInput = viewChild<ElementRef<HTMLInputElement>>('cityInput');
 
 	selectedCountryId = signal<number | null>(null);
-	selectedCities = signal<string[]>([]);
+	selectedCities = signal<CityDto[]>([]);
 
 	ngOnInit(): void {
 
@@ -117,12 +117,13 @@ export class TripFormComponent implements OnInit {
 
 	//when a user selects a city
 	selectedCity(event: MatAutocompleteSelectedEvent): void {
-		const cityValue = event.option.viewValue;
+		const cityValue = event.option.value;
 
 		if (cityValue && !this.selectedCities().includes(cityValue)) {
 			this.selectedCities.update(cities => {
 				const updated = [...cities, cityValue];
 				this.city.setValue(updated, { emitEvent: false });
+				console.log(this.city.value);
 				return updated;
 			})
 		}
@@ -137,7 +138,7 @@ export class TripFormComponent implements OnInit {
 	//when a user clicks to remove a city
 	removeCity(cityName: string): void {
 		this.selectedCities.update(cities => {
-			const updated = cities.filter(city => city !== cityName);
+			const updated = cities.filter(city => city.name !== cityName);
 			this.city.setValue(updated, { emitEvent: false }); //to prevent it from triggering an API request
 			return updated;
 		});

@@ -21,7 +21,7 @@
 	</div>
 
 	<div class="management-buttons">
-		<button class="tertiary-btn" matButton routerLink="/plan-a-trip/edit/120">Edit Trip Details</button>
+		<button class="tertiary-btn" matButton [routerLink]="['/plan-a-trip/edit', tripStateService.trip()?.id]">Edit Trip Details</button>
 		<button class="tertiary-btn" matButton>Delete Trip</button>
 	</div>
 </div>

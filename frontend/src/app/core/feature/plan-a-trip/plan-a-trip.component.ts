@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { TripFormComponent } from "./trip-form/trip-form.component";
 import { TranslocoModule } from '@jsverse/transloco';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +17,8 @@ import { CityDto } from './dtos/city.dto';
 	styleUrl: './plan-a-trip.component.scss',
 })
 export class PlanATripComponent implements OnInit {
+
+	tripForm = viewChild(TripFormComponent);
 
 	private readonly formBuilder = inject(FormBuilder);
 	private readonly tripService = inject(TripService);
@@ -73,17 +75,18 @@ export class PlanATripComponent implements OnInit {
 
 			if (!this.isEditMode) {
 				if (formValue.trip.country) {
+					console.log(formValue.trip.city.map(( cities => cities.id )));
 					const dto: CreateTripDto = {
 						tripName: formValue.trip.tripName,
 						description: formValue.trip.description || undefined,
-						country: formValue.trip.country,
-						city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
+						countryId: formValue.trip.country.id,
+						cityIds: formValue.trip.city.length > 0 ? formValue.trip.city.map(( cities => cities.id )) : undefined,
 						startDate: formValue.trip.startDate,
 						endDate: formValue.trip.endDate,
 						budget: formValue.trip.budget,
 						visibility: formValue.trip.visibility,
-						createdBy: 0, // ver com o diogo se precisamos disto
-						members: formValue.crew.members
+						createdBy: 1, // ver com o diogo se precisamos disto, não é arriscado este parâmetro não ser identificado no backend?
+						// members: formValue.crew.members
 					};
 
 					//http post to create trip
@@ -131,8 +134,8 @@ export class PlanATripComponent implements OnInit {
 							id: Number(tripId),
 							tripName: formValue.trip.tripName,
 							description: formValue.trip.description || undefined,
-							country: formValue.trip.country,
-							city: formValue.trip.city,
+							countryId: formValue.trip.country.id,
+							cityIds: formValue.trip.city.length > 0 ? formValue.trip.city.map(( cities => cities.id )) : undefined,
 							startDate: formValue.trip.startDate,
 							endDate: formValue.trip.endDate,
 							budget: formValue.trip.budget,

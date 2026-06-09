@@ -11,14 +11,14 @@ export enum TripVisibility {
 export interface CreateTripDto {
     tripName: string;
     description?: string;
-    country: CountryDto;
-	city?: CityDto[];
+    countryId: number;
+	cityIds?: number[];
     startDate: string;
     endDate: string;
     budget: number;
     visibility: TripVisibility;
     createdBy: number;
-	members: number[]; //ver com o diogo se vai ser assim
+	// members: number[]; //ver com o diogo se vai ser assim
 }
 
 //what i receive in http get
@@ -35,7 +35,7 @@ export interface TripDto {
     createdBy: number;
     createdAt: string;
     updatedAt?: string;
-	members: number[];
+	// members: number[];
 }
 
 //what i send in http put request to update a trip
@@ -43,8 +43,8 @@ export interface UpdateTripDto {
     id: number;
     tripName: string;
     description?: string;
-    country: CountryDto;
-	city?: CityDto[];
+    countryId: number;
+	cityIds?: number[];
     startDate: string;
     endDate: string;
     budget: number;

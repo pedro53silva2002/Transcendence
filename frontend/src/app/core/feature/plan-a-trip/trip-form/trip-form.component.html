@@ -72,8 +72,8 @@
 			subscriptSizing="dynamic">
 			<mat-chip-grid #chipGrid>
 				@for (city of selectedCities(); track city) {
-				<mat-chip-row (removed)="removeCity(city)">
-					{{ city }}
+				<mat-chip-row (removed)="removeCity(city.name)">
+					{{ city.name }}
 					<button matChipRemove [attr.aria-label]="'Remove ' + city">
 						<mat-icon>cancel</mat-icon>
 					</button>
@@ -86,7 +86,7 @@
 
 			<mat-autocomplete #autoCity="matAutocomplete" (optionSelected)="selectedCity($event)">
 				@for (city of listOfCities$ | async; track city.name) {
-				<mat-option [value]="city.name">
+				<mat-option [value]="city">
 					{{ city.name }}
 				</mat-option>
 				}
