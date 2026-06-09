@@ -24,7 +24,9 @@ public sealed class TripRouter(TripService service, IUserContext userContext) : 
 	[HttpPost]
 	public async Task<ActionResult<TripDto>> Create([FromBody] CreateTripDto dto, CancellationToken ct)
 	{
-		var trip = await service.CreateAsync(dto, ct);
+		
+		var userId = userContext.Require().UserId;
+		var trip = await service.CreateAsync(dto, userId, ct);
 		return CreatedAtAction(nameof(Create), trip);
 	}
 
