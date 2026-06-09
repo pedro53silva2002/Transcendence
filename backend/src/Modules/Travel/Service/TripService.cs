@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
+using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 
@@ -12,10 +13,10 @@ namespace Trippie.Modules.Travel.Service;
 
 public sealed class TripService(TripModel tripModel)
 {
-	public async Task<TripDto> CreateAsync(CreateTripDto dto, CancellationToken ct = default)
+	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
 		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
-		var trip = await tripModel.CreateAsync(dto, ct);
+		var trip = await tripModel.CreateAsync(dto, userId, ct);
 		return trip;
 	}
 
