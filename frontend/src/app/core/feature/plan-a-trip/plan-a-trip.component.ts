@@ -9,6 +9,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TripStateService } from './services/trip-state.service';
 import { CountryDto } from './dtos/country.dto';
 import { CityDto } from './dtos/city.dto';
+import { SessionService } from '../../logic/services/session.service';
 
 @Component({
 	selector: 'app-plan-a-trip',
@@ -25,6 +26,7 @@ export class PlanATripComponent implements OnInit {
 	private readonly router = inject(Router);
 	private readonly tripStateService = inject(TripStateService);
 	private readonly route = inject(ActivatedRoute);
+	private readonly userSession = inject(SessionService);
 
 	public isEditMode = false;
 
@@ -79,13 +81,13 @@ export class PlanATripComponent implements OnInit {
 					const dto: CreateTripDto = {
 						tripName: formValue.trip.tripName,
 						description: formValue.trip.description || undefined,
-						countryId: formValue.trip.country.id,
-						cityIds: formValue.trip.city.length > 0 ? formValue.trip.city.map(( cities => cities.id )) : undefined,
+						country: formValue.trip.country,
+						city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
 						startDate: formValue.trip.startDate,
 						endDate: formValue.trip.endDate,
 						budget: formValue.trip.budget,
 						visibility: formValue.trip.visibility,
-						createdBy: 1, // ver com o diogo se precisamos disto, não é arriscado este parâmetro não ser identificado no backend?
+						// createdBy: 1, // ver com o diogo se precisamos disto, não é arriscado este parâmetro não ser identificado no backend?
 						// members: formValue.crew.members
 					};
 
@@ -134,8 +136,8 @@ export class PlanATripComponent implements OnInit {
 							id: Number(tripId),
 							tripName: formValue.trip.tripName,
 							description: formValue.trip.description || undefined,
-							countryId: formValue.trip.country.id,
-							cityIds: formValue.trip.city.length > 0 ? formValue.trip.city.map(( cities => cities.id )) : undefined,
+							country: formValue.trip.country,
+							city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
 							startDate: formValue.trip.startDate,
 							endDate: formValue.trip.endDate,
 							budget: formValue.trip.budget,
