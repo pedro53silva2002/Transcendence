@@ -17,7 +17,7 @@ namespace Trippie.Common.Services.Search.Model;
 /// invite bugs where someone calls <c>.Add()</c> after the fact.
 /// </remarks>
 public sealed record CursorPage<T>(
-    IReadOnlyList<T> Content,
-    string? NextCursor,
-    bool HasNext,
-    int Size);
+	IList<T> Content,
+	string? NextCursor,
+	bool HasNext,
+	int Size);

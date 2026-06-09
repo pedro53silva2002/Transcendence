@@ -4,6 +4,8 @@ using Trippie.Common.Services.Search.Exception;
 using Trippie.Common.Services.Search.Linq;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Travel.Dtos;
+using Trippie.Modules.Auth.Dtos;
+using Trippie.Modules.Auth.Model;
 
 namespace Trippie.Modules.Travel.Model;
 
@@ -23,27 +25,51 @@ public sealed class Trip(AppDbContext db)
 
 	public TripCountry? TripCountries { get; set; }
 	public ICollection<TripCity> TripCities { get; set; } = [];
-	public static TripDto ToDto(Trip t) => new()
+	public static TripDto ToDto(Trip t)
 	{
-		Id = t.Id,
-		TripName = t.TripName,
-		Description = t.Description,
-		Duration = t.Duration,
-		StartDate = t.StartDate,
-		EndDate = t.EndDate,
-		Budget = t.Budget,
-		Visibility = t.Visibility,
-		CreatedBy = t.CreatedBy,
-		CreatedAt = t.CreatedAt ?? DateTime.UtcNow,
-		UpdatedAt = t.UpdatedAt,
-		CountryId = t.TripCountries?.CountryId ?? 0,
-		CityIds = t.TripCities.Select(tc => tc.CityId).ToList(),
-	};
+		return new()
+		{
+			Id = t.Id,
+			TripName = t.TripName,
+			Description = t.Description,
+			Duration = t.Duration,
+			StartDate = t.StartDate,
+			EndDate = t.EndDate,
+			Budget = t.Budget,
+			Visibility = t.Visibility,
+			CreatedBy = t.CreatedBy,
+			CreatedAt = t.CreatedAt ?? DateTime.UtcNow,
+			UpdatedAt = t.UpdatedAt,
+			Country = t.TripCountries?.Country != null ? new CountryDto
+			{
+				Id = t.TripCountries.Country.Id,
+				Name = t.TripCountries.Country.Name,
+				Code = t.TripCountries.Country.Code
+			} : new CountryDto
+			{
+				Id = 0,
+				Name = string.Empty,
+				Code = string.Empty
+			},
+			Cities = t.TripCities.Select(tc => tc.City is null ? new CityDto
+			{
+				Id = 0,
+				Name = string.Empty,
+				CountryId = 0
+			}
+			: new CityDto
+			{
+				Id = tc.City.Id,
+				Name = tc.City.Name,
+				CountryId = tc.City.CountryId
+			}).ToList(),
+		};
+	}
 }
 
 public sealed class TripModel(AppDbContext db)
 {
-	public async Task<TripDto> CreateAsync(CreateTripDto dto, CancellationToken ct = default)
+	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
 		var trip = new Trip(db)
 		{
@@ -55,18 +81,18 @@ public sealed class TripModel(AppDbContext db)
 			EndDate = dto.EndDate,
 			Budget = dto.Budget == 0 ? 0 : dto.Budget, // --- IGNORE ---
 			Visibility = dto.Visibility == 0 ? TripVisibility.Public : dto.Visibility,
-			CreatedBy = dto.CreatedBy,
+			CreatedBy = userId,
 			CreatedAt = DateTime.UtcNow,
 		};
 
 		db.Trips.Add(trip);
 		await db.SaveChangesAsync(ct);
 
-		db.TripCountries.Add(new TripCountry { TripId = trip.Id, CountryId = dto.CountryId });
+		db.TripCountries.Add(new TripCountry { TripId = trip.Id, CountryId = dto.Country.Id });
 
 		await db.SaveChangesAsync(ct);
 
-		foreach (var cityId in dto.CityIds)
+		foreach (var cityId in dto.Cities.Select(c => c.Id))
 			db.TripCities.Add(new TripCity { TripId = trip.Id, CityId = cityId });
 
 		await db.SaveChangesAsync(ct);
@@ -75,11 +101,15 @@ public sealed class TripModel(AppDbContext db)
 
 	public async Task<CursorPage<TripDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
 	{
-		var query = db.Trips
-			.Include(t => t.TripCountries)
-			.Include(t => t.TripCities);
+		// var query = db.Trips
+		// 	.Include(t => t.TripCountries)
+		// 		.ThenInclude(tc => tc ? tc.Country : null)
+		// 	.Include(t => t.TripCities);
 
-		var res = await new SearchQueryBuilder<Trip>(query)
+		var country = db.TripCountries.Include(tc => tc.Country);
+		var cities = db.TripCities.Include(tc => tc.City);
+
+		var res = await new SearchQueryBuilder<Trip>(db.Trips)
 		.WithKey("id", x => x.Id)
 		.AddFilters(payload.Filters, field => field.ToLowerInvariant() switch
 		{
@@ -102,9 +132,43 @@ public sealed class TripModel(AppDbContext db)
 		.SetCursorPagination(payload.Page)
 		.RunAsync(x => Trip.ToDto(x), ct);  // join data not loaded in search results
 
+		res.Content.ToList().ForEach(trip =>
+		{
+			var tripCountry = country.FirstOrDefault(tc => tc.TripId == trip.Id);
+			if (tripCountry?.Country != null)
+			{
+				trip.Country = new CountryDto
+				{
+					Id = tripCountry.Country.Id,
+					Name = tripCountry.Country.Name,
+					Code = tripCountry.Country.Code
+				};
+			}
+			else
+			{
+				trip.Country = new CountryDto
+				{
+					Id = 0,
+					Name = string.Empty,
+					Code = string.Empty
+				};
+			}
+			var tripCities = cities.Where(tc => tc.TripId == trip.Id).ToList();
+			trip.Cities = tripCities.Select(tc => tc.City is null ? new CityDto
+			{
+				Id = 0,
+				Name = string.Empty,
+				CountryId = 0
+			}
+			: new CityDto
+			{
+				Id = tc.City.Id,
+				Name = tc.City.Name,
+				CountryId = tc.City.CountryId
+			}).ToList();
+		});
 		return res;
 	}
-
 	public async Task<TripDto?> UpdateAsync(int userId, int id, UpdateTripDto dto, CancellationToken ct = default)
 	{
 		var query = db.Trips
@@ -114,11 +178,11 @@ public sealed class TripModel(AppDbContext db)
 		if (trip is null) return null;
 
 		// if (db.Set<TripMember>().AnyAsync(tm => tm.TripId == trip.Id
-        //     && tm.UserId == userId
-        //     && tm.Role != MemberRole.Admin))
-        // {
-        //     throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
-        // }
+		//     && tm.UserId == userId
+		//     && tm.Role != MemberRole.Admin))
+		// {
+		//     throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
+		// }
 
 		if (dto.TripName is not null) trip.TripName = dto.TripName;
 		if (dto.Visibility != trip.Visibility) trip.Visibility = dto.Visibility;
@@ -131,25 +195,19 @@ public sealed class TripModel(AppDbContext db)
 
 		db.Trips.Update(trip);
 
-		// Full replace of join records
-		if (trip.TripCountries?.CountryId != dto.CountryId)
-		{
-			await db.TripCountries.Where(tc => tc.TripId == id).ExecuteDeleteAsync(ct);
-			await db.TripCities.Where(tc => tc.TripId == id).ExecuteDeleteAsync(ct);
+		if (trip.TripCountries is not null)
+			db.TripCountries.Remove(trip.TripCountries);
+		if (trip.TripCities.Count > 0)
+			db.TripCities.RemoveRange(trip.TripCities);
 
-			db.TripCountries.Add(new TripCountry { TripId = id, CountryId = dto.CountryId });
+		await db.SaveChangesAsync(ct);
 
-			foreach (var cityId in dto.CityIds)
-				db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
-		}
-		else
-		{
-			foreach (var cityId in dto.CityIds)
-			{
-				if (!trip.TripCities.Any(tc => tc.CityId == cityId))
-					db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
-			}
-		}
+		await db.TripCountries.AddAsync(new TripCountry { TripId = id, CountryId = dto.Country.Id }, ct);
+
+		await db.SaveChangesAsync(ct);
+
+		foreach (var cityId in dto.Cities.Select(c => c.Id))
+			db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
 
 		await db.SaveChangesAsync(ct);
 
@@ -160,7 +218,9 @@ public sealed class TripModel(AppDbContext db)
 	{
 		var trip = await db.Trips
 		.Include(t => t.TripCountries)
+			.ThenInclude(tc => tc.Country)
 		.Include(t => t.TripCities)
+			.ThenInclude(tc => tc.City)
 		.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return null;
 
@@ -174,11 +234,11 @@ public sealed class TripModel(AppDbContext db)
 		if (trip is null) return false;
 		// Only allow deletion if user is creator of trip
 		// var deleted = await db.Trip.Where(i => i.Id == id
-        //     && (db.Set<TripMember>().AnyAsync(tm => tm.TripId == i.TripId
-        //             && tm.UserId == userId
-        //             && tm.Role == MemberRole.Admin)
-        //     */))
-        //     .ExecuteDeleteAsync(ct); apagar a debaixo depois de descomentar isto
+		//     && (db.Set<TripMember>().AnyAsync(tm => tm.TripId == i.TripId
+		//             && tm.UserId == userId
+		//             && tm.Role == MemberRole.Admin)
+		//     */))
+		//     .ExecuteDeleteAsync(ct); apagar a debaixo depois de descomentar isto
 		var rows = await db.Trips.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
 		return rows > 0;
 	}

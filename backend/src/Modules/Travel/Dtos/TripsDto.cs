@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using NpgsqlTypes;
 using Trippie.Common.Services.Search.Model;
+using Trippie.Modules.Auth.Dtos;
 
 namespace Trippie.Modules.Travel.Dtos;
 
@@ -20,9 +21,8 @@ public sealed class CreateTripDto
 	public required DateTime EndDate { get; set; }
 	public required int Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
-	public required int CreatedBy { get; set; }
-	public required int CountryId { get; set; }
-	public List<int> CityIds { get; set; } = [];	 
+	public required CountryDto Country { get; set; }
+	public List<CityDto> Cities { get; set; } = [];	 
 }
 
 public sealed class TripDto
@@ -38,8 +38,8 @@ public sealed class TripDto
 	public required int CreatedBy { get; set; }
 	public required DateTime CreatedAt { get; set; }
 	public DateTime? UpdatedAt { get; set; }
-	public required int CountryId { get; set; }	
-	public List<int> CityIds { get; set; } = [];	
+	public required CountryDto Country { get; set; }
+	public List<CityDto> Cities { get; set; } = [];
 }
 
 public sealed class UpdateTripDto
@@ -51,6 +51,6 @@ public sealed class UpdateTripDto
 	public required DateTime EndDate { get; set; }
 	public required int Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
-	public required int CountryId { get; set; }	
-	public List<int> CityIds { get; set; } = [];
+	public required CountryDto Country { get; set; }
+	public List<CityDto> Cities { get; set; } = [];
 }
