@@ -17,8 +17,6 @@ export interface CreateTripDto {
     endDate: string;
     budget: number;
     visibility: TripVisibility;
-    // createdBy: number;
-	// members: number[]; //ver com o diogo se vai ser assim
 }
 
 //what i receive in http get
@@ -35,7 +33,6 @@ export interface TripDto {
     createdBy: number;
     createdAt: string;
     updatedAt?: string;
-	// members: number[];
 }
 
 //what i send in http put request to update a trip
