@@ -1,6 +1,5 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using Serilog;
 using Trippie.Common.Database;
@@ -9,6 +8,8 @@ using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
+using Trippie.Modules.Travel.Model;
+using Trippie.Modules.Travel.Service;
 
 Env.TraversePath().Load();
 
@@ -96,6 +97,8 @@ try
     builder.Services.AddScoped<CountryModel>();
     builder.Services.AddScoped<CityService>();
     builder.Services.AddScoped<CityModel>();
+    builder.Services.AddScoped<TripMembersModel>();
+    builder.Services.AddScoped<TripMembersService>();
 
      // Search service with our custom query compiler
 

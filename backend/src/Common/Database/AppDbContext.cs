@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Travel.Model;
+using Trippie.Modules.Travel.Dtos;
 namespace Trippie.Common.Database;
 
 public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
@@ -15,6 +16,6 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
-		modelBuilder.HasPostgresEnum<TripMemberRole>(name: "role");
+		modelBuilder.HasPostgresEnum<TripMemberRole>(name: "member_role");
     }
 }

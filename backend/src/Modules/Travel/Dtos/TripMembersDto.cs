@@ -28,8 +28,6 @@ public sealed class TripMembersDto
 
 public sealed class UpdateTripMembersDto
 {
-    public required int Id { get; set; }
-    public required int TripId { get; set; }
     public required int UserId { get; set; }
     public required TripMemberRole Role { get; set; }
 }
