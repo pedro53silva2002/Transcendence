@@ -9,6 +9,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TripStateService } from './services/trip-state.service';
 import { CountryDto } from './dtos/country.dto';
 import { CityDto } from './dtos/city.dto';
+import { DateTime } from 'luxon';
 
 @Component({
 	selector: 'app-plan-a-trip',
@@ -25,15 +26,15 @@ export class PlanATripComponent implements OnInit {
 	private readonly router = inject(Router);
 	private readonly tripStateService = inject(TripStateService);
 	private readonly route = inject(ActivatedRoute);
-	
+
 	public isEditMode = false;
 
 	planATripForm = this.formBuilder.nonNullable.group({
 		trip: this.formBuilder.nonNullable.group({
 			tripName: ['', [Validators.required, Validators.maxLength(25), Validators.minLength(3)]],
 			description: ['', [Validators.maxLength(250)]],
-			country: [ null as CountryDto | null, [Validators.required, PlanATripComponent.countryValidator]],
-			city: [[] as CityDto[] , [PlanATripComponent.cityValidator]],
+			country: [null as CountryDto | null, [Validators.required, PlanATripComponent.countryValidator]],
+			city: [[] as CityDto[], [PlanATripComponent.cityValidator]],
 			startDate: ['', [Validators.required]],
 			endDate: ['', [Validators.required]],
 			budget: [null as unknown as number, [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]], // Aceita apenas números inteiros
@@ -57,8 +58,8 @@ export class PlanATripComponent implements OnInit {
 						description: currentTrip.description,
 						country: currentTrip.country,
 						city: currentTrip.city,
-						startDate: currentTrip.startDate,
-						endDate: currentTrip.endDate,
+						startDate: currentTrip.startDate ? DateTime.fromISO(currentTrip.startDate, { zone: 'utc' }) as any : '',
+						endDate: currentTrip.endDate ? DateTime.fromISO(currentTrip.endDate, { zone: 'utc' }) as any : '',
 						budget: currentTrip.budget,
 						visibility: currentTrip.visibility
 					}
@@ -108,17 +109,19 @@ export class PlanATripComponent implements OnInit {
 				//checks if tripId is valid
 				if (tripId && formValue.trip.country) {
 					//builds the dto to send to backend
-						const updateDto: UpdateTripDto = {
-							id: Number(tripId),
-							tripName: formValue.trip.tripName,
-							description: formValue.trip.description || undefined,
-							country: formValue.trip.country,
-							city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
-							startDate: formValue.trip.startDate,
-							endDate: formValue.trip.endDate,
-							budget: formValue.trip.budget,
-							visibility: formValue.trip.visibility,
-						}
+					const updateDto: UpdateTripDto = {
+						id: Number(tripId),
+						tripName: formValue.trip.tripName,
+						description: formValue.trip.description || undefined,
+						country: formValue.trip.country,
+						city: formValue.trip.city.length > 0 ? formValue.trip.city : undefined,
+						startDate: this.formatFormDate(formValue.trip.startDate),
+						endDate: this.formatFormDate(formValue.trip.endDate),
+						budget: formValue.trip.budget,
+						visibility: formValue.trip.visibility,
+					}
+
+					console.log(updateDto);
 
 					this.tripService.update(updateDto.id, updateDto).subscribe({
 						next: (response) => {
@@ -138,15 +141,15 @@ export class PlanATripComponent implements OnInit {
 
 	static countryValidator(control: AbstractControl): ValidationErrors | null {
 		const value = control.value;
-		
+
 		if (!value)
 			return null;
 
 		if (typeof value === 'string') {
-			return {countryNotSelected: true};
+			return { countryNotSelected: true };
 		}
 
-		if (typeof value === 'object' && !value.id)	{
+		if (typeof value === 'object' && !value.id) {
 			return { countryNotSelected: true };
 		}
 		return null;
@@ -163,5 +166,28 @@ export class PlanATripComponent implements OnInit {
 			return { cityNotSelected: true };
 		}
 		return null;
+	}
+
+	private formatFormDate(date: any): string {
+		if (!date) return '';
+	
+		// 1. Se for um objeto do Luxon (ou um formato clonado/estendido pelo Material)
+		if (date && typeof date === 'object' && typeof date.toUTC === 'function') {
+			return date.toUTC().toISO({ suppressMilliseconds: true })!;
+		}
+	
+		// 2. Se for uma string (que veio diretamente do patchValue)
+		if (typeof date === 'string') {
+			// Se a string já tiver o "Z" ou offset, respeita. Se não tiver, força zona UTC.
+			const zone = date.includes('Z') || date.includes('+') ? 'local' : 'utc';
+			return DateTime.fromISO(date, { zone }).toUTC().toISO({ suppressMilliseconds: true })!;
+		}
+	
+		// 3. Fallback de segurança para objetos Date nativos do JS por acidente
+		if (date instanceof Date) {
+			return DateTime.fromJSDate(date).toUTC().toISO({ suppressMilliseconds: true })!;
+		}
+	
+		return '';
 	}
 }
