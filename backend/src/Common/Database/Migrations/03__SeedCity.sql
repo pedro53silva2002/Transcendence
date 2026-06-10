@@ -10714,7 +10714,7 @@ JOIN (VALUES
 	('Nicosia'),
 	('Paphos'),
 	('Paralímni'),
-	('Ýpsonas')
+	('Ýpsonas'),
 ) AS v(name) ON c.code = 'CY'
 ON CONFLICT (name, country_id) DO NOTHING;
 
