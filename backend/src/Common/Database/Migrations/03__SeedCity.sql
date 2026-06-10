@@ -6503,7 +6503,7 @@ JOIN (VALUES
 	('Yako'),
 	('Zabré'),
 	('Ziniaré'),
-	('Zorgo')
+	('Zorgo'),
 ) AS v(name) ON c.code = 'BF'
 ON CONFLICT (name, country_id) DO NOTHING;
 
