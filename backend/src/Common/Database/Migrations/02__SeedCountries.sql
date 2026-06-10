@@ -7,6 +7,7 @@ VALUES
 	('American Samoa', 'AS'),
     ('Andorra', 'AD'),
     ('Angola', 'AO'),
+	('Anguilla', 'AI'),
     ('Antigua and Barbuda', 'AG'),
     ('Argentina', 'AR'),
     ('Armenia', 'AM'),
