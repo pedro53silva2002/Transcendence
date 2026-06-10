@@ -11942,6 +11942,46 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Faroe Islands (FO)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Eiði'),
+	('Fámjin'),
+	('Fuglafjørður'),
+	('Hov'),
+	('Húsavík'),
+	('Hvalba'),
+	('Hvannasund'),
+	('Kirkja'),
+	('Klaksvík'),
+	('Kunoy'),
+	('Kvívík'),
+	('Norðragøta'),
+	('Oyrarbakki'),
+	('Porkeri'),
+	('Saltangará'),
+	('Sandavágur'),
+	('Sandur'),
+	('Skálavík'),
+	('Skopun'),
+	('Skúvoy'),
+	('Sørvágur'),
+	('Strendur'),
+	('Sumba'),
+	('Toftir'),
+	('Tórshavn'),
+	('Tvøroyri'),
+	('Vágur'),
+	('Vestmanna'),
+	('Viðareiði')
+) AS v(name) ON c.code = 'ET'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+
+-- ------------------------------------------------------------
 -- Fiji (FJ)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
