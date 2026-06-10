@@ -6279,10 +6279,12 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Bandar Seri Begawan'),
-    ('Kuala Belait'),
-    ('Seria'),
-    ('Tutong')
+	('Bandar Seri Begawan'),
+	('Bangar'),
+	('Kampong Tunah Jambu'),
+	('Kuala Belait'),
+	('Seria'),
+	('Tutong')
 ) AS v(name) ON c.code = 'BN'
 ON CONFLICT (name, country_id) DO NOTHING;
 
