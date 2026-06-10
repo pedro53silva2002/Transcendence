@@ -95,6 +95,7 @@ VALUES
     ('Guyana', 'GY'),
     ('Haiti', 'HT'),
     ('Honduras', 'HN'),
+	('Hong Kong', 'HK'),
     ('Hungary', 'HU'),
     ('Iceland', 'IS'),
     ('India', 'IN'),

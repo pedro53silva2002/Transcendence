@@ -16292,6 +16292,39 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Hong Kong (HK)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Central District'),
+	('Cheung Chau'),
+	('Choi Hung'),
+	('Hong Kong'),
+	('Kennedy Town'),
+	('Kowloon'),
+	('Kowloon City'),
+	('Kwai Chung'),
+	('Lam Tin'),
+	('Pak Tin Pa'),
+	('Sai Kung Tuk'),
+	('Sai Wan Ho'),
+	('San Tung Chung Hang'),
+	('Sha Kok Mei'),
+	('Sha Tin'),
+	('Sham Shui Po'),
+	('Shek Tong Tsui'),
+	('Shek Wai Kok'),
+	('Tin Shui Wai'),
+	('Tsing Yi Town'),
+	('Tung Tau Tsuen'),
+	('Wan Tau Tong'),
+	('Wang Tau Hom')
+) AS v(name) ON c.code = 'HK'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Hungary (HU)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
