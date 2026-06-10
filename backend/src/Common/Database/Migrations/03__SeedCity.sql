@@ -11678,16 +11678,22 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Aconibe'),
-    ('Añisoc'),
-    ('Bata'),
-    ('Ebebiyin'),
-    ('Evinayong'),
-    ('Luba'),
-    ('Malabo'),
-    ('Mbini'),
-    ('Mongomo'),
-    ('Rebola')
+	('Aconibe'),
+	('Añisoc'),
+	('Bata'),
+	('Bengonbeyene'),
+	('Calatrava'),
+	('Djibloho'),
+	('Ebebiyín'),
+	('Evinayong'),
+	('Luba'),
+	('Malabo'),
+	('Mbini'),
+	('Mongomo'),
+	('Palé'),
+	('Rebola'),
+	('Santiago de Baney'),
+	('Sevilla de Niefang')
 ) AS v(name) ON c.code = 'GQ'
 ON CONFLICT (name, country_id) DO NOTHING;
 
