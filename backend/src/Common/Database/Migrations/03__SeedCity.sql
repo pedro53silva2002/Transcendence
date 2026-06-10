@@ -9277,6 +9277,17 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Christmas Island (CX)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Flying Fish Cove')
+) AS v(name) ON c.code = 'CX'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Colombia (CO)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)

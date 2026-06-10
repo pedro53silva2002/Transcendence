@@ -43,6 +43,7 @@ VALUES
     ('Chad', 'TD'),
     ('Chile', 'CL'),
     ('China', 'CN'),
+	('Christmas Island', 'CX'),
     ('Colombia', 'CO'),
     ('Comoros', 'KM'),
     ('Congo', 'CG'),
