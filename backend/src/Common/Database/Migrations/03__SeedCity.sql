@@ -3062,6 +3062,17 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Bermuda (BM)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Hamilton')
+) AS v(name) ON c.code = 'BM'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Bhutan (BT)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
