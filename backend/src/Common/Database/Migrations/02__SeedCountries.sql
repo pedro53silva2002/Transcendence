@@ -48,6 +48,7 @@ VALUES
     ('Comoros', 'KM'),
 	('Congo-Brazzaville', 'CG'),
     ('Congo-Kinshasa', 'CD'),
+	('Cook Islands', 'CK'),
     ('Costa Rica', 'CR'),
     ('Croatia', 'HR'),
     ('Cuba', 'CU'),

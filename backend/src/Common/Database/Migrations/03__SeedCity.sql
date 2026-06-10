@@ -10193,6 +10193,17 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Cook Islands (CK)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Avarua')
+) AS v(name) ON c.code = 'CK'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Costa Rica (CR)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
