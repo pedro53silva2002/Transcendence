@@ -9,7 +9,7 @@ using Trippie.Modules.Auth.Model;
 
 namespace Trippie.Modules.Travel.Model;
 
-public sealed class Trip(AppDbContext db)
+public sealed class Trip()
 {
 	public required int Id { get; set; }
 	public required string TripName { get; set; }
