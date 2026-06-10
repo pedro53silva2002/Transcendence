@@ -1967,7 +1967,7 @@ JOIN (VALUES
 	('Wolfurt'),
 	('Wörgl'),
 	('Zell am See'),
-	('Zwettl'),
+	('Zwettl')
 ) AS v(name) ON c.code = 'AT'
 ON CONFLICT (name, country_id) DO NOTHING;
 
@@ -2108,7 +2108,7 @@ JOIN (VALUES
 	('Zaqatala'),
 	('Zərdab'),
 	('Zirə'),
-	('Zığ'),
+	('Zığ')
 ) AS v(name) ON c.code = 'AZ'
 ON CONFLICT (name, country_id) DO NOTHING;
 
@@ -2119,17 +2119,11 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Alice Town'),
-    ('Andros Town'),
-    ('Cooper''s Town'),
-    ('Freeport'),
-    ('George Town'),
-    ('Governor''s Harbour'),
-    ('Marsh Harbour'),
-    ('Matthew Town'),
-    ('Nassau'),
-    ('Rock Sound'),
-    ('Spanish Wells')
+	('Cooper’s Town'),
+	('Freeport City'),
+	('Lucaya'),
+	('Nassau'),
+	('West End')
 ) AS v(name) ON c.code = 'BS'
 ON CONFLICT (name, country_id) DO NOTHING;
 
