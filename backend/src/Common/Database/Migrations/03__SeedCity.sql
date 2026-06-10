@@ -25905,19 +25905,27 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Black River'),
-    ('Falmouth'),
-    ('Kingston'),
-    ('Mandeville'),
-    ('May Pen'),
-    ('Montego Bay'),
-    ('Morant Bay'),
-    ('Old Harbour'),
-    ('Portmore'),
-    ('Port Antonio'),
-    ('Saint Ann''s Bay'),
-    ('Savanna-la-Mar'),
-    ('Spanish Town')
+	('Black River'),
+	('Bog Walk'),
+	('Ewarton'),
+	('Falmouth'),
+	('Half Way Tree'),
+	('Linstead'),
+	('Lucea'),
+	('Lucky Hill'),
+	('Mandeville'),
+	('May Pen'),
+	('Montego Bay'),
+	('Morant Bay'),
+	('Ocho Rios'),
+	('Old Harbour'),
+	('Port Antonio'),
+	('Port Maria'),
+	('Port Morant'),
+	('Portmore'),
+	('Saint Ann’s Bay'),
+	('Savanna-la-Mar'),
+	('Spanish Town')
 ) AS v(name) ON c.code = 'JM'
 ON CONFLICT (name, country_id) DO NOTHING;
 
