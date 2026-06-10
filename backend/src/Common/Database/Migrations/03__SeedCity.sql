@@ -3079,18 +3079,28 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Bumthang'),
-    ('Gelephu'),
-    ('Jakar'),
-    ('Mongar'),
-    ('Paro'),
-    ('Phuentsholing'),
-    ('Punakha'),
-    ('Samdrup Jongkhar'),
-    ('Thimphu'),
-    ('Trashigang'),
-    ('Trongsa'),
-    ('Wangdue Phodrang')
+	('Daga'),
+	('Gasa'),
+	('Geylegphug'),
+	('Haa'),
+	('Jakar'),
+	('Lhuentse'),
+	('Mongar'),
+	('Paro'),
+	('Pemagatshel'),
+	('Phuntsholing'),
+	('Punakha'),
+	('Samdrup Jongkhar'),
+	('Samtse'),
+	('Sarpang'),
+	('Thimphu'),
+	('Trashi Yangtse'),
+	('Trashigang'),
+	('Trongsa'),
+	('Tsimasham'),
+	('Tsirang'),
+	('Wangdue Phodrang'),
+	('Zhemgang')
 ) AS v(name) ON c.code = 'BT'
 ON CONFLICT (name, country_id) DO NOTHING;
 
