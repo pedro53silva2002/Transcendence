@@ -10699,16 +10699,22 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-
-
-    ('Famagusta'),
-    ('Kyrenia'),
-    ('Larnaca'),
-    ('Limassol'),
-    ('Nicosia'),
-    ('Paphos'),
-    ('Paralimni'),
-    ('Strovolos')
+	('Ágios Athanásios'),
+	('Aradíppou'),
+	('Dáli'),
+	('Famagusta'),
+	('Germasógeia'),
+	('Káto Polemídia'),
+	('Kyrenia'),
+	('Larnaca'),
+	('Latsia'),
+	('Limassol'),
+	('Mésa Geitoniá'),
+	('Mórfou'),
+	('Nicosia'),
+	('Paphos'),
+	('Paralímni'),
+	('Ýpsonas')
 ) AS v(name) ON c.code = 'CY'
 ON CONFLICT (name, country_id) DO NOTHING;
 
