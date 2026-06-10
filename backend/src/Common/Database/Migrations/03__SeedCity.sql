@@ -11732,22 +11732,26 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Haapsalu'),
-    ('Johvi'),
-    ('Keila'),
-    ('Kohtla-Jarve'),
-    ('Kuressaare'),
-    ('Narva'),
-    ('Narva-Joesuu'),
-    ('Paide'),
-    ('Parnu'),
-    ('Rakvere'),
-    ('Sillamae'),
-    ('Tallinn'),
-    ('Tartu'),
-    ('Valga'),
-    ('Viljandi'),
-    ('Voru')
+	('Haapsalu'),
+	('Jõgeva'),
+	('Jõhvi'),
+	('Kärdla'),
+	('Keila'),
+	('Kohtla-Järve'),
+	('Kuressaare'),
+	('Maardu'),
+	('Narva'),
+	('Paide'),
+	('Pärnu'),
+	('Põlva'),
+	('Rakvere'),
+	('Rapla'),
+	('Sillamäe'),
+	('Tallinn'),
+	('Tartu'),
+	('Valga'),
+	('Viljandi'),
+	('Võru')
 ) AS v(name) ON c.code = 'EE'
 ON CONFLICT (name, country_id) DO NOTHING;
 
