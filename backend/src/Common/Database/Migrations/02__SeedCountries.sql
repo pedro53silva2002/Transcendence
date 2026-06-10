@@ -54,7 +54,7 @@ VALUES
     ('Cuba', 'CU'),
     ('Cyprus', 'CY'),
     ('Czechia', 'CZ'),
-    ('Côte d''Ivoire', 'CI'),
+    ('Côte d’Ivoire', 'CI'),
     ('Democratic Republic of the Congo', 'CD'),
     ('Denmark', 'DK'),
     ('Djibouti', 'DJ'),
