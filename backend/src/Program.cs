@@ -1,6 +1,5 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using Serilog;
 using Trippie.Common.Database;
@@ -107,6 +106,8 @@ try
 	builder.Services.AddScoped<TripService>();
 	builder.Services.AddScoped<CityService>();
 	builder.Services.AddScoped<CityModel>();
+	builder.Services.AddScoped<TripMembersModel>();
+	builder.Services.AddScoped<TripMembersService>();
 
 
 	//Add Http request limiter
