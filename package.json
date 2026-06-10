@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@angular/material-luxon-adapter": "^22.0.0",
+    "luxon": "^3.7.2"
+  }
+}

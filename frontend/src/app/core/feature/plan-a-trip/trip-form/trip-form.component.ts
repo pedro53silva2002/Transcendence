@@ -8,14 +8,14 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { TranslocoModule } from '@jsverse/transloco';
 import { LocationsService } from '../services/locations.service';
 import { Observable, debounceTime, delay, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { TripVisibility } from '../dtos/trip.dto';
 import { CountryDto } from '../dtos/country.dto';
 import { MatChipsModule } from '@angular/material/chips';
-import { ImportsNotUsedAsValues } from 'typescript';
 import { MatIconModule } from '@angular/material/icon';
 import { CityDto } from '../dtos/city.dto';
+import { provideLuxonDateAdapter, MAT_LUXON_DATE_ADAPTER_OPTIONS, MatLuxonDateModule } from '@angular/material-luxon-adapter';
 
 //Defining the date format
 export const FORMAT_DMY = {
@@ -38,14 +38,15 @@ export const FORMAT_DMY = {
 		MatFormFieldModule,
 		MatSelectModule,
 		MatChipsModule,
-		MatIconModule
+		MatIconModule,
 	],
 	templateUrl: './trip-form.component.html',
 	styleUrl: './trip-form.component.scss',
 	providers: [
 		{ provide: MAT_DATE_LOCALE, useValue: 'pt-PT' },
 		{ provide: MAT_DATE_FORMATS, useValue: FORMAT_DMY },
-		provideNativeDateAdapter()
+		{ provide: MAT_LUXON_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }, // to solve the issue of converting from PT timezones to the angular default one
+		provideLuxonDateAdapter()
 	]
 })
 export class TripFormComponent implements OnInit {

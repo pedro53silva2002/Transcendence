@@ -10,32 +10,34 @@
 }
 
 .trip-details {
-	gap: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
 	width: 100%;
 
 	h1 {
 		font-family: "BBH Hegarty";
 		font-weight: 400;
-		font-size: 64px;
-		margin-bottom: 10px;
+		font-size: 68px;
+		margin-bottom: 0;
 		text-transform: uppercase;
-		
+
 	}
 
 	h2 {
 		font-family: "BBH Bogle";
 		font-weight: 400;
-		font-size: 30px;
+		font-size: 32px;
 		color: var(--mat-sys-on-primary);
-		opacity: 0.7;
 		margin-top: 0;
-		margin-bottom: 10px;
+		margin-bottom: 0;
 	}
 
 	p {
 		margin-top: 0;
 		color: var(--mat-sys-on-primary);
 		font-size: 16px;
+		opacity: 0.7;
 	}
 }
 
@@ -51,3 +53,103 @@
 		padding: 15px;
 	}
 }
+
+.location-and-budget {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.budget-container {
+	position: relative;
+	display: grid !important;
+    grid-template-areas: "stack" !important;
+}
+
+.budget-base,
+.budget-bar,
+.budget-numbers {
+	grid-area: stack;
+}
+
+.budget-base {
+	width: 200px;
+	height: 30px;
+	background-color: color-mix(in srgb, var(--mat-sys-on-primary) 25%, transparent);
+	border-radius: 25px;
+}
+
+.budget-bar {
+	width: 150px;
+	height: 30px;
+	background-color: var(--mat-sys-on-primary-container);
+	border-radius: 25px;
+}
+
+.budget-numbers {
+	font-family: "BBH Bogle";
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	margin-right: 15px;
+}
+
+.spent {
+	color: color-mix(in srgb, var(--mat-sys-on-primary) 80%, transparent) !important;
+	margin-bottom: 0;
+	font-size: 20px !important;
+}
+
+.budget {
+	margin-left: 2px;
+	margin-bottom: 0;
+	font-size: 20px !important;
+	opacity: 1 !important;
+}
+
+.money-symbol {
+	margin-bottom: 0;
+	margin-left: 2px;
+	font-size: 18px !important;
+	opacity: 1 !important;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	margin-bottom: 50px;
+}
+
+.trip-dates {
+	display: flex;
+	align-items: flex-end;
+	// color: red;
+	color: var(--mat-sys-primary);
+	font-family: "BBH Bogle";
+}
+
+.start-date, .end-date {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background-color: var(--mat-sys-on-primary-container);
+
+	.day {
+		text-align: center;
+		font-size: 28px;
+		margin: 0;
+	}
+
+	.month {
+		text-align: center;
+		font-size: 20px;
+		margin: 0;
+	}
+}
+

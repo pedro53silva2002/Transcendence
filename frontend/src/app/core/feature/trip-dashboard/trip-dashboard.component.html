@@ -1,19 +1,43 @@
 <div class="main-container">
-	<div class="trip-details">
-		<h1>{{ tripStateService.trip()?.tripName }}</h1>
-		<h2>
-			@if (tripStateService.trip()?.city && tripStateService.trip()!.city!.length > 0) {
-				@for (city of tripStateService.trip()?.city; track city; let last = $last) {
+	<div class="header">
+		<div class="trip-details">
+			<h1>{{ tripStateService.trip()?.tripName }}</h1>
+			<div class="location-and-budget">
+				<h2>
+					@if (tripStateService.trip()?.city && tripStateService.trip()!.city!.length > 0) {
+					@for (city of tripStateService.trip()?.city; track city; let last = $last) {
 					<span>{{ city.name }}{{ !last ? ', ' : '' }}</span>
-				}
-			}
-			@else {
-				<span>{{ tripStateService.trip()?.country?.name }}</span>
-			}
-		</h2>
-		<p>{{ tripStateService.trip()?.description }}</p>
+					}
+					}
+					@else {
+					<span>{{ tripStateService.trip()?.country?.name }}</span>
+					}
+				</h2>
+				<!-- budget meter -->
+				<div class="budget-container">
+					<div class="budget-base"></div>
+					<div class="budget-bar"></div>
+					<div class="budget-numbers">
+						<p class="spent">2</p>
+						<p class="budget">/{{ tripStateService.trip()?.budget }}</p>
+						<p class="money-symbol">€</p>
+					</div>
+				</div>
+			</div>
+			<p>{{ tripStateService.trip()?.description }}</p>
+		</div>
+		<div class="trip-dates">
+			<div class="start-date">
+				<p class="day">{{ tripStateService.trip()?.startDate | date: 'dd' : 'UTC' }}</p>
+				<p class="month">{{ tripStateService.trip()?.startDate | date: 'MMM' : 'UTC' }}</p>
+			</div>
+			<div class="end-date">
+				<p class="day">{{ tripStateService.trip()?.endDate | date: 'dd' : 'UTC' }}</p>
+				<p class="month">{{ tripStateService.trip()?.endDate | date: 'MMM' : 'UTC' }}</p>
+			</div>
+		</div>
 	</div>
-	
+
 	<div class="cards">
 		<!-- container itinerário -->
 		<!-- container crew -->
@@ -21,8 +45,8 @@
 	</div>
 
 	<div class="management-buttons">
-		<button class="tertiary-btn" matButton [routerLink]="['/plan-a-trip/edit', tripStateService.trip()?.id]">Edit Trip Details</button>
+		<button class="tertiary-btn" matButton [routerLink]="['/plan-a-trip/edit', tripStateService.trip()?.id]">Edit
+			Trip Details</button>
 		<button class="tertiary-btn" matButton>Delete Trip</button>
 	</div>
 </div>
-
