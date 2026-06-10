@@ -4,6 +4,7 @@ VALUES
     ('Afghanistan', 'AF'),
     ('Albania', 'AL'),
     ('Algeria', 'DZ'),
+	('American Samoa', 'AS'),
     ('Andorra', 'AD'),
     ('Angola', 'AO'),
     ('Antigua and Barbuda', 'AG'),
