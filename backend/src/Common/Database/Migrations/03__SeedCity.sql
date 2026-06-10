@@ -712,6 +712,17 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- American Samoa (AS)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('Pago Pago')
+) AS v(name) ON c.code = 'AS'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Andorra (AD)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
@@ -724,7 +735,8 @@ JOIN (VALUES
     ('Escaldes-Engordany'),
     ('La Massana'),
     ('Ordino'),
-    ('Sant Julia de Loria')
+    ('Sant Julia de Loria'),
+	('Sant Pere')
 ) AS v(name) ON c.code = 'AD'
 ON CONFLICT (name, country_id) DO NOTHING;
 
@@ -5092,6 +5104,7 @@ JOIN (VALUES
     ('Apia'),
     ('Asau'),
     ('Mulifanua'),
+	('Pago Pago'),
     ('Safotu'),
     ('Salelologa')
 ) AS v(name) ON c.code = 'WS'
