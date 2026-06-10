@@ -106,6 +106,8 @@ try
 	builder.Services.AddScoped<TripService>();
 	builder.Services.AddScoped<CityService>();
 	builder.Services.AddScoped<CityModel>();
+	builder.Services.AddScoped<TripMembersModel>();
+	builder.Services.AddScoped<TripMembersService>();
 
 
 	//Add Http request limiter
@@ -170,16 +172,6 @@ try
 		return 0;
 	}
 
-    //Add dependency injection for model and service
-    builder.Services.AddScoped<UserModel>();
-    builder.Services.AddScoped<UserService>();
-    builder.Services.AddScoped<AuthService>();
-    builder.Services.AddScoped<CountryService>();
-    builder.Services.AddScoped<CountryModel>();
-    builder.Services.AddScoped<CityService>();
-    builder.Services.AddScoped<CityModel>();
-    builder.Services.AddScoped<TripMembersModel>();
-    builder.Services.AddScoped<TripMembersService>();
 	// ── Middleware order matters ────────────────────────────────────────────────
 	// 1. Serilog's request logger must be OUTERMOST so it observes the final status
 	//    code after GlobalExceptionMiddleware has mapped the exception to e.g. 404.

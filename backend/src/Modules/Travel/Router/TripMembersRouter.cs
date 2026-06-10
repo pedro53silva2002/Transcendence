@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Trippie.Common.Services.Authentication.Context;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Travel.Dtos;
-using Trippie.Modules.Travel.Service;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
+using Trippie.Modules.Travel.Service;
 
 namespace Trippie.Modules.Travel.Router;
 
