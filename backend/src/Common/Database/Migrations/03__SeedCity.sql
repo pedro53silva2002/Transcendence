@@ -2825,13 +2825,14 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Belmopan'),
-    ('Belize City'),
-    ('Dangriga'),
-    ('Orange Walk'),
-    ('Punta Gorda'),
-    ('San Ignacio'),
-    ('San Pedro')
+	('Belize City'),
+	('Belmopan'),
+	('Corozal'),
+	('Dangriga'),
+	('Orange Walk'),
+	('Punta Gorda'),
+	('San Ignacio'),
+	('San Pedro')
 ) AS v(name) ON c.code = 'BZ'
 ON CONFLICT (name, country_id) DO NOTHING;
 
