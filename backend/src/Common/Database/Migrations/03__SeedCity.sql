@@ -15630,6 +15630,19 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Guam (GU)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Hagåtña'),
+	('Maina')
+) AS v(name) ON c.code = 'GU'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+
+-- ------------------------------------------------------------
 -- Guatemala (GT)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
