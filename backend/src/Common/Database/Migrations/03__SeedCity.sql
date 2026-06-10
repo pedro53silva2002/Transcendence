@@ -2134,17 +2134,16 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('A''ali'),
-    ('Al Hadd'),
-    ('Al Muharraq'),
-    ('Budaiya'),
-    ('Hamad Town'),
-    ('Isa Town'),
-    ('Jidhafs'),
-    ('Manama'),
-    ('Riffa'),
-    ('Sitra'),
-    ('Tubli')
+	('Ad Dirāz'),
+	('Al Hamalah'),
+	('Al Mālikīyah'),
+	('Al Muḩarraq'),
+	('Jidd Ḩafş'),
+	('Karrānah'),
+	('Madīnat ‘Īsá'),
+	('Madīnat Ḩamad'),
+	('Manama'),
+	('Sitrah')
 ) AS v(name) ON c.code = 'BH'
 ON CONFLICT (name, country_id) DO NOTHING;
 
