@@ -1546,6 +1546,18 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Aruba (AW)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Oranjestad'),
+	('Tanki Leendert')
+) AS v(name) ON c.code = 'AW'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Australia (AU)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
