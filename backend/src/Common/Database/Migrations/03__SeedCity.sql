@@ -11931,12 +11931,25 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Falkland Islands (FK)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Stanley')
+) AS v(name) ON c.code = 'ET'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Fiji (FJ)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
+
+
     ('Ba'),
     ('Labasa'),
     ('Lautoka'),

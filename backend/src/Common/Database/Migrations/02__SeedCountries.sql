@@ -69,6 +69,8 @@ VALUES
     ('Estonia', 'EE'),
     ('Eswatini', 'SZ'),
     ('Ethiopia', 'ET'),
+	('Falkland Islands', 'FK'),
+	('Faroe Islands', 'FO'),
     ('Fiji', 'FJ'),
     ('Finland', 'FI'),
     ('France', 'FR'),
