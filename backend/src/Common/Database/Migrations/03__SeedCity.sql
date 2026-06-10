@@ -926,13 +926,7 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('All Saints'),
-    ('Codrington'),
-    ('Falmouth'),
-    ('Liberta'),
-    ('Potters Village'),
-    ('Saint John''s'),
-    ('Woods')
+    ('Saint John’s')
 ) AS v(name) ON c.code = 'AG'
 ON CONFLICT (name, country_id) DO NOTHING;
 
