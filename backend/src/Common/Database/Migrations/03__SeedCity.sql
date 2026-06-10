@@ -7227,21 +7227,50 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Bambari'),
-    ('Bangassou'),
-    ('Bangui'),
-    ('Berberati'),
-    ('Bimbo'),
-    ('Bossangoa'),
-    ('Bouar'),
-    ('Bria'),
-    ('Carnot'),
-    ('Kaga-Bandoro'),
-    ('Mbaiki'),
-    ('Mobaye'),
-    ('Nola'),
-    ('Sibut'),
-    ('Yaloke')
+	('Alindao'),
+	('Bakouma'),
+	('Bambari'),
+	('Bambio'),
+	('Bangassou'),
+	('Bangui'),
+	('Baoro'),
+	('Batangafo'),
+	('Berbérati'),
+	('Bimbo'),
+	('Birao'),
+	('Boali'),
+	('Bobangui'),
+	('Bocaranga'),
+	('Boda'),
+	('Bossangoa'),
+	('Bossembele'),
+	('Bouar'),
+	('Bouca'),
+	('Bozoum'),
+	('Bria'),
+	('Carnot'),
+	('Dekoa'),
+	('Gamboula'),
+	('Grimari'),
+	('Ippy'),
+	('Kabo'),
+	('Kaga Bandoro'),
+	('Kembé'),
+	('Mambéré'),
+	('Mbaïki'),
+	('Mboki'),
+	('Mobaye'),
+	('Mongoumba'),
+	('Ndélé'),
+	('Nola'),
+	('Obo'),
+	('Ouadda'),
+	('Paoua'),
+	('Rafaï'),
+	('Sibut'),
+	('Yakossi'),
+	('Yaloké'),
+	('Zemio')
 ) AS v(name) ON c.code = 'CF'
 ON CONFLICT (name, country_id) DO NOTHING;
 
@@ -7252,6 +7281,8 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
+
+
     ('Abeche'),
     ('Ati'),
     ('Bongor'),
