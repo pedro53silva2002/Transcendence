@@ -10012,27 +10012,46 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
--- Congo (CG)
+-- Congo-Brazzaville (CG)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Brazzaville'),
-    ('Dolisie'),
-    ('Gamboma'),
-    ('Impfondo'),
-    ('Kayes'),
-    ('Kinkala'),
-    ('Loandjili'),
-    ('Madingou'),
-    ('Makoua'),
-    ('Mindouli'),
-    ('Nkayi'),
-    ('Ouesso'),
-    ('Owando'),
-    ('Pointe-Noire'),
-    ('Sibiti')
+	('Bétou'),
+	('Boloso'),
+	('Bouansa'),
+	('Boundji'),
+	('Brazzaville'),
+	('Djambala'),
+	('Dolisie'),
+	('Dongou'),
+	('Enyellé'),
+	('Etoumbi'),
+	('Ewo'),
+	('Gamboma'),
+	('Hinda'),
+	('Impfondo'),
+	('Kayes'),
+	('Kéllé'),
+	('Kinkala'),
+	('Loango'),
+	('Loudima Poste'),
+	('Loutété'),
+	('Madingou'),
+	('Makoua'),
+	('Mindouli'),
+	('Mossaka'),
+	('Mossendjo'),
+	('Mouyondzi'),
+	('Ouésso'),
+	('Owando'),
+	('Oyo'),
+	('Pointe-Noire'),
+	('Sémbé'),
+	('Sibiti'),
+	('Souanké'),
+	('Tchibota')
 ) AS v(name) ON c.code = 'CG'
 ON CONFLICT (name, country_id) DO NOTHING;
 
