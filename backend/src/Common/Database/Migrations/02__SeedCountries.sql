@@ -103,6 +103,7 @@ VALUES
     ('Iran', 'IR'),
     ('Iraq', 'IQ'),
     ('Ireland', 'IE'),
+	('Isle of Man', 'IM'),
     ('Israel', 'IL'),
     ('Italy', 'IT'),
     ('Jamaica', 'JM'),

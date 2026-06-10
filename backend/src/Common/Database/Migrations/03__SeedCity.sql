@@ -24420,33 +24420,108 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Isle of Man (IM)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Douglas'),
+	('Onchan')
+) AS v(name) ON c.code = 'IM'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Israel (IL)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Ashdod'),
-    ('Ashkelon'),
-    ('Bat Yam'),
-    ('Beer Sheva'),
-    ('Bnei Brak'),
-    ('Eilat'),
-    ('Haifa'),
-    ('Herzliya'),
-    ('Holon'),
-    ('Jerusalem'),
-    ('Kfar Saba'),
-    ('Lod'),
-    ('Nahariya'),
-    ('Nazareth'),
-    ('Netanya'),
-    ('Petah Tikva'),
-    ('Ramat Gan'),
-    ('Rishon LeZion'),
-    ('Rehovot'),
-    ('Tel Aviv'),
-    ('Tiberias')
+	('‘Akko'),
+	('Afula'),
+	('Arad'),
+	('Ashdod'),
+	('Ashqelon'),
+	('Atlit'),
+	('Bāqa el Gharbīya'),
+	('Bat Yam'),
+	('Be’er Ya‘aqov'),
+	('Beersheba'),
+	('Ben Zakkay'),
+	('Bené Beraq'),
+	('Bet She’an'),
+	('Bet Shemesh'),
+	('Dimona'),
+	('Eilat'),
+	('El‘ad'),
+	('Eṭ Ṭaiyiba'),
+	('Eṭ Ṭīra'),
+	('Gan Yavne'),
+	('Gedera'),
+	('Giv‘at Shemu’él'),
+	('Givatayim'),
+	('Hadera'),
+	('Haifa'),
+	('Herẕliyya'),
+	('Hod HaSharon'),
+	('Holon'),
+	('H̱ura'),
+	('Jerusalem'),
+	('Jisr ez Zarqā'),
+	('Kafr Qāsim'),
+	('Karmiel'),
+	('Kefar Sava'),
+	('Kefar Yona'),
+	('Kuseifa'),
+	('Laqiyya'),
+	('Lod'),
+	('Ma‘alot Tarshīḥā'),
+	('Majdal Shams'),
+	('Migdal Ha‘Emeq'),
+	('Modi‘in Makkabbim Re‘ut'),
+	('Nahariyya'),
+	('Nazareth'),
+	('Nes Ẕiyyona'),
+	('Nesher'),
+	('Netanya'),
+	('Netivot'),
+	('Ofaqim'),
+	('Or ‘Aqiva'),
+	('Or Yehuda'),
+	('Pardés H̱anna Karkur'),
+	('Petaẖ Tiqwa'),
+	('Qalansuwa'),
+	('Qiryat Ata'),
+	('Qiryat Bialik'),
+	('Qiryat Gat'),
+	('Qiryat Mal’akhi'),
+	('Qiryat Moẕqin'),
+	('Qiryat Ono'),
+	('Qiryat Shemona'),
+	('Qiryat Yam'),
+	('Ra‘ananna'),
+	('Rahat'),
+	('Rama'),
+	('Ramat Gan'),
+	('Ramat HaSharon'),
+	('Ramla'),
+	('Reẖovot'),
+	('Rishon LeẔiyyon'),
+	('Rosh Ha‘Ayin'),
+	('Sakhnīn'),
+	('Sederot'),
+	('Segev Shalom'),
+	('Shefar‘am'),
+	('Tamra'),
+	('Tel Aviv-Yafo'),
+	('Tiberias'),
+	('Tirat Karmel'),
+	('Umm el Faḥm'),
+	('Yehud'),
+	('Yoqne‘am ‘Illit'),
+	('Ẕefat'),
+	('Ẕur Hadassa')
 ) AS v(name) ON c.code = 'IL'
 ON CONFLICT (name, country_id) DO NOTHING;
 
