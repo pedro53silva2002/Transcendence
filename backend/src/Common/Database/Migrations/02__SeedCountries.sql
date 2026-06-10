@@ -74,6 +74,8 @@ VALUES
     ('Fiji', 'FJ'),
     ('Finland', 'FI'),
     ('France', 'FR'),
+	('French Guiana', 'GF'),
+	('French Polynesia', 'PF'),
     ('Gabon', 'GA'),
     ('Gambia', 'GM'),
     ('Georgia', 'GE'),

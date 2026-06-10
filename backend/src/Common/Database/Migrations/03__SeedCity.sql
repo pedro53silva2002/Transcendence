@@ -11938,7 +11938,7 @@ SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
 	('Stanley')
-) AS v(name) ON c.code = 'ET'
+) AS v(name) ON c.code = 'FK'
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
@@ -11977,7 +11977,7 @@ JOIN (VALUES
 	('Vágur'),
 	('Vestmanna'),
 	('Viðareiði')
-) AS v(name) ON c.code = 'ET'
+) AS v(name) ON c.code = 'FO'
 ON CONFLICT (name, country_id) DO NOTHING;
 
 
@@ -13341,12 +13341,43 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- French Guiana (GF)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Cayenne'),
+	('Iracoubo'),
+	('Kourou'),
+	('Roura'),
+	('Saint-Georges'),
+	('Saint-Laurent-du-Maroni'),
+	('Sinnamary')
+) AS v(name) ON c.code = 'GF'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- French Polynesia (PF)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+
+) AS v(name) ON c.code = 'PF'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Gabon (GA)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
+
+
+
     ('Bitam'),
     ('Booue'),
     ('Franceville'),
