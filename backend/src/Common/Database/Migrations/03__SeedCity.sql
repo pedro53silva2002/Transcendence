@@ -3237,6 +3237,19 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Bonaire, Sint Eustatius and Saba (BQ)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Kralendijk'),
+	('Oranjestad'),
+	('The Bottom')
+) AS v(name) ON c.code = 'BQ'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Bosnia and Herzegovina (BA)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)

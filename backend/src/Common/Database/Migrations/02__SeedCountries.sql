@@ -26,6 +26,7 @@ VALUES
 	('Bermuda', 'BM'),
     ('Bhutan', 'BT'),
     ('Bolivia', 'BO'),
+	('Bonaire, Sint Eustatius and Saba', 'BQ'),
     ('Bosnia and Herzegovina', 'BA'),
     ('Botswana', 'BW'),
     ('Brazil', 'BR'),
