@@ -15967,6 +15967,19 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Guernsey (GG)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Saint Peter Port'),
+	('Saint Sampson')
+) AS v(name) ON c.code = 'GG'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+
+-- ------------------------------------------------------------
 -- Guinea (GN)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)

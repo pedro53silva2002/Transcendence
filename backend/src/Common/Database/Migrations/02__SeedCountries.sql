@@ -89,6 +89,7 @@ VALUES
 	('Guadeloupe', 'GP'),
 	('Guam', 'GU'),
     ('Guatemala', 'GT'),
+	('Guernsey', 'GG'),
     ('Guinea', 'GN'),
     ('Guinea-Bissau', 'GW'),
     ('Guyana', 'GY'),
