@@ -1,0 +1,54 @@
+@use 'material-theme' as theme;
+@use '@angular/material' as mat;
+
+:root {
+	@include mat.autocomplete-overrides((background-color: var(--mat-sys-primary-container),
+			container-shape: 20px,
+		));
+
+	@include mat.form-field-overrides((container-height: 40px,
+			container-text-size: 16px,
+			container-vertical-padding: 7px,
+			outlined-outline-width: 2px,
+			outlined-container-shape: 20px,
+			//for border-radius
+		));
+}
+
+.std-btn {
+	transition: all 300ms ease-in-out;
+	border-radius: 20px !important;
+	border: 2px solid var(--mat-sys-on-primary) !important;
+	background-color: var(--mat-sys-primary-container) !important;
+	color: var(--mat-sys-on-primary) !important;
+	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+	&:hover {
+		transition: all 300ms ease-in-out;
+		background-color: var(--mat-sys-on-primary) !important;
+		color: var(--mat-sys-primary-container) !important;
+	}
+}
+
+.mat-mdc-menu-panel.centered-menu {
+	margin-left: -30px;
+	margin-top: 8px !important;
+	border-radius: 20px !important;
+	// border: 1px solid var(--mat-sys-primary);
+	background-color: var(--mat-sys-on-primary) !important;
+	min-width: 100px !important;
+}
+
+.mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+	color: var(--mat-sys-primary-container);
+	text-align: center;
+}
+
+.mat-mdc-menu-content .mat-mdc-menu-item:hover {
+	background-color: var(--mat-sys-on-primary) !important;
+}
+
+.mat-mdc-menu-content .mat-mdc-menu-item:hover .mat-mdc-menu-item-text {
+	color: var(--mat-sys-on-primary-container) !important;
+	text-align: center;
+}

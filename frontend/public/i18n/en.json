@@ -1,0 +1,51 @@
+{
+  "auth": {
+    "register": "Register",
+    "login": "Login",
+    "password": "password",
+    "google": "Sign In with",
+    "username": "username",
+    "password-confirmation": "confirm password",
+    "email": "email",
+    "usernameTaken": "This username is already taken.",
+    "invalidEmail": "Invalid e-mail.",
+    "emailTaken": "This email is already used.",
+    "passwordMismatch": "The passwords does not match",
+    "passwordRules": {
+      "length": "8-20 characters long",
+      "lowercase": "1 lowercase character",
+      "uppercase": "1 uppercase character",
+      "special": "1 special character",
+      "digits": "1 digit"
+    },
+	"error-login": "Invalid username or password.",
+	"error-oauth": "Google Authentication failed."
+
+  },
+
+  "navbar": {
+    "profile": "Profile",
+    "trip": "Plan a Trip",
+    "my-trips": "My Trips",
+    "my-friends": "My Friends",
+    "my-expenses": "My Expenses"
+  },
+
+  "card": {
+    "trip-description": "Click here to start planning your next trip.",
+    "my-trips-description": "Click here to view your past, present and future trips.",
+    "my-friends-description": "Click here to view your list of friends.",
+    "my-expenses-description": "Click here to check where your money wandered."
+  },
+
+  "dashboard": {
+    "greet": "Hello, ",
+    "intro": "Ready for your next adventure?"
+  },
+
+  "stats": {
+    "countries": "Visited Countries",
+    "trips": "Trips Booked This Year",
+    "countdown": "Days Until Next Trip"
+  }
+}
