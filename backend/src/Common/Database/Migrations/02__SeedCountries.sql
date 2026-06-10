@@ -11,6 +11,7 @@ VALUES
     ('Antigua and Barbuda', 'AG'),
     ('Argentina', 'AR'),
     ('Armenia', 'AM'),
+	('Aruba', 'AW'),
     ('Australia', 'AU'),
     ('Austria', 'AT'),
     ('Azerbaijan', 'AZ'),
