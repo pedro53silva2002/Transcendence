@@ -6514,21 +6514,24 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Bubanza'),
-    ('Bujumbura'),
-    ('Bururi'),
-    ('Gitega'),
-    ('Karuzi'),
-    ('Kayanza'),
-    ('Kirundo'),
-    ('Makamba'),
-    ('Muramvya'),
-    ('Muyinga'),
-    ('Mwaro'),
-    ('Ngozi'),
-    ('Rutana'),
-    ('Rumonge'),
-    ('Ruyigi')
+	('Bubanza'),
+	('Bujumbura'),
+	('Cankuzo'),
+	('Cibitoke'),
+	('Gatumba'),
+	('Gitega'),
+	('Isale'),
+	('Karuzi'),
+	('Kayanza'),
+	('Kirundo'),
+	('Makamba'),
+	('Muramvya'),
+	('Muyinga'),
+	('Ngozi'),
+	('Rumonge'),
+	('Rutana'),
+	('Ruyigi'),
+	('Zanandore')
 ) AS v(name) ON c.code = 'BI'
 ON CONFLICT (name, country_id) DO NOTHING;
 
