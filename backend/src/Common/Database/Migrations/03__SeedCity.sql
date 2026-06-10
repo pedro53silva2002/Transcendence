@@ -6542,15 +6542,30 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Assomada'),
-    ('Mindelo'),
-    ('Pedra Badejo'),
-    ('Porto Novo'),
-    ('Praia'),
-    ('Ribeira Grande'),
-    ('Santa Maria'),
-    ('Sao Filipe'),
-    ('Tarrafal')
+	('Assomada'),
+	('Calheta de São Miguel'),
+	('Cidade Velha'),
+	('Cova Figueira'),
+	('Espargos'),
+	('Igreja'),
+	('João Teves'),
+	('Lazareto'),
+	('Mindelo'),
+	('Nova Sintra'),
+	('Pedra Badejo'),
+	('Picos'),
+	('Pombas'),
+	('Ponta do Sol'),
+	('Porto Inglês'),
+	('Porto Novo'),
+	('Praia'),
+	('Ribeira Brava'),
+	('Ribeira Grande'),
+	('Sal Rei'),
+	('Santa Maria'),
+	('São Domingos'),
+	('São Filipe'),
+	('Tarrafal')
 ) AS v(name) ON c.code = 'CV'
 ON CONFLICT (name, country_id) DO NOTHING;
 
