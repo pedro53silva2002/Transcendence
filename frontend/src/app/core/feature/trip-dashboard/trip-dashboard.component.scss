@@ -41,6 +41,11 @@
 	}
 }
 
+.description {
+	overflow: hidden;
+	width: 40%;
+}
+
 .management-buttons {
 	display: flex;
 	gap: 12px;

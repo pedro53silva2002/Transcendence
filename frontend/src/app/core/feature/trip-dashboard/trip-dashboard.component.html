@@ -24,16 +24,18 @@
 					</div>
 				</div>
 			</div>
-			<p>{{ tripStateService.trip()?.description }}</p>
+			<div class="description">
+				<p>{{ tripStateService.trip()?.description }}</p>
+			</div>
 		</div>
 		<div class="trip-dates">
 			<div class="start-date">
-				<p class="day">{{ tripStateService.trip()?.startDate | date: 'dd' : 'UTC' }}</p>
-				<p class="month">{{ tripStateService.trip()?.startDate | date: 'MMM' : 'UTC' }}</p>
+				<p class="day">{{ tripStateService.trip()?.startDate | date: 'dd' }}</p>
+				<p class="month">{{ tripStateService.trip()?.startDate | date: 'MMM' }}</p>
 			</div>
 			<div class="end-date">
-				<p class="day">{{ tripStateService.trip()?.endDate | date: 'dd' : 'UTC' }}</p>
-				<p class="month">{{ tripStateService.trip()?.endDate | date: 'MMM' : 'UTC' }}</p>
+				<p class="day">{{ tripStateService.trip()?.endDate | date: 'dd' }}</p>
+				<p class="month">{{ tripStateService.trip()?.endDate | date: 'MMM' }}</p>
 			</div>
 		</div>
 	</div>

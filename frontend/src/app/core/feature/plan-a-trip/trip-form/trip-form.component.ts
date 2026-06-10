@@ -1,6 +1,6 @@
-import { Component, ElementRef, inject, input, OnInit, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, Injectable, input, OnInit, signal, viewChild } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, NativeDateAdapter, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,13 +15,23 @@ import { CountryDto } from '../dtos/country.dto';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { CityDto } from '../dtos/city.dto';
-import { provideLuxonDateAdapter, MAT_LUXON_DATE_ADAPTER_OPTIONS, MatLuxonDateModule } from '@angular/material-luxon-adapter';
+import { DateTime } from 'luxon';
 
 //Defining the date format
 export const FORMAT_DMY = {
 	parse: { dateInput: 'DD/MM/YYYY' },
 	display: { dateInput: 'DD/MM/YYYY', monthYearLabel: 'MMM YYYY', dateA11yLabel: 'LL', monthYearA11yLabel: 'MMMM YYYY' },
 };
+
+
+@Injectable()
+export class PlainDateAdapter extends NativeDateAdapter {
+	// Altera a forma como o Angular Material serializa a data para o formulário
+	override toIso8601(date: Date): string {
+		// Retorna rigorosamente YYYY-MM-DD no fuso horário local, sem horas
+		return DateTime.fromJSDate(date).toISODate()!;
+	}
+}
 
 @Component({
 	selector: 'app-trip-form',
@@ -45,8 +55,7 @@ export const FORMAT_DMY = {
 	providers: [
 		{ provide: MAT_DATE_LOCALE, useValue: 'pt-PT' },
 		{ provide: MAT_DATE_FORMATS, useValue: FORMAT_DMY },
-		{ provide: MAT_LUXON_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }, // to solve the issue of converting from PT timezones to the angular default one
-		provideLuxonDateAdapter()
+		{ provide: DateAdapter, useClass: PlainDateAdapter }
 	]
 })
 export class TripFormComponent implements OnInit {
@@ -149,6 +158,8 @@ export class TripFormComponent implements OnInit {
 	displayCountryFn(country: CountryDto | null): string {
 		return country && country.name ? country.name : '';
 	}
+
+
 
 	get tripName() { return this.tripGroup().controls['tripName']; }
 	get startDate() { return this.tripGroup().controls['startDate']; }
