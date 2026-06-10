@@ -15616,6 +15616,20 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Guadeloupe (GP)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Basse-Terre'),
+	('Pointe-à-Pitre'),
+	('Saint-Claude'),
+	('Saint-François')
+) AS v(name) ON c.code = 'GP'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Guatemala (GT)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)

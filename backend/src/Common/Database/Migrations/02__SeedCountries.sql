@@ -87,6 +87,7 @@ VALUES
 	('Greenland', 'GL'),
     ('Grenada', 'GD'),
     ('Guatemala', 'GT'),
+	('Guadeloupe', 'GP'),
     ('Guinea', 'GN'),
     ('Guinea-Bissau', 'GW'),
     ('Guyana', 'GY'),
