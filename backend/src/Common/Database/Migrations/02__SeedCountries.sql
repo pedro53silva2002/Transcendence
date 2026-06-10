@@ -38,6 +38,7 @@ VALUES
     ('Cambodia', 'KH'),
     ('Cameroon', 'CM'),
     ('Canada', 'CA'),
+	('Cayman Islands', 'KY'),
     ('Central African Republic', 'CF'),
     ('Chad', 'TD'),
     ('Chile', 'CL'),

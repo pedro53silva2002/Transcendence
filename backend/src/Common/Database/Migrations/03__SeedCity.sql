@@ -7210,6 +7210,17 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Cayman Islands (KY)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+    ('George Town')
+) AS v(name) ON c.code = 'KY'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Central African Republic (CF)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
