@@ -11988,19 +11988,15 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-
-
-    ('Ba'),
-    ('Labasa'),
-    ('Lautoka'),
-    ('Levuka'),
-    ('Nadi'),
-    ('Nasinu'),
-    ('Nausori'),
-    ('Savusavu'),
-    ('Sigatoka'),
-    ('Suva'),
-    ('Tavua')
+	('Ba'),
+	('Labasa'),
+	('Lami'),
+	('Lautoka'),
+	('Nadi'),
+	('Nakasi'),
+	('Nausori'),
+	('Sigatoka'),
+	('Suva')
 ) AS v(name) ON c.code = 'FJ'
 ON CONFLICT (name, country_id) DO NOTHING;
 
