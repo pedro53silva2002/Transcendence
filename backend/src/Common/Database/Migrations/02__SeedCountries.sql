@@ -82,6 +82,7 @@ VALUES
     ('Georgia', 'GE'),
     ('Germany', 'DE'),
     ('Ghana', 'GH'),
+	('Gibraltar', 'GI'),
     ('Greece', 'GR'),
     ('Grenada', 'GD'),
     ('Guatemala', 'GT'),

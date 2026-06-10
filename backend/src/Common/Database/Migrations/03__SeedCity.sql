@@ -15358,12 +15358,26 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Gibraltar (GI)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Gibraltar')
+) AS v(name) ON c.code = 'GI'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Greece (GR)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
+
+
+
     ('Agrinio'),
     ('Alexandroupoli'),
     ('Athens'),
