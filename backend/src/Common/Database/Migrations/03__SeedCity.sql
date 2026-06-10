@@ -16500,20 +16500,18 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-    ('Akranes'),
-    ('Akureyri'),
-    ('Borgarnes'),
-    ('Egilsstadir'),
-    ('Hafnarfjordur'),
-    ('Husavik'),
-    ('Isafjordur'),
-    ('Keflavik'),
-    ('Kopavogur'),
-    ('Mosfellsbaer'),
-    ('Reykjavik'),
-    ('Selfoss'),
-    ('Siglufjordur'),
-    ('Vestmannaeyjar')
+	('Akureyri'),
+	('Borgarnes'),
+	('Egilsstaðir'),
+	('Garðabær'),
+	('Hafnarfjörður'),
+	('Höfn'),
+	('Ísafjörður'),
+	('Keflavík'),
+	('Kópavogur'),
+	('Reykjavík'),
+	('Sauðárkrókur'),
+	('Selfoss')
 ) AS v(name) ON c.code = 'IS'
 ON CONFLICT (name, country_id) DO NOTHING;
 
