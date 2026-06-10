@@ -27228,8 +27228,19 @@ JOIN (VALUES
 	('Zama'),
 	('Zaō'),
 	('Zentsujichó'),
-('Zushi')
+	('Zushi')
 ) AS v(name) ON c.code = 'JP'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
+-- Jersey (JE)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('Saint Helier')
+) AS v(name) ON c.code = 'JE'
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------

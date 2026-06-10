@@ -108,6 +108,7 @@ VALUES
     ('Italy', 'IT'),
     ('Jamaica', 'JM'),
     ('Japan', 'JP'),
+    ('Jersey', 'JE'),
     ('Jordan', 'JO'),
     ('Kazakhstan', 'KZ'),
     ('Kenya', 'KE'),
