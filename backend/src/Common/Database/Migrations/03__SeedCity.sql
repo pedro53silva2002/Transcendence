@@ -13364,7 +13364,7 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-
+	('Papeete')
 ) AS v(name) ON c.code = 'PF'
 ON CONFLICT (name, country_id) DO NOTHING;
 
