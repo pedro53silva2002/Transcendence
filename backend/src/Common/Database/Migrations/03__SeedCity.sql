@@ -13375,23 +13375,28 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-
-
-
-    ('Bitam'),
-    ('Booue'),
-    ('Franceville'),
-    ('Koulamoutou'),
-    ('Lambarene'),
-    ('Lastoursville'),
-    ('Libreville'),
-    ('Makokou'),
-    ('Moanda'),
-    ('Mouila'),
-    ('Ntoum'),
-    ('Oyem'),
-    ('Port-Gentil'),
-    ('Tchibanga')
+	('Bifoun'),
+	('Bitam'),
+	('Franceville'),
+	('Gamba'),
+	('Koulamoutou'),
+	('Lambaréné'),
+	('Libreville'),
+	('Makokou'),
+	('Mayumba'),
+	('Mékambo'),
+	('Mitzic'),
+	('Moanda'),
+	('Mouila'),
+	('Ndendé'),
+	('Ntoum'),
+	('Okondja'),
+	('Omboué'),
+	('Owendo'),
+	('Oyem'),
+	('Port-Gentil'),
+	('Tchibanga'),
+	('Tsogni')
 ) AS v(name) ON c.code = 'GA'
 ON CONFLICT (name, country_id) DO NOTHING;
 
