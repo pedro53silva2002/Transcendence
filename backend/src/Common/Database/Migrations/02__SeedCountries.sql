@@ -78,6 +78,7 @@ VALUES
 	('French Polynesia', 'PF'),
     ('Gabon', 'GA'),
     ('Gambia', 'GM'),
+	('Gaza Strip', 'XG'),
     ('Georgia', 'GE'),
     ('Germany', 'DE'),
     ('Ghana', 'GH'),

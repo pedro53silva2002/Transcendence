@@ -13431,6 +13431,25 @@ JOIN (VALUES
 ON CONFLICT (name, country_id) DO NOTHING;
 
 -- ------------------------------------------------------------
+-- Gaza Strip (XG)
+-- ------------------------------------------------------------
+INSERT INTO auth.cities (name, country_id)
+SELECT v.name, c.id
+FROM auth.countries c
+JOIN (VALUES
+	('‘Abasān al Kabīrah'),
+	('Az Zuwāydah'),
+	('Banī Suhaylā'),
+	('Bayt Lāhyā'),
+	('Dayr al Balaḩ'),
+	('Gaza'),
+	('Jabālyā'),
+	('Khān Yūnis'),
+	('Rafaḩ')
+) AS v(name) ON c.code = 'XG'
+ON CONFLICT (name, country_id) DO NOTHING;
+
+-- ------------------------------------------------------------
 -- Georgia (GE)
 -- ------------------------------------------------------------
 INSERT INTO auth.cities (name, country_id)
