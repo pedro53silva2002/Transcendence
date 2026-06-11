@@ -180,6 +180,7 @@ public sealed class TripModel(AppDbContext db)
 				Id = tm.Id,
 				TripId = tm.TripId,
 				UserId = tm.UserId,
+				DisplayName = tm.User?.DisplayName ?? tm.User?.Username ?? string.Empty,
 				Role = tm.Role
 			}).ToList();
 		});

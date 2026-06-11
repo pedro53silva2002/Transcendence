@@ -7,6 +7,7 @@ using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Exception;
 using Trippie.Common.Services.Search.Linq;
 using Trippie.Common.Services.Search.Model;
+using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Travel.Dtos;
 
 namespace Trippie.Modules.Travel.Model;
@@ -19,11 +20,15 @@ public sealed class TripMembers
 	public required TripMemberRole Role { get; set; }
 	public DateTime JoinedAt { get; set; }
 	public DateTime? UpdatedAt { get; set; }
-	public static TripMembersDto ToDto(TripMembers tm) => new()
+	public User? User { get; set; }
+
+	public static TripMembersDto ToDto(TripMembers tm, User user) => new()
 	{
 		Id = tm.Id,
 		TripId = tm.TripId,
 		UserId = tm.UserId,
+		DisplayName = user.DisplayName,
+		ProfilePicture = user.ProfilePhotoUrl,
 		Role = tm.Role,
 		JoinedAt = tm.JoinedAt,
 		UpdatedAt = tm.UpdatedAt,
@@ -123,7 +128,12 @@ public sealed class TripMembersModel(AppDbContext db)
 
 		await db.TripMembers.AddRangeAsync(members, ct);
 		await db.SaveChangesAsync(ct);
-		return [.. members.Select(TripMembers.ToDto)];
+
+		var usersById = await db.Users
+			.Where(u => userIds.Contains(u.Id))
+			.ToDictionaryAsync(u => u.Id, ct);
+
+		return [.. members.Select(member => TripMembers.ToDto(member, usersById[member.UserId]))];
 	}
 
 	public async Task<CursorPage<TripMembersDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
@@ -149,9 +159,25 @@ public sealed class TripMembersModel(AppDbContext db)
 				_ => throw new SearchValidationException($"Invalid sort field: {field}")
 			})
 			.SetCursorPagination(payload.Page)
-			.RunAsync(tm => TripMembers.ToDto(tm), ct);
+			.RunAsync(tm => new TripMembersDto
+			{
+				Id = tm.Id,
+				TripId = tm.TripId,
+				UserId = tm.UserId,
+				DisplayName = tm.User!.DisplayName,
+				ProfilePicture = tm.User.ProfilePhotoUrl,
+				Role = tm.Role,
+				JoinedAt = tm.JoinedAt,
+				UpdatedAt = tm.UpdatedAt,
+			}, ct);
 
 		return res;
+	}
+
+	private async Task<TripMembersDto> ToDtoAsync(TripMembers member, CancellationToken ct)
+	{
+		var user = await db.Users.FirstAsync(u => u.Id == member.UserId, ct);
+		return TripMembers.ToDto(member, user);
 	}
 
 	public Task<TripMembersDto?> UpdateAsync(int adminId, int id, UpdateTripMembersDto dto, CancellationToken ct = default)
@@ -172,7 +198,7 @@ public sealed class TripMembersModel(AppDbContext db)
 			member.UpdatedAt = DateTime.UtcNow;
 			await db.SaveChangesAsync(ct);
 
-			return TripMembers.ToDto(member);
+			return await ToDtoAsync(member, ct);
 		}, ct);
 	}
 
@@ -180,7 +206,7 @@ public sealed class TripMembersModel(AppDbContext db)
 	{
 		var member = await db.TripMembers
 			.FirstOrDefaultAsync(tm => tm.Id == id, ct);
-		return member == null ? null : TripMembers.ToDto(member);
+		return member == null ? null : await ToDtoAsync(member, ct);
 	}
 
 	public Task<bool> DeleteAsync(int myId, int deletingId, CancellationToken ct = default)

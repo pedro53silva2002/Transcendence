@@ -21,15 +21,7 @@ internal sealed class TripMembersConfiguration : IEntityTypeConfiguration<TripMe
 
 		tm.HasIndex(tm => new { tm.TripId, tm.UserId }).IsUnique();
 
-		//Navigation to Trip
-		// tm.HasOne<Trip>()
-		// 	.WithMany()
-		// 	.HasForeignKey(t => t.TripId)
-		// 	.HasConstraintName("travel_trip_members_fk_trip")
-		// 	.OnDelete(DeleteBehavior.Cascade);
-
-		// Navigation to User (use type-based navigation if TripMembers doesn't expose a User property)
-		tm.HasOne<User>()
+		tm.HasOne(tm => tm.User)
 			.WithMany()
 			.HasForeignKey(tm => tm.UserId)
 			.HasConstraintName("travel_trip_members_fk_user")
