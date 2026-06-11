@@ -68,5 +68,9 @@
 	"trip-budget": "budget (€)",
 	"budget-error": "A budget is required.",
 	"budget-numbers-error": "A budget can only contain numbers."
+  },
+  "trip-dashboard": {
+	"delete-trip-title": "Are you sure?",
+	"delete-trip-message": "If you confirm this decision, you will delete everything about this trip."
   }
 }
