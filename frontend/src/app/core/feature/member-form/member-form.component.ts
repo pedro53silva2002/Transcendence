@@ -13,16 +13,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslocoModule } from '@jsverse/transloco';
 import { MatDialog } from '@angular/material/dialog';
-import { TripMemberService } from '../service/trip/Member';
+import { TripMemberService } from '../service/trip/member.service';
 import { AddMemberDialogComponent } from './add-member-dialog/add-member-dialog.component';
 import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
-
-export interface MemberDisplayDto {
-  userId: number;
-  displayName: string;
-  profilePicture: string | null;
-  role: 'Admin' | 'Member';
-}
+import { TripStateService } from '../plan-a-trip/services/trip-state.service';
+import { TripMemberDto } from '../dtos/trip/member.dto';
 
 @Component({
   selector: 'app-member-form',
@@ -42,15 +37,21 @@ export interface MemberDisplayDto {
 export class MemberFormComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly memberService = inject(TripMemberService);
+  private readonly tripState = inject(TripStateService);
 
   readonly tripId = input<number | null>(null);
 
-  public readonly members = signal<MemberDisplayDto[]>([]);
+  // members are stored in TripStateService so the dashboard can read the same list
+  public readonly members = this.tripState.members;
   protected readonly loading = signal(false);
 
   ngOnInit(): void {
     const id = this.tripId();
-    if (id === null) return;
+    // create flow: no trip yet, start with an empty shared list
+    if (id === null) {
+      this.tripState.setMembers([]);
+      return;
+    }
 
     this.loading.set(true);
     this.memberService
@@ -64,15 +65,7 @@ export class MemberFormComponent implements OnInit {
       )
       .subscribe({
         next: (result) => {
-          if (result.data)
-            this.members.set(
-              result.data.content.map((m) => ({
-                userId: m.userId,
-                displayName: m.displayName,
-                profilePicture: m.profilePicture,
-                role: m.role === 'Admin' ? 'Admin' : 'Member',
-              })),
-            );
+          if (result.data) this.tripState.setMembers(result.data.content);
         },
         complete: () => this.loading.set(false),
         error: () => this.loading.set(false),
@@ -85,18 +78,14 @@ export class MemberFormComponent implements OnInit {
       data: { tripId: this.tripId(), alreadyAdded },
     });
 
-    ref.afterClosed().subscribe((newMember: MemberDisplayDto | undefined) => {
+    ref.afterClosed().subscribe((newMember: TripMemberDto | undefined) => {
       if (newMember) {
-        this.members.update((list) => [...list, newMember]);
+        this.tripState.addMember(newMember);
       }
     });
   }
 
   protected updateRole(userId: number, role: 'Admin' | 'Member'): void {
-    this.members.update((list) =>
-      list.map((m) =>
-        m.userId === userId ? { ...m, role: role === 'Admin' ? 'Admin' : 'Member' } : m,
-      ),
-    );
+    this.tripState.updateMemberRole(userId, role);
   }
 }

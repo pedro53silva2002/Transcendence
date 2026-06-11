@@ -1,12 +1,12 @@
 export interface TripMemberDto {
-  id: number;
-  tripId: number;
+  id?: number;
+  tripId?: number;
   userId: number;
   displayName: string;
   profilePicture: string | null;
   role: 'Admin' | 'Member';
-  joinedAt: string;
-  updatedAt: string;
+  joinedAt?: string;
+  updatedAt?: string;
 }
 
 export interface CreateTripMemberDto {

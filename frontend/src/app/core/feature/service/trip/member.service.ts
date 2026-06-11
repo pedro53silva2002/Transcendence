@@ -1,11 +1,11 @@
-import { CursorPage } from './../../../logic/services/search.service';
+import { CursorPage } from '../../../logic/services/search.service';
 import {
   CreateTripMemberDto,
   TripMemberDto,
   TripMemberOrderByDto,
   TripMemberSearchFieldsDto,
   UpdateTripMemberDto,
-} from './../../dtos/trip/Member';
+} from '../../dtos/trip/member.dto';
 import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';

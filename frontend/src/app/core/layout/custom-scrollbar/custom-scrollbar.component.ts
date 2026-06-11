@@ -13,31 +13,7 @@ import {
   selector: 'app-custom-scrollbar',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'custom-scrollbar-host' },
-  template: `
-    <div #viewport class="scrollbar-viewport" (scroll)="onScroll()">
-      <ng-content />
-    </div>
-
-    @if (isScrollable()) {
-      <div
-        class="scrollbar-track"
-        role="scrollbar"
-        aria-orientation="vertical"
-        [attr.aria-valuenow]="scrollPercent()"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        (mousedown)="onTrackClick($event)"
-      >
-        <div
-          #thumb
-          class="scrollbar-thumb"
-          [style.height.%]="thumbHeight()"
-          [style.top.%]="thumbTop()"
-          (mousedown)="onThumbDragStart($event)"
-        ></div>
-      </div>
-    }
-  `,
+  templateUrl: './custom-scrollbar.component.html',
   styleUrl: './custom-scrollbar.component.scss',
 })
 export class CustomScrollbarComponent implements AfterViewInit, OnDestroy {

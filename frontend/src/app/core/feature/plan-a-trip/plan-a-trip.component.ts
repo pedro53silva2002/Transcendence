@@ -60,9 +60,6 @@ export class PlanATripComponent implements OnInit {
       ], // Aceita apenas números inteiros
       visibility: [TripVisibility.Private, [Validators.required]],
     }),
-    crew: this.formBuilder.nonNullable.group({
-      members: [[] as number[]],
-    }),
   });
 
   ngOnInit(): void {
@@ -85,7 +82,7 @@ export class PlanATripComponent implements OnInit {
             budget: currentTrip.budget,
             visibility: currentTrip.visibility,
           },
-          //add here crew members later
+          // members are owned by MemberFormComponent, which loads them by tripId
         });
       }
     }
