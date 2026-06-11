@@ -21,7 +21,7 @@
 
     @if (!loading()) {
       <div class="friends-grid">
-        @for (friend of friends(); track friend.userId) {
+        @for (friend of friends(); track friend.id) {
           <button
             type="button"
             class="friend-card"

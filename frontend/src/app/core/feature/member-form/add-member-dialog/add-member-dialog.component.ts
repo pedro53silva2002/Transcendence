@@ -12,14 +12,8 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { TripMemberService } from '../../service/trip/Member';
-
-interface FriendDto {
-  friendshipId: number;
-  userId: number;
-  username: string;
-  displayName: string;
-  profilePhotoUrl: string | null;
-}
+import { UserService } from '../../auth/services/user.service';
+import { UserDto } from '../../auth/dtos/user.dto';
 
 @Component({
   selector: 'app-add-member-dialog',
@@ -34,10 +28,10 @@ export class AddMemberDialogComponent implements OnInit {
   private readonly data = inject<{ tripId: number | null; alreadyAdded: number[] }>(
     MAT_DIALOG_DATA,
   );
-  //private readonly friendService = inject(FriendService)
   private readonly memberService = inject(TripMemberService);
+  private readonly userService = inject(UserService);
 
-  protected readonly friends = signal<FriendDto[]>([]);
+  protected readonly friends = signal<UserDto[]>([]);
   protected readonly loading = signal(false);
   protected readonly adding = signal(false);
 
@@ -45,19 +39,29 @@ export class AddMemberDialogComponent implements OnInit {
   readonly alreadyAdded = this.data.alreadyAdded;
 
   ngOnInit(): void {
-    // Add the friends service logic, getting all the friends.
-    //Delete this when we have the friends logic
-    const available = this.getMockedFriends().filter((f) => !this.alreadyAdded.includes(f.userId));
-    this.friends.set(available);
-    this.loading.set(false);
+    this.loading.set(true);
+    this.userService
+      .search({ pageSize: 50 })
+      .subscribe({
+        next: (result) => {
+          if (result.data) {
+            this.friends.set(
+              result.data.content.filter((u) => !this.alreadyAdded.includes(u.id)),
+            );
+          }
+        },
+        complete: () => this.loading.set(false),
+        error: () => this.loading.set(false),
+      });
   }
 
-  protected addMember(friend: FriendDto): void {
+  protected addMember(friend: UserDto): void {
     if (this.adding()) return;
+    const tripId = this.tripId;
 
-    if (this.tripId === null) {
+    if (tripId === null) {
       this.dialogRef.close({
-        userId: friend.userId,
+        userId: friend.id,
         displayName: friend.displayName,
         profilePicture: friend.profilePhotoUrl,
         role: 'MEMBER' as const,
@@ -67,15 +71,16 @@ export class AddMemberDialogComponent implements OnInit {
 
     this.adding.set(true);
     this.memberService
-      .create({
-        userId: friend.userId,
-        role: 'MEMBER',
-        tripId: this.tripId,
-      })
+      .create({ tripId, userIds: [friend.id] }, tripId)
       .subscribe({
         next: (result) => {
           if (result.data) {
-            this.dialogRef.close(result.data);
+            this.dialogRef.close({
+              userId: friend.id,
+              displayName: friend.displayName,
+              profilePicture: friend.profilePhotoUrl,
+              role: 'MEMBER' as const,
+            });
           }
         },
         complete: () => this.adding.set(false),
@@ -85,66 +90,5 @@ export class AddMemberDialogComponent implements OnInit {
 
   protected cancel(): void {
     this.dialogRef.close();
-  }
-
-  private getMockedFriends(): FriendDto[] {
-    return [
-      {
-        friendshipId: 1,
-        userId: 101,
-        username: 'Balouta',
-        profilePhotoUrl: null,
-        displayName: 'Maria Balouta',
-      },
-      {
-        friendshipId: 2,
-        userId: 102,
-        username: 'Miguelote',
-        profilePhotoUrl: null,
-        displayName: 'Miguel Hot',
-      },
-      {
-        friendshipId: 3,
-        userId: 103,
-        username: 'Coletes',
-        profilePhotoUrl: null,
-        displayName: 'Coletis Sonecas',
-      },
-      {
-        friendshipId: 4,
-        userId: 104,
-        username: 'dadiaz',
-        profilePhotoUrl: null,
-        displayName: 'Diogo',
-      },
-      {
-        friendshipId: 5,
-        userId: 105,
-        username: 'Lalalala',
-        profilePhotoUrl: null,
-        displayName: 'Michale Jackson',
-      },
-      {
-        friendshipId: 6,
-        userId: 106,
-        username: 'gomes',
-        profilePhotoUrl: null,
-        displayName: 'Coelho Mau',
-      },
-      {
-        friendshipId: 7,
-        userId: 107,
-        username: 'gomes',
-        profilePhotoUrl: null,
-        displayName: 'Coelho Mau',
-      },
-      {
-        friendshipId: 8,
-        userId: 108,
-        username: 'gomes',
-        profilePhotoUrl: null,
-        displayName: 'Coelho Mau',
-      },
-    ];
   }
 }

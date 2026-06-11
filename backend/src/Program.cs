@@ -45,9 +45,13 @@ try
 	//ADd enum to database recognize
 	var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
 	dataSourceBuilder.MapEnum<TripVisibility>("trip_visibility");
+	dataSourceBuilder.MapEnum<TripMemberRole>("member_role");
 	var dataSource = dataSourceBuilder.Build();
 	builder.Services.AddDbContext<AppDbContext>(opts =>
-		opts.UseNpgsql(dataSource, npgsqlOptions => npgsqlOptions.MapEnum<TripVisibility>("trip_visibility")));
+		opts.UseNpgsql(dataSource, npgsqlOptions => npgsqlOptions
+			.MapEnum<TripVisibility>("trip_visibility")
+			.MapEnum<TripMemberRole>("member_role")
+			));
 
 	// Replace MS logging with Serilog (reads "Serilog" + "ErrorHandling" sections).
 	builder.Host.UseAppSerilog();

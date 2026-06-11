@@ -25,7 +25,7 @@ public sealed class Trip()
 
 	public TripCountry? TripCountries { get; set; }
 	public ICollection<TripCity> TripCities { get; set; } = [];
-	public ICollection<TripMembersDto> Members { get; set; } = [];
+	public IReadOnlyList<TripMembersDto> Members { get; set; } = [];
 	public static TripDto ToDto(Trip t)
 	{
 		return new()
@@ -64,7 +64,7 @@ public sealed class Trip()
 				Name = tc.City.Name,
 				CountryId = tc.City.CountryId
 			}).ToList(),
-			Members = (List<TripMembersDto>)(t.Members ?? []),
+			Members = t.Members.ToList() ?? [],
 		};
 	}
 }

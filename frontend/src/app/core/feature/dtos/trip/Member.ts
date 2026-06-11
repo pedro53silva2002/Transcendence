@@ -4,23 +4,24 @@ export interface TripMemberDto {
   userId: number;
   displayName: string;
   profilePicture: string | null;
-  role: 'ADMIN' | 'MEMBER';
+  role: 'Admin' | 'Member';
   joinedAt: string;
+  updatedAt: string;
 }
 
 export interface CreateTripMemberDto {
   tripId: number;
-  userId: number;
-  role: 'ADMIN' | 'MEMBER';
+  userIds: number[];
 }
 
 export interface UpdateTripMemberDto {
-  role: 'ADMIN' | 'MEMBER';
+  userId: number;
+  role: 'Admin' | 'Member';
 }
 
 export type TripMemberSearchFieldsDto = {
   tripId: number;
-  role: 'ADMIN' | 'MEMBER';
+  role: 'Admin' | 'Member';
   displayName: string;
 };
 

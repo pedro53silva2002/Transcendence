@@ -104,7 +104,7 @@ public sealed class TripMembersModel(AppDbContext db)
 		ValidateCreateRequest(callerId, dto, userIds);
 
 		var existingUserIds = await db.TripMembers
-        	.Where(tm => tm.TripId == dto.TripId && userIds.Contains(tm.UserId))
+			.Where(tm => tm.TripId == dto.TripId && userIds.Contains(tm.UserId))
 			.Select(tm => tm.UserId)
 			.ToListAsync(ct);
 
@@ -121,14 +121,8 @@ public sealed class TripMembersModel(AppDbContext db)
 			JoinedAt = DateTime.UtcNow
 		}).ToList();
 
-		await db.BulkInsertAsync(
-			members,
-			new BulkConfig
-			{
-				SetOutputIdentity = true,
-				PreserveInsertOrder = true
-			},
-			cancellationToken: ct);
+		await db.TripMembers.AddRangeAsync(members, ct);
+		await db.SaveChangesAsync(ct);
 		return [.. members.Select(TripMembers.ToDto)];
 	}
 

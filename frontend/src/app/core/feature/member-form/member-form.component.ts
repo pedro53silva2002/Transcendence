@@ -21,12 +21,19 @@ export interface MemberDisplayDto {
   userId: number;
   displayName: string;
   profilePicture: string | null;
-  role: 'ADMIN' | 'MEMBER';
+  role: 'Admin' | 'Member';
 }
 
 @Component({
   selector: 'app-member-form',
-  imports: [MatButtonModule, MatIconModule, MatSelectModule, NgOptimizedImage, TranslocoModule, CustomScrollbarComponent],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatSelectModule,
+    NgOptimizedImage,
+    TranslocoModule,
+    CustomScrollbarComponent,
+  ],
   templateUrl: './member-form.component.html',
   styleUrl: './member-form.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -38,7 +45,7 @@ export class MemberFormComponent implements OnInit {
 
   readonly tripId = input<number | null>(null);
 
-  readonly members = signal<MemberDisplayDto[]>([]);
+  public readonly members = signal<MemberDisplayDto[]>([]);
   protected readonly loading = signal(false);
 
   ngOnInit(): void {
@@ -47,14 +54,25 @@ export class MemberFormComponent implements OnInit {
 
     this.loading.set(true);
     this.memberService
-      .search({
-        search: { tripId: { op: 'EQUAL', value: id } },
-        orderBy: [{ field: 'displayName', descending: false }],
-        pageSize: 10,
-      })
+      .search(
+        {
+          search: { tripId: { op: 'EQUAL', value: id } },
+          orderBy: [{ field: 'userId', descending: false }],
+          pageSize: 10,
+        },
+        id,
+      )
       .subscribe({
         next: (result) => {
-          if (result.data) this.members.set(result.data);
+          if (result.data)
+            this.members.set(
+              result.data.content.map((m) => ({
+                userId: m.userId,
+                displayName: m.displayName,
+                profilePicture: m.profilePicture,
+                role: m.role === 'Admin' ? 'Admin' : 'Member',
+              })),
+            );
         },
         complete: () => this.loading.set(false),
         error: () => this.loading.set(false),
@@ -74,9 +92,11 @@ export class MemberFormComponent implements OnInit {
     });
   }
 
-  protected updateRole(userId: number, role: 'ADMIN' | 'MEMBER'): void {
+  protected updateRole(userId: number, role: 'Admin' | 'Member'): void {
     this.members.update((list) =>
-      list.map((m) => (m.userId === userId ? { ...m, role } : m)),
+      list.map((m) =>
+        m.userId === userId ? { ...m, role: role === 'Admin' ? 'Admin' : 'Member' } : m,
+      ),
     );
   }
 }

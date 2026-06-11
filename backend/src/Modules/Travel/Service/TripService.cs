@@ -17,8 +17,9 @@ public sealed class TripService(TripModel tripModel, TripMembersModel tripMember
 	{
 		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
 		var trip = await tripModel.CreateAsync(dto, userId, ct);
+		dto.Members.TripId = trip.Id;
 		var members = await new TripMembersService(tripMembersModel).CreateAsync(userId, dto.Members, ct);
-		trip.Members = (List<TripMembersDto>?)members;
+		trip.Members = [.. members];
 		return trip;
 	}
 
