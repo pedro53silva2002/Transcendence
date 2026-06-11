@@ -904,7 +904,7 @@ JOIN (VALUES
 	('Vila Teixeira da Silva'),
 	('Virei'),
 	('Xá Muteba'),
-	('Xangongo'),
+	('Xangongo')
 ) AS v(name) ON c.code = 'AO'
 ON CONFLICT (name, country_id) DO NOTHING;
 
@@ -1301,7 +1301,7 @@ JOIN (VALUES
 	('Plottier'),
 	('Posadas'),
 	('Presidencia de la Plaza'),
-	('Presidencia Roque Sáenz Peña')
+	('Presidencia Roque Sáenz Peña'),
 	('Profesor Salvador Mazza'),
 	('Puan'),
 	('Puerto Deseado'),
@@ -15988,7 +15988,6 @@ JOIN (VALUES
 	('Saint Sampson')
 ) AS v(name) ON c.code = 'GG'
 ON CONFLICT (name, country_id) DO NOTHING;
-
 
 -- ------------------------------------------------------------
 -- Guinea (GN)
@@ -32882,7 +32881,7 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-('Capitol Hill')
+	('Capitol Hill')
 ) AS v(name) ON c.code = 'MP'
 ON CONFLICT (name, country_id) DO NOTHING;
 
@@ -35113,7 +35112,7 @@ INSERT INTO auth.cities (name, country_id)
 SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
-('Adamstown')
+	('Adamstown')
 ) AS v(name) ON c.code = 'PN'
 ON CONFLICT (name, country_id) DO NOTHING;
 
@@ -41507,7 +41506,7 @@ SELECT v.name, c.id
 FROM auth.countries c
 JOIN (VALUES
 	('Neiafu'),
-	('Nuku‘alofa'),
+	('Nuku‘alofa')
 ) AS v(name) ON c.code = 'TO'
 ON CONFLICT (name, country_id) DO NOTHING;
 
@@ -42479,7 +42478,6 @@ JOIN (VALUES
 	('Grand Turk')
 ) AS v(name) ON c.code = 'TC'
 ON CONFLICT (name, country_id) DO NOTHING;
-
 
 -- ------------------------------------------------------------
 -- Tuvalu (TV)
@@ -47299,10 +47297,10 @@ JOIN (VALUES
 	('Oconomowoc'),
 	('Odenton'),
 	('Odessa'),
-	('O'Fallon'),
+	('O''Fallon'),
 	('Ogden'),
 	('Ogdensburg'),
-	('O'Hara'),
+	('O''Hara'),
 	('Oil City'),
 	('Oildale'),
 	('Ojus'),
@@ -48319,7 +48317,7 @@ JOIN (VALUES
 	('Totowa'),
 	('Towamencin'),
 	('Town and Country'),
-	('Town 'n' Country'),
+	('Town ''n'' Country'),
 	('Townsend'),
 	('Towson'),
 	('Tracy'),
