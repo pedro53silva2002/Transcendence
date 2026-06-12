@@ -1,0 +1,23 @@
+<form class="main-container" [formGroup]="planATripForm" (submit)="submitTrip()">
+  <h1 class="page-title">{{ 'plan-a-trip.title' | transloco }}</h1>
+  <div class="form-column">
+    <app-trip-form [tripGroup]="planATripForm.controls['trip']"></app-trip-form>
+  </div>
+  <div class="crew-column">
+    <app-member-form [tripId]="currentTripId()"></app-member-form>
+  </div>
+  <div class="actions-row">
+    <button
+      type="submit"
+      class="tertiary-btn create-btn"
+      matButton="filled"
+      [disabled]="planATripForm.invalid"
+    >
+      @if (!isEditMode) {
+        {{ 'plan-a-trip.create-trip' | transloco }}
+      } @else {
+        {{ 'plan-a-trip.update-trip' | transloco }}
+      }
+    </button>
+  </div>
+</form>
