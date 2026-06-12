@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Trippie.Common.Services.Authentication.Context;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
@@ -11,6 +12,7 @@ using Trippie.Modules.Travel.Service;
 namespace Trippie.Modules.Travel.Router;
 
 [ApiController]
+[Authorize]
 [Route("api/trips/itinerary")]
 public sealed class ItineraryRouter(ItineraryService service, IUserContext userContext) : ControllerBase
 {

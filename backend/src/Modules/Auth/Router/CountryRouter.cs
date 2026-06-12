@@ -10,7 +10,7 @@ using Trippie.Common.Services.Search.Model;
 namespace Trippie.Modules.Auth.Router;
 
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route("api/countries")]
 public sealed class CountryRouter (CountryService service) : ControllerBase
 {
