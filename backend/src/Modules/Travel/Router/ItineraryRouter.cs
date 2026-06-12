@@ -24,7 +24,7 @@ public sealed class ItineraryRouter(ItineraryService service, IUserContext userC
     public async Task<ActionResult<ItineraryDto>> Create([FromBody] CreateItineraryDto dto, CancellationToken ct)
     {
         var userId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
-        
+
         var itinerary = await service.CreateAsync(userId, dto, ct);
         return CreatedAtAction(nameof(GetById), new { id = itinerary.Id }, itinerary);
     }
@@ -49,6 +49,8 @@ public sealed class ItineraryRouter(ItineraryService service, IUserContext userC
     public async Task<ActionResult<ItineraryDto>> Update(int id, [FromBody] UpdateItineraryDto dto, CancellationToken ct)
     {
         var userId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
+
+
         var itinerary = await service.UpdateAsync(userId, id, dto, ct);
         return itinerary is null ? NotFound() : Ok(itinerary);
     }
@@ -57,7 +59,7 @@ public sealed class ItineraryRouter(ItineraryService service, IUserContext userC
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
         var userId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
-        
+
         await service.DeleteAsync(userId, id, ct);
         return NoContent();
     }

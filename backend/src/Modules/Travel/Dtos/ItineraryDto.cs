@@ -30,12 +30,3 @@ public sealed class UpdateItineraryDto
     public DateTime UpdatedAt { get; set; }
 }
 
-public sealed class SearchItineraryDto
-{
-    public int? TripId { get; set; }
-    public string? Title { get; set; }
-    public string? Description { get; set; }
-    public int? ExpectedPrice { get; set; }
-    public int? Day { get; set; }
-    public int? CreatedBy { get; set; }
-}
