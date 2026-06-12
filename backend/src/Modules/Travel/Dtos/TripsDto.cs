@@ -22,7 +22,8 @@ public sealed class CreateTripDto
 	public required int Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required CountryDto Country { get; set; }
-	public List<CityDto> City { get; set; } = [];	 
+	public List<CityDto> City { get; set; } = [];
+	public required CreateTripMembersDto Members { get; set; }
 }
 
 public sealed class TripDto
@@ -40,6 +41,7 @@ public sealed class TripDto
 	public DateTime? UpdatedAt { get; set; }
 	public required CountryDto Country { get; set; }
 	public List<CityDto> City { get; set; } = [];
+	public List<TripMembersDto>? Members { get; set; }
 }
 
 public sealed class UpdateTripDto

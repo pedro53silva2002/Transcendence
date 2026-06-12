@@ -9,7 +9,7 @@ using Trippie.Modules.Auth.Model;
 
 namespace Trippie.Modules.Travel.Model;
 
-public sealed class Trip(AppDbContext db)
+public sealed class Trip()
 {
 	public required int Id { get; set; }
 	public required string TripName { get; set; }
@@ -25,6 +25,7 @@ public sealed class Trip(AppDbContext db)
 
 	public TripCountry? TripCountries { get; set; }
 	public ICollection<TripCity> TripCities { get; set; } = [];
+	public IReadOnlyList<TripMembersDto> Members { get; set; } = [];
 	public static TripDto ToDto(Trip t)
 	{
 		return new()
@@ -63,6 +64,7 @@ public sealed class Trip(AppDbContext db)
 				Name = tc.City.Name,
 				CountryId = tc.City.CountryId
 			}).ToList(),
+			Members = t.Members.ToList() ?? [],
 		};
 	}
 }
@@ -71,7 +73,7 @@ public sealed class TripModel(AppDbContext db)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
-		var trip = new Trip(db)
+		var trip = new Trip()
 		{
 			Id = 0,
 			TripName = dto.TripName,
@@ -113,6 +115,7 @@ public sealed class TripModel(AppDbContext db)
 
 		var country = db.TripCountries.Include(tc => tc.Country);
 		var cities = db.TripCities.Include(tc => tc.City);
+		var members = db.TripMembers.Include(tm => tm.TripId);
 
 		var res = await new SearchQueryBuilder<Trip>(db.Trips)
 		.WithKey("id", x => x.Id)
@@ -169,6 +172,16 @@ public sealed class TripModel(AppDbContext db)
 				Id = tc.City.Id,
 				Name = tc.City.Name,
 				CountryId = tc.City.CountryId
+			}).ToList();
+
+			var tripMembers = members.Where(tm => tm.TripId == trip.Id).ToList();
+			trip.Members = tripMembers.Select(tm => new TripMembersDto
+			{
+				Id = tm.Id,
+				TripId = tm.TripId,
+				UserId = tm.UserId,
+				DisplayName = tm.User?.DisplayName ?? tm.User?.Username ?? string.Empty,
+				Role = tm.Role
 			}).ToList();
 		});
 		return res;

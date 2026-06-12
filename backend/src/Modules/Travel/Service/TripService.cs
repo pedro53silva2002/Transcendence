@@ -11,12 +11,15 @@ using Trippie.Modules.Travel.Model;
 
 namespace Trippie.Modules.Travel.Service;
 
-public sealed class TripService(TripModel tripModel)
+public sealed class TripService(TripModel tripModel, TripMembersModel tripMembersModel)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
 		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
 		var trip = await tripModel.CreateAsync(dto, userId, ct);
+		dto.Members.TripId = trip.Id;
+		var members = await new TripMembersService(tripMembersModel).CreateAsync(userId, dto.Members, ct);
+		trip.Members = [.. members];
 		return trip;
 	}
 
@@ -39,16 +42,16 @@ public sealed class TripService(TripModel tripModel)
 		return res;
 	}
 
-	public async Task DeleteAsync(int userId,int id, CancellationToken ct = default)
+	public async Task DeleteAsync(int userId, int id, CancellationToken ct = default)
 	{
-		var delete = await tripModel.DeleteAsync(userId,id, ct);
+		var delete = await tripModel.DeleteAsync(userId, id, ct);
 		if (!delete) throw new NotFoundException($"Trip {id} not found.", id);
 	}
 
 	private void ValidateTrip(string tripName, string? description, int budget, DateTime startDate, DateTime endDate)
 	{
 		if (string.IsNullOrWhiteSpace(tripName)) throw new ValidationException("tripname", "Trip name is required");
-		if (tripName.Length > 25 || tripName.Length < 3) throw new ValidationException("tripname", "Trip name must be between 3 and 25 characters.");	
+		if (tripName.Length > 25 || tripName.Length < 3) throw new ValidationException("tripname", "Trip name must be between 3 and 25 characters.");
 		if (startDate == default(DateTime)) throw new ValidationException("startdate", "Start date is required");
 		if (endDate == default(DateTime)) throw new ValidationException("enddate", "End date is required");
 		if (endDate <= startDate) throw new ValidationException("endDate, startDate", "End date cannot be before or equal to start date.");
