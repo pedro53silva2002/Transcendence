@@ -6,15 +6,24 @@ using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.Extensions;
 using Trippie.Common.Services.Authentication.Jwt;
 using Trippie.Common.Services.Authentication.Security;
+using Trippie.Common.Services.Caching;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Model;
 
 namespace Trippie.Modules.Auth.Service;
 
-public sealed class AuthService(UserService userService, IJwtTokenService jwt, AppDbContext db, IOptions<JwtOptions> jwtOptions)
+public sealed class AuthService(
+    UserService userService,
+    IJwtTokenService jwt,
+    AppDbContext db,
+    IOptions<JwtOptions> jwtOptions,
+    ICachingService cacheService)
 {
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
+
+    private static string GetMeCacheKey(int userId, CancellationToken ct = default) => $"user:me:{userId}";
+
     public async Task<AuthResponseDto> Register(RegisterDto dto, CancellationToken ct = default)
     {
         if (dto.Username is null) throw new ValidationException("username", "Username can not be empty.");
@@ -38,22 +47,36 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
     public async Task<MeDto> GetMe(ClaimsPrincipal principal, CancellationToken ct = default)
     {
         var userId = principal.GetUserId() ?? throw new UnauthorizedException("User not authenticated");
-        var user = await userService.GetById(userId, ct) ?? throw new NotFoundException($"User with id {userId} not found.", userId);
+        
+        string cacheKey = GetMeCacheKey(userId, ct);
 
-        var me = new MeDto
+        return await cacheService.GetOrCreateAsync(cacheKey, async (token) =>
         {
-            Username = user.Username,
-            DisplayName = user.DisplayName,
-            Email = user.Email,
-            ProfilePhotoUrl = user.ProfilePhotoUrl,
-            Trips = [.. principal.GetTrips().Select(t => new TripMembershipDto
+            var user = await db.Users.FirstOrDefaultAsync(u => u.Id == userId, token)
+                ?? throw new NotFoundException($"User with id {userId} not found.", userId);
+            
+            var memberships = await db.TripMembers
+                .Where(m => m.UserId == userId)
+                .Select(m => new { m.TripId, m.Role })
+                .ToListAsync(token);
+            
+            var userTrips = memberships.Select(m => new TripMembershipDto
             {
-                TripId = t.TripId,
-                Role = t.Role
-            })]
-        };
+                TripId = m.TripId,
+                Role = m.Role.ToString()
+            }).ToList();
 
-        return me;
+            var meDto = new MeDto
+            {
+                Username = user.Username,
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                ProfilePhotoUrl = user.ProfilePhotoUrl,
+                Trips = userTrips
+            };
+
+            return meDto;
+        }, TimeSpan.FromMinutes(15), ct); // Caches for 15 minutes unless explicitly invalidated
     }
 
     public async Task<AuthResponseDto> Login(LoginDto dto, CancellationToken ct = default)
@@ -66,8 +89,23 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
         string passwordHash = await userService.GetPasswordByUsername(dto.Username, ct) ?? throw new UnauthorizedException("Password not found.");
         if (!new BCryptPasswordHasher().Verify(dto.Password, passwordHash)) throw new UnauthorizedException("Invalid username or password.");
 
-        var response = await BuildAuthResponse(user, [], ct);
+        //invalidate any existing refresh tokens for this user (need to review this with Diogo)
+        await cacheService.RemoveAsync(GetMeCacheKey(user.Id), ct);
 
+        //shouldnt we also get the activeTrips?
+        
+        var memberships = await db.TripMembers
+            .Where(m => m.UserId == user.Id)
+            .Select(m => new { m.TripId, m.Role })
+            .ToListAsync(ct);
+
+        var activeTrips = memberships.Select(m => new JwtTripClaim
+        {
+            TripId = m.TripId,
+            Role = m.Role.ToString()
+        }).ToList();
+        
+        var response = await BuildAuthResponse(user, activeTrips, ct);
         return response;
     }
 
@@ -85,13 +123,30 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
         var user = await userService.GetById(stored.UserId, ct)
             ?? throw new UnauthorizedException("User not found");
 
-        return await BuildAuthResponse(user, [], ct);
+        //I assum we also have to invalidate the cache here(perguntar ao Diogo)
+        await cacheService.RemoveAsync(GetMeCacheKey(user.Id), ct);
+
+        var memberships = await db.TripMembers
+            .Where(m => m.UserId == user.Id)
+            .Select(m => new { m.TripId, m.Role })
+            .ToListAsync(ct);
+
+        var activeTrips = memberships.Select(m => new JwtTripClaim
+            {
+                TripId = m.TripId,
+                Role = m.Role.ToString()
+            }).ToList();
+
+        return await BuildAuthResponse(user, activeTrips, ct);
     }
 
     public async Task Logout(int userId, string token, CancellationToken ct = default)
     {
+        await cacheService.RemoveAsync(GetMeCacheKey(userId), ct);
+        
         if (!string.IsNullOrWhiteSpace(token))
             jwt.InvalidateToken(token);
+
         await db.RefreshTokens
             .Where(r => r.UserId == userId && r.RevokedAt == null)
             .ExecuteUpdateAsync(s => s.SetProperty(r => r.RevokedAt, DateTime.UtcNow), ct);
@@ -108,11 +163,17 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
 
         var existingOAuthUser = await userService.GetByOAuthIdAsync(dto.OAuthProvider, dto.OAuthId, ct);
         if (existingOAuthUser is not null)
+        {
+            await cacheService.RemoveAsync(GetMeCacheKey(existingOAuthUser.Id, ct));
             return await BuildAuthResponse(existingOAuthUser, [], ct);
+        }
 
         var existingEmailUser = await userService.GetByEmail(dto.Email, ct);
         if (existingEmailUser is not null)
+        {
+            await cacheService.RemoveAsync(GetMeCacheKey(existingEmailUser.Id, ct));
             return await BuildAuthResponse(existingEmailUser, [], ct);
+        }
 
         var baseUsername = dto.Email.Split('@')[0];
         var uniqueUsername = await userService.GenerateUniqueUsername(baseUsername, ct);

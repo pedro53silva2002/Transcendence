@@ -10,6 +10,8 @@ using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Trippie.Common.Services.Caching;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 using Trippie.Modules.Travel.Service;
@@ -130,6 +132,19 @@ try
 				});
 		});
 	});
+
+	var redisHost = Environment.GetEnvironmentVariable("REDIS_HOST") ?? "localhost";
+	var redisPort = Environment.GetEnvironmentVariable("REDIS_PORT") ?? "6379";
+
+	// Redis Service configuration
+	builder.Services.AddStackExchangeRedisCache(options =>
+	{
+    	options.Configuration = $"{redisHost}:{redisPort}";
+		options.InstanceName = "Trippie_";
+
+	});
+
+	builder.Services.AddTransient<ICachingService, CacheService>();
 
 	var app = builder.Build();
 

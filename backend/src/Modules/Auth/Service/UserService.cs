@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
+using Trippie.Common.Services.Caching;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Auth.Dtos;
@@ -7,7 +8,7 @@ using Trippie.Modules.Auth.Model;
 
 namespace Trippie.Modules.Auth.Service;
 
-public sealed class UserService(AppDbContext db, UserModel userModel)
+public sealed class UserService(AppDbContext db, UserModel userModel, ICachingService cacheService)
 {
     public async Task<UserDto> CreateAsync(CreateUserDto dto, CancellationToken ct = default)
     {
@@ -51,6 +52,8 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
 
         var user = await userModel.UpdateAsync(id, dto, ct) ?? throw new NotFoundException($"User {id} not found.", id);
 
+        await cacheService.RemoveAsync($"user:me:{id}", ct);
+
         return User.ToDto(user);
     }
 
@@ -65,7 +68,8 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
 
 	 public async Task<UserDto?> GetByUsername(string username, CancellationToken ct = default)
     {
-        if (username is null) throw new ValidationException("username", $"Username cannot be empty.");
+        if (string.IsNullOrWhiteSpace(username))
+            throw new ValidationException("username", $"Username cannot be empty.");
 
         var res = await userModel.GetByUsername(username, ct);
 
@@ -114,11 +118,14 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
     {
         var deleted = await userModel.DeleteAsync(id, ct);
         if (!deleted) throw new NotFoundException($"User {id} not found.", id);
+
+        await cacheService.RemoveAsync($"user:me:{id}", ct);
     }
 
     public async Task<string?> GetPasswordByUsername(string username, CancellationToken ct = default)
     {
-        if (username is null) throw new ValidationException("email", $"Email cannot be empty");
+        if (string.IsNullOrWhiteSpace(username))
+            throw new ValidationException("username", $"Username cannot be empty");
 
         var res = await userModel.GetPasswordByUsername(username, ct);
         if (res is not null)
