@@ -1,6 +1,6 @@
 .crew-panel {
   background-color: var(--mat-sys-primary-container);
-  border: 4px solid var(--mat-sys-secondary);
+  border: 2px solid var(--mat-sys-on-primary-container);
   border-radius: 25px;
   padding: 40px;
   height: 280px;
@@ -16,27 +16,30 @@
 }
 
 .crew-title {
-  font-family: 'BBH Hegarty', sans-serif;
+  font-family: 'BBH Bogle', sans-serif;
   font-size: 1.1rem;
-  font-weight: 700;
+  opacity: 0.8;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--mat-sys-on-primary-container);
   margin: 0;
+  font-size: 22px;
 }
 
 .add-member-btn {
   border-radius: 20px !important;
   border: 2px solid var(--mat-sys-on-primary-container) !important;
-  color: var(--mat-sys-on-primary-container) !important;
+  // color: var(--mat-sys-on-primary-container) !important;
   font-size: 0.8rem;
   height: 34px;
   gap: 4px;
+  opacity: 0.9;
 
   mat-icon {
     font-size: 16px;
     width: 16px;
     height: 16px;
+    opacity: 0.8;
   }
 }
 
@@ -113,13 +116,10 @@ mat-icon.avatar-icon {
   }
 
   .mat-mdc-select-value {
-    color: var(--mat-sys-on-primary-container);
-    font-size: 0.75rem;
-    width: auto;
-  }
-
-  .mat-mdc-select-arrow-wrapper {
-    height: auto;
+    color: var(--mat-sys-on-primary);
+    font-size: 0.65rem;
+    margin-left: 8px;
+    opacity: 0.8;
   }
 
   .mat-mdc-select-arrow {
@@ -130,6 +130,7 @@ mat-icon.avatar-icon {
 .crew-empty {
   grid-column: 1 / -1;
   text-align: center;
-  color: var(--mat-sys-on-primary-container);
+  color: var(--mat-sys-on-primary);
   font-size: 0.85rem;
+  opacity: 0.6;
 }

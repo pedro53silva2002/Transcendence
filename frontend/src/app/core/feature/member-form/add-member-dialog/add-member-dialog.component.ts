@@ -15,10 +15,11 @@ import { TripMemberService } from '../../service/trip/member.service';
 import { UserService } from '../../auth/services/user.service';
 import { UserDto } from '../../auth/dtos/user.dto';
 import { TripMemberDto } from '../../dtos/trip/member.dto';
+import { CloseButtonComponent } from '../../../../shared/components/close-button/close-button.component';
 
 @Component({
   selector: 'app-add-member-dialog',
-  imports: [MatDialogModule, MatButtonModule, MatIconModule, NgOptimizedImage, TranslocoModule],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, NgOptimizedImage, TranslocoModule, CloseButtonComponent],
   templateUrl: './add-member-dialog.component.html',
   styleUrl: './add-member-dialog.component.scss',
   encapsulation: ViewEncapsulation.None,

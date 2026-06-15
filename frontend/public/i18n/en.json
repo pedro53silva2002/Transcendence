@@ -93,7 +93,7 @@
   },
   "trips": {
     "members": {
-      "title": "Trip Members",
+      "title": "Choose Your Crew",
       "addMember": "Add Member",
       "noMembers": "No trip members",
       "role": {
@@ -129,5 +129,9 @@
         "descriptionMaxLength": "Description cannot exceed 30 characters"
       }
     }
+  },
+  "crew": {
+    "addMember": "Add Member",
+    "allFriendsAdded": "All your friends have been added to the crew."
   }
 }
