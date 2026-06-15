@@ -81,6 +81,9 @@ export class NavbarComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly otherAuth = inject(OtherAuth);
 
+  public isDashboardRoute = false;
+
+
   ngOnInit(): void {
     if (!this.authService.getOAuthResult()) {
       if (sessionStorage.getItem('auth_origin') === 'register') {
@@ -89,6 +92,7 @@ export class NavbarComponent implements OnInit {
         this.openLogin();
       }
     }
+	this.isDashboardRoute = this.router.url.includes('home');
   }
 
   openLogin(): void {

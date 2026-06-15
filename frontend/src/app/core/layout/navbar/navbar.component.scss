@@ -156,7 +156,15 @@ nav {
 @media (max-width: 1254px) {
 
 	.full-screen-buttons {
-		display: none !important;
+		display: contents !important; //prevents gap from some invisible buttons to appear
+
+		> button {
+			display: none !important;
+		}
+
+		> button.keep-visible {
+			display: inline-flex !important;
+		}
 	}
 
 	.hamburger-btn {

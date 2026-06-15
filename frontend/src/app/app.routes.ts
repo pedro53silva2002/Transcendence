@@ -7,6 +7,7 @@ import { AuthCallbackComponent } from './core/auth/auth-callback/auth-callback.c
 import { AppLayoutComponent } from './core/layout/app-layout/app-layout.component';
 import { PlanATripComponent } from './core/feature/plan-a-trip/plan-a-trip.component';
 import { TripDashboardComponent } from './core/feature/trip-dashboard/trip-dashboard.component';
+import ProfileComponent from './core/feature/profile/profile.component';
 
 export const routes: Routes = [
   { 
@@ -34,10 +35,10 @@ export const routes: Routes = [
 	component: AppLayoutComponent,
 	// canActivate: [guestGuard],
 	children: [
-		// {
-		// 	path: 'profile',
-		// 	loadComponent: () => import('<url from component'),
-		// },
+		{
+			path: 'profile',
+			component: ProfileComponent,
+		},
 		{
 			path: 'plan-a-trip',
 			component: PlanATripComponent

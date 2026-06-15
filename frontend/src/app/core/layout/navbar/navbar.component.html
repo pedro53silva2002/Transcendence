@@ -27,7 +27,7 @@
 			 <button routerLinkActive="active-link" routerLink="/home" class="primary-btn" matButton="outlined">Home</button>
 			 }
 			 @if (showProfile()) {
-			 <button routerLinkActive="active-link" routerLink="/profile" class="primary-btn"
+			 <button routerLinkActive="active-link" routerLink="/profile" class="primary-btn" [class.keep-visible]="isDashboardRoute"
 				 matButton="outlined">Profile</button>
 			 }
 			 @if (showPlanATrip()) {
