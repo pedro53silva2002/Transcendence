@@ -7,24 +7,22 @@ import {
   UserSearchFieldsDto,
 } from '../dtos/user.dto';
 import { CursorPage, SearchParams, searchToQuery } from '../../../logic/services/search.service';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends BaseApiService {
-  public async create(dto: CreateUserDto): Promise<ApiResponse<UserDto>> {
-    const res = await this._post<UserDto>(`/users`, dto);
-    return res;
+  public create(dto: CreateUserDto): Observable<ApiResponse<UserDto>> {
+    return this._post<UserDto>(`/users`, dto);
   }
-  public async search(
+
+  public search(
     search: SearchParams<UserSearchFieldsDto, UserOrderByFieldsDto>,
-  ): Promise<ApiResponse<CursorPage<UserDto>>> {
+  ): Observable<ApiResponse<CursorPage<UserDto>>> {
     const query = searchToQuery(search);
-    const res = this._get<CursorPage<UserDto>>(`/users/search?q=${query}`);
-
-    return res;
+    return this._get<CursorPage<UserDto>>(`/users/search?q=${query}`);
   }
 
-  public async delete(id: number): Promise<ApiResponse<void>> {
-    const res = this._delete<void>(`/users`);
-    return res;
+  public delete(id: number): Observable<ApiResponse<void>> {
+    return this._delete<void>(`/users/${id}`);
   }
 }

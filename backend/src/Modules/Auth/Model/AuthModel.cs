@@ -1,5 +1,3 @@
-using Trippie.Modules.Auth.Dtos;
-
 namespace Trippie.Modules.Auth.Model;
 
 public sealed class RefreshToken

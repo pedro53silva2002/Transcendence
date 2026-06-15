@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.Security;
@@ -60,6 +58,7 @@ public sealed class UserModel(AppDbContext db)
         await db.SaveChangesAsync(ct);
         return User.ToDto(user);
     }
+
     public async Task<CursorPage<UserDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
     {
         var res = await new SearchQueryBuilder<User>(db.Users)

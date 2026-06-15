@@ -1,0 +1,100 @@
+.plan-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: start;
+	gap: 20px;
+	width: 590px;
+
+	::placeholder {
+		color: var(--mat-sys-on-primary) !important;
+		opacity: 0.6 !important;
+	}
+}
+
+.budget-dates,
+.country-and-city {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+
+}
+
+::ng-deep .plan-form {
+
+	.mat-mdc-form-field {
+		width: 100%;
+	}
+
+	.mdc-notched-outline__leading,
+	.mdc-notched-outline__notch,
+	.mdc-notched-outline__trailing {
+		border-color: var(--mat-sys-on-primary-container) !important;
+	}
+
+	.mat-datepicker-toggle {
+		color: var(--mat-sys-on-primary) !important;
+		margin-right: 5px;
+		opacity: 0.7;
+	}
+
+	.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input,
+	.mat-date-range-input-separator {
+		color: var(--mat-sys-on-primary) !important;
+	}
+
+	.mat-date-range-input-wrapper {
+		// width: 100% !important;
+		flex-grow: 1;
+	}
+
+}
+
+::ng-deep {
+
+	.mat-mdc-form-field-type-mat-chip-grid {
+		.mat-mdc-form-field-infix {
+			display: flex;
+			align-items: center;
+			min-height: 40px;
+			padding-top: 0 !important;
+			padding-bottom: 0 !important;
+		}
+
+		mat-chip-grid {
+			display: flex;
+			align-items: center;
+		}
+	}
+
+    .mdc-evolution-chip__cell,
+    .mdc-evolution-chip__action,
+    .mat-mdc-chip-focus-overlay {      
+        &::before,
+        &::after {
+            border: none !important;
+        }
+    }
+
+    .mat-mdc-chip-row {
+        .mdc-evolution-chip__text-label {
+            color: var(--mat-sys-on-primary) !important;
+        }
+		
+        border: 2px solid color-mix(in srgb, var(--mat-sys-on-primary) 40%, transparent) !important;
+        border-radius: 20px !important;
+    }
+}
+
+.privacy-container {
+	width: 100%;
+	margin-bottom: 40px;
+
+	p {
+		color: var(--mat-sys-on-primary);
+		margin-bottom: 7px;
+		margin-top: 5px;
+		margin-left: 10px;
+	}
+}

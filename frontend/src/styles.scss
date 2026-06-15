@@ -15,7 +15,7 @@
 		));
 }
 
-.std-btn {
+.primary-btn {
 	transition: all 300ms ease-in-out;
 	border-radius: 20px !important;
 	border: 2px solid var(--mat-sys-on-primary) !important;
@@ -27,6 +27,25 @@
 		transition: all 300ms ease-in-out;
 		background-color: var(--mat-sys-on-primary) !important;
 		color: var(--mat-sys-primary-container) !important;
+	}
+
+}
+
+.tertiary-btn {
+	transition: all 300ms ease-in-out;
+	background-color: var(--mat-sys-on-primary-container) !important;
+	color: var(--mat-sys-primary-container) !important;
+	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+	display: block;
+
+	&:hover {
+		background-color: var(--mat-sys-secondary) !important;
+		color: var(--mat-sys-primary-container) !important;
+	}
+
+	&:disabled {
+		opacity: 0.6 !important;
+		cursor: not-allowed;
 	}
 }
 
@@ -52,3 +71,71 @@
 	color: var(--mat-sys-on-primary-container) !important;
 	text-align: center;
 }
+
+.mat-mdc-form-field {
+
+	mat-icon {
+		color: var(--mat-sys-on-primary);
+		font-size: 18px;
+		opacity: 0.6;
+		text-align: left;
+		height: 19px;
+	}
+
+	.mdc-text-field--outlined {
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+		border-radius: 25px;
+		display: block;
+		background-color: var(--mat-sys-primary-container) !important;
+	}
+}
+
+.mat-mdc-form-field-error {
+	color: var(--mat-sys-error) !important;
+	font-size: 11px;
+	margin-top: 2px;
+}
+
+
+//CALENDAR
+.mat-datepicker-popup .mat-calendar {
+	background-color: var(--mat-sys-primary-container) !important; /* Cor de fundo do painel */
+	border-radius: 16px; /* Opcional: dá um toque arredondado ao menu do calendário */
+}
+
+/* Opcional: Altera a cor dos textos dos dias e cabeçalho para contrastar com o novo fundo */
+.mat-datepicker-popup {
+	.mat-calendar-body-cell-content, 
+	.mat-calendar-header,
+	.mat-calendar-table-header {
+		color: var(--mat-sys-on-primary-container) !important;
+	}
+
+	/* Opcional: Altera a cor do dia atual/hoje */
+	.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+		border-color: var(--mat-sys-secondary) !important;
+	}
+}
+
+.mat-calendar-body-selected {
+	background-color: var(--mat-sys-on-primary) !important; /* Castanho escuro */
+	color: white !important; /* Texto branco para contrastar */
+}
+
+/* 2. Cor do meio do intervalo (Os dias que ficam entre o início e o fim) */
+.mat-calendar-body-in-range::before {
+	background: var(--mat-sys-primary) !important; /* Castanho claro / Bege para o fundo do meio */
+}
+
+.mat-datepicker-popup, .mat-calendar {	
+	/* 3. Forçar o estilo do picotado*/
+	[class*="mat-calendar-body-in-preview"] {
+		border-color: var(--mat-sys-on-primary) !important;
+		color: var(--mat-sys-on-primary) !important;
+	}
+}
+
+
+
+
+

@@ -1,17 +1,21 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   OnInit,
   ViewEncapsulation,
   inject,
+  signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { EMPTY, Subject, catchError, exhaustMap, finalize, of, switchMap, tap } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService as ApiAuthService } from '../../feature/auth/services/auth.service';
 import { SessionService } from '../../logic/services/session.service';
@@ -30,6 +34,7 @@ import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-
     GoogleAuthButtonComponent,
     CloseButtonComponent,
     TranslocoModule,
+    MatIcon,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -42,16 +47,24 @@ export class LoginComponent implements OnInit {
   private readonly tokenStorage = inject(TokenStorageService);
   private readonly router = inject(Router);
   private readonly dialogRef = inject(MatDialogRef<LoginComponent>);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly submitTrigger$ = new Subject<void>();
+
+  protected readonly submitting = signal(false);
+  protected readonly passwordVisible = signal(false);
+  readonly showLoginErrorMessage = signal(false);
 
   readonly form = new FormGroup({
-    email: new FormControl('', {
+    username: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.email],
+      validators: [Validators.required],
     }),
     password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
 
   showOAuthErrorMessage = false;
+
+  constructor() {}
 
   ngOnInit(): void {
     if (sessionStorage.getItem('auth_origin') === 'login') {
@@ -62,29 +75,44 @@ export class LoginComponent implements OnInit {
       }
     }
 
-    //sets the auth_origin in the session storage to 'login'
     sessionStorage.setItem('auth_origin', 'login');
+
+    this.submitTrigger$
+      .pipe(
+        exhaustMap(() =>
+          this.apiAuthService.login(this.form.getRawValue()).pipe(
+            switchMap((result) => {
+              if (result.data) {
+                this.tokenStorage.saveAccessToken(result.data.token);
+                this.tokenStorage.saveRefreshToken(result.data.refreshToken);
+                return this.authService.loadMe();
+              }
+              return of(false);
+            }),
+            tap((ok) => {
+              if (ok) {
+                this.dialogRef.close();
+                this.router.navigate(['/home']);
+              } else {
+                this.showLoginErrorMessage.set(true);
+              }
+            }),
+            catchError(() => {
+              this.showLoginErrorMessage.set(true);
+              return EMPTY;
+            }),
+            finalize(() => this.submitting.set(false)),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
   }
 
-  async submit(): Promise<void> {
-    this.showOAuthErrorMessage = false;
+  submit(): void {
     if (this.form.invalid) return;
-    const { email, password } = this.form.getRawValue();
-    try {
-      const result = await this.apiAuthService.login({ email, password });
-      if (result.data) {
-        this.tokenStorage.saveAccessToken(result.data.token);
-        this.tokenStorage.saveRefreshToken(result.data.refreshToken);
-        const ok = await firstValueFrom(this.authService.loadMe());
-        if (ok) {
-          this.dialogRef.close();
-          this.router.navigate(['/home']);
-          return;
-        }
-      }
-    } catch {
-      // login failed
-    }
-    alert('Invalid credentials');
+    this.showLoginErrorMessage.set(false);
+    this.submitting.set(true);
+    this.submitTrigger$.next();
   }
 }

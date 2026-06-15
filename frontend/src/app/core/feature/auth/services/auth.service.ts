@@ -3,19 +3,20 @@ import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.se
 import { AuthResponseDto, LoginDto, MeDto } from '../dtos/auth.dto';
 import { CreateUserDto } from '../dtos/user.dto';
 import { SessionService } from '../../../logic/services/session.service';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseApiService {
   private readonly authSession = inject(SessionService);
-  public async register(dto: CreateUserDto): Promise<ApiResponse<AuthResponseDto>> {
+  public register(dto: CreateUserDto): Observable<ApiResponse<AuthResponseDto>> {
     return this._post<AuthResponseDto>('/auth/register', dto);
   }
 
-  public async me(): Promise<ApiResponse<MeDto>> {
+  public me(): Observable<ApiResponse<MeDto>> {
     return this._get<MeDto>('/auth/me');
   }
 
-  public async login(dto: LoginDto): Promise<ApiResponse<AuthResponseDto>> {
+  public login(dto: LoginDto): Observable<ApiResponse<AuthResponseDto>> {
     return this._post<AuthResponseDto>('/auth/login', dto);
   }
 
@@ -24,11 +25,11 @@ export class AuthService extends BaseApiService {
    * @returns returns the Google URL for the user to be able to login with the Google account
    */
   public getGoogleRedirectUrl() {
-    return this._getO<{ authorizationUrl: string }>('/auth/google/url');
+    return this._get<{ authorizationUrl: string }>('/auth/google/url');
   }
 
-  public async logout(): Promise<ApiResponse<void>> {
-    const res = await this._post<void>(`/auth/logout`, null);
+  public logout(): Observable<ApiResponse<void>> {
+    const res = this._post<void>(`/auth/logout`, null);
     this.authSession.clearSession();
     return res;
   }
