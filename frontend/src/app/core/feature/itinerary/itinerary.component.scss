@@ -33,9 +33,9 @@ app-custom-scrollbar {
 .itin-card {
   width: 372px;
   background: var(--mat-sys-primary-container);
-  border: 2px solid var(--mat-sys-secondary);
+  border: 2px solid var(--mat-sys-on-primary-container);
   border-radius: 28px;
-  box-shadow: 0 22px 48px rgba(150, 92, 0, 0.2);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   padding: 54px 100px 54px;
   display: flex;
   flex-direction: column;
@@ -65,8 +65,8 @@ app-custom-scrollbar {
   height: 28px;
   border-radius: 50%;
   border: none;
-  background: var(--mat-sys-secondary);
-  color: #fff;
+  background: var(--mat-sys-on-primary-container);
+  color: var(--mat-sys-primary-container);
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -75,15 +75,17 @@ app-custom-scrollbar {
     transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
     background 0.2s,
     box-shadow 0.2s;
-  box-shadow: 0 4px 10px rgba(255, 136, 0, 0.35);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
   &:hover {
-    background: var(--mat-sys-secondary);
-    box-shadow: 0 6px 14px rgba(255, 136, 0, 0.45);
+    background: var(--mat-sys-on-primary-container);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
   }
+
   &:active {
     transform: scale(0.9);
   }
+
   &.open {
     transform: rotate(135deg);
   }
@@ -117,6 +119,7 @@ app-custom-scrollbar {
     opacity: 0;
     transform: translateY(-6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -135,7 +138,7 @@ app-custom-scrollbar {
 }
 
 .person {
-  color: #fff;
+    color: var(--mat-sys-primary-container);
 }
 
 .add-remove {
@@ -182,7 +185,7 @@ app-custom-scrollbar {
 .del-btn {
   border: none;
   background: transparent;
-  color: var(--mat-sys-secondary);
+  color: var(--mat-sys-on-primary-container);
   cursor: pointer;
   padding: 2px;
   line-height: 0;
@@ -192,7 +195,7 @@ app-custom-scrollbar {
     color 0.15s;
 
   &:hover {
-    color: var(--mat-sys-secondary);
+    color: var(--mat-sys-on-primary-container);
     transform: scale(1.2) rotate(90deg);
   }
 
@@ -208,7 +211,7 @@ app-custom-scrollbar {
   font-family: 'Comfortaa', sans-serif;
   font-weight: 500;
   font-size: 13px;
-  color: var(--mat-sys-secondary);
+  color: var(--mat-sys-on-primary-container);
   padding: 28px 8px;
   opacity: 0.85;
 }
@@ -249,7 +252,7 @@ app-custom-scrollbar {
   font-family: 'ADLaM', sans-serif;
   font-weight: 700;
   font-size: 12.5px;
-  border: 2px solid var(--mat-sys-secondary);
+  border: 2px solid var(--mat-sys-on-primary-container);
   background: var(--mat-sys-primary-container);
   color: var(--mat-sys-on-primary);
   border-radius: 999px;
@@ -264,13 +267,16 @@ app-custom-scrollbar {
     opacity: 70%;
     color: var(--mat-sys-on-primary);
   }
+
   &:focus {
-    border-color: var(--mat-sys-secondary);
-    box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.18);
+    border-color: var(--mat-sys-on-primary-container);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
   }
+
   &.grow {
     flex: 1;
   }
+
   &.cost {
     width: 92px;
     flex: 0 0 auto;
@@ -292,27 +298,29 @@ app-custom-scrollbar {
   font-family: 'ADLaM Display', sans-serif;
   font-size: 14px;
   border: none;
-  background: var(--mat-sys-secondary);
-  color: #fff;
+  background: var(--mat-sys-on-primary-container);
+  color: var(--mat-sys-primary-container);
   border-radius: 999px;
   padding: 9px 24px;
   cursor: pointer;
   flex: 0 0 auto;
-  box-shadow: 0 4px 10px rgba(255, 136, 0, 0.32);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   transition:
     background 0.18s,
     transform 0.12s,
     box-shadow 0.18s;
 
   &:hover {
-    background: var(--mat-sys-secondary);
-    box-shadow: 0 6px 14px rgba(255, 136, 0, 0.42);
+    background: var(--mat-sys-on-primary-container);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
   }
+
   &:active {
     transform: translateY(1px);
   }
+
   &:disabled {
-    background: var(--mat-sys-secondary);
+    background: var(--mat-sys-on-primary-container);
     color: rgba(255, 255, 255, 0.5);
     box-shadow: none;
     opacity: 50%;
@@ -333,7 +341,7 @@ app-custom-scrollbar {
   align-items: center;
   gap: 12px;
   background: var(--mat-sys-on-primary);
-  color: #fff;
+  color: var(--mat-sys-primary-container);
   border-radius: 999px;
   padding: 8px 14px;
   user-select: none;
@@ -348,7 +356,7 @@ app-custom-scrollbar {
 .day-arrow {
   border: none;
   background: transparent;
-  color: #fff;
+  color: var(--mat-sys-primary-container);
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -361,6 +369,7 @@ app-custom-scrollbar {
   &:hover {
     transform: scale(1.25);
   }
+
   &:disabled {
     opacity: 0.3;
     cursor: not-allowed;

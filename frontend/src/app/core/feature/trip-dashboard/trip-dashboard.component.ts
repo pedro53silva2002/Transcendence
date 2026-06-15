@@ -8,6 +8,8 @@ import { ConfirmationPopUpComponent } from '../../../shared/pop-up/confirmation-
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { EMPTY, filter, switchMap } from 'rxjs';
+import { MemberFormComponent } from '../member-form/member-form.component';
+import ItineraryComponent from '../itinerary/itinerary.component';
 
 @Component({
 	selector: 'app-trip-dashboard',
@@ -15,7 +17,9 @@ import { EMPTY, filter, switchMap } from 'rxjs';
 		RouterLink,
 		DatePipe,
 		MatDialogModule,
-		TranslocoModule],
+		TranslocoModule,
+		MemberFormComponent,
+		ItineraryComponent],
 	templateUrl: './trip-dashboard.component.html',
 	styleUrl: './trip-dashboard.component.scss',
 })
