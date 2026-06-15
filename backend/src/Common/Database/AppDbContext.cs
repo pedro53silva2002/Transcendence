@@ -11,15 +11,19 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Country> Countries => Set<Country>();
+    public DbSet<City> Cities => Set<City>();
+	public DbSet<TripMembers> TripMembers => Set<TripMembers>();
 	public DbSet<Trip> Trips => Set<Trip>();
-	public DbSet<City> Cities => Set<City>();
 	public DbSet<TripCountry> TripCountries => Set<TripCountry>();
     public DbSet<TripCity> TripCities => Set<TripCity>();
+	public DbSet<Itinerary> Itineraries => Set<Itinerary>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 		modelBuilder.HasPostgresEnum<TripVisibility>(name: "trip_visibility");
+		modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+		modelBuilder.HasPostgresEnum<TripMemberRole>(name: "member_role");
 		
 		modelBuilder.Entity<TripCountry>(e =>
 		{

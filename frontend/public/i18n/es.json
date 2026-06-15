@@ -33,5 +33,42 @@
 		"countries": "Paises Visitados",
 		"trips": "Viajes Este Ano",
 		"countdown": "Dias Para El Viaje"
-	}
+	},
+
+  "trips": {
+    "members": {
+      "title": "Elige Tu Equipo",
+      "addMember": "Amigos"
+    }
+  },
+
+  "crew": {
+    "noMembers": "Sin miembros todavía",
+    "roleFor": "Rol de {{ name }}",
+    "role": {
+      "member": "Miembro",
+      "admin": "Admin"
+    }
+  },
+  "itinerary": {
+    "title": "Itinerario",
+    "addItem": "Agregar parada",
+    "closeForm": "Cerrar formulario",
+    "stops": "Paradas del itinerario",
+    "empty": "Sin paradas — toca + para agregar una.",
+    "remove": "Eliminar {{ title }}",
+    "day": "DÍA",
+    "dayNav": "Navegación por día",
+    "prevDay": "Día anterior",
+    "nextDay": "Día siguiente",
+    "form": {
+      "titleLabel": "Título",
+      "title": "título",
+      "costLabel": "Coste en euros",
+      "cost": "coste (€)",
+      "infoLabel": "Más información",
+      "info": "más info",
+      "save": "Guardar"
+    }
+  }
 }

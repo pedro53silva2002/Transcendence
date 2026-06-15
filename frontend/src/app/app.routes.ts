@@ -9,17 +9,17 @@ import { PlanATripComponent } from './core/feature/plan-a-trip/plan-a-trip.compo
 import { TripDashboardComponent } from './core/feature/trip-dashboard/trip-dashboard.component';
 
 export const routes: Routes = [
-  { 
-	path: '',
-	component: LandingPageComponent,
-	canActivate: [guestGuard]
-},
+  {
+    path: '',
+    component: LandingPageComponent,
+    canActivate: [guestGuard],
+  },
 
   //to verify if the google auth was successful and redirect to the home page
-  { 
-	path: 'auth/callback',
-	component: AuthCallbackComponent
-	},
+  {
+    path: 'auth/callback',
+    component: AuthCallbackComponent,
+  },
 
   //user dashboard (after logging in)
   {
@@ -30,28 +30,32 @@ export const routes: Routes = [
 
   //all other pages
   {
-	path: '',
-	component: AppLayoutComponent,
-	// canActivate: [guestGuard],
-	children: [
-		// {
-		// 	path: 'profile',
-		// 	loadComponent: () => import('<url from component'),
-		// },
-		{
-			path: 'plan-a-trip',
-			component: PlanATripComponent
-		},
-		{
-			//route to edit the trip that will point to the same component
-			path: 'plan-a-trip/edit/:id',
-			component: PlanATripComponent
-		},
-		{
-			path: 'trip-dashboard/:id',
-			component: TripDashboardComponent
-		}
-	]
+    path: '',
+    component: AppLayoutComponent,
+    // canActivate: [guestGuard],
+    children: [
+      // {
+      // 	path: 'profile',
+      // 	loadComponent: () => import('<url from component'),
+      // },
+      {
+        path: 'plan-a-trip',
+        component: PlanATripComponent,
+      },
+      {
+        //route to edit the trip that will point to the same component
+        path: 'plan-a-trip/edit/:id',
+        component: PlanATripComponent,
+      },
+      {
+        path: 'trip-dashboard/:id',
+        component: TripDashboardComponent,
+      },
+    ],
   },
-  { path: '**', redirectTo: '' },
+  {
+    path: 'itinerary/:tripId',
+    loadComponent: () => import('./core/feature/itinerary/itinerary.component'),
+    canActivate: [authGuard],
+  },
 ];
