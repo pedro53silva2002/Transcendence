@@ -21,7 +21,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-itinerary',
-  imports: [NavbarComponent, CustomScrollbarComponent, MatIcon, MatError, TranslocoModule, ReactiveFormsModule],
+  imports: [ CustomScrollbarComponent, MatIcon, MatError, TranslocoModule, ReactiveFormsModule],
   templateUrl: './itinerary.component.html',
   styleUrl: './itinerary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
