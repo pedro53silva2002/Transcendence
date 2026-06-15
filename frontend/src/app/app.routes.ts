@@ -53,4 +53,9 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'itinerary/:tripId',
+    loadComponent: () => import('./core/feature/itinerary/itinerary.component'),
+    canActivate: [authGuard],
+  },
 ];

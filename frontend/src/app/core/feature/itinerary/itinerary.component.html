@@ -56,7 +56,7 @@
       <!-- Add form (collapsible) -->
       <div class="form-collapse" [class.open]="showForm()" [attr.aria-hidden]="!showForm()">
         <div class="form-inner">
-          <div class="itin-form">
+          <div class="itin-form" [formGroup]="itemForm">
             <div class="form-line">
               <label class="sr-only" for="itin-title">{{
                 'itinerary.form.titleLabel' | transloco
@@ -64,9 +64,8 @@
               <input
                 id="itin-title"
                 class="pill grow"
+                formControlName="title"
                 [placeholder]="'itinerary.form.title' | transloco"
-                [value]="titleValue()"
-                (input)="titleValue.set($any($event.target).value)"
                 (keydown)="onKeyDown($event)"
               />
               <label class="sr-only" for="itin-cost">{{
@@ -75,12 +74,23 @@
               <input
                 id="itin-cost"
                 class="pill cost"
+                formControlName="expectedPrice"
                 [placeholder]="'itinerary.form.cost' | transloco"
-                [value]="costValue()"
-                (input)="filterCost($event)"
                 (keydown)="onKeyDown($event)"
                 inputmode="decimal"
               />
+            </div>
+            <div class="form-errors">
+              @if (itemForm.controls.title.touched) {
+                @if (itemForm.controls.title.hasError('required')) {
+                  <mat-error>{{ 'itinerary.form.errors.titleRequired' | transloco }}</mat-error>
+                } @else if (itemForm.controls.title.hasError('maxlength')) {
+                  <mat-error>{{ 'itinerary.form.errors.titleMaxLength' | transloco }}</mat-error>
+                }
+              }
+              @if (itemForm.controls.expectedPrice.touched && itemForm.controls.expectedPrice.hasError('min')) {
+                <mat-error>{{ 'itinerary.form.errors.priceMin' | transloco }}</mat-error>
+              }
             </div>
             <div class="form-line">
               <label class="sr-only" for="itin-info">{{
@@ -89,14 +99,18 @@
               <input
                 id="itin-info"
                 class="pill grow"
+                formControlName="description"
                 [placeholder]="'itinerary.form.info' | transloco"
-                [value]="infoValue()"
-                (input)="infoValue.set($any($event.target).value)"
                 (keydown)="onKeyDown($event)"
               />
               <button class="save-btn" (click)="saveItem()" [disabled]="!canSave()">
                 {{ 'itinerary.form.save' | transloco }}
               </button>
+            </div>
+            <div class="form-errors">
+              @if (itemForm.controls.description.touched && itemForm.controls.description.hasError('maxlength')) {
+                <mat-error>{{ 'itinerary.form.errors.descriptionMaxLength' | transloco }}</mat-error>
+              }
             </div>
           </div>
         </div>

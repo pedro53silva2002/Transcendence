@@ -277,6 +277,17 @@ app-custom-scrollbar {
   }
 }
 
+.form-errors {
+  min-height: 0;
+  padding: 0 4px;
+
+  mat-error {
+    font-size: 11px;
+    line-height: 1.2;
+    margin-top: -6px;
+  }
+}
+
 .save-btn {
   font-family: 'ADLaM Display', sans-serif;
   font-size: 14px;

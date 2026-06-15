@@ -99,7 +99,13 @@
       "cost": "cost (€)",
       "infoLabel": "More info",
       "info": "more info",
-      "save": "Save"
+      "save": "Save",
+      "errors": {
+        "titleRequired": "Title is required",
+        "titleMaxLength": "Title cannot exceed 20 characters",
+        "priceMin": "Price must be 0 or greater",
+        "descriptionMaxLength": "Description cannot exceed 30 characters"
+      }
     }
   }
 }
