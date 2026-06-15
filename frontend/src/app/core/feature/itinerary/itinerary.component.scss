@@ -25,13 +25,18 @@
 }
 
 // ===== Card =====
+app-custom-scrollbar {
+  margin-right: -40px;
+  opacity: 80%;
+}
+
 .itin-card {
   width: 372px;
   background: var(--mat-sys-primary-container);
   border: 2px solid var(--mat-sys-secondary);
   border-radius: 28px;
   box-shadow: 0 22px 48px rgba(150, 92, 0, 0.2);
-  padding: 24px 24px 24px;
+  padding: 54px 100px 54px;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -49,6 +54,7 @@
 .itin-title {
   font-size: 26px;
   font-weight: 400;
+  font-family: 'BBH Hegarty';
   letter-spacing: 0.2px;
   color: var(--mat-sys-on-primary);
   margin: 0;
@@ -90,43 +96,13 @@
 }
 
 // ===== Stop list =====
-.itin-list-wrap {
-  position: relative;
-  border-radius: 14px;
-  flex: 1;
-  overflow: clip;
-  min-height: 0;
-}
-
 .itin-list {
   list-style: none;
   margin: 0;
-  padding: 4px 14px 4px 2px;
+  padding: 4px 32px 4px 2px;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  overflow-y: auto;
-  height: 100%;
-  scrollbar-gutter: stable;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-track {
-    background: #ebd9a6;
-    border-radius: 999px;
-    margin: 4px 0;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #bfa569;
-    border-radius: 999px;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: #a98f52;
-  }
-
-  scrollbar-width: thin;
-  scrollbar-color: #bfa569 #ebd9a6;
 }
 
 .itin-row {
@@ -151,16 +127,22 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #6e5c2c;
+  background: var(--mat-sys-on-primary);
   display: grid;
+  opacity: 70%;
   place-items: center;
   flex: 0 0 auto;
+}
 
-  svg {
-    width: 24px;
-    height: 24px;
-    color: #fbefd2;
-  }
+.person {
+  color: #fff;
+}
+
+.add-remove {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
 }
 
 .row-main {
@@ -171,16 +153,17 @@
 
 .row-title {
   font-size: 17px;
-  color: #3f2d00;
+  color: var(--mat-sys-on-primary);
 }
 
 .row-sub {
-  font-family: 'Comfortaa', sans-serif;
+  font-family: 'ADLaM', sans-serif;
   font-weight: 700;
   font-size: 11px;
   letter-spacing: 0.3px;
-  color: #b98327;
+  color: var(--mat-sys-on-primary);
   margin-top: 2px;
+  opacity: 70%;
 }
 
 .row-end {
@@ -193,7 +176,7 @@
 
 .row-cost {
   font-size: 17px;
-  color: #3f2d00;
+  color: var(--mat-sys-on-primary);
 }
 
 .del-btn {
@@ -209,7 +192,7 @@
     color 0.15s;
 
   &:hover {
-    color: #d96f00;
+    color: var(--mat-sys-secondary);
     transform: scale(1.2) rotate(90deg);
   }
 
@@ -225,7 +208,7 @@
   font-family: 'Comfortaa', sans-serif;
   font-weight: 500;
   font-size: 13px;
-  color: #b98327;
+  color: var(--mat-sys-secondary);
   padding: 28px 8px;
   opacity: 0.85;
 }
@@ -263,12 +246,12 @@
 }
 
 .pill {
-  font-family: 'Comfortaa', sans-serif;
-  font-weight: 500;
+  font-family: 'ADLaM', sans-serif;
+  font-weight: 700;
   font-size: 12.5px;
-  border: 1.5px solid #ff9a1f;
-  background: #ffe7ae;
-  color: #3f2d00;
+  border: 2px solid var(--mat-sys-secondary);
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary);
   border-radius: 999px;
   padding: 9px 16px;
   outline: none;
@@ -278,7 +261,8 @@
     box-shadow 0.15s;
 
   &::placeholder {
-    color: #c79436;
+    opacity: 70%;
+    color: var(--mat-sys-on-primary);
   }
   &:focus {
     border-color: var(--mat-sys-secondary);
@@ -310,16 +294,17 @@
     box-shadow 0.18s;
 
   &:hover {
-    background: #ff7a00;
+    background: var(--mat-sys-secondary);
     box-shadow: 0 6px 14px rgba(255, 136, 0, 0.42);
   }
   &:active {
     transform: translateY(1px);
   }
   &:disabled {
-    background: #e9c887;
+    background: var(--mat-sys-secondary);
     color: rgba(255, 255, 255, 0.5);
     box-shadow: none;
+    opacity: 50%;
     cursor: not-allowed;
   }
 }
@@ -328,15 +313,16 @@
 .day-bar {
   display: flex;
   justify-content: center;
-  margin-top: -15px;
+  margin-top: 10px;
+  opacity: 80%;
 }
 
 .day-pill {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: #6e5c2c;
-  color: #fbefd2;
+  background: var(--mat-sys-on-primary);
+  color: #fff;
   border-radius: 999px;
   padding: 8px 14px;
   user-select: none;
@@ -345,12 +331,13 @@
 .day-label {
   font-size: 14px;
   letter-spacing: 1.5px;
+  font-family: 'BBH Hegarty';
 }
 
 .day-arrow {
   border: none;
   background: transparent;
-  color: #fbefd2;
+  color: #fff;
   cursor: pointer;
   display: grid;
   place-items: center;
