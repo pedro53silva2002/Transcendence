@@ -49,5 +49,26 @@
       "member": "Membro",
       "admin": "Admin"
     }
+  },
+  "itinerary": {
+    "title": "Itinerário",
+    "addItem": "Adicionar paragem",
+    "closeForm": "Fechar formulário",
+    "stops": "Paragens do itinerário",
+    "empty": "Sem paragens — toca em + para adicionar.",
+    "remove": "Remover {{ title }}",
+    "day": "DIA",
+    "dayNav": "Navegação por dia",
+    "prevDay": "Dia anterior",
+    "nextDay": "Próximo dia",
+    "form": {
+      "titleLabel": "Título",
+      "title": "título",
+      "costLabel": "Custo em euros",
+      "cost": "custo (€)",
+      "infoLabel": "Mais informação",
+      "info": "mais info",
+      "save": "Guardar"
+    }
   }
 }
