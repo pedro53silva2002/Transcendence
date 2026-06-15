@@ -46,10 +46,10 @@
               </div>
               <div class="row-main">
                 <span class="row-title">{{ item.title }}</span>
-                <span class="row-sub">{{ item.sub }}</span>
+                <span class="row-sub">{{ item.description }}</span>
               </div>
               <div class="row-end">
-                <span class="row-cost">{{ item.cost }}€</span>
+                <span class="row-cost">{{ item.expectedPrice }}€</span>
                 <button
                   class="del-btn"
                   (click)="removeItem(item.id)"
@@ -135,7 +135,12 @@
             </svg>
           </button>
           <span class="day-label" aria-live="polite">DAY {{ currentDay() }}</span>
-          <button class="day-arrow" (click)="changeDay(1)" aria-label="Next day">
+          <button
+            class="day-arrow"
+            (click)="changeDay(1)"
+            [disabled]="nextDisabled()"
+            aria-label="Next day"
+          >
             <svg
               viewBox="0 0 24 24"
               fill="none"
