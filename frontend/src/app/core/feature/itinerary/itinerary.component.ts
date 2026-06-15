@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
   signal,
   inject,
   viewChild,
@@ -11,13 +10,16 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
+import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
 import { ItineraryService } from '../service/trip/itinerary.service';
 import { ItineraryDto } from '../dtos/trip/itinerary.dto';
 import { TripService } from '../plan-a-trip/services/trip.service';
+import { MatIcon } from '@angular/material/icon';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-itinerary',
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, CustomScrollbarComponent, MatIcon, TranslocoModule],
   templateUrl: './itinerary.component.html',
   styleUrl: './itinerary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,7 +64,7 @@ export default class ItineraryComponent {
   readonly prevDisabled = computed(() => this.currentDay() <= 1);
   readonly nextDisabled = computed(() => this.currentDay() >= this.maxDays());
 
-  readonly listRef = viewChild<ElementRef<HTMLUListElement>>('listRef');
+  readonly scrollbarRef = viewChild<CustomScrollbarComponent>('scrollbar');
 
   private readonly queryParams = computed(() => ({
     tripId: this.tripId(),
@@ -110,8 +112,8 @@ export default class ItineraryComponent {
           this.costValue.set('');
           this.infoValue.set('');
           setTimeout(() => {
-            const el = this.listRef()?.nativeElement;
-            if (el) el.scrollTop = el.scrollHeight;
+            const vp = this.scrollbarRef()?.viewport().nativeElement;
+            if (vp) vp.scrollTop = vp.scrollHeight;
           });
         }
       });
