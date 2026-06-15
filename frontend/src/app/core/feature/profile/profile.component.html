@@ -1,2 +1,32 @@
-<p>profile works!</p>
-
+<div class="main-container">
+	<div class="header">
+		<div class="left-details">
+			@if (user(); as currentUser) {
+			<div class="avatar" [attr.aria-label]="currentUser.displayName" role="img">
+				@if (currentUser.profilePhotoUrl) {
+				<img [src]="currentUser.profilePhotoUrl" [alt]="currentUser.displayName" [width]="84" [height]="84"
+					class="avatar-img" />
+				} @else {
+				<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
+				}
+			</div>
+			<div class="name-and-description">
+				<h2>{{ currentUser.displayName }}</h2>
+				<p>Description comes here.</p>
+				<button mat-button class="tertiary-btn profile-btn">Edit Profile</button>
+			</div>
+			}
+		</div>
+		<div class="right-details">
+			<app-stat-cards></app-stat-cards>
+		</div>
+	</div>
+	<div class="countries-section">
+		<h1>{{ 'profile.countries-section-title' | transloco }}</h1>
+		<!-- loop sobre todos os países que o user visitou -->
+	</div>
+	<div class="my-itineraries-section">
+		<h1>{{ 'profile.itineraries-section-title' | transloco }}</h1>
+		<!-- loop sobre os itinerarios publicos/friends do user -->
+	</div>
+</div>
