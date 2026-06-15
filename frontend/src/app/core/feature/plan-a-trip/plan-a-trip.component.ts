@@ -27,7 +27,6 @@ import { MemberFormComponent } from '../member-form/member-form.component';
 export class PlanATripComponent implements OnInit {
   tripForm = viewChild(TripFormComponent);
   memberForm = viewChild(MemberFormComponent);
-  tripForm = viewChild(TripFormComponent);
 
   private readonly formBuilder = inject(FormBuilder);
   private readonly tripService = inject(TripService);
