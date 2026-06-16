@@ -1,9 +1,10 @@
 .crew-panel {
+  width: 330px;
   background-color: var(--mat-sys-primary-container);
   border: 2px solid var(--mat-sys-on-primary-container);
   border-radius: 25px;
   padding: 40px;
-  height: 280px;
+  min-height: 280px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -43,11 +44,22 @@
     height: 16px;
     opacity: 0.8;
   }
+
+  &.compact {
+    font-size: 0.7rem;
+    height: 26px;
+    padding: 0 10px;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+  }
 }
 
 .crew-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   row-gap: 28px;
   column-gap: 65px;
   justify-content: space-between;

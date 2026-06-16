@@ -16,12 +16,22 @@ import { ItineraryService } from '../service/trip/itinerary.service';
 import { ItineraryDto } from '../dtos/trip/itinerary.dto';
 import { TripService } from '../plan-a-trip/services/trip.service';
 import { MatIcon } from '@angular/material/icon';
-import { MatError } from '@angular/material/form-field';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-itinerary',
-  imports: [CustomScrollbarComponent, MatIcon, MatError, TranslocoModule, ReactiveFormsModule],
+  imports: [
+    CustomScrollbarComponent,
+    MatIcon,
+    MatError,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    TranslocoModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './itinerary.component.html',
   styleUrl: './itinerary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,9 +67,9 @@ export default class ItineraryComponent {
   });
 
   readonly itemForm = this.formBuilder.nonNullable.group({
-    title: ['', [Validators.required, Validators.maxLength(20)]],
+    title: ['', [Validators.required, Validators.required, Validators.maxLength(20)]],
     description: ['', [Validators.maxLength(30)]],
-    expectedPrice: [0, [Validators.min(0)]],
+    expectedPrice: [null as unknown as number, [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]],
   });
 
   readonly showForm = signal(false);

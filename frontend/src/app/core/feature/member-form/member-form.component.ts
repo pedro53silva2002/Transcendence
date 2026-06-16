@@ -40,6 +40,8 @@ export class MemberFormComponent implements OnInit {
   private readonly tripState = inject(TripStateService);
 
   readonly tripId = input<number | null>(null);
+  readonly columns = input(2);
+  readonly compact = input(false);
 
   // members are stored in TripStateService so the dashboard can read the same list
   public readonly members = this.tripState.members;

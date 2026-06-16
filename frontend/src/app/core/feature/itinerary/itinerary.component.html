@@ -73,6 +73,7 @@
                 (keydown)="onKeyDown($event)"
                 inputmode="decimal"
               />
+              
             </div>
             <div class="form-errors">
               @if (itemForm.controls.title.touched) {
@@ -82,8 +83,8 @@
                   <mat-error>{{ 'itinerary.form.errors.titleMaxLength' | transloco }}</mat-error>
                 }
               }
-              @if (itemForm.controls.expectedPrice.touched && itemForm.controls.expectedPrice.hasError('min')) {
-                <mat-error>{{ 'itinerary.form.errors.priceMin' | transloco }}</mat-error>
+              @if (itemForm.controls.expectedPrice.touched && itemForm.controls.expectedPrice.hasError('pattern')) {
+                <mat-error>{{ 'plan-a-trip.budget-numbers-error' | transloco }}</mat-error>
               }
             </div>
             <div class="form-line">
