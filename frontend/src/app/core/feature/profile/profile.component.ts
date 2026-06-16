@@ -6,6 +6,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map, of } from 'rxjs';
 import { StatCardsComponent } from "../../../shared/stat-cards/stat-cards.component";
 import { MatAnchor } from "@angular/material/button";
+import { UserService } from '../auth/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -16,19 +17,9 @@ import { MatAnchor } from "@angular/material/button";
 export default class ProfileComponent {
 	
 	private authService = inject(AuthService);
-
-	private mockApiResponse = {
-		data : {
-			displayName: 'Cristiano Ronaldo',
-			username: 'cr7',
-			profilePhotoUrl: 'images/globe.png'
-			// profilePhotoUrl: null
-		}
-	};
 	
 	public user = toSignal(
-		// this.authService.me().pipe(
-		of(this.mockApiResponse).pipe(
+		this.authService.me().pipe(
 			map(response => response.data)
 		)
 	);
