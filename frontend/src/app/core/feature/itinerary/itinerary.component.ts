@@ -21,7 +21,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-itinerary',
-  imports: [ CustomScrollbarComponent, MatIcon, MatError, TranslocoModule, ReactiveFormsModule],
+  imports: [CustomScrollbarComponent, MatIcon, MatError, TranslocoModule, ReactiveFormsModule],
   templateUrl: './itinerary.component.html',
   styleUrl: './itinerary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,7 +32,7 @@ export default class ItineraryComponent {
   private readonly formBuilder = inject(FormBuilder);
 
   readonly tripId = toSignal(
-    inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('tripId')))),
+    inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('id')))),
     { initialValue: 0 },
   );
 
@@ -66,10 +66,9 @@ export default class ItineraryComponent {
   readonly currentDay = signal(1);
   readonly items = signal<ItineraryDto[]>([]);
 
-  readonly canSave = toSignal(
-    this.itemForm.statusChanges.pipe(map((s) => s === 'VALID')),
-    { initialValue: this.itemForm.valid },
-  );
+  readonly canSave = toSignal(this.itemForm.statusChanges.pipe(map((s) => s === 'VALID')), {
+    initialValue: this.itemForm.valid,
+  });
   readonly prevDisabled = computed(() => this.currentDay() <= 1);
   readonly nextDisabled = computed(() => this.currentDay() >= this.maxDays());
 

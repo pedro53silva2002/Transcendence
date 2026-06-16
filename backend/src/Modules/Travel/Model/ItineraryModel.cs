@@ -45,20 +45,20 @@ public sealed class ItineraryModel(AppDbContext db)
 
         var itinerary = new Itinerary
         {
-			Id = 0,
+            Id = 0,
             TripId = dto.TripId,
             Title = dto.Title,
             Description = dto.Description,
-        	ExpectedPrice = dto.ExpectedPrice,
-        	Day = dto.Day,
-        	CreatedBy = userId,
-    	};
+            ExpectedPrice = dto.ExpectedPrice,
+            Day = dto.Day,
+            CreatedBy = userId,
+        };
 
-    	db.Itineraries.Add(itinerary);
-		await db.SaveChangesAsync(ct);
+        db.Itineraries.Add(itinerary);
+        await db.SaveChangesAsync(ct);
 
-	    return Itinerary.ToDto(itinerary);
-	}
+        return Itinerary.ToDto(itinerary);
+    }
 
     public async Task<CursorPage<ItineraryDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
     {
@@ -125,9 +125,9 @@ public sealed class ItineraryModel(AppDbContext db)
             && tm.Role == TripMemberRole.Admin, ct);
 
         if (itinerary.CreatedBy != userId && !isAdmin)
-		{
-			throw new UnauthorizedAccessException("You are not authorized to delete this itinerary.");
-		}
+        {
+            throw new UnauthorizedAccessException("You are not authorized to delete this itinerary.");
+        }
 
         var deleted = await db.Itineraries.Where(i => i.Id == id)
             .ExecuteDeleteAsync(ct);
