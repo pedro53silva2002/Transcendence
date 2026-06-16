@@ -1,6 +1,6 @@
 .stats {
 	display: flex;
-	width: 285px;
+	width: 220px;
 	justify-content: space-between;
 	align-items: center;
 	margin: 0 auto;
@@ -10,18 +10,18 @@
 	.circle {
 		background-color: var(--mat-sys-on-primary-container);
 		border-radius: 50%;
-		width: 90px;
-		height: 90px;
+		width: 70px;
+		height: 70px;
 		color: var(--mat-sys-primary);
 		text-align: center;
 	}
 
 	h1 {
 		margin-bottom: 0;
-		margin-top: 12px;
+		margin-top: 10px;
 		font-family: "BBH Hegarty";
 		font-weight: 100;
-		font-size: 26px;
+		font-size: 18px;
 	}
 
 	p {
@@ -29,7 +29,7 @@
 		font-family: "BBH Bogle";
 		width: 80%;
 		margin: 0 auto;
-		font-size: 12px;
-		letter-spacing: 0.4px;
+		font-size: 10px;
+		letter-spacing: 0.3px;
 	}
 }
