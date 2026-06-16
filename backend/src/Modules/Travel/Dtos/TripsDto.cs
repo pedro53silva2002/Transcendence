@@ -19,7 +19,7 @@ public sealed class CreateTripDto
 	public string? Description { get; set; }
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
-	public required int Budget { get; set; }
+	public required long Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required CountryDto Country { get; set; }
 	public List<CityDto> City { get; set; } = [];
@@ -34,7 +34,7 @@ public sealed class TripDto
 	public required int Duration { get; set; }
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
-	public required int Budget { get; set; }
+	public required long Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
 	public required DateTime CreatedAt { get; set; }
@@ -51,7 +51,7 @@ public sealed class UpdateTripDto
 	public string? Description { get; set; }
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
-	public required int Budget { get; set; }
+	public required long Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required CountryDto Country { get; set; }
 	public List<CityDto> City { get; set; } = [];
