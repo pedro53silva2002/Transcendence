@@ -84,6 +84,8 @@
 	"profile": {
 		"countries-section-title": "Where I've Been Wandering",
 		"itineraries-section-title": "My Itineraries",
-		"edit-title": "Edit Profile"
+		"edit-title": "Edit Profile",
+		"update-button": "Update Profile",
+		"description": "description"
 	}
 }
