@@ -13,7 +13,7 @@
 			<div class="name-and-description">
 				<h2>{{ currentUser.displayName }}</h2>
 				<p>Description comes here.</p>
-				<button mat-button class="tertiary-btn profile-btn">Edit Profile</button>
+				<button mat-button (click)="openEditProfile()" class="tertiary-btn profile-btn">Edit Profile</button>
 			</div>
 			}
 		</div>

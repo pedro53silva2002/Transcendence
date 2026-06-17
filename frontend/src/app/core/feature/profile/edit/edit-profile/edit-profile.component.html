@@ -1,0 +1,32 @@
+<div class="dialog-header">
+	<app-close-button color="var(--mat-sys-on-primary)"></app-close-button>
+</div>
+<div class="title">
+	<h2 mat-dialog-title>{{ 'profile.edit-title' | transloco }}</h2>
+	<hr>
+</div>
+
+<mat-dialog-content [formGroup]="editProfileForm" class="edit-profile-form">
+
+	<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic" class="displayname">
+		<input formControlName="displayName" matInput placeholder="{{ 'plan-a-trip.trip-name' | transloco }}">
+		@if (editProfileForm.controls.displayName.errors?.['required']) {
+		<mat-error>{{ 'plan-a-trip.name-error' | transloco }}</mat-error>
+		}
+		@if (editProfileForm.controls.displayName.errors?.['minlength']) {
+		<mat-error>{{ 'plan-a-trip.name-min-length-error' | transloco }}</mat-error>
+		}
+		@if (editProfileForm.controls.displayName.errors?.['maxlength']) {
+		<mat-error>{{ 'plan-a-trip.name-max-length-error' | transloco }}</mat-error>
+		}
+	</mat-form-field>
+
+	<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
+		<textarea formControlName="description" matInput
+			placeholder="{{ 'plan-a-trip.trip-description' | transloco }}"></textarea>
+		@if (editProfileForm.controls.description.errors?.['maxlength']) {
+		<mat-error>{{ 'plan-a-trip.description-max-length-error' | transloco }}</mat-error>
+		}
+	</mat-form-field>
+
+</mat-dialog-content>

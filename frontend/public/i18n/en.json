@@ -83,6 +83,7 @@
 	},
 	"profile": {
 		"countries-section-title": "Where I've Been Wandering",
-		"itineraries-section-title": "My Itineraries"
+		"itineraries-section-title": "My Itineraries",
+		"edit-title": "Edit Profile"
 	}
 }
