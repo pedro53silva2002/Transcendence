@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.RateLimiting;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 using Trippie.Modules.Travel.Service;
+using Trippie.Modules.Social.Model;
+using Trippie.Modules.Social.Service;
 
 Env.TraversePath().Load();
 
@@ -112,7 +114,8 @@ try
 	builder.Services.AddScoped<CityModel>();
 	builder.Services.AddScoped<TripMembersModel>();
 	builder.Services.AddScoped<TripMembersService>();
-
+	builder.Services.AddScoped<FriendRequestModel>();
+	builder.Services.AddScoped<FriendRequestService>();
 
 	//Add Http request limiter
 	builder.Services.AddRateLimiter(options =>
