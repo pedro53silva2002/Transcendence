@@ -28,6 +28,8 @@ h1 {
 .crew-column {
   flex: 1 1 650px;
   max-width: 650px;
+  display: flex;
+  flex-direction: column;
 }
 
 .actions-row {

@@ -10,14 +10,12 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NavbarComponent } from '../../layout/navbar/navbar.component';
 import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
 import { ItineraryService } from '../service/trip/itinerary.service';
 import { ItineraryDto } from '../dtos/trip/itinerary.dto';
 import { TripService } from '../plan-a-trip/services/trip.service';
 import { MatIcon } from '@angular/material/icon';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+import { MatError } from '@angular/material/form-field';
 import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
@@ -26,9 +24,6 @@ import { TranslocoModule } from '@jsverse/transloco';
     CustomScrollbarComponent,
     MatIcon,
     MatError,
-    MatFormField,
-    MatLabel,
-    MatInput,
     TranslocoModule,
     ReactiveFormsModule,
   ],

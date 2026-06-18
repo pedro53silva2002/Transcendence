@@ -23,12 +23,29 @@ import ItineraryComponent from '../itinerary/itinerary.component';
 	templateUrl: './trip-dashboard.component.html',
 	styleUrl: './trip-dashboard.component.scss',
 })
-export class TripDashboardComponent {
+export class TripDashboardComponent implements OnInit {
 	public tripStateService = inject(TripStateService);
 	public tripService = inject(TripService);
 	private dialog = inject(MatDialog);
 	private translocoService = inject(TranslocoService);
 	public route = inject(Router);
+	private activatedRoute = inject(ActivatedRoute);
+
+
+	//Verify if state service is empty. If so, make the request to backend to fill the data.
+	ngOnInit(): void {
+		const idParam = this.activatedRoute.snapshot.paramMap.get('id');
+		if (!idParam) return;
+		const id = Number(idParam);
+
+		if (this.tripStateService.trip()?.id === id) return;
+
+		this.tripService.getById(id).subscribe({
+			next: (response) => {
+				if (response.data) this.tripStateService.setTrip(response.data);
+			},
+		});
+	}
 
 	deleteTrip(): void {
 

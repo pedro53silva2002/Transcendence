@@ -1,5 +1,12 @@
+app-member-form {
+  display: flex;
+  flex-direction: column;
+}
+
 .crew-panel {
-  width: 330px;
+  width: 400px;
+  flex: 1;
+  box-sizing: border-box;
   background-color: var(--mat-sys-primary-container);
   border: 2px solid var(--mat-sys-on-primary-container);
   border-radius: 25px;
@@ -9,7 +16,6 @@
   flex-direction: column;
   gap: 16px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-
 }
 
 .crew-header {
@@ -70,6 +76,24 @@
   flex-direction: row;
   align-items: center;
   gap: 12px;
+}
+
+.del-btn {
+  border: none;
+  background: transparent;
+  color: var(--mat-sys-on-primary-container);
+  cursor: pointer;
+  padding: 2px;
+  line-height: 0;
+  border-radius: 6px;
+  transition:
+    transform 0.15s,
+    color 0.15s;
+
+  &:hover {
+    color: var(--mat-sys-on-primary-container);
+    transform: scale(1.2) rotate(90deg);
+  }
 }
 
 .crew-info {
@@ -147,4 +171,13 @@ mat-icon.avatar-icon {
   color: var(--mat-sys-on-primary);
   font-size: 0.85rem;
   opacity: 0.6;
+}
+
+.crew-column app-member-form {
+  flex: 1;
+  max-height: 600px;
+}
+
+.crew-column .crew-panel {
+  width: 100%;
 }

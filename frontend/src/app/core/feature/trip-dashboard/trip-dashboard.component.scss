@@ -166,4 +166,8 @@
 	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: stretch;
+
+	app-member-form {
+		max-height: 468px;
+	}
 }

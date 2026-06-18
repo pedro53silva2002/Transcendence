@@ -10,15 +10,14 @@ import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.se
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  buildSearchUrl,
   SearchParams,
   searchToQuery,
 } from '../../../logic/services/search.service';
 
 @Injectable({ providedIn: 'root' })
 export class TripMemberService extends BaseApiService {
-  public create(dto: CreateTripMemberDto, tripId: number): Observable<ApiResponse<TripMemberDto>> {
-    const res = this._post<TripMemberDto>(`/trips/${tripId}/members`, dto);
+  public create(dto: CreateTripMemberDto, tripId: number): Observable<ApiResponse<TripMemberDto[]>> {
+    const res = this._post<TripMemberDto[]>(`/trips/${tripId}/members`, dto);
     return res;
   }
 

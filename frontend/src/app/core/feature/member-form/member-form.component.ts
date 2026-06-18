@@ -2,9 +2,9 @@ import { NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
   input,
-  OnInit,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
@@ -34,7 +34,7 @@ import { TripMemberDto } from '../dtos/trip/member.dto';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MemberFormComponent implements OnInit {
+export class MemberFormComponent {
   private readonly dialog = inject(MatDialog);
   private readonly memberService = inject(TripMemberService);
   private readonly tripState = inject(TripStateService);
@@ -42,36 +42,42 @@ export class MemberFormComponent implements OnInit {
   readonly tripId = input<number | null>(null);
   readonly columns = input(2);
   readonly compact = input(false);
+  readonly showRole = input(true);
+  readonly showAddButton = input(true);
 
   // members are stored in TripStateService so the dashboard can read the same list
   public readonly members = this.tripState.members;
   protected readonly loading = signal(false);
 
-  ngOnInit(): void {
-    const id = this.tripId();
-    // create flow: no trip yet, start with an empty shared list
-    if (id === null) {
-      this.tripState.setMembers([]);
-      return;
-    }
+  constructor() {
+    // Only fetch when tripId is a real id; skip null
+    effect(() => {
+      const id = this.tripId();
+      if (id === null) return;
 
-    this.loading.set(true);
-    this.memberService
-      .search(
-        {
-          search: { tripId: { op: 'EQUAL', value: id } },
-          orderBy: [{ field: 'userId', descending: false }],
-          pageSize: 10,
-        },
-        id,
-      )
-      .subscribe({
-        next: (result) => {
-          if (result.data) this.tripState.setMembers(result.data.content);
-        },
-        complete: () => this.loading.set(false),
-        error: () => this.loading.set(false),
-      });
+      this.loading.set(true);
+      this.memberService
+        .search(
+          {
+            search: { tripId: { op: 'EQUAL', value: id } },
+            orderBy: [{ field: 'userId', descending: false }],
+            pageSize: 10,
+          },
+          id,
+        )
+        .subscribe({
+          next: (result) => {
+            if (result.data) this.tripState.setMembers(result.data.content);
+          },
+          complete: () => this.loading.set(false),
+          error: () => this.loading.set(false),
+        });
+    }, { allowSignalWrites: true });
+
+    // For the create flow (no tripId yet), start with an empty list.
+    if (this.tripId() === null) {
+      this.tripState.setMembers([]);
+    }
   }
 
   protected openAddMember(): void {
@@ -89,5 +95,13 @@ export class MemberFormComponent implements OnInit {
 
   protected updateRole(userId: number, role: 'Admin' | 'Member'): void {
     this.tripState.updateMemberRole(userId, role);
+  }
+
+  protected removeMember(memberId: number | undefined, userId: number): void {
+    const tripId = this.tripId();
+    if (tripId !== null && memberId !== undefined) {
+      this.memberService.delete(memberId, tripId).subscribe();
+    }
+    this.tripState.removeMember(userId);
   }
 }

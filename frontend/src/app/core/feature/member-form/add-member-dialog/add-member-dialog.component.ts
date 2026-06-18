@@ -72,8 +72,7 @@ export class AddMemberDialogComponent implements OnInit {
     this.adding.set(true);
     this.memberService.create({ tripId, userIds: [friend.id] }, tripId).subscribe({
       next: (result) => {
-        // backend returns the persisted member (real id, tripId, timestamps)
-        if (result.data) this.dialogRef.close(result.data);
+        if (result.data?.[0]) this.dialogRef.close(result.data[0]);
       },
       complete: () => this.adding.set(false),
       error: () => this.adding.set(false),
