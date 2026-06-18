@@ -33,10 +33,18 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
     public async Task<CursorPage<UserDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
 	{
 		var res = await userModel.SearchAsync(payload, ct);
-		Console.WriteLine($"ProfilePhotoUrl: {res.Content[0].ProfilePhotoUrl}");
+		/*Console.WriteLine($"ProfilePhotoUrl: {res.Content[0].ProfilePhotoUrl}");
 		Console.WriteLine($"Path: {res.Content[0].ProfilePhotoUrl.Split('/')[0]}");
-		Console.WriteLine($"Path: {res.Content[0].ProfilePhotoUrl.Split('/')[1]}");
-		res.Content.Select(u => u.ProfilePhotoUrl is not null ? u.ProfilePhotoUrl = minioClient.GetObjectUrl(u.ProfilePhotoUrl.Split('/')[1], u.ProfilePhotoUrl.Split('/')[2]).GetAwaiter().GetResult() : u.ProfilePhotoUrl =null).ToList();
+		Console.WriteLine($"Path: {res.Content[0].ProfilePhotoUrl.Split('/')[1]}");*/
+		res.Content.Select(u => 
+		{
+			if (u.ProfilePhotoUrl is not null && u.ProfilePhotoUrl[0] == '/')
+				u.ProfilePhotoUrl = minioClient.GetObjectUrl(
+					u.ProfilePhotoUrl.Split('/')[1], 
+					u.ProfilePhotoUrl.Split('/')[2])
+					.GetAwaiter().GetResult();
+			return u;
+		}).ToList();
 		return res;
 	}
 
