@@ -2,6 +2,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using Trippie.Common.Services.Authentication.Context;
+using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Service;
@@ -10,7 +12,7 @@ namespace Trippie.Modules.Auth.Router;
 
 [ApiController]
 [Route("api/users")]
-public sealed class UserRouter(UserService service) : ControllerBase
+public sealed class UserRouter(UserService service, IUserContext userContext) : ControllerBase
 {
     private static readonly JsonSerializerOptions SearchJsonOptions = new()
     {
@@ -56,10 +58,11 @@ public sealed class UserRouter(UserService service) : ControllerBase
         return Ok(user);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id, CancellationToken ct)
+    [HttpDelete]
+    public async Task<IActionResult> Delete(CancellationToken ct)
     {
-        await service.DeleteAsync(id, ct);
+		var userId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
+        await service.DeleteAsync(userId, ct);
         return NoContent();
     }
 }
