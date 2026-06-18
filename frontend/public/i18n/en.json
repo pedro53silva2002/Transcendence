@@ -19,7 +19,8 @@
 			"digits": "1 digit"
 		},
 		"error-login": "Invalid username or password.",
-		"error-oauth": "Google Authentication failed."
+		"error-oauth": "Google Authentication failed.",
+		"new-password": "new password"
 	},
 	"navbar": {
 		"profile": "Profile",
@@ -86,6 +87,11 @@
 		"itineraries-section-title": "My Itineraries",
 		"edit-title": "Edit Profile",
 		"update-button": "Update Profile",
-		"description": "description"
+		"description": "description",
+		"delete-button": "Delete Account",
+		"delete-user-title": "Are you sure?",
+		"delete-user-message": "If you confirm this decision, your account will be deleted.",
+		"description-error": "Can't be more than 150 characters long.",
+		"name-error": "You must define a display name."
 	}
 }

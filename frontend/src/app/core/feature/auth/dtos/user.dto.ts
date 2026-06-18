@@ -18,7 +18,6 @@ export interface UserDto {
 }
 
 export interface UpdateUserDto {
-  id: number;
   email: string;
   username: string;
   displayName: string;

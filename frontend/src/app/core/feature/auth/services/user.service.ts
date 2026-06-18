@@ -22,7 +22,7 @@ export class UserService extends BaseApiService {
     return this._get<CursorPage<UserDto>>(`/users/search?q=${query}`);
   }
 
-  public delete(id: number): Observable<ApiResponse<void>> {
-    return this._delete<void>(`/users/${id}`);
+  public delete(): Observable<ApiResponse<void>> {
+    return this._delete<void>(`/users`);
   }
 }
