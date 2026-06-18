@@ -51,7 +51,7 @@ public sealed class Trip(AppDbContext db)
 				Name = string.Empty,
 				Code = string.Empty
 			},
-			Cities = t.TripCities.Select(tc => tc.City is null ? new CityDto
+			City = t.TripCities.Select(tc => tc.City is null ? new CityDto
 			{
 				Id = 0,
 				Name = string.Empty,
@@ -92,7 +92,7 @@ public sealed class TripModel(AppDbContext db)
 
 		await db.SaveChangesAsync(ct);
 
-		foreach (var cityId in dto.Cities.Select(c => c.Id))
+		foreach (var cityId in dto.City.Select(c => c.Id))
 			db.TripCities.Add(new TripCity { TripId = trip.Id, CityId = cityId });
 
 		await db.SaveChangesAsync(ct);
@@ -158,7 +158,7 @@ public sealed class TripModel(AppDbContext db)
 				};
 			}
 			var tripCities = cities.Where(tc => tc.TripId == trip.Id).ToList();
-			trip.Cities = tripCities.Select(tc => tc.City is null ? new CityDto
+			trip.City = tripCities.Select(tc => tc.City is null ? new CityDto
 			{
 				Id = 0,
 				Name = string.Empty,
@@ -210,7 +210,7 @@ public sealed class TripModel(AppDbContext db)
 
 		await db.SaveChangesAsync(ct);
 
-		foreach (var cityId in dto.Cities.Select(c => c.Id))
+		foreach (var cityId in dto.City.Select(c => c.Id))
 			db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
 
 		await db.SaveChangesAsync(ct);

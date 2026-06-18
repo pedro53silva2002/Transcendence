@@ -12,7 +12,7 @@ namespace Trippie.Modules.Auth.Router;
 [ApiController]
 [Authorize]
 [Route("api/countries")]
-public sealed class CountryRouter(CountryService service) : ControllerBase
+public sealed class CountryRouter (CountryService service) : ControllerBase
 {
     private static readonly JsonSerializerOptions SearchJsonOptions = new()
     {
