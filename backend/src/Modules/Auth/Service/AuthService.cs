@@ -203,7 +203,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             throw new ValidationException("email.tld.too_short", "Top-level domain must be at least 2 characters long.", "Top-level domain must be at least 2 characters long.");
     }
 
-    private static void PasswordVerification(string Password)
+    public static void PasswordVerification(string Password)
     {
 
         if (string.IsNullOrWhiteSpace(Password))

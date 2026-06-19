@@ -17,7 +17,7 @@ public sealed class Trip()
 	public required int Duration { get; set; }
 	public required DateTime StartDate { get; set; }
 	public required DateTime EndDate { get; set; }
-	public required int Budget { get; set; }
+	public required long Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
 	public DateTime? CreatedAt { get; set; }
@@ -100,12 +100,14 @@ public sealed class TripModel(AppDbContext db)
 		await db.SaveChangesAsync(ct);
 
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 		var createdTrip = await db.Trips
 			.Include(t => t.TripCountries)
 				.ThenInclude(tc => tc.Country)
 			.Include(t => t.TripCities)
 				.ThenInclude(tc => tc.City)
 			.FirstAsync(t => t.Id == trip.Id, ct);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 		return Trip.ToDto(createdTrip);
 	}
@@ -228,24 +230,28 @@ public sealed class TripModel(AppDbContext db)
 
 		await db.SaveChangesAsync(ct);
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 		var updatedTrip = await db.Trips
 			.Include(t => t.TripCountries)
 				.ThenInclude(tc => tc.Country)
 			.Include(t => t.TripCities)
 				.ThenInclude(tc => tc.City)
 			.FirstAsync(t => t.Id == id, ct);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 		return Trip.ToDto(updatedTrip);
 	}
 
 	public async Task<TripDto?> GetById(int id, CancellationToken ct = default)
 	{
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 		var trip = await db.Trips
 		.Include(t => t.TripCountries)
 			.ThenInclude(tc => tc.Country)
 		.Include(t => t.TripCities)
 			.ThenInclude(tc => tc.City)
 		.FirstOrDefaultAsync(t => t.Id == id, ct);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 		if (trip is null) return null;
 
 		return Trip.ToDto(trip);
