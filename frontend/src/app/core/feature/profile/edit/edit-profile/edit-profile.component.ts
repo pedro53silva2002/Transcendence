@@ -1,5 +1,5 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CloseButtonComponent } from '../../../../../shared/components/close-button/close-button.component';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
@@ -43,6 +43,8 @@ export class EditProfileComponent {
 
 	//to receive the data transfered from the profile component
 	private userData = inject<{ user: UserDto }>(MAT_DIALOG_DATA);
+	//to send data back to the profile component
+	private dialogRef = inject(MatDialogRef<EditProfileComponent>);
 
 	private authService = inject(SessionService);
 	private formBuilder = inject(FormBuilder);
@@ -96,7 +98,7 @@ export class EditProfileComponent {
 		if (user) {
 			this.editProfileForm.patchValue({
 				displayName: user.displayName,
-				// description: user.description, descomentar isto depois
+				description: user.bio,
 				avatar: user.profilePhotoUrl
 			});
 			this.avatarPreview.set(user.profilePhotoUrl);
@@ -159,12 +161,15 @@ export class EditProfileComponent {
 			email: user.email,
 			username: user.username,
 			displayName: this.editProfileForm.getRawValue().displayName ?? user.displayName,
-			password: this.editProfileForm.getRawValue().password ?? null,
+			password: this.editProfileForm.getRawValue().password ? this.editProfileForm.getRawValue().password : null,
 			bio: this.editProfileForm.getRawValue().description ?? user.bio,
 			profilePhotoUrl: typeof this.editProfileForm.value.avatar === 'string' ? this.editProfileForm.value.avatar : user.profilePhotoUrl
 		}
-		
-		//chamar o serviço para update do user
+
+		this.userService.update(updateDto).subscribe(response => {
+			const updatedUser = response.data ?? response;
+			this.dialogRef.close(updatedUser);
+		});
 	}
 
 	deleteAccount(): void {
@@ -184,8 +189,11 @@ export class EditProfileComponent {
 			return of(null);
 		}), takeUntilDestroyed(this.destroyRef)).subscribe({
 			next: (response) => {
-				if (response)
+				if (response) {
+					this.dialogRef.close();
+					this.authService.clearSession();
 					this.router.navigate(['/']);
+				}
 			}
 		});
 	}
@@ -200,19 +208,17 @@ export class EditProfileComponent {
 		const element = event.target as HTMLInputElement;
 		const fileList: FileList | null = element.files;
 
-		if (fileList && fileList.length > 0)
-		{
+		if (fileList && fileList.length > 0) {
 			const file = fileList[0];
-
 			const avatarControl = this.editProfileForm.controls.avatar;
 
 			if (avatarControl) {
 				avatarControl.patchValue(file);
+				avatarControl.markAsDirty();
 				avatarControl.updateValueAndValidity();
 			}
 
 			this.avatarPreview.set(URL.createObjectURL(file));
-
 			element.value = '';
 		}
 	}

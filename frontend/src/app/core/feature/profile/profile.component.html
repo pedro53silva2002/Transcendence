@@ -3,8 +3,8 @@
 		<div class="left-details">
 			@if (visitedUser(); as currentUser) {
 			<div class="avatar" [attr.aria-label]="currentUser.displayName" role="img">
-				@if (currentUser.profilePhotoUrl) {
-				<img [src]="currentUser.profilePhotoUrl" [alt]="currentUser.displayName" [width]="84" [height]="84"
+				@if (finalAvatarUrl()) {
+				<img [src]="finalAvatarUrl()" [alt]="currentUser.displayName" [width]="84" [height]="84"
 					class="avatar-img" />
 				} @else {
 				<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>

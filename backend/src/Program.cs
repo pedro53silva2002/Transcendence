@@ -70,6 +70,21 @@ try
 	// OAuth state store for managing PKCE state without sessions
 	builder.Services.AddSingleton<OAuthStateStore>();
 
+	builder.Services.AddCors(options =>
+	{
+		options.AddDefaultPolicy(policy =>
+		{
+			var allowedOrigins = builder.Configuration
+				.GetSection("AllowedOrigins")
+				.Get<string[]>() ?? [Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGIN") ?? throw new InvalidOperationException("CORS_ALLOWED_ORIGIN not set")];
+
+			policy.WithOrigins(allowedOrigins)
+				  .AllowAnyHeader()
+				  .AllowAnyMethod()
+				  .AllowCredentials();
+		});
+	});
+
 	//MinIO client configuration
 	/*var minioClient = new MinIOService()
     .WithEndpoint(

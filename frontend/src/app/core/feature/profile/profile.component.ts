@@ -36,6 +36,21 @@ export default class ProfileComponent {
 	//bool signal to check if the profile is from the logged user or not
 	protected readonly isOwnProfile = computed(() => this.authUsername() === this.profileUsername());
 
+	protected readonly finalAvatarUrl = computed (() => {
+		const photoUrl = this.visitedUser()?.profilePhotoUrl;
+
+		if (!photoUrl)
+			return null;
+
+		//if it begins with these its google auth picture
+		if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
+			return photoUrl;
+		}
+
+		//if not, we append the MINIO_ENDPOINT
+		return `http://localhost:9000/${photoUrl}`;
+	})
+
 	constructor() {
 		//extract profileUsername from URL
 		this.route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
@@ -75,8 +90,14 @@ export default class ProfileComponent {
 		const userToEdit = this.visitedUser();
 
 		//to send the user data to the mat-dialog
-		this.dialog.open(EditProfileComponent, {
+		const dialogRef = this.dialog.open(EditProfileComponent, {
 			data: { user: userToEdit }
 		});
+
+		dialogRef.afterClosed().subscribe((updatedUser: UserDto | undefined) => {
+			if (updatedUser)
+				this.visitedUser.set(updatedUser);
+		})
+
 	}
 }

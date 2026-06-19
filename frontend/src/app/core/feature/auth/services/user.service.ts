@@ -25,7 +25,7 @@ export class UserService extends BaseApiService {
 
   //ver o endpoint do backend
   public update(dto: UpdateUserDto): Observable<ApiResponse<UserDto>> {
-	return this._put<UserDto>(``, dto);
+	return this._put<UserDto>(`/users`, dto);
   }
 
   public delete(): Observable<ApiResponse<void>> {
