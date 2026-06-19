@@ -48,7 +48,7 @@ public sealed class TripService(TripModel tripModel, TripMembersModel tripMember
 		if (!delete) throw new NotFoundException($"Trip {id} not found.", id);
 	}
 
-	private void ValidateTrip(string tripName, string? description, int budget, DateTime startDate, DateTime endDate)
+	private void ValidateTrip(string tripName, string? description, long budget, DateTime startDate, DateTime endDate)
 	{
 		if (string.IsNullOrWhiteSpace(tripName)) throw new ValidationException("tripname", "Trip name is required");
 		if (tripName.Length > 25 || tripName.Length < 3) throw new ValidationException("tripname", "Trip name must be between 3 and 25 characters.");
