@@ -21,8 +21,9 @@ export interface UpdateUserDto {
   email: string;
   username: string;
   displayName: string;
-  bio: string;
-  profilePhotoUrl: string;
+  password: string | null;
+  bio: string | null;
+  profilePhotoUrl: string | null;
 }
 
 export interface AuthResponseDto {

@@ -1,5 +1,5 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CloseButtonComponent } from '../../../../../shared/components/close-button/close-button.component';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
@@ -14,7 +14,8 @@ import { ConfirmationPopUpComponent } from '../../../../../shared/pop-up/confirm
 import { EMPTY, filter, of, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from '../../../auth/services/user.service';
-import { UpdateUserDto } from '../../../auth/dtos/user.dto';
+import { UpdateUserDto, UserDto } from '../../../auth/dtos/user.dto';
+import { SessionService } from '../../../../logic/services/session.service';
 
 //shows the errors in real time
 export class InstantErrorStateMatcher implements ErrorStateMatcher {
@@ -40,7 +41,10 @@ export class InstantErrorStateMatcher implements ErrorStateMatcher {
 })
 export class EditProfileComponent {
 
-	private authService = inject(AuthService);
+	//to receive the data transfered from the profile component
+	private userData = inject<{ user: UserDto }>(MAT_DIALOG_DATA);
+
+	private authService = inject(SessionService);
 	private formBuilder = inject(FormBuilder);
 	private readonly destroyRef = inject(DestroyRef);
 	private translocoService = inject(TranslocoService);
@@ -87,23 +91,16 @@ export class EditProfileComponent {
 
 	private loadUserData(): void {
 
-		this.authService.me().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-			next: (response) => {
-				if (response && response.data) {
-					const user = response.data;
+		const user = this.userData?.user;
 
-					this.editProfileForm.patchValue({
-						displayName: user.displayName,
-						// description: user.description,
-						avatar: user.profilePhotoUrl
-					});
-					this.avatarPreview.set(user.profilePhotoUrl);
-				}
-			},
-			error: (err) => {
-				console.error('Erro ao carregar dados do utilizador:', err);
-			}
-		});
+		if (user) {
+			this.editProfileForm.patchValue({
+				displayName: user.displayName,
+				// description: user.description, descomentar isto depois
+				avatar: user.profilePhotoUrl
+			});
+			this.avatarPreview.set(user.profilePhotoUrl);
+		}
 	}
 
 	private passwordRulesValidator(): ValidatorFn {
@@ -156,11 +153,18 @@ export class EditProfileComponent {
 		if (this.editProfileForm.invalid)
 			return;
 
+		const user = this.userData?.user;
+
 		const updateDto: UpdateUserDto = {
-			displayName: string;
-			bio: string;
-			profilePhotoUrl: string;
-		}		
+			email: user.email,
+			username: user.username,
+			displayName: this.editProfileForm.getRawValue().displayName ?? user.displayName,
+			password: this.editProfileForm.getRawValue().password ?? null,
+			bio: this.editProfileForm.getRawValue().description ?? user.bio,
+			profilePhotoUrl: typeof this.editProfileForm.value.avatar === 'string' ? this.editProfileForm.value.avatar : user.profilePhotoUrl
+		}
+		
+		//chamar o serviço para update do user
 	}
 
 	deleteAccount(): void {

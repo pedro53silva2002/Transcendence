@@ -2,10 +2,12 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
+  computed,
   HostListener,
   inject,
   input,
   OnInit,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -35,7 +37,8 @@ import { LanguageButtonComponent } from '../../../shared/components/language-but
 import { UserService } from '../../feature/auth/services/user.service';
 import { UserDto } from '../../feature/auth/dtos/user.dto';
 import { SessionService } from '../../logic/services/session.service';
-import { AuthService as OtherAuth } from '../../feature/auth/services/auth.service';
+import { AuthService, AuthService as OtherAuth } from '../../feature/auth/services/auth.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-navbar',
@@ -71,18 +74,16 @@ export class NavbarComponent implements OnInit {
   showLogin = input(false);
   showRegister = input(false);
 
-  constructor(
-    private readonly dialog: MatDialog,
-    private readonly cd: ChangeDetectorRef,
-  ) {}
-
   private readonly userService = inject(UserService);
   private readonly authService = inject(SessionService);
   private readonly router = inject(Router);
   private readonly otherAuth = inject(OtherAuth);
+  private readonly dialog = inject(MatDialog);
+  private readonly cd = inject(ChangeDetectorRef);
 
   public isDashboardRoute = false;
 
+  public authUsername = computed(() => this.authService.user()?.username ?? null);
 
   ngOnInit(): void {
     if (!this.authService.getOAuthResult()) {

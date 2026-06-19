@@ -1,7 +1,7 @@
 <div class="main-container">
 	<div class="header">
 		<div class="left-details">
-			@if (user(); as currentUser) {
+			@if (visitedUser(); as currentUser) {
 			<div class="avatar" [attr.aria-label]="currentUser.displayName" role="img">
 				@if (currentUser.profilePhotoUrl) {
 				<img [src]="currentUser.profilePhotoUrl" [alt]="currentUser.displayName" [width]="84" [height]="84"
@@ -13,7 +13,12 @@
 			<div class="name-and-description">
 				<h2>{{ currentUser.displayName }}</h2>
 				<p>Description comes here.</p>
-				<button mat-button (click)="openEditProfile()" class="tertiary-btn profile-btn">Edit Profile</button>
+				@if (isOwnProfile()) {
+					<button mat-button (click)="openEditProfile()" class="tertiary-btn profile-btn">{{ 'profile.edit-btn' | transloco }}</button>
+				} @else {
+					<!-- inserir aqui a lógica do add friend/remove friend consoante as friendships -->
+					<button mat-button class="tertiary-btn profile-btn">{{ 'profile.add-friend-btn' | transloco }}</button>
+				}
 			</div>
 			}
 		</div>

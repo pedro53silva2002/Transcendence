@@ -92,6 +92,8 @@
 		"delete-user-title": "Are you sure?",
 		"delete-user-message": "If you confirm this decision, your account will be deleted.",
 		"description-error": "Can't be more than 150 characters long.",
-		"name-error": "You must define a display name."
+		"name-error": "You must define a display name.",
+		"add-friend-btn": "Add Friend",
+		"edit-btn": "Edit Profile"
 	}
 }

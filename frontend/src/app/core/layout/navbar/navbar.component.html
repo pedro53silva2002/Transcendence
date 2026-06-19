@@ -12,7 +12,7 @@
 			</button>
 			<mat-menu #mobileMenu="matMenu" yPosition="below" xPosition="after" class="hamburguer-menu-panel">
 				<button mat-menu-item routerLink="/home">Home</button>
-				<button mat-menu-item routerLink="/profile">Profile</button>
+				<button mat-menu-item [routerLink]="['/profile', authUsername()]">Profile</button>
 				<button mat-menu-item routerLink="/plan-a-trip">Plan A Trip</button>
 				<button mat-menu-item routerLink="/my-trip">My Trips</button>
 				<button mat-menu-item routerLink="/friends">Friends</button>
@@ -27,7 +27,7 @@
 			 <button routerLinkActive="active-link" routerLink="/home" class="primary-btn" matButton="outlined">Home</button>
 			 }
 			 @if (showProfile()) {
-			 <button routerLinkActive="active-link" routerLink="/profile" class="primary-btn" [class.keep-visible]="isDashboardRoute"
+			 <button routerLinkActive="active-link" [routerLink]="['/profile', authUsername()]" class="primary-btn" [class.keep-visible]="isDashboardRoute"
 				 matButton="outlined">Profile</button>
 			 }
 			 @if (showPlanATrip()) {

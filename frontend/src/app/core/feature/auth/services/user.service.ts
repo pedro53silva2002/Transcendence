@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
 import {
   CreateUserDto,
+  UpdateUserDto,
   UserDto,
   UserOrderByFieldsDto,
   UserSearchFieldsDto,
@@ -20,6 +21,11 @@ export class UserService extends BaseApiService {
   ): Observable<ApiResponse<CursorPage<UserDto>>> {
     const query = searchToQuery(search);
     return this._get<CursorPage<UserDto>>(`/users/search?q=${query}`);
+  }
+
+  //ver o endpoint do backend
+  public update(dto: UpdateUserDto): Observable<ApiResponse<UserDto>> {
+	return this._put<UserDto>(``, dto);
   }
 
   public delete(): Observable<ApiResponse<void>> {

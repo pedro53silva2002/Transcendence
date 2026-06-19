@@ -26,17 +26,17 @@ export const routes: Routes = [
   {
     path: 'home',
     component: UserDashboardComponent, //o componente que tem a nav-bar e router-outlet para navegar pelas páginas do site
-    // canActivate: [guestGuard],
+    canActivate: [authGuard],
   },
 
   //all other pages
   {
 	path: '',
 	component: AppLayoutComponent,
-	// canActivate: [guestGuard],
+	canActivate: [authGuard],
 	children: [
 		{
-			path: 'profile',
+			path: 'profile/:username',
 			component: ProfileComponent,
 		},
 		{
