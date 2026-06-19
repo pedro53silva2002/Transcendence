@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Trippie.Common.Services.Authentication.Context;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
@@ -11,6 +12,7 @@ using Trippie.Modules.Auth.Service;
 namespace Trippie.Modules.Auth.Router;
 
 [ApiController]
+[Authorize]
 [Route("api/users")]
 public sealed class UserRouter(UserService service, IUserContext userContext) : ControllerBase
 {
@@ -51,10 +53,10 @@ public sealed class UserRouter(UserService service, IUserContext userContext) : 
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<UserDto>> Update(int id, [FromBody] UpdateUserDto dto, CancellationToken ct)
+    [HttpPut]
+    public async Task<ActionResult<UserDto>> Update([FromBody] UpdateUserDto dto, CancellationToken ct)
     {
-        var user = await service.UpdateAsync(id, dto, ct);
+        var user = await service.UpdateAsync(userContext.UserId ?? throw new UnauthorizedException("User not authenticated."), dto, ct);
         return Ok(user);
     }
 

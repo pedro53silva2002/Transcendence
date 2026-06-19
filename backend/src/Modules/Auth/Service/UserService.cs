@@ -5,6 +5,7 @@ using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Model;
 using Trippie.Common.Services.MinIO;
+using Trippie.Modules.Auth.Service;
 using Minio;
 
 namespace Trippie.Modules.Auth.Service;
@@ -54,6 +55,8 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
             throw new ValidationException("email", "Email can not be empty.");
         if (dto.Username is not null && string.IsNullOrWhiteSpace(dto.Username))
             throw new ValidationException("username", "Username can not be blank.");
+		if (dto.Password is not null)
+			AuthService.PasswordVerification(dto.Password);
 
         if (dto.Email is not null || dto.Username is not null)
         {

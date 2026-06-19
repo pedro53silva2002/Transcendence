@@ -96,6 +96,7 @@ public sealed class UserModel(AppDbContext db)
 
         if (dto.Email is not null) user.Email = dto.Email;
         if (dto.Username is not null) user.Username = dto.Username;
+		if (dto.Password is not null) user.PasswordHash = new BCryptPasswordHasher().Hash(dto.Password);
         if (dto.DisplayName is not null) user.DisplayName = dto.DisplayName;
 		if (dto.ProfilePhotoUrl is not null && dto.ProfilePhotoUrl != user.ProfilePhotoUrl) user.ProfilePhotoUrl = dto.ProfilePhotoUrl;
         user.Bio = dto.Bio;
