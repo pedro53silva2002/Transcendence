@@ -89,7 +89,8 @@
     "city-string-error": "Please select a valid city.",
     "trip-budget": "budget (€)",
     "budget-error": "A budget is required.",
-    "budget-numbers-error": "A budget can only contain numbers."
+    "budget-numbers-error": "A budget can only contain numbers.",
+	"crew-title": "Crew"
   },
   "trips": {
     "members": {
