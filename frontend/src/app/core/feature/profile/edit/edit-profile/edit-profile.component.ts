@@ -59,6 +59,7 @@ export class EditProfileComponent {
 	protected readonly passwordVisible = signal(false);
 	protected readonly confirmPasswordVisible = signal(false);
 	protected readonly avatarPreview = signal<string | null>(null);
+	protected readonly isGoogleAccount = signal(false);
 
 	readonly editProfileForm = this.formBuilder.group({
 		displayName: ['', [Validators.required, Validators.maxLength(15), Validators.minLength(3)]],
@@ -102,6 +103,9 @@ export class EditProfileComponent {
 				avatar: user.profilePhotoUrl
 			});
 			this.avatarPreview.set(user.profilePhotoUrl);
+			if (user.oAuthProvider) {
+				this.isGoogleAccount.set(true);
+			}
 		}
 	}
 
@@ -168,6 +172,7 @@ export class EditProfileComponent {
 
 		this.userService.update(updateDto).subscribe(response => {
 			const updatedUser = response.data ?? response;
+			this.authService.loadMe().subscribe();
 			this.dialogRef.close(updatedUser);
 		});
 	}

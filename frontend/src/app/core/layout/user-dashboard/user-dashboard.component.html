@@ -5,7 +5,7 @@
 		<div class="greet-text">
 			<h1> {{ 'dashboard.greet' | transloco }}
 				@if (user()) {
-					&nbsp;{{ user()?.username }}
+					&nbsp;{{ user()?.displayName }}
 				} @else {&nbsp;Guest}
 			</h1>
 			<p> {{ 'dashboard.intro' | transloco }} </p>
