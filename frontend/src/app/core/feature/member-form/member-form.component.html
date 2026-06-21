@@ -40,7 +40,14 @@
 				</div>
 
 				<div class="crew-info">
-					<span class="crew-username">{{ member.displayName }}</span>
+					<div class="name-and-delete">
+						<span class="crew-username">{{ member.displayName }}</span>
+						<button type="button" class="del-btn"
+						[attr.aria-label]="'trips.members.remove' | transloco: { name: member.displayName }"
+						(click)="removeMember(member.id, member.userId)">
+						<mat-icon class="delete-icon">close</mat-icon>
+					</button>
+					</div>
 					@if (showRole()) {
 					<mat-select class="role-select" [value]="member.role"
 						[attr.aria-label]="'crew.roleFor' | transloco: { name: member.displayName }"
@@ -52,11 +59,6 @@
 					</mat-select>
 					}
 				</div>
-				<button type="button" class="del-btn"
-					[attr.aria-label]="'trips.members.remove' | transloco: { name: member.displayName }"
-					(click)="removeMember(member.id, member.userId)">
-					<mat-icon>close</mat-icon>
-				</button>
 			</div>
 			} @empty {
 			<p class="crew-empty">{{ 'trips.members.noMembers' | transloco }}</p>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { TripStateService } from '../plan-a-trip/services/trip-state.service';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
@@ -10,6 +10,7 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { EMPTY, filter, switchMap } from 'rxjs';
 import { MemberFormComponent } from '../member-form/member-form.component';
 import ItineraryComponent from '../itinerary/itinerary.component';
+import { SessionService } from '../../logic/services/session.service';
 
 @Component({
 	selector: 'app-trip-dashboard',
@@ -30,7 +31,9 @@ export class TripDashboardComponent implements OnInit {
 	private translocoService = inject(TranslocoService);
 	public route = inject(Router);
 	private activatedRoute = inject(ActivatedRoute);
+	public authService = inject(SessionService);
 
+	public isAdmin = signal(false);
 
 	//Verify if state service is empty. If so, make the request to backend to fill the data.
 	ngOnInit(): void {
@@ -45,6 +48,11 @@ export class TripDashboardComponent implements OnInit {
 				if (response.data) this.tripStateService.setTrip(response.data);
 			},
 		});
+
+		// if (this.authService.me()?.trips[id].role === 'ADMIN')
+		// 	this.isAdmin.set(true); não está a funcionar...
+
+		// console.log(this.isAdmin());
 	}
 
 	deleteTrip(): void {
