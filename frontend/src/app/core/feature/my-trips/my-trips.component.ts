@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { TranslocoModule } from '@jsverse/transloco';
 import { forkJoin, of, switchMap } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -21,6 +21,30 @@ export class MyTripsComponent implements OnInit {
   readonly trips = signal<TripDto[]>([]);
   readonly memberCounts = signal<Record<number, number>>({});
   readonly isLoading = signal(true);
+
+  /* The single upcoming trip: the next one that hasn't started yet (earliest
+     start date that is today or later). The list is sorted by startDate ascending. */
+  readonly upcomingTripId = computed(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const upcoming = this.trips().find((trip) => {
+      const start = new Date(trip.startDate);
+      start.setHours(0, 0, 0, 0);
+      return start >= today;
+    });
+    return upcoming?.id ?? null;
+  });
+
+  /* Trips to display: the upcoming trip is moved to the front, the rest keep
+     their original (startDate ascending) order. */
+  readonly displayTrips = computed(() => {
+    const id = this.upcomingTripId();
+    const list = this.trips();
+    if (id == null) return list;
+    const upcoming = list.filter((trip) => trip.id === id);
+    const rest = list.filter((trip) => trip.id !== id);
+    return [...upcoming, ...rest];
+  });
 
   ngOnInit(): void {
     this.tripService

@@ -3,12 +3,13 @@
     <app-utrip-bubble class="bubble-anchor" />
   }
   <div class="card">
-    <div class="image-container">
+    <!-- Circular image with an orange ring, overlapping the card's left edge. -->
+    <div class="avatar">
       <img
         [ngSrc]="imagePath()"
         fill
         [alt]="trip().tripName"
-        class="season-image"
+        class="avatar-image"
       />
     </div>
     <div class="card-content">

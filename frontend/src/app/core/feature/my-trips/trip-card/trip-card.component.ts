@@ -15,6 +15,8 @@ import { UtripBubbleComponent } from '../utrip-bubble/utrip-bubble.component';
 export class TripCardComponent {
   trip = input.required<TripDto>();
   memberCount = input<number>(0);
+  /* Set by the parent; only one card in the list is the upcoming trip. */
+  isUpcoming = input<boolean>(false);
 
   readonly destination = computed(() => {
     const t = this.trip();
@@ -23,14 +25,6 @@ export class TripCardComponent {
   });
 
   readonly imagePath = computed(() => getSeasonImage(this.trip().startDate));
-
-  readonly isUpcoming = computed(() => {
-    const start = new Date(this.trip().startDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    start.setHours(0, 0, 0, 0);
-    return start > today;
-  });
 }
 
 function getSeasonImage(startDate: string): string {
