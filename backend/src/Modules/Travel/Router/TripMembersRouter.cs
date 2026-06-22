@@ -51,6 +51,7 @@ public sealed class TripMembersRouter(TripMembersService tripMembersService, IUs
 	public async Task<ActionResult<TripMembersDto>> UpdateAsync(int id, [FromBody] UpdateTripMembersDto dto, CancellationToken ct = default)
 	{
 		var AdminId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
+
 		var updatedMember = await tripMembersService.UpdateAsync(AdminId, id, dto, ct);
 		return updatedMember == null ? NotFound() : Ok(updatedMember);
 	}
@@ -59,6 +60,7 @@ public sealed class TripMembersRouter(TripMembersService tripMembersService, IUs
 	public async Task<ActionResult> DeleteAsync(int id, CancellationToken ct = default)
 	{
 		var AdminId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
+
 		await tripMembersService.DeleteAsync(AdminId, id, ct);
 		return NoContent();
 	}
