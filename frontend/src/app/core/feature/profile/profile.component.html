@@ -5,7 +5,7 @@
 			<div class="avatar" [attr.aria-label]="currentUser.displayName" role="img">
 				@if (finalAvatarUrl()) {
 				<img [src]="finalAvatarUrl()" [alt]="currentUser.displayName" [width]="84" [height]="84"
-					class="avatar-img" />
+					class="avatar-img" referrerpolicy="no-referrer"/>
 				} @else {
 				<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
 				}

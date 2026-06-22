@@ -19,7 +19,7 @@
 					</button>
 				</div>
 				@if (avatarPreview()) {
-				<img [src]="avatarPreview()" alt="avatar" class="avatar-preview" />
+				<img referrerpolicy="no-referrer" [src]="avatarPreview()" alt="avatar" class="avatar-preview" />
 				} @else {
 				<mat-icon class="avatar-icon">person</mat-icon>
 				}
@@ -42,7 +42,6 @@
 		</mat-form-field>
 
 		@if (isGoogleAccount() === false) {
-			<h1>{{isGoogleAccount()}}</h1>
 		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
 			<input matInput [type]="passwordVisible() ? 'text' : 'password'" formControlName="newPassword"
 				[errorStateMatcher]="matcher" placeholder="{{ 'auth.new-password' | transloco }}" />

@@ -112,6 +112,11 @@ export class EditProfileComponent {
 					this.avatarPreview.set(`http://localhost:9000/${user.profilePhotoUrl}`);
 				}
 			}
+
+			console.log(user.oAuthProvider);
+
+			if (user.oAuthProvider === 'google')
+				this.isGoogleAccount.set(true);
 		}
 	}
 
