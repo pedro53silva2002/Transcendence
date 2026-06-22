@@ -3,14 +3,10 @@
     <app-utrip-bubble class="bubble-anchor" />
   }
   <div class="card">
-    <!-- Circular image with an orange ring, overlapping the card's left edge. -->
-    <div class="avatar">
-      <img
-        [ngSrc]="imagePath()"
-        fill
-        [alt]="trip().tripName"
-        class="avatar-image"
-      />
+    <!-- Oversized season image overlaid on the card, clipped to its rounded
+         shape; the same effect used by the dashboard card. -->
+    <div class="overlay-container">
+      <img [src]="imagePath()" [alt]="trip().tripName" />
     </div>
     <div class="card-content">
       <h2 class="trip-name">{{ trip().tripName }}</h2>

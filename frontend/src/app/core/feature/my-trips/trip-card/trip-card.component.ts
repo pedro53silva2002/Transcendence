@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { NgOptimizedImage, DatePipe, UpperCasePipe } from '@angular/common';
+import { DatePipe, UpperCasePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { TripDto } from '../../plan-a-trip/dtos/trip.dto';
@@ -8,7 +8,7 @@ import { UtripBubbleComponent } from '../utrip-bubble/utrip-bubble.component';
 @Component({
   selector: 'app-trip-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgOptimizedImage, DatePipe, UpperCasePipe, MatIconModule, RouterLink, UtripBubbleComponent],
+  imports: [DatePipe, UpperCasePipe, MatIconModule, RouterLink, UtripBubbleComponent],
   templateUrl: './trip-card.component.html',
   styleUrl: './trip-card.component.scss',
 })
