@@ -52,6 +52,8 @@ public sealed class UserModel(AppDbContext db)
             DisplayName = dto.Username,
             PasswordHash = passwordHash,
             OauthProvider = dto.OAuthProvider ?? "none",
+			OauthId = dto.OAuthId,
+			ProfilePhotoUrl = dto.ProfilePhotoUrl
         };
 
         db.Users.Add(user);
@@ -103,6 +105,13 @@ public sealed class UserModel(AppDbContext db)
 
         return user;
     }
+
+	public async Task UpdateProfilePhotoAsync(int id, string? profilePhotoUrl, CancellationToken ct = default)
+	{
+	    await db.Users
+	        .Where(u => u.Id == id)
+	        .ExecuteUpdateAsync(s => s.SetProperty(u => u.ProfilePhotoUrl, profilePhotoUrl), ct);
+	}
 
     public async Task<UserDto?> GetByEmail(string email, CancellationToken ct = default)
     {
