@@ -10,6 +10,7 @@
 }
 
 .trip-details {
+	margin-top: 0px;
 	display: flex;
 	flex-direction: column;
 	gap: 15px;
@@ -130,9 +131,10 @@
 .trip-dates {
 	display: flex;
 	align-items: flex-end;
-	// color: red;
 	color: var(--mat-sys-primary);
 	font-family: "BBH Bogle";
+	position: relative;
+	margin-bottom: 50px;
 }
 
 .start-date, .end-date {
@@ -158,8 +160,16 @@
 	}
 }
 
+.double-arrow {
+	position: absolute;
+	width: 40px;
+	z-index: 1;	
+	margin-left: 60px;
+	margin-bottom: 30px;
+}
+
 .cards {
-	margin-top: 50px;
+	margin-top: 20px;
 	width: 100%;
 	gap: 30px;
 	display: flex;
@@ -171,3 +181,5 @@
 		max-height: 468px;
 	}
 }
+
+

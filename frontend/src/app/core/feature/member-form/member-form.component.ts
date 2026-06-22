@@ -17,8 +17,10 @@ import { TripMemberService } from '../service/trip/member.service';
 import { AddMemberDialogComponent } from './add-member-dialog/add-member-dialog.component';
 import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
 import { TripStateService } from '../plan-a-trip/services/trip-state.service';
-import { TripMemberDto } from '../dtos/trip/member.dto';
+import { TripMemberDto } from '../itinerary/dtos/member.dto';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingService } from '../../logic/services/loading.service';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
 	selector: 'app-member-form',
@@ -29,6 +31,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 		NgOptimizedImage,
 		TranslocoModule,
 		CustomScrollbarComponent,
+		LoadingSpinnerComponent
 	],
 	templateUrl: './member-form.component.html',
 	styleUrl: './member-form.component.scss',

@@ -21,9 +21,7 @@
 
 	<app-custom-scrollbar>
 		@if (loading()) {
-		<div role="status" aria-label="Loading members">
-			<mat-icon>hourglass_empty</mat-icon>
-		</div>
+		<app-loading-spinner></app-loading-spinner>
 		}
 
 		@if (!loading()) {
@@ -48,7 +46,7 @@
 						<mat-icon class="delete-icon">close</mat-icon>
 					</button>
 					</div>
-					@if (showRole()) {
+					<!-- @if (showRole()) { -->
 					<mat-select class="role-select" [value]="member.role"
 						[attr.aria-label]="'crew.roleFor' | transloco: { name: member.displayName }"
 						(valueChange)="updateRole(member.userId, $event)">
@@ -57,7 +55,7 @@
 							}}</mat-option>
 						<mat-option value="Admin">{{ 'trips.members.role.admin' | transloco }}</mat-option>
 					</mat-select>
-					}
+					<!-- } -->
 				</div>
 			</div>
 			} @empty {

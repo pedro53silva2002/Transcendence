@@ -5,7 +5,7 @@ import {
   TripMemberOrderByDto,
   TripMemberSearchFieldsDto,
   UpdateTripMemberDto,
-} from '../../dtos/trip/member.dto';
+} from '../../itinerary/dtos/member.dto';
 import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';

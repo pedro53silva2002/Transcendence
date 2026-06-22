@@ -1,6 +1,6 @@
 import { computed, Injectable, Signal, signal } from '@angular/core';
 import { TripDto } from '../dtos/trip.dto';
-import { TripMemberDto } from '../../dtos/trip/member.dto';
+import { TripMemberDto } from '../../itinerary/dtos/member.dto';
 
 /* This service will store the info od the trip so we 
 	don't need to keep making requests to the backend

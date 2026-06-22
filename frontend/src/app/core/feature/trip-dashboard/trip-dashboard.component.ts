@@ -49,10 +49,7 @@ export class TripDashboardComponent implements OnInit {
 			},
 		});
 
-		// if (this.authService.me()?.trips[id].role === 'ADMIN')
-		// 	this.isAdmin.set(true); não está a funcionar...
-
-		// console.log(this.isAdmin());
+		console.log(this.authService.me()?.trips.find(trip => trip.tripId === id)?.role);
 	}
 
 	deleteTrip(): void {
@@ -81,7 +78,5 @@ export class TripDashboardComponent implements OnInit {
 				this.route.navigate(['/home']);
 			}
 		});
-
-
 	}
 }
