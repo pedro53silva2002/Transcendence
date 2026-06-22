@@ -108,11 +108,23 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
 
         var existingOAuthUser = await userService.GetByOAuthIdAsync(dto.OAuthProvider, dto.OAuthId, ct);
         if (existingOAuthUser is not null)
+		{
+            string existingProfilePhotoUrl = existingOAuthUser.ProfilePhotoUrl;
+
+            if (existingProfilePhotoUrl != null && existingProfilePhotoUrl[0] != '/')
+			    await userService.UpdateProfilePhotoAsync(existingOAuthUser.Id, dto.ProfilePhotoUrl, ct);
             return await BuildAuthResponse(existingOAuthUser, [], ct);
+		}
 
         var existingEmailUser = await userService.GetByEmail(dto.Email, ct);
         if (existingEmailUser is not null)
+		{
+            string existingProfilePhotoUrl = existingEmailUser.ProfilePhotoUrl;
+
+            if (existingProfilePhotoUrl != null && existingProfilePhotoUrl[0] != '/')
+			    await userService.UpdateProfilePhotoAsync(existingEmailUser.Id, dto.ProfilePhotoUrl, ct);
             return await BuildAuthResponse(existingEmailUser, [], ct);
+		}
 
         var baseUsername = dto.Email.Split('@')[0];
         var uniqueUsername = await userService.GenerateUniqueUsername(baseUsername, ct);
