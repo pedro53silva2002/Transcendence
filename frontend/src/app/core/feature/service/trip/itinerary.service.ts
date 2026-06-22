@@ -5,7 +5,7 @@ import {
   ItineraryDto,
   ItineraryOrderByDto,
   ItinerarySearchFieldsDto,
-} from '../../dtos/trip/itinerary.dto';
+} from '../../itinerary/dtos/itinerary.dto';
 import { Observable } from 'rxjs';
 import { CursorPage, SearchParams, searchToQuery } from '../../../logic/services/search.service';
 

@@ -13,7 +13,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
 import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
 import { ItineraryService } from '../service/trip/itinerary.service';
-import { ItineraryDto } from '../dtos/trip/itinerary.dto';
+import { ItineraryDto } from './dtos/itinerary.dto';
 import { TripService } from '../plan-a-trip/services/trip.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatError } from '@angular/material/form-field';

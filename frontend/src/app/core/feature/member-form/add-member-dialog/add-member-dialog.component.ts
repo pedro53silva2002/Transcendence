@@ -14,7 +14,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { TripMemberService } from '../../service/trip/member.service';
 import { UserService } from '../../auth/services/user.service';
 import { UserDto } from '../../auth/dtos/user.dto';
-import { TripMemberDto } from '../../dtos/trip/member.dto';
+import { TripMemberDto } from '../dtos/member.dto';
 
 @Component({
   selector: 'app-add-member-dialog',

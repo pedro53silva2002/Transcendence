@@ -17,7 +17,7 @@ import { TripMemberService } from '../service/trip/member.service';
 import { AddMemberDialogComponent } from './add-member-dialog/add-member-dialog.component';
 import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
 import { TripStateService } from '../plan-a-trip/services/trip-state.service';
-import { TripMemberDto } from '../dtos/trip/member.dto';
+import { TripMemberDto } from './dtos/member.dto';
 
 @Component({
   selector: 'app-member-form',
