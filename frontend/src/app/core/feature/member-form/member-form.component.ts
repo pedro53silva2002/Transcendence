@@ -103,8 +103,17 @@ export class MemberFormComponent {
 		});
 	}
 
-	protected updateRole(userId: number, role: 'Admin' | 'Member'): void {
+	protected updateRole(
+		memberId: number | undefined,
+		userId: number,
+		role: 'Admin' | 'Member',
+	): void {
 		this.tripState.updateMemberRole(userId, role);
+
+		const tripId = this.tripId();
+		if (tripId !== null && memberId !== undefined) {
+			this.memberService.update(memberId, { userId, role }, tripId).subscribe();
+		}
 	}
 
 	protected removeMember(memberId: number | undefined, userId: number): void {
