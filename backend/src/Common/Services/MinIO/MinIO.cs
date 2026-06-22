@@ -95,11 +95,33 @@ public class MinIOService : IMinIOService
 	}
 
 	public async Task CreateBucketAsync(string bucketName)
-	{
-		bool found = await _minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(bucketName));
-		if (!found)
+{
+    bool found = await _minioClient.BucketExistsAsync(
+        new BucketExistsArgs().WithBucket(bucketName));
+
+    if (!found)
+    {
+        await _minioClient.MakeBucketAsync(
+            new MakeBucketArgs().WithBucket(bucketName));
+
+        var policy = $$"""
 		{
-			await _minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(bucketName));
+		"Version":"2012-10-17",
+		"Statement":[
+			{
+			"Effect":"Allow",
+			"Principal":{"AWS":["*"]},
+			"Action":["s3:GetObject"],
+			"Resource":["arn:aws:s3:::{{bucketName}}/*"]
+			}
+		]
 		}
-	}
+		""";
+
+        await _minioClient.SetPolicyAsync(
+		new SetPolicyArgs()
+			.WithBucket(bucketName)
+			.WithPolicy(policy));
+    }
+}
 }
