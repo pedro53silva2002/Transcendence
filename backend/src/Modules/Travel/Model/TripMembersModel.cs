@@ -49,7 +49,7 @@ public sealed class TripMembersModel(AppDbContext db)
 			throw new SearchValidationException("Duplicate user IDs were provided in the request.");
 
 		if (userIds.Count(id => id == callerId) != 1)
-			throw new SearchValidationException("The trip creator must appear exactly once in the member list.");
+		 	throw new SearchValidationException("The trip creator must appear exactly once in the member list.");
 	}
 
 	private async Task<int> CountAdminsAsync(int tripId, int excludedMemberId, CancellationToken ct)

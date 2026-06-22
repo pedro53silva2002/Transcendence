@@ -77,8 +77,8 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
 			dto.ProfilePhotoUrl = await minioClient.UploadFileAsync("profile-photos", $"{dto.Username}_{Guid.NewGuid()}", new MemoryStream(), "application/octet-stream");
 		}
         var user = await userModel.UpdateAsync(id, dto, ct) ?? throw new NotFoundException($"User {id} not found.", id);
-
-        return User.ToDto(user);
+    
+        return user;
     }
 
 	public async Task UpdateProfilePhotoAsync(int id, string? profilePhotoUrl, CancellationToken ct = default)

@@ -10,17 +10,17 @@ import { TripDashboardComponent } from './core/feature/trip-dashboard/trip-dashb
 import ProfileComponent from './core/feature/profile/profile.component';
 
 export const routes: Routes = [
-  { 
-	path: '',
-	component: LandingPageComponent,
-	canActivate: [guestGuard]
-},
+  {
+    path: '',
+    component: LandingPageComponent,
+    canActivate: [guestGuard],
+  },
 
   //to verify if the google auth was successful and redirect to the home page
-  { 
-	path: 'auth/callback',
-	component: AuthCallbackComponent
-	},
+  {
+    path: 'auth/callback',
+    component: AuthCallbackComponent,
+  },
 
   //user dashboard (after logging in)
   {
@@ -54,5 +54,4 @@ export const routes: Routes = [
 		}
 	]
   },
-  { path: '**', redirectTo: '' },
 ];

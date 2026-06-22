@@ -32,4 +32,5 @@ public sealed class UpdateUserDto
 	public string? Password { get; set; }
     public string? Bio { get; set; }
     public string? ProfilePhotoUrl { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

@@ -142,6 +142,8 @@ try
 	builder.Services.AddScoped<CityModel>();
 	builder.Services.AddScoped<TripMembersModel>();
 	builder.Services.AddScoped<TripMembersService>();
+	builder.Services.AddScoped<ItineraryModel>();
+    builder.Services.AddScoped<ItineraryService>();
 
 
 	//Add Http request limiter

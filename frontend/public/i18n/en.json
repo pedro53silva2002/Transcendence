@@ -44,7 +44,7 @@
 		"trips": "Trips Booked This Year",
 		"countdown": "Days Until Next Trip"
 	},
-	"plan-a-trip": {
+	  "plan-a-trip": {
 		"title": "Plan your trip",
 		"trip-name": "trip name",
 		"trip-description": "trip description",
@@ -69,7 +69,7 @@
 		"trip-budget": "budget (€)",
 		"budget-error": "A budget is required.",
 		"budget-numbers-error": "A budget can only contain numbers."
-	},
+	  },
 	"trips": {
 		"members": {
 			"title": "Trip Members",
@@ -95,5 +95,33 @@
 		"name-error": "You must define a display name.",
 		"add-friend-btn": "Add Friend",
 		"edit-btn": "Edit Profile"
-	}
+	},
+ 
+  "itinerary": {
+    "title": "Itinerary",
+    "addItem": "Add itinerary item",
+    "closeForm": "Close add form",
+    "stops": "Itinerary stops",
+    "empty": "No stops yet — tap + to add one.",
+    "remove": "Remove {{ title }}",
+    "day": "DAY",
+    "dayNav": "Day navigation",
+    "prevDay": "Previous day",
+    "nextDay": "Next day",
+    "form": {
+      "titleLabel": "Title",
+      "title": "title",
+      "costLabel": "Cost in euros",
+      "cost": "cost (€)",
+      "infoLabel": "More info",
+      "info": "more info",
+      "save": "Save",
+      "errors": {
+        "titleRequired": "Title is required",
+        "titleMaxLength": "Title cannot exceed 20 characters",
+        "priceMin": "Price must be 0 or greater",
+        "descriptionMaxLength": "Description cannot exceed 30 characters"
+      }
+    }
+  }
 }
