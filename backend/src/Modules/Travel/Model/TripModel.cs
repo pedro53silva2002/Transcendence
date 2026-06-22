@@ -177,14 +177,14 @@ public sealed class TripModel(AppDbContext db)
 			}).ToList();
 
 			var tripMembers = members.Where(tm => tm.TripId == trip.Id).ToList();
-			trip.Members = tripMembers.Select(tm => new TripMembersDto
+			trip.Members = [.. tripMembers.Select(tm => new TripMembersDto
 			{
 				Id = tm.Id,
 				TripId = tm.TripId,
 				UserId = tm.UserId,
 				DisplayName = tm.User?.DisplayName ?? tm.User?.Username ?? string.Empty,
 				Role = tm.Role
-			}).ToList();
+			})];
 		});
 		return res;
 	}
@@ -196,12 +196,14 @@ public sealed class TripModel(AppDbContext db)
 		var trip = await query.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return null;
 
-		// if (db.Set<TripMember>().AnyAsync(tm => tm.TripId == trip.Id
-		//     && tm.UserId == userId
-		//     && tm.Role != MemberRole.Admin))
-		// {
-		//     throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
-		// }
+		var isAdmin = await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == trip.Id
+		    && tm.UserId == userId
+		    && tm.Role == TripMemberRole.Admin, ct);
+
+		if (!isAdmin)
+		{
+		    throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
+		}
 
 		if (dto.TripName is not null) trip.TripName = dto.TripName;
 		if (dto.Visibility != trip.Visibility) trip.Visibility = dto.Visibility;
@@ -262,13 +264,16 @@ public sealed class TripModel(AppDbContext db)
 
 		var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return false;
-		// Only allow deletion if user is creator of trip
-		// var deleted = await db.Trip.Where(i => i.Id == id
-		//     && (db.Set<TripMember>().AnyAsync(tm => tm.TripId == i.TripId
-		//             && tm.UserId == userId
-		//             && tm.Role == MemberRole.Admin)
-		//     */))
-		//     .ExecuteDeleteAsync(ct); apagar a debaixo depois de descomentar isto
+
+		var isAdmin = await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == trip.Id
+		    && tm.UserId == userId
+		    && tm.Role == TripMemberRole.Admin, ct);
+
+		if (!isAdmin)
+		{
+		    throw new UnauthorizedAccessException("You are not authorized to delete this Trip.");
+		}
+
 		var rows = await db.Trips.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
 		return rows > 0;
 	}
