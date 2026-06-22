@@ -81,6 +81,9 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
         return User.ToDto(user);
     }
 
+	public async Task UpdateProfilePhotoAsync(int id, string? profilePhotoUrl, CancellationToken ct = default)
+    	=> await userModel.UpdateProfilePhotoAsync(id, profilePhotoUrl, ct);
+
     public async Task<UserDto?> GetByEmail(string email, CancellationToken ct = default)
     {
         if (email is null) throw new ValidationException("email", $"Email cannot be empty.");

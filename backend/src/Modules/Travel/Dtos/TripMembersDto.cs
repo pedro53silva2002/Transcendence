@@ -22,7 +22,7 @@ public sealed class TripMembersDto
     public required int TripId { get; set; }
     public required int UserId { get; set; }
 	public required string DisplayName { get; set; }
-	public string ? ProfilePicture { get; set; }
+	public string? ProfilePicture { get; set; }
 	public required TripMemberRole Role { get; set; }
     public DateTime JoinedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
