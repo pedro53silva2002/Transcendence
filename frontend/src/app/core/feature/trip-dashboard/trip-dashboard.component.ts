@@ -37,6 +37,8 @@ export class TripDashboardComponent implements OnInit {
 
 	//Verify if state service is empty. If so, make the request to backend to fill the data.
 	ngOnInit(): void {
+
+
 		const idParam = this.activatedRoute.snapshot.paramMap.get('id');
 		if (!idParam) return;
 		const id = Number(idParam);
@@ -49,7 +51,15 @@ export class TripDashboardComponent implements OnInit {
 			},
 		});
 
-		console.log(this.authService.me()?.trips.find(trip => trip.tripId === id)?.role);
+		//update the session
+		this.authService.loadMe().subscribe({
+			next: (success) => {
+				console.log('eu sou: ', this.authService.me()?.username);
+				console.log('me role: ', this.authService.me()?.trips.find(trip => trip.tripId === id)?.role);
+				console.log('trip id: ', this.authService.me()?.trips.find(trip => trip.tripId === id));
+				console.log('as minhas trips: ', this.authService.me()?.trips);
+			}
+		});
 	}
 
 	deleteTrip(): void {

@@ -17,6 +17,7 @@ import { CountryDto } from './dtos/country.dto';
 import { CityDto } from './dtos/city.dto';
 import { DateTime } from 'luxon';
 import { MemberFormComponent } from '../member-form/member-form.component';
+import { SessionService } from '../../logic/services/session.service';
 
 @Component({
   selector: 'app-plan-a-trip',
@@ -33,6 +34,7 @@ export class PlanATripComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly tripStateService = inject(TripStateService);
   private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(SessionService);
   protected readonly currentTripId = signal<number | null>(null);
 
   public isEditMode = false;
@@ -142,6 +144,9 @@ export class PlanATripComponent implements OnInit {
         }
       }
     }
+
+	//update the session
+	this.authService.loadMe().subscribe();
   }
 
   static countryValidator(control: AbstractControl): ValidationErrors | null {
