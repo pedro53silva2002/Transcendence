@@ -1,0 +1,28 @@
+<article class="card-wrapper" [routerLink]="['/trip-dashboard', trip().id]">
+  @if (isUpcoming()) {
+    <app-utrip-bubble class="bubble-anchor" />
+  }
+  <div class="card">
+    <div class="image-container">
+      <img
+        [ngSrc]="imagePath()"
+        fill
+        [alt]="trip().tripName"
+        class="season-image"
+      />
+    </div>
+    <div class="card-content">
+      <h2 class="trip-name">{{ trip().tripName }}</h2>
+      <p class="destination">{{ destination() }}</p>
+      <div class="trip-meta">
+        <span class="members" [attr.aria-label]="memberCount() + ' members'">
+          <mat-icon aria-hidden="true" class="person-icon">person</mat-icon>
+          <span>{{ memberCount() }}</span>
+        </span>
+        <span class="dates">
+          {{ trip().startDate | date : 'd MMM' | uppercase }} &ndash; {{ trip().endDate | date : 'd MMM' | uppercase }}
+        </span>
+      </div>
+    </div>
+  </div>
+</article>

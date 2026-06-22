@@ -50,6 +50,14 @@
       "admin": "Admin"
     }
   },
+  "my-trips": {
+    "title": "Mis Viajes",
+    "empty": "Aún no tienes viajes. ¡Empieza a planear uno!",
+    "loading": "Cargando tus viajes…",
+    "upcoming-badge": "Viaje próximo",
+    "upcoming-badge-line1": "PRÓXIMO",
+    "upcoming-badge-line2": "VIAJE"
+  },
   "itinerary": {
     "title": "Itinerario",
     "addItem": "Agregar parada",

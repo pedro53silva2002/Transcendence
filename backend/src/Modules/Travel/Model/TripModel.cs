@@ -115,7 +115,7 @@ public sealed class TripModel(AppDbContext db)
 
 		var country = db.TripCountries.Include(tc => tc.Country);
 		var cities = db.TripCities.Include(tc => tc.City);
-		var members = db.TripMembers.Include(tm => tm.TripId);
+		var members = db.TripMembers.Include(tm => tm.User);
 
 		var res = await new SearchQueryBuilder<Trip>(db.Trips)
 		.WithKey("id", x => x.Id)
