@@ -44,7 +44,7 @@ export default class ProfileComponent {
 
 		//if it begins with these its google auth picture
 		if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
-			return photoUrl;
+			return photoUrl.replace(/=s\d+(-c)?$/, '=s0');
 		}
 
 		//if not, we append the MINIO_ENDPOINT
@@ -75,6 +75,7 @@ export default class ProfileComponent {
 		this.userService.search(searchParams).pipe(takeUntilDestroyed()).subscribe({
 			next: (response) => {
 				const users = response.data?.content ?? [];
+
 
 				if (users.length > 0) {
 					this.visitedUser.set(users[0]);
