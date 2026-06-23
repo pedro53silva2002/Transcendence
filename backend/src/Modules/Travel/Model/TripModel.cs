@@ -186,6 +186,59 @@ public sealed class TripModel(AppDbContext db)
 		});
 		return res;
 	}
+
+	public async Task<CursorPage<TripDto>> GetTripsForUser(int userId, CancellationToken ct = default)
+	{
+		// Get trip ids where the user is a member
+		var tripIds = await db.TripMembers
+			.Where(tm => tm.UserId == userId)
+			.Select(tm => tm.TripId)
+			.Distinct()
+			.ToListAsync(ct);
+
+		if (!tripIds.Any())
+			return new CursorPage<TripDto>(new List<TripDto>(), null, false, 0);
+
+		// Load trips with related country and city data
+		var trips = await db.Trips
+			.Where(t => tripIds.Contains(t.Id))
+			.Include(t => t.TripCountries)
+				.ThenInclude(tc => tc.Country)
+			.Include(t => t.TripCities)
+				.ThenInclude(tc => tc.City)
+			.ToListAsync(ct);
+
+		// Load members for these trips (with user info)
+		var members = await db.TripMembers
+			.Include(tm => tm.User)
+			.Where(tm => tripIds.Contains(tm.TripId))
+			.ToListAsync(ct);
+
+		var dtoList = trips.Select(t =>
+		{
+			var dto = Trip.ToDto(t);
+			var tripMembers = members
+				.Where(tm => tm.TripId == t.Id)
+				.Select(tm => new TripMembersDto
+				{
+					Id = tm.Id,
+					TripId = tm.TripId,
+					UserId = tm.UserId,
+					DisplayName = tm.User?.DisplayName ?? tm.User?.Username ?? string.Empty,
+					Role = tm.Role,
+					JoinedAt = tm.JoinedAt,
+					UpdatedAt = tm.UpdatedAt
+				})
+				.ToList();
+
+			dto.Members = tripMembers;
+			return dto;
+		}).ToList();
+
+		return new CursorPage<TripDto>(dtoList, null, false, dtoList.Count);
+	}
+
+
 	public async Task<TripDto?> UpdateAsync(int userId, int id, UpdateTripDto dto, CancellationToken ct = default)
 	{
 		var query = db.Trips

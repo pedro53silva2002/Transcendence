@@ -9,10 +9,12 @@ using Trippie.Common.Services.Authentication.Security;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Model;
+using Trippie.Modules.Travel.Model;
+using Trippie.Common.Services.Search.Model;
 
 namespace Trippie.Modules.Auth.Service;
 
-public sealed class AuthService(UserService userService, IJwtTokenService jwt, AppDbContext db, IOptions<JwtOptions> jwtOptions)
+public sealed class AuthService(UserService userService, IJwtTokenService jwt, AppDbContext db, IOptions<JwtOptions> jwtOptions, TripModel tripModel)
 {
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
     public async Task<AuthResponseDto> Register(RegisterDto dto, CancellationToken ct = default)
@@ -38,7 +40,19 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
     public async Task<MeDto> GetMe(ClaimsPrincipal principal, CancellationToken ct = default)
     {
         var userId = principal.GetUserId() ?? throw new UnauthorizedException("User not authenticated");
-        var user = await userService.GetById(userId, ct) ?? throw new NotFoundException($"User with id {userId} not found.", userId);
+		var user = await userService.GetById(userId, ct) ?? throw new NotFoundException($"User with id {userId} not found.", userId);
+        var payload = new SearchPayload();
+        var tripsPage = await tripModel.GetTripsForUser(userId, ct);
+
+        var tripMemberships = tripsPage.Content
+		.Select(t => t.Members?.FirstOrDefault(m => m.UserId == userId))
+		.Where(m => m is not null)
+		.Select(m => new TripMembershipDto
+		{
+			TripId = m!.TripId,
+			Role = m!.Role.ToString()
+		})
+		.ToList();
 
         var me = new MeDto
         {
@@ -46,11 +60,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             DisplayName = user.DisplayName,
             Email = user.Email,
             ProfilePhotoUrl = user.ProfilePhotoUrl,
-            Trips = [.. principal.GetTrips().Select(t => new TripMembershipDto
-            {
-                TripId = t.TripId,
-                Role = t.Role
-            })]
+            Trips = tripMemberships
         };
 
         return me;
