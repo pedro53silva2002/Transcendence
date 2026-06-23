@@ -5,7 +5,7 @@ using Trippie.Modules.Travel.Model;
 
 namespace Trippie.Modules.Travel.Service;
 
-public sealed class ItineraryService(ItineraryModel itineraryModel)
+public sealed class ItineraryService(ItineraryModel itineraryModel, TripModel tripModel, TripMembersModel tripMembersModel)
 {
     public async Task<ItineraryDto?> GetById(int id, CancellationToken ct = default)
         => await itineraryModel.GetById(id, ct);
@@ -30,6 +30,15 @@ public sealed class ItineraryService(ItineraryModel itineraryModel)
 
         var itinerary = await itineraryModel.UpdateAsync(userId, id, dto, ct) ?? throw new NotFoundException($"Itinerary {id} not found.", id);
         return itinerary;
+    }
+
+    public async Task<TripTotalPriceDto?> GetTotalPriceAsync(int userId, int tripId, CancellationToken ct = default)
+    {
+        var isMember = await tripMembersModel.IsMemberAsync(userId, tripId, ct);
+        if (!isMember)
+            throw new UnauthorizedAccessException("You are not a member of this trip.");
+
+        return await tripModel.GetTotalPriceAsync(tripId, ct);
     }
 
     public async Task DeleteAsync(int userId, int id, CancellationToken ct = default)

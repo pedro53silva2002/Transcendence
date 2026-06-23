@@ -56,3 +56,9 @@ public sealed class UpdateTripDto
 	public required CountryDto Country { get; set; }
 	public List<CityDto> City { get; set; } = [];
 }
+
+public sealed class TripTotalPriceDto
+{
+    public required int TripId { get; set; }
+    public required int TotalPrice { get; set; }
+}

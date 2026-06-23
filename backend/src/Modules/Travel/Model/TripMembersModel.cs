@@ -228,4 +228,7 @@ public sealed class TripMembersModel(AppDbContext db)
 			return true;
 		}, ct);
 	}
+
+	public async Task<bool> IsMemberAsync(int userId, int tripId, CancellationToken ct = default)
+    	=> await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == tripId && tm.UserId == userId, ct);
 }

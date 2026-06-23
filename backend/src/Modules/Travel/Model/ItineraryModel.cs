@@ -34,11 +34,11 @@ public sealed class Itinerary
     };
 }
 
-public sealed class ItineraryModel(AppDbContext db)
+public sealed class ItineraryModel(AppDbContext db, TripMembersModel tripMembersModel)
 {
     public async Task<ItineraryDto> CreateAsync(int userId, CreateItineraryDto dto, CancellationToken ct = default)
     {
-        var isMember = await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == dto.TripId && tm.UserId == userId, ct);
+        var isMember = await tripMembersModel.IsMemberAsync(userId, dto.TripId, ct);
 
         if (!isMember)
             throw new UnauthorizedAccessException("You are not authorized to create an itinerary for this trip.");
