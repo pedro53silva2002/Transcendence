@@ -58,4 +58,9 @@ export const routes: Routes = [
     loadComponent: () => import('./core/feature/itinerary/itinerary.component'),
     canActivate: [authGuard],
   },
+  {
+    path: 'my-friends',
+    loadComponent: () => import('./core/feature/friendship/friendship.component'),
+    canActivate: [authGuard],
+  },
 ];

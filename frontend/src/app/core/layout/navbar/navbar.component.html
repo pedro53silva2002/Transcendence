@@ -15,7 +15,7 @@
 				<button mat-menu-item routerLink="/profile">Profile</button>
 				<button mat-menu-item routerLink="/plan-a-trip">Plan A Trip</button>
 				<button mat-menu-item routerLink="/my-trip">My Trips</button>
-				<button mat-menu-item routerLink="/friends">Friends</button>
+				<button mat-menu-item routerLink="/my-friends">Friends</button>
 				<button mat-menu-item routerLink="/my-expenses">My Expenses</button>
 			</mat-menu>
 		</div>
@@ -39,7 +39,7 @@
 				 Trips</button>
 			 }
 			 @if (showFriends()) {
-			 <button routerLinkActive="active-link" routerLink="/friends" class="primary-btn"
+			 <button routerLinkActive="active-link" routerLink="/my-friends" class="primary-btn"
 				 matButton="outlined">Friends</button>
 			 }
 			 @if (showMyExpenses()) {

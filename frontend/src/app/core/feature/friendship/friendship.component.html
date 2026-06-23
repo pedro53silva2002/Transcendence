@@ -1,23 +1,96 @@
 <div class="page">
+  <app-navbar
+    [showHome]="true"
+    [showProfile]="true"
+    [showPlanATrip]="true"
+    [showMyTrips]="true"
+    [showFriends]="true"
+    [showMyExpenses]="true"
+    [showSearch]="true"
+    [showLanguageSelector]="true"
+    [showLogout]="true"
+  ></app-navbar>
+
   <div class="main-container">
-    <h1 class="page-title">{{ 'my-trips.title' | transloco }}</h1>
+    <div class="header-row">
+      <h1 class="page-title">My Friends</h1>
+      <div class="header-actions">
+        <div class="search-field">
+          <mat-icon aria-hidden="true">search</mat-icon>
+          <input
+            type="text"
+            placeholder="Friends"
+            [formControl]="searchControl"
+            aria-label="Search friends"
+          />
+        </div>
+        <div class="requests-wrapper">
+          <button
+            class="friend-requests-btn"
+            (click)="showRequests.set(!showRequests())"
+            [attr.aria-expanded]="showRequests()"
+            aria-controls="friend-requests-panel"
+          >
+            Friend Requests
+          </button>
+          @if (pendingCount() > 0) {
+            <span class="count-badge" aria-label="{{ pendingCount() }} pending friend requests">
+              {{ pendingCount() }}
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    @if (showRequests()) {
+      <div id="friend-requests-panel" class="requests-panel" role="region" aria-label="Friend requests">
+        @if (pendingRequests().length === 0) {
+          <p class="requests-empty">No pending friend requests.</p>
+        } @else {
+          <ul class="requests-list">
+            @for (req of pendingRequests(); track req.id) {
+              @if (req.status === 'Pending') {
+                <li class="request-item">
+                  <mat-icon aria-hidden="true">person_add</mat-icon>
+                  <span>Request #{{ req.id }}</span>
+                </li>
+              }
+            }
+          </ul>
+        }
+      </div>
+    }
 
     @if (isLoading()) {
-      <div class="loading-state" role="status" [attr.aria-label]="'my-trips.loading' | transloco">
-        <span class="sr-only">{{ 'my-trips.loading' | transloco }}</span>
+      <div class="loading-state" role="status" aria-label="Loading friends">
+        <app-loading-spinner></app-loading-spinner>
       </div>
-    } @else if (trips().length === 0) {
-      <p class="empty-state">{{ 'my-trips.empty' | transloco }}</p>
+    } @else if (filteredFriends().length === 0) {
+      <p class="empty-state">No friends found.</p>
     } @else {
-      <div class="trips-grid">
-        @for (trip of displayTrips(); track trip.id) {
-          <app-trip-card
-            [trip]="trip"
-            [memberCount]="getMemberCount(trip.id)"
-            [isUpcoming]="trip.id === upcomingTripId()"
-          />
+      <div class="friends-grid">
+        @for (entry of filteredFriends(); track entry.friendshipId) {
+          <div class="friend-card">
+            <div class="avatar">
+              @if (entry.friend.profilePhotoUrl) {
+                <img [src]="entry.friend.profilePhotoUrl" [alt]="entry.friend.username" />
+              } @else {
+                <mat-icon aria-hidden="true">account_circle</mat-icon>
+              }
+            </div>
+            <span class="friend-username">{{ entry.friend.username }}</span>
+            <button
+              class="remove-btn"
+              (click)="removeFriend(entry.friendshipId)"
+              [attr.aria-label]="'Remove ' + entry.friend.username + ' from friends'"
+            >
+              Remove
+            </button>
+          </div>
         }
       </div>
     }
   </div>
+
+  <app-footer></app-footer>
 </div>

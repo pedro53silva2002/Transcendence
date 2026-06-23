@@ -21,5 +21,7 @@ export class FriendRequestService extends BaseApiService {
     return res;
   }
 
-  // FALTA UM GET PARA IR BUSCAR OS PEDIDOS
+  public getAll(): Observable<ApiResponse<FriendRequestDto[]>> {
+    return this._get<FriendRequestDto[]>('/friend-requests');
+  }
 }
