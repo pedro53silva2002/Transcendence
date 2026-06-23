@@ -33,7 +33,6 @@ public sealed class FriendRequestService(FriendRequestModel friendRequestModel)
 			throw new ValidationException("Status", "Only pending friend requests can be accepted.");
 
 		friendRequest.Status = FriendRequestStatus.Accepted;
-		await friendRequestModel.UpdateAsync(friendRequest, ct);
 
 		return friendRequest;
 	}

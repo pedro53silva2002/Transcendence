@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Trippie.Common.Services.Authentication.Context;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Social.Dtos;
+using Trippie.Modules.Social.Model;
 using Trippie.Modules.Social.Service;
 
 namespace Trippie.Modules.Social.Router;
@@ -19,7 +20,7 @@ public sealed class FriendshipRouter(FriendshipService service, IUserContext use
 	public async Task<ActionResult<FriendshipDto>> Create([FromBody] CreateFriendshipDto dto, CancellationToken ct = default)
 	{
 		var userId = userContext.Require().UserId;
-		var friendship = await service.CreateFriendshipAsync(dto, ct);
+		var friendship = await service.CreateFriendshipAsync(userId, dto, ct);
 		return CreatedAtAction(nameof(Create), new { id = friendship.Id }, friendship);
 	}
 
@@ -27,7 +28,7 @@ public sealed class FriendshipRouter(FriendshipService service, IUserContext use
 	public async Task<ActionResult<List<FriendDto>>> GetAllAsync(CancellationToken ct = default)
 	{
 		var userId = userContext.Require().UserId;
-		var friends = await service.GetAllFriendsAsync(userId, ct);
+		var friends = await service.GetAllAsync(userId, ct);
 		return Ok(friends);
 	}
 
@@ -35,7 +36,7 @@ public sealed class FriendshipRouter(FriendshipService service, IUserContext use
 	public async Task<ActionResult<int>> FriendshipCountAsync(CancellationToken ct = default)
 	{
 		var userId = userContext.Require().UserId;
-		var count = await service.GetFriendshipCountAsync(userId, ct);
+		var count = await service.FriendshipCountAsync(userId, ct);
 		return Ok(count);
 	}
 
@@ -43,7 +44,7 @@ public sealed class FriendshipRouter(FriendshipService service, IUserContext use
 	public async Task<ActionResult<FriendshipDto?>> GetById(int id, CancellationToken ct = default)
 	{
 		var userId = userContext.Require().UserId;
-		var friendship = await service.GetFriendshipByIdAsync(id, ct);
+		var friendship = await service.GetById(id, ct);
 		if (friendship == null)
 			return NotFound();
 		return Ok(friendship);

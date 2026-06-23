@@ -43,6 +43,12 @@ public sealed class FriendRequestModel(AppDbContext db)
 		if (existingRequest != null)
 			throw new SearchValidationException("A friend request already exists between these users.");
 
+		var existingFriendship = await db.Friendships
+			.AnyAsync(f => (f.UserId == dto.SenderId && f.FriendId == dto.ReceiverId) ||
+			             (f.UserId == dto.ReceiverId && f.FriendId == dto.SenderId), ct);
+		if (existingFriendship)
+			throw new SearchValidationException("A friendship already exists between these users.");
+
 		var friendRequest = new FriendRequest
 		{
 			Id = 0,
@@ -90,7 +96,7 @@ public sealed class FriendRequestModel(AppDbContext db)
 		return FriendRequest.ToDto(friendRequest);
 	}
 
-	public async Task<FriendRequestDto> AcceptAsync(int id, CancellationToken ct = default)
+	public async Task AcceptAsync(int id, CancellationToken ct = default)
 	{
 		var friendRequest = await db.FriendRequests
 			.FirstOrDefaultAsync(fr => fr.Id == id, ct);
@@ -100,8 +106,6 @@ public sealed class FriendRequestModel(AppDbContext db)
 
 		if (friendRequest.Status != FriendRequestStatus.Pending)
 			throw new SearchValidationException("Only pending friend requests can be accepted.");
-
-		UpdateAsync(friendRequest, ct).Wait();
 
 		friendRequest.Status = FriendRequestStatus.Accepted;
 		friendRequest.UpdatedAt = DateTime.UtcNow;
@@ -115,12 +119,6 @@ public sealed class FriendRequestModel(AppDbContext db)
 		};
 
 		await db.SaveChangesAsync(ct);
-
-		return FriendRequest.ToDto(friendRequest);
-	}
-
-	public async Task<FriendRequestDto> UpdateAsync(FriendRequest friendRequest, CancellationToken ct = default)
-	{//TODO
 	}
 
 	public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)

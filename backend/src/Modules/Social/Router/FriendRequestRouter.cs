@@ -7,6 +7,7 @@ using Trippie.Modules.Social.Dtos;
 using Trippie.Modules.Social.Service;
 using Trippie.Common.Services.Authentication.Context;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
+using Trippie.Modules.Social.Model;
 
 namespace Trippie.Modules.Social.Service;
 
@@ -39,7 +40,7 @@ public sealed class FriendRequestRouter(FriendRequestService friendRequestServic
 		if (friendRequest == null)
 			return NotFound();
 		
-		var friendshipDto = await friendRequestService.CreateFriendshipAsync(friendRequest, ct);
+		var friendshipDto = await new FriendshipService(new FriendshipModel(db)).CreateFriendshipAsync(callerId, friendRequest, ct);
 		return Ok(friendshipDto);
 	}
 
@@ -48,7 +49,7 @@ public sealed class FriendRequestRouter(FriendRequestService friendRequestServic
 	{
 		var callerId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
 
-		var success = await friendRequestService.DeleteAsync(callerId, id, ct);
+		var success = await new FriendshipService(new FriendshipModel(db)).DeleteAsync(callerId, id, ct);
 		if (!success)
 			return NotFound();
 

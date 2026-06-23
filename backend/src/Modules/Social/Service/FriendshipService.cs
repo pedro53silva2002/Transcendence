@@ -2,18 +2,18 @@ using Trippie.Modules.Social.Model;
 using Trippie.Modules.Social.Dtos;
 
 
-namespace Trippie.Modules.Social.Model;
+namespace Trippie.Modules.Social.Service;
 
 public sealed class FriendshipService(FriendshipModel friendshipModel)
 {
-	public async Task<FriendshipDto> CreateFriendshipAsync(CreateFriendshipDto dto, CancellationToken ct = default)
+	public async Task<FriendshipDto> CreateFriendshipAsync(int myId, CreateFriendshipDto dto, CancellationToken ct = default)
 	{
-		if (dto.UserId1 == dto.UserId2)
+		if (dto.FriendId == myId)
 			throw new ArgumentException("Cannot create friendship with the same user.");
-		if (dto.UserId1 <= 0 || dto.UserId2 <= 0)
+		if (myId <= 0 || dto.FriendId <= 0)
 			throw new ArgumentException("User IDs must be greater than zero.");
 		
-		var friendship = await friendshipModel.CreateAsync(dto, ct);
+		var friendship = await friendshipModel.CreateAsync(myId, dto, ct);
 		return friendship;
 	}
 

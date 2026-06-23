@@ -2,6 +2,7 @@ using NpgsqlTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Text.Json.Serialization;
+using Trippie.Modules.Social.Model;
 
 namespace Trippie.Modules.Social.Config;
 
@@ -10,8 +11,6 @@ public enum FriendRequestStatus
 {
 	[PgName("pending")] Pending,
 	[PgName("accepted")] Accepted,
-	[PgName("rejected")] Rejected,
-	[PgName("canceled")] Canceled,
 }
 
 internal sealed class FriendRequestConfiguration : IEntityTypeConfiguration<FriendRequest>
@@ -30,8 +29,18 @@ internal sealed class FriendRequestConfiguration : IEntityTypeConfiguration<Frie
 
 		fr.HasIndex(fr => new { fr.SenderId, fr.ReceiverId }).IsUnique();
 		fr.HasIndex(fr => fr.ReceiverId).HasDatabaseName("social_friend_requests_i_receiver").HasFilter("status = 'pending'");
-		fr.HasOne(fr => fr.Sender).WithMany().HasForeignKey(fr => fr.SenderId).HasConstraintName("social_friend_requests_sender").OnDelete(DeleteBehavior.Cascade);
-		fr.HasOne(fr => fr.Receiver).WithMany().HasForeignKey(fr => fr.ReceiverId).HasConstraintName("social_friend_requests_receiver").OnDelete(DeleteBehavior.Cascade);
+
+		fr.HasMany(fr => fr.SenderId)
+			.WithMany()
+			.HasForeignKey(fr => fr.SenderId)
+			.HasConstraintName("social_friend_requests_sender")
+			.OnDelete(DeleteBehavior.Cascade);
+
+		fr.HasMany(fr => fr.ReceiverId)
+			.WithMany()
+			.HasForeignKey(fr => fr.ReceiverId)
+			.HasConstraintName("social_friend_requests_receiver")
+			.OnDelete(DeleteBehavior.Cascade);
 		fr.ToTable(t => t.HasCheckConstraint("social_friend_requests_c_self_request", "sender_id <> receiver_id"));
 	}
 }
