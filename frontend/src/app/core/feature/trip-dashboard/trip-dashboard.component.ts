@@ -34,6 +34,7 @@ export class TripDashboardComponent implements OnInit {
 	public authService = inject(SessionService);
 
 	public isAdmin = signal(false);
+	protected totalItineraryPrice = signal<number | null>(0);
 
 	//Verify if state service is empty. If so, make the request to backend to fill the data.
 	ngOnInit(): void {
@@ -60,6 +61,10 @@ export class TripDashboardComponent implements OnInit {
 				console.log('as minhas trips: ', this.authService.me()?.trips);
 			}
 		});
+	}
+
+	public onPriceChange(newTotal: number | null): void {
+		this.totalItineraryPrice.set(newTotal);
 	}
 
 	deleteTrip(): void {

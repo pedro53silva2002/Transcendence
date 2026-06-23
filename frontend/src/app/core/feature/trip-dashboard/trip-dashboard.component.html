@@ -18,7 +18,7 @@
 					<div class="budget-base"></div>
 					<div class="budget-bar"></div>
 					<div class="budget-numbers">
-						<p class="spent">2</p>
+						<p class="spent">{{ totalItineraryPrice() ?? 0 }}</p>
 						<p class="budget">/{{ tripStateService.trip()?.budget }}</p>
 						<p class="money-symbol">€</p>
 					</div>
@@ -42,7 +42,7 @@
 	</div>
 
 	<div class="cards">
-		<app-itinerary></app-itinerary>
+		<app-itinerary (totalPriceChanged)="onPriceChange($event)"></app-itinerary>
 		<app-member-form [columns]="1" [compact]="true" [tripId]="tripStateService.trip()?.id ?? null" [showAddButton]="false"></app-member-form>
 		<!-- container expenses (vai ter agora um container existente só para efeitos de mockup)-->
 		<app-itinerary></app-itinerary>

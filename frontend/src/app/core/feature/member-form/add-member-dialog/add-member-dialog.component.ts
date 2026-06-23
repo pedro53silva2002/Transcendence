@@ -11,7 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
-import { TripMemberService } from '../../service/trip/member.service';
+import { TripMemberService } from '../services/member.service';
 import { UserService } from '../../auth/services/user.service';
 import { UserDto } from '../../auth/dtos/user.dto';
 import { TripMemberDto } from '../../itinerary/dtos/member.dto';
