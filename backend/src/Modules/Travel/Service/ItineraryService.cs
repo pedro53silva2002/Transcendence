@@ -5,7 +5,7 @@ using Trippie.Modules.Travel.Model;
 
 namespace Trippie.Modules.Travel.Service;
 
-public sealed class ItineraryService(ItineraryModel itineraryModel)
+public sealed class ItineraryService(ItineraryModel itineraryModel, TripModel tripModel, TripMembersModel tripMembersModel)
 {
     public async Task<ItineraryDto?> GetById(int id, CancellationToken ct = default)
         => await itineraryModel.GetById(id, ct);

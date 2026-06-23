@@ -34,7 +34,7 @@ public sealed class Itinerary
     };
 }
 
-public sealed class ItineraryModel(AppDbContext db)
+public sealed class ItineraryModel(AppDbContext db, TripMembersModel tripMembersModel)
 {
     public async Task<ItineraryDto> CreateAsync(int userId, CreateItineraryDto dto, CancellationToken ct = default)
     {
