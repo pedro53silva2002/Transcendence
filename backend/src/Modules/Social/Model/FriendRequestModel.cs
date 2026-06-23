@@ -32,18 +32,12 @@ public sealed class FriendRequest
 
 public sealed class FriendRequestModel(AppDbContext db)
 {
-	public async Task<FriendRequestDto> CreateAsync(int senderId, int receiverId, CancellationToken ct = default)
+	public async Task<FriendRequestDto> CreateAsync(CreateFriendRequestDto dto, CancellationToken ct = default)
 	{
-		if (senderId <= 0 || receiverId <= 0)
-			throw new SearchValidationException("Sender ID and Receiver ID must be greater than zero.");
-
-		if (senderId == receiverId)
-			throw new SearchValidationException("Sender ID and Receiver ID cannot be the same.");
-
 		var existingRequest = await db.FriendRequests
 			.FirstOrDefaultAsync(fr =>
-				(fr.SenderId == senderId && fr.ReceiverId == receiverId) ||
-				(fr.SenderId == receiverId && fr.ReceiverId == senderId),
+				(fr.SenderId == dto.SenderId && fr.ReceiverId == dto.ReceiverId) ||
+				(fr.SenderId == dto.ReceiverId && fr.ReceiverId == dto.SenderId),
 				ct);
 
 		if (existingRequest != null)
@@ -52,8 +46,8 @@ public sealed class FriendRequestModel(AppDbContext db)
 		var friendRequest = new FriendRequest
 		{
 			Id = 0,
-			SenderId = senderId,
-			ReceiverId = receiverId,
+			SenderId = dto.SenderId,
+			ReceiverId = dto.ReceiverId,
 			Status = FriendRequestStatus.Pending,
 		};
 
@@ -73,4 +67,66 @@ public sealed class FriendRequestModel(AppDbContext db)
 
 		return FriendRequest.ToDto(friendRequest);
 	}
+
+	public async Task<FriendRequestDto?> GetBySenderIdAsync(int id, CancellationToken ct = default)
+	{
+		var friendRequest = await db.FriendRequests
+			.FirstOrDefaultAsync(fr => fr.SenderId == id && fr.Status == FriendRequestStatus.Pending, ct);
+
+		if (friendRequest is null)
+			return null;
+
+		return FriendRequest.ToDto(friendRequest);
+	}
+
+	public async Task<FriendRequestDto?> GetByIdAsync(int id, CancellationToken ct = default)
+	{
+		var friendRequest = await db.FriendRequests
+			.FirstOrDefaultAsync(fr => fr.Id == id, ct);
+
+		if (friendRequest is null)
+			return null;
+
+		return FriendRequest.ToDto(friendRequest);
+	}
+
+	public async Task<FriendRequestDto> AcceptAsync(int id, CancellationToken ct = default)
+	{
+		var friendRequest = await db.FriendRequests
+			.FirstOrDefaultAsync(fr => fr.Id == id, ct);
+
+		if (friendRequest is null)
+			throw new NotFoundException("FriendRequest.Not.Found","Friend request not found.");
+
+		if (friendRequest.Status != FriendRequestStatus.Pending)
+			throw new SearchValidationException("Only pending friend requests can be accepted.");
+
+		UpdateAsync(friendRequest, ct).Wait();
+
+		friendRequest.Status = FriendRequestStatus.Accepted;
+		friendRequest.UpdatedAt = DateTime.UtcNow;
+
+		var friendshipdto = new FriendshipDto
+		{
+			Id = 0,
+			UserId1 = friendRequest.SenderId,
+			UserId2 = friendRequest.ReceiverId,
+			CreatedAt = DateTime.UtcNow
+		};
+
+		await db.SaveChangesAsync(ct);
+
+		return FriendRequest.ToDto(friendRequest);
+	}
+
+	public async Task<FriendRequestDto> UpdateAsync(FriendRequest friendRequest, CancellationToken ct = default)
+	{//TODO
+	}
+
+	public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
+	{
+		var rows = await db.FriendRequests.Where(fr => fr.Id == id).ExecuteDeleteAsync(ct);
+		return rows > 0;
+	}
+	
 }
