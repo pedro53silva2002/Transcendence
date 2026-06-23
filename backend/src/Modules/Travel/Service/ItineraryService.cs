@@ -32,6 +32,15 @@ public sealed class ItineraryService(ItineraryModel itineraryModel)
         return itinerary;
     }
 
+    public async Task<TripTotalPriceDto?> GetTotalPriceAsync(int userId, int tripId, CancellationToken ct = default)
+    {
+        var isMember = await tripMembersModel.IsMemberAsync(userId, tripId, ct);
+        if (!isMember)
+            throw new UnauthorizedAccessException("You are not a member of this trip.");
+
+        return await tripModel.GetTotalPriceAsync(tripId, ct);
+    }
+
     public async Task DeleteAsync(int userId, int id, CancellationToken ct = default)
     {
         var deleted = await itineraryModel.DeleteAsync(userId, id, ct);

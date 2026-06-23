@@ -253,6 +253,22 @@ public sealed class TripModel(AppDbContext db)
 		return Trip.ToDto(trip);
 	}
 
+	public async Task<TripTotalPriceDto?> GetTotalPriceAsync(int tripId, CancellationToken ct = default)
+	{
+		var tripExists = await db.Trips.AnyAsync(t => t.Id == tripId, ct);
+		if (!tripExists) return null;
+
+		var totalPrice = await db.Itineraries
+			.Where(i => i.TripId == tripId)
+			.SumAsync(i => i.ExpectedPrice, ct);
+
+		return new TripTotalPriceDto
+		{
+			TripId = tripId,
+			TotalPrice = totalPrice
+		};
+	}
+
 	public async Task<bool> DeleteAsync(int userId, int id, CancellationToken ct = default)
 	{
 
