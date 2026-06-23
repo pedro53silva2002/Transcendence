@@ -137,7 +137,6 @@ export default class ItineraryComponent {
 					});
 
 					this.totalPrice.update(costSum => (costSum ?? 0) + (res.data?.expectedPrice ?? 0));
-					console.log('new totalPrice: ', this.totalPrice());
 				}
 			});
 	}
@@ -156,7 +155,6 @@ export default class ItineraryComponent {
 				//subtracts the removed item from the totalPrice
 				if (deletingItem?.expectedPrice) {
 					this.totalPrice.update(costSum => (costSum ?? 0) - deletingItem.expectedPrice);
-					console.log('new totalPrice: ', this.totalPrice());
 				}
 			});
 	}
