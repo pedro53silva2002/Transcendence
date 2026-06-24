@@ -3,9 +3,9 @@ import { CityDto } from './city.dto';
 import { CountryDto } from './country.dto';
 
 export enum TripVisibility {
-  Private = 0,
-  Public = 1,
-  FriendsOnly = 2,
+  Private = 'Private',
+  Public = 'Public',
+  FriendsOnly = 'Friends',
 }
 
 //what i send in http post request to create a trip

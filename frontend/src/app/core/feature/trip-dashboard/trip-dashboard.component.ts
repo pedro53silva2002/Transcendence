@@ -33,11 +33,10 @@ export class TripDashboardComponent implements OnInit {
 	private activatedRoute = inject(ActivatedRoute);
 	public authService = inject(SessionService);
 
-	public isAdmin = signal(false);
 	protected totalItineraryPrice = signal<number>(0);
 	protected totalBudget = signal<number>(0);
 
-	protected budgetPercentage = computed (() => {
+	protected budgetPercentage = computed(() => {
 		const total = this.totalItineraryPrice();
 		const max = this.totalBudget();
 
@@ -48,6 +47,17 @@ export class TripDashboardComponent implements OnInit {
 		return Math.min(percentage, 100); //prevents the bar from passing the 100%
 	});
 
+	public isAdmin = computed(() => {
+		const user = this.authService.me();
+		const id = this.tripStateService.trip()?.id;
+
+		if (!user || !id)
+			return false;
+
+		const currentTrip = user.trips.find(trip => trip.tripId === id);
+		return currentTrip?.role.toUpperCase() === 'ADMIN';
+	});
+
 	//Verify if state service is empty. If so, make the request to backend to fill the data.
 	ngOnInit(): void {
 		const idParam = this.activatedRoute.snapshot.paramMap.get('id');
@@ -56,15 +66,14 @@ export class TripDashboardComponent implements OnInit {
 
 		if (this.tripStateService.trip()?.id === id) {
 			this.totalBudget.set(this.tripStateService.trip()?.budget ?? 0);
-			return;
+		} else {
+			this.tripService.getById(id).subscribe({
+				next: (response) => {
+					if (response.data) this.tripStateService.setTrip(response.data);
+					this.totalBudget.set(response.data?.budget ?? 0);
+				},
+			});
 		}
-
-		this.tripService.getById(id).subscribe({
-			next: (response) => {
-				if (response.data) this.tripStateService.setTrip(response.data);
-				this.totalBudget.set(response.data?.budget ?? 0);
-			},
-		});
 
 		//update the session
 		this.authService.loadMe().subscribe();

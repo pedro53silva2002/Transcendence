@@ -159,7 +159,16 @@ export class TripFormComponent implements OnInit {
 		return country && country.name ? country.name : '';
 	}
 
+	public updateFormFields(cities: CityDto[], visibility: TripVisibility, countryId?: number | null): void {
+		this.selectedCities.set(cities ?? []);
+		if (countryId) {
+			this.selectedCountryId.set(countryId);
+		}
 
+		if (visibility !== undefined) {
+			this.visibility.setValue(visibility, { emitEvent: false });
+		}
+	}
 
 	get tripName() { return this.tripGroup().controls['tripName']; }
 	get startDate() { return this.tripGroup().controls['startDate']; }

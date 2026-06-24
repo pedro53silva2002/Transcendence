@@ -124,7 +124,6 @@ export default class ItineraryComponent {
 
 		effect(() => {
 			this.totalPriceChanged.emit(this.totalPrice());
-			console.log('total price itinerary component constructor: ', this.totalPrice());
 		});
 	}
 
