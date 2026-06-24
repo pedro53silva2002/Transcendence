@@ -42,10 +42,10 @@
 	</div>
 
 	<div class="cards">
-		<app-itinerary (totalPriceChanged)="onPriceChange($event)"></app-itinerary>
-		<app-member-form [columns]="1" [compact]="true" [tripId]="tripStateService.trip()?.id ?? null" [showAddButton]="false"></app-member-form>
+		<app-itinerary [isAdmin]="isAdmin()" (totalPriceChanged)="onPriceChange($event)"></app-itinerary>
+		<app-member-form [isAdmin]="isAdmin()" [columns]="1" [compact]="true" [tripId]="tripStateService.trip()?.id ?? null" [showAddButton]="false"></app-member-form>
 		<!-- container expenses (vai ter agora um container existente só para efeitos de mockup)-->
-		<app-itinerary></app-itinerary>
+		<app-itinerary [isAdmin]="isAdmin()"></app-itinerary>
 	</div>
 
 	@if (isAdmin()) {

@@ -7,6 +7,7 @@ import {
 	viewChild,
 	output,
 	effect,
+	input,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -40,6 +41,8 @@ export default class ItineraryComponent {
 
 	protected totalPrice = signal<number>(0);
 	public totalPriceChanged = output<number>(); //the channel to send the totalPrice to the main component
+
+	public isAdmin = input.required<boolean>();
 
 	readonly tripId = toSignal(
 		inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('id')))),
