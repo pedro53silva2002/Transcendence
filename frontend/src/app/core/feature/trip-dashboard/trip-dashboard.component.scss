@@ -75,6 +75,7 @@
 
 .budget-base,
 .budget-bar,
+.budget-fullbar,
 .budget-numbers {
 	grid-area: stack;
 }
@@ -93,6 +94,11 @@
 	border-radius: 25px;
 }
 
+.budget-fullbar {
+	background-color: var(--mat-sys-error);
+	border-radius: 25px;
+}
+
 .budget-numbers {
 	font-family: "BBH Bogle";
 	z-index: 2;
@@ -101,6 +107,7 @@
 	justify-content: flex-end;
 	margin-right: 15px;
 }
+
 
 .spent {
 	color: color-mix(in srgb, var(--mat-sys-on-primary) 80%, transparent) !important;

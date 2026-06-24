@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { TripStateService } from '../plan-a-trip/services/trip-state.service';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
@@ -34,37 +34,54 @@ export class TripDashboardComponent implements OnInit {
 	public authService = inject(SessionService);
 
 	public isAdmin = signal(false);
-	protected totalItineraryPrice = signal<number | null>(0);
+	protected totalItineraryPrice = signal<number>(0);
+	protected totalBudget = signal<number>(0);
+
+	protected budgetPercentage = computed (() => {
+		const total = this.totalItineraryPrice();
+		const max = this.totalBudget();
+
+		if (max <= 0)
+			return 0;
+
+		const percentage = (total / max) * 100;
+		return Math.min(percentage, 100); //prevents the bar from passing the 100%
+	});
 
 	//Verify if state service is empty. If so, make the request to backend to fill the data.
 	ngOnInit(): void {
-
-
 		const idParam = this.activatedRoute.snapshot.paramMap.get('id');
 		if (!idParam) return;
 		const id = Number(idParam);
 
-		if (this.tripStateService.trip()?.id === id) return;
+		if (this.tripStateService.trip()?.id === id) {
+			this.totalBudget.set(this.tripStateService.trip()?.budget ?? 0);
+			return;
+		}
 
 		this.tripService.getById(id).subscribe({
 			next: (response) => {
 				if (response.data) this.tripStateService.setTrip(response.data);
+				this.totalBudget.set(response.data?.budget ?? 0);
 			},
 		});
 
 		//update the session
-		this.authService.loadMe().subscribe({
-			next: (success) => {
-				console.log('eu sou: ', this.authService.me()?.username);
-				console.log('me role: ', this.authService.me()?.trips.find(trip => trip.tripId === id)?.role);
-				console.log('trip id: ', this.authService.me()?.trips.find(trip => trip.tripId === id));
-				console.log('as minhas trips: ', this.authService.me()?.trips);
-			}
-		});
+		this.authService.loadMe().subscribe();
 	}
 
+	protected progressBarClass = computed(() => {
+		const percentage = this.budgetPercentage();
+
+		if (percentage === 100) {
+			return 'budget-fullbar';
+		}
+
+		return 'budget-bar';
+	})
+
 	public onPriceChange(newTotal: number | null): void {
-		this.totalItineraryPrice.set(newTotal);
+		this.totalItineraryPrice.set(newTotal ?? 0);
 	}
 
 	deleteTrip(): void {

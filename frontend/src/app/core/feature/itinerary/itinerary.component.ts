@@ -38,8 +38,8 @@ export default class ItineraryComponent {
 	private readonly tripService = inject(TripService);
 	private readonly formBuilder = inject(FormBuilder);
 
-	protected totalPrice = signal<number | null>(null);
-	public totalPriceChanged = output<number | null>(); //the channel to send the totalPrice to the main component
+	protected totalPrice = signal<number>(0);
+	public totalPriceChanged = output<number>(); //the channel to send the totalPrice to the main component
 
 	readonly tripId = toSignal(
 		inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('id')))),
@@ -89,6 +89,15 @@ export default class ItineraryComponent {
 		day: this.currentDay(),
 	}));
 
+	private readonly initialTotalPrice = toSignal(
+		toObservable(this.tripId).pipe(
+			filter((id) => id > 0),
+			switchMap((id) => this.itineraryService.getTotalPrice(id)),
+			map((res) => res.data?.totalPrice ?? 0)
+		),
+		{ initialValue: 0 }
+	);
+
 	// I needed to put this on constructor because if I do it onInit, it won't update.
 	// I tried to work with ngOnInit, but did not get lucky with that.
 	constructor() {
@@ -105,10 +114,17 @@ export default class ItineraryComponent {
 					}),
 				),
 			)
-			.subscribe((res) => this.items.set(res.data?.content ?? []));
+			.subscribe((res) => {
+				this.items.set(res.data?.content ?? [])
+			});
+
+		effect(() => {
+			this.totalPrice.set(this.initialTotalPrice());
+		})
 
 		effect(() => {
 			this.totalPriceChanged.emit(this.totalPrice());
+			console.log('total price itinerary component constructor: ', this.totalPrice());
 		});
 	}
 
@@ -154,7 +170,11 @@ export default class ItineraryComponent {
 
 				//subtracts the removed item from the totalPrice
 				if (deletingItem?.expectedPrice) {
-					this.totalPrice.update(costSum => (costSum ?? 0) - deletingItem.expectedPrice);
+					const newTotal = (this.totalPrice() ?? 0) - deletingItem.expectedPrice;
+					if (newTotal <= 0)
+						this.totalPrice.set(0);
+					else
+						this.totalPrice.update(costSum => (costSum ?? 0) - deletingItem.expectedPrice);
 				}
 			});
 	}
