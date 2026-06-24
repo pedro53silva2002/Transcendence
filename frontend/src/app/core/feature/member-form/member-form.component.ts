@@ -55,7 +55,7 @@ export class MemberFormComponent {
 	public readonly members = this.tripState.members;
 	protected readonly loading = signal(false);
 
-	public isAdmin = input.required<boolean>();
+	public isAdmin = input<boolean>();
 
 	constructor() {
 
