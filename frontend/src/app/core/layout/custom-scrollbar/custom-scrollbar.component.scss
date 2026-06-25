@@ -1,0 +1,46 @@
+:host {
+  display: flex;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+.scrollbar-viewport {
+  flex: 1;
+  overflow-y: scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.scrollbar-track {
+  position: relative;
+  width: 3px;
+  margin: 0 6px;
+  border-radius: 0;
+  background-color: color-mix(in srgb, var(--mat-sys-on-primary) 20%, transparent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.scrollbar-thumb {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  min-height: 24px;
+  border-radius: 2px;
+  background-color: color-mix(in srgb, var(--mat-sys-on-primary) 70%, transparent);
+  transition: background-color 0.15s ease;
+  cursor: grab;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--mat-sys-on-primary) 90%, transparent);
+  }
+
+  &:active {
+    background-color: var(--mat-sys-on-primary-container);
+    cursor: grabbing;
+  }
+}

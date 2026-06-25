@@ -22,7 +22,12 @@ public sealed class CreateTripDto
 	public required int Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required CountryDto Country { get; set; }
+<<<<<<< HEAD
 	public List<CityDto> City { get; set; } = [];	 
+=======
+	public List<CityDto> City { get; set; } = [];
+	public required CreateTripMembersDto Members { get; set; }
+>>>>>>> feature/trips
 }
 
 public sealed class TripDto
@@ -40,6 +45,10 @@ public sealed class TripDto
 	public DateTime? UpdatedAt { get; set; }
 	public required CountryDto Country { get; set; }
 	public List<CityDto> City { get; set; } = [];
+<<<<<<< HEAD
+=======
+	public List<TripMembersDto>? Members { get; set; }
+>>>>>>> feature/trips
 }
 
 public sealed class UpdateTripDto
@@ -54,3 +63,12 @@ public sealed class UpdateTripDto
 	public required CountryDto Country { get; set; }
 	public List<CityDto> City { get; set; } = [];
 }
+<<<<<<< HEAD
+=======
+
+public sealed class TripTotalPriceDto
+{
+    public required int TripId { get; set; }
+    public required int TotalPrice { get; set; }
+}
+>>>>>>> feature/trips

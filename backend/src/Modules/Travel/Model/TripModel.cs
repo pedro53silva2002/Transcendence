@@ -9,7 +9,11 @@ using Trippie.Modules.Auth.Model;
 
 namespace Trippie.Modules.Travel.Model;
 
+<<<<<<< HEAD
 public sealed class Trip(AppDbContext db)
+=======
+public sealed class Trip()
+>>>>>>> feature/trips
 {
 	public required int Id { get; set; }
 	public required string TripName { get; set; }
@@ -25,6 +29,10 @@ public sealed class Trip(AppDbContext db)
 
 	public TripCountry? TripCountries { get; set; }
 	public ICollection<TripCity> TripCities { get; set; } = [];
+<<<<<<< HEAD
+=======
+	public IReadOnlyList<TripMembersDto> Members { get; set; } = [];
+>>>>>>> feature/trips
 	public static TripDto ToDto(Trip t)
 	{
 		return new()
@@ -63,6 +71,10 @@ public sealed class Trip(AppDbContext db)
 				Name = tc.City.Name,
 				CountryId = tc.City.CountryId
 			}).ToList(),
+<<<<<<< HEAD
+=======
+			Members = t.Members.ToList() ?? [],
+>>>>>>> feature/trips
 		};
 	}
 }
@@ -71,12 +83,20 @@ public sealed class TripModel(AppDbContext db)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
+<<<<<<< HEAD
 		var trip = new Trip(db)
+=======
+		var trip = new Trip()
+>>>>>>> feature/trips
 		{
 			Id = 0,
 			TripName = dto.TripName,
 			Description = dto.Description,
+<<<<<<< HEAD
 			Duration = (dto.EndDate - dto.StartDate).Days + 1,
+=======
+			Duration = (dto.EndDate - dto.StartDate).Days,
+>>>>>>> feature/trips
 			StartDate = dto.StartDate,
 			EndDate = dto.EndDate,
 			Budget = dto.Budget == 0 ? 0 : dto.Budget, // --- IGNORE ---
@@ -113,6 +133,10 @@ public sealed class TripModel(AppDbContext db)
 
 		var country = db.TripCountries.Include(tc => tc.Country);
 		var cities = db.TripCities.Include(tc => tc.City);
+<<<<<<< HEAD
+=======
+		var members = db.TripMembers.Include(tm => tm.TripId);
+>>>>>>> feature/trips
 
 		var res = await new SearchQueryBuilder<Trip>(db.Trips)
 		.WithKey("id", x => x.Id)
@@ -170,6 +194,19 @@ public sealed class TripModel(AppDbContext db)
 				Name = tc.City.Name,
 				CountryId = tc.City.CountryId
 			}).ToList();
+<<<<<<< HEAD
+=======
+
+			var tripMembers = members.Where(tm => tm.TripId == trip.Id).ToList();
+			trip.Members = [.. tripMembers.Select(tm => new TripMembersDto
+			{
+				Id = tm.Id,
+				TripId = tm.TripId,
+				UserId = tm.UserId,
+				DisplayName = tm.User?.DisplayName ?? tm.User?.Username ?? string.Empty,
+				Role = tm.Role
+			})];
+>>>>>>> feature/trips
 		});
 		return res;
 	}
@@ -181,19 +218,34 @@ public sealed class TripModel(AppDbContext db)
 		var trip = await query.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return null;
 
+<<<<<<< HEAD
 		// if (db.Set<TripMember>().AnyAsync(tm => tm.TripId == trip.Id
 		//     && tm.UserId == userId
 		//     && tm.Role != MemberRole.Admin))
 		// {
 		//     throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
 		// }
+=======
+		var isAdmin = await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == trip.Id
+		    && tm.UserId == userId
+		    && tm.Role == TripMemberRole.Admin, ct);
+
+		if (!isAdmin)
+		{
+		    throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
+		}
+>>>>>>> feature/trips
 
 		if (dto.TripName is not null) trip.TripName = dto.TripName;
 		if (dto.Visibility != trip.Visibility) trip.Visibility = dto.Visibility;
 		if (dto.Description is not null) trip.Description = dto.Description;
 		if (dto.StartDate != trip.StartDate) trip.StartDate = dto.StartDate;
 		if (dto.EndDate != trip.EndDate) trip.EndDate = dto.EndDate;
+<<<<<<< HEAD
 		if (((dto.EndDate - dto.StartDate).Days + 1) != trip.Duration) trip.Duration = (dto.EndDate - dto.StartDate).Days + 1;
+=======
+		if ((dto.EndDate - dto.StartDate).Days != trip.Duration) trip.Duration = (dto.EndDate - dto.StartDate).Days;
+>>>>>>> feature/trips
 		if (dto.Budget is not 0) trip.Budget = dto.Budget;
 		trip.UpdatedAt = DateTime.UtcNow;
 
@@ -238,11 +290,31 @@ public sealed class TripModel(AppDbContext db)
 		return Trip.ToDto(trip);
 	}
 
+<<<<<<< HEAD
+=======
+	public async Task<TripTotalPriceDto?> GetTotalPriceAsync(int tripId, CancellationToken ct = default)
+	{
+		var tripExists = await db.Trips.AnyAsync(t => t.Id == tripId, ct);
+		if (!tripExists) return null;
+
+		var totalPrice = await db.Itineraries
+			.Where(i => i.TripId == tripId)
+			.SumAsync(i => i.ExpectedPrice, ct);
+
+		return new TripTotalPriceDto
+		{
+			TripId = tripId,
+			TotalPrice = totalPrice
+		};
+	}
+
+>>>>>>> feature/trips
 	public async Task<bool> DeleteAsync(int userId, int id, CancellationToken ct = default)
 	{
 
 		var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return false;
+<<<<<<< HEAD
 		// Only allow deletion if user is creator of trip
 		// var deleted = await db.Trip.Where(i => i.Id == id
 		//     && (db.Set<TripMember>().AnyAsync(tm => tm.TripId == i.TripId
@@ -250,6 +322,18 @@ public sealed class TripModel(AppDbContext db)
 		//             && tm.Role == MemberRole.Admin)
 		//     */))
 		//     .ExecuteDeleteAsync(ct); apagar a debaixo depois de descomentar isto
+=======
+
+		var isAdmin = await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == trip.Id
+		    && tm.UserId == userId
+		    && tm.Role == TripMemberRole.Admin, ct);
+
+		if (!isAdmin)
+		{
+		    throw new UnauthorizedAccessException("You are not authorized to delete this Trip.");
+		}
+
+>>>>>>> feature/trips
 		var rows = await db.Trips.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
 		return rows > 0;
 	}
