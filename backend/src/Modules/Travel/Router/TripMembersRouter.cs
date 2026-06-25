@@ -28,7 +28,7 @@ public sealed class TripMembersRouter(TripMembersService tripMembersService, IUs
 		var callerId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
 
 		var createdMembers = await tripMembersService.CreateAsync(callerId, dto, ct);
-		return CreatedAtAction(nameof(CreateAsync), new { Id = createdMembers.Select(m => m.Id) }, createdMembers);
+		return Ok(createdMembers);
 	}
 
 	[HttpGet("search")]
