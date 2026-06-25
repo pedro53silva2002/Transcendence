@@ -25,7 +25,26 @@ export class UserService extends BaseApiService {
 
   //ver o endpoint do backend
   public update(dto: UpdateUserDto): Observable<ApiResponse<UserDto>> {
-	return this._put<UserDto>(`/users`, dto);
+
+    const formData = new FormData();
+
+    formData.append('Email', dto.email);
+    formData.append('Username', dto.username);
+    formData.append('DisplayName', dto.displayName);
+
+    if (dto.bio) {
+      formData.append('Bio', dto.bio);
+    }
+
+    if (dto.password) {
+      formData.append('Password', dto.password);
+    }
+
+    if (dto.profilePhotoUrl instanceof File) {
+      formData.append('ProfilePhotoUrl', dto.profilePhotoUrl, dto.profilePhotoUrl.name);
+    }
+
+    return this._put<UserDto>(`/users`, formData as any);
   }
 
   public delete(): Observable<ApiResponse<void>> {
