@@ -72,12 +72,35 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
 		Console.WriteLine($"Username: {dto.Username}");
 		Console.WriteLine($"ProfilePhotoUrl: {dto.ProfilePhotoUrl}");
 		Console.WriteLine($"ProfilePhotoPath: {dto.ProfilePhotoPath}");
-		if (dto.ProfilePhotoUrl != null)
+		
+        if (dto.ProfilePhotoUrl != null)
 		{
-			var found = await minioClient.FileExistsAsync("profile-photos", dto.ProfilePhotoUrl);
-			if (found)
-				await minioClient.DeleteFileAsync("profile-photos", dto.ProfilePhotoUrl);
-			dto.ProfilePhotoPath = await minioClient.UploadFileAsync("profile-photos", $"{dto.Username}_{Guid.NewGuid()}", dto.ProfilePhotoUrl.OpenReadStream(),  dto.ProfilePhotoUrl.ContentType);
+			const string bucketName = "profile-photos";
+
+        // 1. Procuramos o user atual para saber o nome do ficheiro antigo que está no MinIO
+        var currentUser = await userModel.GetById(id, ct);
+        
+        if (currentUser is not null && !string.IsNullOrWhiteSpace(currentUser.ProfilePhotoUrl))
+        {
+            // Extrai o nome real do ficheiro antigo (ex: nome_guid.jpg)
+            var oldFileName = currentUser.ProfilePhotoUrl.Split('/').Last();
+
+            // Verifica se o ficheiro antigo existe e apaga-o para não deixar lixo no MinIO
+            var found = await minioClient.FileExistsAsync(bucketName, oldFileName);
+            if (found)
+            {
+                await minioClient.DeleteFileAsync(bucketName, oldFileName);
+            }
+        }
+
+        // 2. Faz o upload do NOVO ficheiro enviado pelo Frontend
+        var newFileName = $"{dto.Username}_{Guid.NewGuid()}";
+        dto.ProfilePhotoPath = await minioClient.UploadFileAsync(
+            bucketName, 
+            newFileName, 
+            dto.ProfilePhotoUrl.OpenReadStream(),  
+            dto.ProfilePhotoUrl.ContentType
+        );
 		}
         var user = await userModel.UpdateAsync(id, dto, ct) ?? throw new NotFoundException($"User {id} not found.", id);
     
@@ -170,25 +193,32 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
+{
+    // 1. Procura o utilizador
+    var user = await userModel.GetById(id, ct);
+    if (user is null) throw new NotFoundException($"User {id} not found.", id);
+
+    // 2. Se o utilizador tiver foto de perfil, trata da remoção no MinIO
+    if (!string.IsNullOrWhiteSpace(user.ProfilePhotoUrl))
     {
-		var user = await userModel.GetById(id, ct);
-		if (user is null) throw new NotFoundException($"User {id} not found.", id);
-		if (user.ProfilePhotoUrl is not null)
-		{
-			var photoURL = minioClient.GetObjectAsync("profile-photos", user.ProfilePhotoUrl).GetAwaiter().GetResult();
-			var found = await minioClient.FileExistsAsync("profile-photos", photoURL);
-			if (found)
-			{
-				if (user.ProfilePhotoUrl is not null)
-				{
-					var path_url = user.ProfilePhotoUrl.Split('/');
-					await minioClient.DeleteFileAsync(path_url[1], photoURL);
-				}
-			}
-		}
-        var deleted = await userModel.DeleteAsync(id, ct);
-        if (!deleted) throw new NotFoundException($"User {id} not found for deleting.", id);
+        const string bucketName = "profile-photos";
+        
+        // Extrai apenas o nome do ficheiro (ex: mjbalouta_e8ccd763-947b...)
+        var fileName = user.ProfilePhotoUrl.Split('/').Last();
+
+        // 🌟 Verifica se o ficheiro existe usando a string do nome
+        var found = await minioClient.FileExistsAsync(bucketName, fileName);
+        if (found)
+        {
+            // 🌟 Apaga o ficheiro diretamente usando o await correto
+            await minioClient.DeleteFileAsync(bucketName, fileName);
+        }
     }
+
+    // 3. Apaga o utilizador da Base de Dados
+    var deleted = await userModel.DeleteAsync(id, ct);
+    if (!deleted) throw new NotFoundException($"User {id} not found for deleting.", id);
+}
 
     public async Task<string?> GetPasswordByUsername(string username, CancellationToken ct = default)
     {

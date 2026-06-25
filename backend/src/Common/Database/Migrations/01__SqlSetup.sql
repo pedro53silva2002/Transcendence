@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS "travel"."trips" (
     "updated_at" TIMESTAMPTZ
 );
 
-ALTER TABLE "travel"."trips" ADD CONSTRAINT "travel_trips_fk_created_by" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id") ON DELETE RESTRICT;
+ALTER TABLE "travel"."trips" ADD CONSTRAINT "travel_trips_fk_created_by" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
 ALTER TABLE "travel"."trips" ADD CONSTRAINT "travel_trips_c_dates" CHECK ("end_date" >= "start_date");
 ALTER TABLE "travel"."trips" ADD CONSTRAINT "travel_trips_c_budget" CHECK ("budget" IS NULL OR "budget" >= 0);
 
@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS "travel"."trip_members" (
 );
 
 ALTER TABLE "travel"."trip_members" ADD CONSTRAINT "travel_trip_members_fk_trip" FOREIGN KEY ("trip_id") REFERENCES "travel"."trips"("id") ON DELETE CASCADE;
-ALTER TABLE "travel"."trip_members" ADD CONSTRAINT "travel_trip_members_fk_user" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE RESTRICT;
+ALTER TABLE "travel"."trip_members" ADD CONSTRAINT "travel_trip_members_fk_user" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
 ALTER TABLE "travel"."trip_members" ADD CONSTRAINT "travel_trip_members_u_trip_user" UNIQUE ("trip_id", "user_id");
 
 CREATE TABLE IF NOT EXISTS "travel"."itineraries" (
@@ -239,7 +239,7 @@ CREATE TABLE IF NOT EXISTS "travel"."itineraries" (
 );
 
 ALTER TABLE "travel"."itineraries" ADD CONSTRAINT "travel_itineraries_fk_trip" FOREIGN KEY ("trip_id") REFERENCES "travel"."trips"("id") ON DELETE CASCADE;
-ALTER TABLE "travel"."itineraries" ADD CONSTRAINT "travel_itineraries_fk_created_by" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id") ON DELETE RESTRICT;
+ALTER TABLE "travel"."itineraries" ADD CONSTRAINT "travel_itineraries_fk_created_by" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
 ALTER TABLE "travel"."itineraries" ADD CONSTRAINT "travel_itineraries_c_day" CHECK ("day" >= 1);
 
 CREATE TABLE IF NOT EXISTS "travel"."expenses" (
@@ -255,7 +255,7 @@ CREATE TABLE IF NOT EXISTS "travel"."expenses" (
 );
 
 ALTER TABLE "travel"."expenses" ADD CONSTRAINT "travel_expenses_fk_trip" FOREIGN KEY ("trip_id") REFERENCES "travel"."trips"("id") ON DELETE CASCADE;
-ALTER TABLE "travel"."expenses" ADD CONSTRAINT "travel_expenses_fk_paid_by" FOREIGN KEY ("paid_by") REFERENCES "auth"."users"("id") ON DELETE RESTRICT;
+ALTER TABLE "travel"."expenses" ADD CONSTRAINT "travel_expenses_fk_paid_by" FOREIGN KEY ("paid_by") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
 ALTER TABLE "travel"."expenses" ADD CONSTRAINT "travel_expenses_c_amount" CHECK ("amount" > 0);
 
 CREATE TABLE IF NOT EXISTS "travel"."expense_participants" (
@@ -267,7 +267,7 @@ CREATE TABLE IF NOT EXISTS "travel"."expense_participants" (
 );
 
 ALTER TABLE "travel"."expense_participants" ADD CONSTRAINT "travel_expense_participants_fk_expense" FOREIGN KEY ("expense_id") REFERENCES "travel"."expenses"("id") ON DELETE CASCADE;
-ALTER TABLE "travel"."expense_participants" ADD CONSTRAINT "travel_expense_participants_fk_user" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE RESTRICT;
+ALTER TABLE "travel"."expense_participants" ADD CONSTRAINT "travel_expense_participants_fk_user" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
 ALTER TABLE "travel"."expense_participants" ADD CONSTRAINT "travel_expense_participants_c_amount" CHECK ("amount_owed" > 0);
 
 CREATE TABLE IF NOT EXISTS "auth"."refresh_tokens" (

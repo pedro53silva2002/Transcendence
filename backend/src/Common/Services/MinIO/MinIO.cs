@@ -15,8 +15,8 @@ public interface IMinIOService
 {
 	Task<string> UploadFileAsync(string bucketName, string objectName, Stream fileStream, string contentType);
 	Task<Stream> DownloadFileAsync(string bucketName, string objectName);
-	Task DeleteFileAsync(string bucketName, IFormFile objectName);
-	Task<bool> FileExistsAsync(string bucketName, IFormFile objectName);
+	Task DeleteFileAsync(string bucketName, string objectName);
+	Task<bool> FileExistsAsync(string bucketName, string objectName);
 	Task CreateBucketAsync(string bucketName);
 	Task<string> GetObjectUrl(string bucketName, string objectName);
 	Task <IFormFile> GetObjectAsync(string bucketName, string objectName);
@@ -89,27 +89,32 @@ public class MinIOService : IMinIOService
         return memoryStream;
     }
 
-    public async Task<bool> FileExistsAsync(string bucketName, IFormFile objectName)
+  public async Task<bool> FileExistsAsync(string bucketName, string objectName)
+{
+    try
     {
-        try
-        {
-            await _minioClient.StatObjectAsync(new StatObjectArgs()
-                .WithBucket(bucketName)
-                .WithObject(objectName.FileName));
+        // Limpa o path se vier com barras (ex: profile-photos/mjbalouta_xxx)
+        var cleanObjectName = objectName.Contains('/') ? objectName.Split('/').Last() : objectName;
 
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
+        await _minioClient.StatObjectAsync(new StatObjectArgs()
+            .WithBucket(bucketName)
+            .WithObject(cleanObjectName)); // 🌟 CORREÇÃO: Deixa apenas cleanObjectName (remove o .FileName daqui!)
+
+        return true;
     }
+    catch
+    {
+        return false;
+    }
+}
 
-	public async Task DeleteFileAsync(string bucketName, IFormFile objectName)
+	public async Task DeleteFileAsync(string bucketName, string objectName)
 	{
+        var cleanObjectName = objectName.Contains('/') ? objectName.Split('/').Last() : objectName;
+
 		await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
 			.WithBucket(bucketName)
-			.WithObject(objectName.FileName));
+			.WithObject(cleanObjectName));
 	}
 
 	public async Task CreateBucketAsync(string bucketName)

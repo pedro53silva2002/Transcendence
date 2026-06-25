@@ -54,7 +54,7 @@ public sealed class UserRouter(UserService service, IUserContext userContext) : 
     }
 
     [HttpPut]
-    public async Task<ActionResult<UserDto>> Update([FromBody] UpdateUserDto dto, CancellationToken ct)
+    public async Task<ActionResult<UserDto>> Update([FromForm] UpdateUserDto dto, CancellationToken ct)
     {
         var user = await service.UpdateAsync(userContext.UserId ?? throw new UnauthorizedException("User not authenticated."), dto, ct);
         return Ok(user);
