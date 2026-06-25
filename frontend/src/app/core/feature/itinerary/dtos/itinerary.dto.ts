@@ -26,4 +26,8 @@ export type ItinerarySearchFieldsDto = {
   createdBy: number;
 };
 
+export interface TripTotalPriceDto {
+	totalPrice: number;
+}
+
 export type ItineraryOrderByDto = 'id' | 'tripId' | 'title' | 'expectedPrice' | 'day' | 'createdBy';

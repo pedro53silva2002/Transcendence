@@ -1,6 +1,7 @@
 import { UserDto } from './user.dto';
 
 export interface MeDto {
+  id: number;
   username: string;
   displayName: string;
   email: string;

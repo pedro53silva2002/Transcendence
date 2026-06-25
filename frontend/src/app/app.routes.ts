@@ -8,6 +8,7 @@ import { AppLayoutComponent } from './core/layout/app-layout/app-layout.componen
 import { PlanATripComponent } from './core/feature/plan-a-trip/plan-a-trip.component';
 import { TripDashboardComponent } from './core/feature/trip-dashboard/trip-dashboard.component';
 import { MyTripsComponent } from './core/feature/my-trips/my-trips.component';
+import { tripMemberGuard } from './core/feature/trip-dashboard/guards/trip-member-guard';
 
 export const routes: Routes = [
   {
@@ -26,14 +27,14 @@ export const routes: Routes = [
   {
     path: 'home',
     component: UserDashboardComponent, //o componente que tem a nav-bar e router-outlet para navegar pelas páginas do site
-    // canActivate: [guestGuard],
+    canActivate: [authGuard],
   },
 
   //all other pages
   {
     path: '',
     component: AppLayoutComponent,
-    // canActivate: [guestGuard],
+    canActivate: [authGuard],
     children: [
       // {
       // 	path: 'profile',
@@ -51,16 +52,12 @@ export const routes: Routes = [
       {
         path: 'trip-dashboard/:id',
         component: TripDashboardComponent,
+        canActivate: [tripMemberGuard],
       },
       {
         path: 'my-trips',
         component: MyTripsComponent,
       },
     ],
-  },
-  {
-    path: 'itinerary/:tripId',
-    loadComponent: () => import('./core/feature/itinerary/itinerary.component'),
-    canActivate: [authGuard],
   },
 ];

@@ -26,7 +26,6 @@ public sealed class TripRouter(TripService service, IUserContext userContext) : 
 	{
 		
 		var userId = userContext.Require().UserId;
-
 		var trip = await service.CreateAsync(dto, userId, ct);
 		return CreatedAtAction(nameof(Create), trip);
 	}
@@ -52,7 +51,6 @@ public sealed class TripRouter(TripService service, IUserContext userContext) : 
 	public async Task<ActionResult<TripDto>> Update(int id, [FromBody]UpdateTripDto dto, CancellationToken ct)
 	{
 		var userId = userContext.Require().UserId;
-
 		var trip = await service.UpdateAsync(userId, id, dto, ct);
 		return Ok(trip);
 	}
@@ -61,7 +59,6 @@ public sealed class TripRouter(TripService service, IUserContext userContext) : 
 	public async Task<ActionResult<TripDto>> Delete(int id, CancellationToken ct)
 	{
 		var userId = userContext.Require().UserId;
-
 		await service.DeleteAsync(userId, id, ct);
 		return NoContent();
 	}

@@ -69,9 +69,34 @@
     "budget-error": "A budget is required.",
     "budget-numbers-error": "A budget can only contain numbers."
   },
+  "trip-dashboard": {
+    "delete-trip-title": "Are you sure?",
+    "delete-trip-message": "If you confirm this decision, you will delete everything about this trip.",
+    "city": "city",
+    "privacy-text": "Would you like to allow friends/public to view your trip?",
+    "private-option": "private",
+    "friends-option": "friends",
+    "public-option": "public",
+    "create-trip": "Create Trip",
+    "update-trip": "Update Trip",
+    "name-error": "The trip's name is required.",
+    "name-min-length-error": "The trip's name must be at least 3 characters long.",
+    "name-max-length-error": "The trip's name can't be more than 25 characters long.",
+    "date-error": "Selecting the start and end dates for your trip is required.",
+    "description-max-length-error": "The trip's description can't be more than 256 characters long.",
+    "country-error": "A country's selection is required.",
+    "country-string-error": "Please select a valid country.",
+    "city-string-error": "Please select a valid city.",
+    "trip-budget": "budget (€)",
+    "budget-error": "A budget is required.",
+    "budget-numbers-error": "A budget can only contain numbers.",
+    "crew-title": "Crew",
+    "delete-trip-btn": "Delete Trip",
+    "edit-trip-btn": "Edit Trip Details"
+  },
   "trips": {
     "members": {
-      "title": "Trip Members",
+      "title": "Choose Your Crew",
       "addMember": "Add Member",
       "noMembers": "No trip members",
       "role": {
@@ -115,5 +140,13 @@
         "descriptionMaxLength": "Description cannot exceed 30 characters"
       }
     }
+  },
+  "crew": {
+    "addMember": "Add Member",
+    "allFriendsAdded": "All your friends have been added to the crew."
+  },
+  "popup": {
+    "cancel-btn": "Cancel",
+    "confirm-btn": "Confirm"
   }
 }
