@@ -90,7 +90,9 @@
     "trip-budget": "budget (€)",
     "budget-error": "A budget is required.",
     "budget-numbers-error": "A budget can only contain numbers.",
-	"crew-title": "Crew"
+    "crew-title": "Crew",
+    "delete-trip-btn": "Delete Trip",
+    "edit-trip-btn": "Edit Trip Details"
   },
   "trips": {
     "members": {
@@ -134,5 +136,9 @@
   "crew": {
     "addMember": "Add Member",
     "allFriendsAdded": "All your friends have been added to the crew."
+  },
+  "popup": {
+    "cancel-btn": "Cancel",
+    "confirm-btn": "Confirm"
   }
 }

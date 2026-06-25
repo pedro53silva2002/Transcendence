@@ -50,9 +50,8 @@
 
 	@if (isAdmin()) {
 		<div class="management-buttons">
-			<button class="tertiary-btn" matButton [routerLink]="['/plan-a-trip/edit', tripStateService.trip()?.id]">Edit
-				Trip Details</button>
-			<button class="tertiary-btn" (click)="deleteTrip()" matButton>Delete Trip</button>
+			<button class="tertiary-btn" matButton [routerLink]="['/plan-a-trip/edit', tripStateService.trip()?.id]">{{ 'trip-dashboard.edit-trip-btn' | transloco }}</button>
+			<button class="tertiary-btn" (click)="deleteTrip()" matButton>{{ 'trip-dashboard.delete-trip-btn' | transloco }}</button>
 		</div>
 	}
 </div>

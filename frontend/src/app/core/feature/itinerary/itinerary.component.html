@@ -34,13 +34,15 @@
               </div>
               <div class="row-end">
                 <span class="row-cost">{{ item.expectedPrice }}€</span>
-                <button
-                  class="del-btn"
-                  (click)="removeItem(item.id)"
-                  [attr.aria-label]="'itinerary.remove' | transloco: { title: item.title }"
-                >
-                  <mat-icon class="add-remove">close</mat-icon>
-                </button>
+                <!-- so aparece para o admin ou para o autor desta entrada -->
+                 @if (isAdmin() || loggedUserId === item.createdBy) {
+                   <button
+                     class="del-btn"
+                     (click)="removeItem(item.id)"
+                     [attr.aria-label]="'itinerary.remove' | transloco: { title: item.title }">
+                     <mat-icon class="add-remove">close</mat-icon>
+                   </button>
+                 }
               </div>
             </li>
           }

@@ -20,6 +20,8 @@ import { TripService } from '../plan-a-trip/services/trip.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatError } from '@angular/material/form-field';
 import { TranslocoModule } from '@jsverse/transloco';
+import { SessionService } from '../../logic/services/session.service';
+import { MeDto } from '../auth/dtos/auth.dto';
 
 @Component({
 	selector: 'app-itinerary',
@@ -38,11 +40,14 @@ export default class ItineraryComponent {
 	private readonly itineraryService = inject(ItineraryService);
 	private readonly tripService = inject(TripService);
 	private readonly formBuilder = inject(FormBuilder);
+	private readonly authService = inject(SessionService);
 
 	protected totalPrice = signal<number>(0);
 	public totalPriceChanged = output<number>(); //the channel to send the totalPrice to the main component
 
 	public isAdmin = input.required<boolean>();
+
+	protected loggedUserId = this.authService?.me()?.id;
 
 	readonly tripId = toSignal(
 		inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('id')))),

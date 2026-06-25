@@ -186,11 +186,6 @@ app-custom-scrollbar {
 		transform 0.15s,
 		color 0.15s;
 
-	&:hover {
-		color: var(--mat-sys-on-primary-container);
-		transform: scale(1.2) rotate(90deg);
-	}
-
 	svg {
 		width: 15px;
 		height: 15px;
