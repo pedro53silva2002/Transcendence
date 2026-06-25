@@ -78,7 +78,7 @@ public sealed class TripModel(AppDbContext db)
 			Id = 0,
 			TripName = dto.TripName,
 			Description = dto.Description,
-			Duration = (dto.EndDate - dto.StartDate).Days + 1,
+			Duration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1,
 			StartDate = dto.StartDate,
 			EndDate = dto.EndDate,
 			Budget = dto.Budget == 0 ? 0 : dto.Budget, // --- IGNORE ---
@@ -261,7 +261,8 @@ public sealed class TripModel(AppDbContext db)
 		if (dto.Description is not null) trip.Description = dto.Description;
 		if (dto.StartDate != trip.StartDate) trip.StartDate = dto.StartDate;
 		if (dto.EndDate != trip.EndDate) trip.EndDate = dto.EndDate;
-		if ((dto.EndDate - dto.StartDate).Days + 1 != trip.Duration) trip.Duration = (dto.EndDate - dto.StartDate).Days;
+		var calculatedDuration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
+		if (calculatedDuration != trip.Duration) trip.Duration = calculatedDuration;
 		if (dto.Budget is not 0) trip.Budget = dto.Budget;
 		trip.UpdatedAt = DateTime.UtcNow;
 
