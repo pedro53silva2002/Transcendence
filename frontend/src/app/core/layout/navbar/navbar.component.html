@@ -49,13 +49,20 @@
 		</div>
 		@if (showSearch()) {
 		<mat-form-field appearance="outline" class="search">
-			<mat-icon matPrefix>search</mat-icon>
-			<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users" />
-			<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel">
+			<mat-icon class="search-icon" matPrefix>search</mat-icon>
+			<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users" (focus)="clearOnFocus()" />
+			<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel" (optionSelected)="goToProfile($event)">
 				@for (user of filteredUsers | async; track user) {
 				<mat-option [value]="user">
-					<div>
-						<span>{{user.displayName}}</span>
+					<div class="search-results">
+						<div class="avatar">
+							@if (user.profilePhotoUrl) {
+								<img referrerpolicy="no-referrer" [src]="getUserAvatarUrl(user.profilePhotoUrl)" alt="avatar" class="avatar-img">
+							} @else {
+								<mat-icon class="avatar-icon">person</mat-icon>
+							}
+						</div>
+						<span class="username">{{user.displayName}}</span>
 					</div>
 				</mat-option>
 				}

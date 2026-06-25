@@ -72,7 +72,7 @@ export default class ProfileComponent {
 			pageSize: 1
 		};
 
-		this.userService.search(searchParams).pipe(takeUntilDestroyed()).subscribe({
+		this.userService.search(searchParams).subscribe({
 			next: (response) => {
 				const users = response.data?.content ?? [];
 
