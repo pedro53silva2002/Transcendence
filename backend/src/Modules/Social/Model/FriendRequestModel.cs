@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Trippie.Modules.Social.Config;
 using Trippie.Modules.Social.Dtos;
 using Trippie.Common.Database;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
+
 using Trippie.Common.Services.Search.Exception;
 using Trippie.Common.Services.Search.Linq;
 using Trippie.Common.Services.Search.Model;
@@ -15,7 +17,7 @@ public sealed class FriendRequest
 	public required int Id { get; set; }
 	public required int SenderId { get; set; }
 	public required int ReceiverId { get; set; }
-	public required FriendRequestStatus Status { get; set; }
+	public required FriendRequestStatus Status { get; set; } = FriendRequestStatus.Pending;
 	public DateTime CreatedAt { get; set; }
 	public DateTime? UpdatedAt { get; set; }
 
@@ -32,57 +34,72 @@ public sealed class FriendRequest
 
 public sealed class FriendRequestModel(AppDbContext db)
 {
-	public async Task<FriendRequestDto> CreateAsync(CreateFriendRequestDto dto, CancellationToken ct = default)
+	public async Task<FriendRequestDto> CreateAsync(
+		int senderId, int receiverId,CancellationToken ct = default)
 	{
-		var existingRequest = await db.FriendRequests
-			.FirstOrDefaultAsync(fr =>
-				(fr.SenderId == dto.SenderId && fr.ReceiverId == dto.ReceiverId) ||
-				(fr.SenderId == dto.ReceiverId && fr.ReceiverId == dto.SenderId),
-				ct);
+		var sameDuplicate = await db.FriendRequests
+			.AsNoTracking()
+			.AnyAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId, ct);
 
-		if (existingRequest != null)
-			throw new SearchValidationException("A friend request already exists between these users.");
+		if (sameDuplicate)
+			throw new ValidationException("FriendRequest.Duplicate", "A friend request already exists between these users.");
 
 		var existingFriendship = await db.Friendships
-			.AnyAsync(f => (f.UserId == dto.SenderId && f.FriendId == dto.ReceiverId) ||
-			             (f.UserId == dto.ReceiverId && f.FriendId == dto.SenderId), ct);
-		if (existingFriendship)
-			throw new SearchValidationException("A friendship already exists between these users.");
+			.AsNoTracking()
+			.AnyAsync(f =>
+				(f.UserId == senderId && f.FriendId == receiverId) ||
+			    (f.UserId == receiverId && f.FriendId == senderId), ct);
 
-		var friendRequest = new FriendRequest
+		if (existingFriendship)
+			throw new ValidationException("Friendship.Exists", "A friendship already exists between these users.");
+
+		var request = new FriendRequest
 		{
 			Id = 0,
-			SenderId = dto.SenderId,
-			ReceiverId = dto.ReceiverId,
+			SenderId = senderId,
+			ReceiverId = receiverId,
 			Status = FriendRequestStatus.Pending,
+			CreatedAt = DateTime.UtcNow,
 		};
 
-		db.FriendRequests.Add(friendRequest);
-		await db.SaveChangesAsync(ct);
+		db.FriendRequests.Add(request);
 
-		return FriendRequest.ToDto(friendRequest);
+		try
+		{
+			await db.SaveChangesAsync(ct);
+		}
+		catch (DbUpdateException ex) when (IsUniqueViolation(ex))
+		{
+			throw new ValidationException("FriendRequest.Duplicate", "A friend request already exists between these users.");
+		}
+
+		return FriendRequest.ToDto(request);
 	}
 
-	public async Task<FriendRequestDto?> GetByReceiverIdAsync(int id, CancellationToken ct = default)
+	public async Task<FriendRequest?> GetPendingFromAsync(
+		int senderId, int receiverId, CancellationToken ct = default)
 	{
-		var friendRequest = await db.FriendRequests
-			.FirstOrDefaultAsync(fr => fr.ReceiverId == id && fr.Status == FriendRequestStatus.Pending, ct);
-
-		if (friendRequest is null)
-			return null;
-
-		return FriendRequest.ToDto(friendRequest);
+		return await db.FriendRequests
+			.AsNoTracking()
+			.FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId, ct);
 	}
 
-	public async Task<FriendRequestDto?> GetBySenderIdAsync(int id, CancellationToken ct = default)
+	public async Task<List<FriendRequestDto>> GetReceivedAsync(int id, CancellationToken ct = default)
 	{
-		var friendRequest = await db.FriendRequests
-			.FirstOrDefaultAsync(fr => fr.SenderId == id && fr.Status == FriendRequestStatus.Pending, ct);
+		return await db.FriendRequests
+			.AsNoTracking()
+			.Where(fr => fr.ReceiverId == id)
+			.Select(fr => FriendRequest.ToDto(fr))
+			.ToListAsync(ct);
+	}
 
-		if (friendRequest is null)
-			return null;
-
-		return FriendRequest.ToDto(friendRequest);
+	public async Task<List<FriendRequestDto>> GetSentAsync(int senderId, CancellationToken ct = default)
+	{
+		return await db.FriendRequests
+			.AsNoTracking()
+			.Where(fr => fr.SenderId == senderId)
+			.Select(fr => FriendRequest.ToDto(fr))
+			.ToListAsync(ct);
 	}
 
 	public async Task<FriendRequestDto?> GetByIdAsync(int id, CancellationToken ct = default)
@@ -96,35 +113,15 @@ public sealed class FriendRequestModel(AppDbContext db)
 		return FriendRequest.ToDto(friendRequest);
 	}
 
-	public async Task AcceptAsync(int id, CancellationToken ct = default)
-	{
-		var friendRequest = await db.FriendRequests
-			.FirstOrDefaultAsync(fr => fr.Id == id, ct);
-
-		if (friendRequest is null)
-			throw new NotFoundException("FriendRequest.Not.Found","Friend request not found.");
-
-		if (friendRequest.Status != FriendRequestStatus.Pending)
-			throw new SearchValidationException("Only pending friend requests can be accepted.");
-
-		friendRequest.Status = FriendRequestStatus.Accepted;
-		friendRequest.UpdatedAt = DateTime.UtcNow;
-
-		var friendshipdto = new FriendshipDto
-		{
-			Id = 0,
-			UserId1 = friendRequest.SenderId,
-			UserId2 = friendRequest.ReceiverId,
-			CreatedAt = DateTime.UtcNow
-		};
-
-		await db.SaveChangesAsync(ct);
-	}
-
 	public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
 	{
-		var rows = await db.FriendRequests.Where(fr => fr.Id == id).ExecuteDeleteAsync(ct);
+		var rows = await db.FriendRequests
+			.Where(fr => fr.Id == id).ExecuteDeleteAsync(ct);
+
 		return rows > 0;
 	}
-	
+
+	//to deal with race conditions where two friend requests are sent at the same time, we check for unique constraint violation
+	private static bool IsUniqueViolation(DbUpdateException ex)
+		=> ex.InnerException is PostgresException pg && pg.SqlState == "23505";
 }

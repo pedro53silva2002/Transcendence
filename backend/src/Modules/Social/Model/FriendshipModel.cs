@@ -1,9 +1,7 @@
-using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
 using Trippie.Modules.Social.Config;
 using Trippie.Modules.Social.Dtos;
-using Trippie.Modules.Social.Model;
 
 namespace Trippie.Modules.Social.Model;
 
@@ -14,70 +12,68 @@ public sealed class Friendship()
 	public required int FriendId { get; set; }
 	public DateTime CreatedAt { get; set; }
 
-	public static FriendshipDto ToDto(Friendship friendship) => new()
+	public static FriendshipDto ToDto(Friendship f) => new()
 	{
-		Id = friendship.Id,
-		FriendId = friendship.FriendId,
-		CreatedAt = friendship.CreatedAt,
+		Id = f.Id,
+		UserId = f.UserId,
+		FriendId = f.FriendId,
+		CreatedAt = f.CreatedAt,
 	};
 }
 
 public sealed class FriendshipModel(AppDbContext db)
 {
-	public async Task<FriendshipDto> CreateAsync(int myId, CreateFriendshipDto dto, CancellationToken ct = default)
+	//Are all this verifications necessary?
+	public async Task<FriendshipDto> CreateAsync(int senderId, int receiverId, CancellationToken ct = default)
 	{
+		var now = DateTime.UtcNow;
+
 		var existingFriendship = await db.Friendships.AnyAsync(
-		    f => (f.UserId == myId && f.FriendId == dto.FriendId) ||
-		         (f.UserId == dto.FriendId && f.FriendId == myId),
+		    f => (f.UserId == senderId && f.FriendId == receiverId) ||
+		         (f.UserId == receiverId && f.FriendId == senderId),
 		    ct);
 
 		if (existingFriendship)
 		    throw new InvalidOperationException("Friendship already exists between these users.");
 
 		var request = await db.FriendRequests.FirstOrDefaultAsync(
-			fr => (fr.SenderId == myId && fr.ReceiverId == dto.FriendId) ||
-				  (fr.SenderId == dto.FriendId && fr.ReceiverId == myId), ct);
+			fr => (fr.SenderId == senderId && fr.ReceiverId == receiverId) ||
+				  (fr.SenderId == receiverId && fr.ReceiverId == senderId), ct);
 
 		if (request == null)
 			throw new InvalidOperationException("No friend request exists between these users.");
-		if (request.Status != FriendRequestStatus.Pending)
-			throw new InvalidOperationException("Friend request is not pending.");
 
-		var friendship = new Friendship()
+		var f = new Friendship()
 		{
 			Id = 0,
-			UserId = myId,
-			FriendId = dto.FriendId,
-			CreatedAt = DateTime.UtcNow,
+			UserId = senderId,
+			FriendId = receiverId,
+			CreatedAt = now,
 		};
-		var friendship2 = new Friendship()
+		var f2 = new Friendship()
 		{
 			Id = 0,
-			UserId = dto.FriendId,
-			FriendId = myId,
-			CreatedAt = DateTime.UtcNow,
+			UserId = receiverId,
+			FriendId = senderId,
+			CreatedAt = now,
 		};
 
-		db.Friendships.Add(friendship);
-		db.Friendships.Add(friendship2);
-
-		if (await db.SaveChangesAsync(ct) == 0)
-			throw new InvalidOperationException("Failed to create friendship.");
-
-		if (request.Status == FriendRequestStatus.Accepted)
-			await new FriendRequestModel(db).DeleteAsync(request.Id, ct);
+		db.Friendships.AddRange(f, f2);
 
 		await db.SaveChangesAsync(ct);
 
-		return Friendship.ToDto(friendship);
+		// we only return one of the friendships, as they are essentially duplicates 
+		// and this friendship derives from the receiver's prespective 
+		// since they are the one accepting the request
+		return Friendship.ToDto(f2);
 	}
 
-	public async Task<List<FriendDto>> GetAllAsync(int myId, CancellationToken ct = default)
+	public async Task<List<FriendDto>> GetAllAsync(int userId, CancellationToken ct = default)
 	{
 		return await (
-    		from f in db.Friendships
-    		where f.UserId == myId
-    		join u in db.Users on f.FriendId equals u.Id
+    		from f in db.Friendships.AsNoTracking()
+    		where f.UserId == userId
+    		join u in db.Users.AsNoTracking() on f.FriendId equals u.Id
     		select new FriendDto
     		{
     		    FriendId = u.Id,
@@ -87,24 +83,35 @@ public sealed class FriendshipModel(AppDbContext db)
     		.ToListAsync(ct);
 	}
 
-	public async Task<int> FriendshipCountAsync(int myId, CancellationToken ct = default)
+	public async Task<int> FriendshipCountAsync(int userId, CancellationToken ct = default)
 	{
-		return await db.Friendships.CountAsync(
-			f => f.UserId == myId, ct);
+		return await db.Friendships
+			.AsNoTracking()
+			.CountAsync(f => f.UserId == userId, ct);
 	}
 
-	public async Task<FriendshipDto?> GetById(int id, CancellationToken ct = default)
+	public async Task<FriendshipDto?> GetById(int id, int userId, CancellationToken ct = default)
 	{
-		var friendship = await db.Friendships.FirstOrDefaultAsync(f => f.Id == id, ct);
-		return friendship == null ? null : Friendship.ToDto(friendship);
+		var friendship = await db.Friendships
+		.AsNoTracking()
+		.FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId, ct);
+
+		return friendship is null ? null : Friendship.ToDto(friendship);
 	}
 
-	public async Task<bool> DeleteAsync(int myId, int friendId, CancellationToken ct = default)
+	public async Task<bool> DeleteAsync(int id, int userId, CancellationToken ct = default)
 	{
+		var friendship = await db.Friendships
+			.AsNoTracking()
+			.FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId, ct);
+
+		if (friendship is null)
+			return false;
+
 		var deleted = await db.Friendships
         	.Where(f =>
-        	    (f.UserId == myId && f.FriendId == friendId) ||
-        	    (f.UserId == friendId && f.FriendId == myId))
+        	    (f.UserId == userId && f.FriendId == friendship.FriendId) ||
+        	    (f.UserId == friendship.FriendId && f.FriendId == userId))
         	.ExecuteDeleteAsync(ct);
 
     	return deleted == 2;
