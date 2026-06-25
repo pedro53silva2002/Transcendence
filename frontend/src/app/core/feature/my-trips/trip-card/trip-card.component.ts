@@ -1,9 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { DatePipe, UpperCasePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { TripDto } from '../../plan-a-trip/dtos/trip.dto';
 import { UtripBubbleComponent } from '../utrip-bubble/utrip-bubble.component';
+import { TripService } from '../../plan-a-trip/services/trip.service';
+import { catchError, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-trip-card',
@@ -12,11 +22,13 @@ import { UtripBubbleComponent } from '../utrip-bubble/utrip-bubble.component';
   templateUrl: './trip-card.component.html',
   styleUrl: './trip-card.component.scss',
 })
-export class TripCardComponent {
+export class TripCardComponent implements OnInit {
+  private readonly tripService = inject(TripService);
+
   trip = input.required<TripDto>();
-  memberCount = input<number>(0);
   /* Set by the parent; only one card in the list is the upcoming trip. */
   isUpcoming = input<boolean>(false);
+  readonly memberCount = signal<number>(0);
 
   readonly destination = computed(() => {
     const t = this.trip();
@@ -25,6 +37,16 @@ export class TripCardComponent {
   });
 
   readonly imagePath = computed(() => getSeasonImage(this.trip().startDate));
+
+  ngOnInit(): void {
+    this.tripService
+      .getById(this.trip().id)
+      .pipe(
+        map((response) => response.data?.members?.length ?? 0),
+        catchError(() => of(0)),
+      )
+      .subscribe((count) => this.memberCount.set(count));
+  }
 }
 
 function getSeasonImage(startDate: string): string {

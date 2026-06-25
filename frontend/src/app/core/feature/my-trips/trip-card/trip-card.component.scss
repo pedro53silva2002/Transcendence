@@ -8,7 +8,7 @@
      be clipped. The image is clipped by the inner .card instead. */
 
   &:focus-visible .card {
-    outline: 3px solid var(--mat-sys-secondary);
+    outline: 3px solid var(--mat-sys-on-primary-container);
     outline-offset: 3px;
   }
 
@@ -27,7 +27,7 @@
   transform: rotate(25deg);
   transition: transform 0.2s ease;
   font-family: 'BBH Bogle', sans-serif;
-  color: var(--mat-sys-secondary);
+  color: var(--mat-sys-on-primary-container);
 }
 
 .card {
@@ -52,7 +52,7 @@
     position: absolute;
     inset: 0;
     z-index: 1;
-    border: 4px solid var(--mat-sys-secondary);
+    border: 4px solid var(--mat-sys-on-primary-container);
     border-radius: 25px;
     pointer-events: none;
   }

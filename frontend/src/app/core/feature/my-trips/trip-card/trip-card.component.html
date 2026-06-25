@@ -1,4 +1,4 @@
-<article class="card-wrapper" [routerLink]="['/trip-dashboard', trip().id]">
+<article class="card-wrapper" [routerLink]="['/trip-dashboard/', trip().id]">
   @if (isUpcoming()) {
     <app-utrip-bubble class="bubble-anchor" />
   }

@@ -35,6 +35,7 @@ export interface TripDto {
   createdBy: number;
   createdAt: string;
   updatedAt?: string;
+  members?: TripMemberDto[];
 }
 
 //what i send in http put request to update a trip
