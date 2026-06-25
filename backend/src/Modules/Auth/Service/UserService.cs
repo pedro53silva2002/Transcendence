@@ -11,13 +11,14 @@ namespace Trippie.Modules.Auth.Service;
 
 public sealed class UserService(AppDbContext db, UserModel userModel)
 {
-    private const int UsernameMaxLength = 25;
+    private const int UsernameMaxLength = 15;
     private const int SuffixLength = 6;
 
     public async Task<UserDto> CreateAsync(CreateUserDto dto, CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(dto.Email)) throw new ValidationException("email", "Email is required.");
         if (string.IsNullOrWhiteSpace(dto.Username)) throw new ValidationException("username", "Username is required.");
+		if (dto.Username.Length > UsernameMaxLength) throw new ValidationException("username", $"Username cannot exceed {UsernameMaxLength} characters.");
 
         var existsUsername = await userModel.GetByUsername(dto.Username, ct);
         var existsEmails = await userModel.GetByEmail(dto.Email, ct);
@@ -41,6 +42,10 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
             throw new ValidationException("email", "Email can not be empty.");
         if (dto.Username is not null && string.IsNullOrWhiteSpace(dto.Username))
             throw new ValidationException("username", "Username can not be blank.");
+		if (dto.Username is not null && dto.Username.Length > UsernameMaxLength)
+			throw new ValidationException("username", $"Username cannot exceed {UsernameMaxLength} characters.");
+		if (dto.DisplayName is not null && dto.DisplayName.Length > UsernameMaxLength)
+			throw new ValidationException("displayName", $"Display name cannot exceed {UsernameMaxLength} characters.");
 
         if (dto.Email is not null || dto.Username is not null)
         {
