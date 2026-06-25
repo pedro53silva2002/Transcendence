@@ -69,12 +69,15 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
             if (clash is not null)
                 throw new ConflictException("Email or username already in use.");
         }
+		Console.WriteLine($"Username: {dto.Username}");
+		Console.WriteLine($"ProfilePhotoUrl: {dto.ProfilePhotoUrl}");
+		Console.WriteLine($"ProfilePhotoPath: {dto.ProfilePhotoPath}");
 		if (dto.ProfilePhotoUrl != null)
 		{
 			var found = await minioClient.FileExistsAsync("profile-photos", dto.ProfilePhotoUrl);
 			if (found)
 				await minioClient.DeleteFileAsync("profile-photos", dto.ProfilePhotoUrl);
-			dto.ProfilePhotoUrl = await minioClient.UploadFileAsync("profile-photos", $"{dto.Username}_{Guid.NewGuid()}", new MemoryStream(), "application/octet-stream");
+			dto.ProfilePhotoPath = await minioClient.UploadFileAsync("profile-photos", $"{dto.Username}_{Guid.NewGuid()}", dto.ProfilePhotoUrl.OpenReadStream(),  dto.ProfilePhotoUrl.ContentType);
 		}
         var user = await userModel.UpdateAsync(id, dto, ct) ?? throw new NotFoundException($"User {id} not found.", id);
     
@@ -172,13 +175,14 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
 		if (user is null) throw new NotFoundException($"User {id} not found.", id);
 		if (user.ProfilePhotoUrl is not null)
 		{
-			var found = await minioClient.FileExistsAsync("profile-photos", user.ProfilePhotoUrl);
+			var photoURL = minioClient.GetObjectAsync("profile-photos", user.ProfilePhotoUrl).GetAwaiter().GetResult();
+			var found = await minioClient.FileExistsAsync("profile-photos", photoURL);
 			if (found)
 			{
 				if (user.ProfilePhotoUrl is not null)
 				{
 					var path_url = user.ProfilePhotoUrl.Split('/');
-					await minioClient.DeleteFileAsync(path_url[1], path_url[2]);
+					await minioClient.DeleteFileAsync(path_url[1], photoURL);
 				}
 			}
 		}

@@ -99,7 +99,7 @@ public sealed class UserModel(AppDbContext db)
         if (dto.Username is not null) user.Username = dto.Username;
 		if (dto.Password is not null) user.PasswordHash = new BCryptPasswordHasher().Hash(dto.Password);
         if (dto.DisplayName is not null) user.DisplayName = dto.DisplayName;
-		if (dto.ProfilePhotoUrl is not null && dto.ProfilePhotoUrl != user.ProfilePhotoUrl) user.ProfilePhotoUrl = dto.ProfilePhotoUrl;
+		if (dto.ProfilePhotoPath is not null && dto.ProfilePhotoPath != user.ProfilePhotoUrl) user.ProfilePhotoUrl = dto.ProfilePhotoPath;
         user.Bio = dto.Bio;
         user.UpdatedAt = DateTime.UtcNow;
 

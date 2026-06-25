@@ -15,10 +15,11 @@ public interface IMinIOService
 {
 	Task<string> UploadFileAsync(string bucketName, string objectName, Stream fileStream, string contentType);
 	Task<Stream> DownloadFileAsync(string bucketName, string objectName);
-	Task DeleteFileAsync(string bucketName, string objectName);
-	Task<bool> FileExistsAsync(string bucketName, string objectName);
+	Task DeleteFileAsync(string bucketName, IFormFile objectName);
+	Task<bool> FileExistsAsync(string bucketName, IFormFile objectName);
 	Task CreateBucketAsync(string bucketName);
 	Task<string> GetObjectUrl(string bucketName, string objectName);
+	Task <IFormFile> GetObjectAsync(string bucketName, string objectName);
 }
 
 public class MinIOService : IMinIOService
@@ -29,6 +30,23 @@ public class MinIOService : IMinIOService
     {
         _minioClient = minioClient;
     }
+
+	public async Task<IFormFile> GetObjectAsync(string bucketName, string objectName)
+	{
+		var memoryStream = new MemoryStream();
+
+		await _minioClient.GetObjectAsync(new GetObjectArgs()
+			.WithBucket(bucketName)
+			.WithObject(objectName)
+			.WithCallbackStream(stream =>
+			{
+				stream.CopyTo(memoryStream);
+			}));
+
+		memoryStream.Position = 0;
+
+		return new FormFile(memoryStream, 0, memoryStream.Length, objectName, objectName);
+	}
 
 	public async Task<string> GetObjectUrl(string bucketName, string objectName)
 	{
@@ -71,13 +89,13 @@ public class MinIOService : IMinIOService
         return memoryStream;
     }
 
-    public async Task<bool> FileExistsAsync(string bucketName, string objectName)
+    public async Task<bool> FileExistsAsync(string bucketName, IFormFile objectName)
     {
         try
         {
             await _minioClient.StatObjectAsync(new StatObjectArgs()
                 .WithBucket(bucketName)
-                .WithObject(objectName));
+                .WithObject(objectName.FileName));
 
             return true;
         }
@@ -87,11 +105,11 @@ public class MinIOService : IMinIOService
         }
     }
 
-	public async Task DeleteFileAsync(string bucketName, string objectName)
+	public async Task DeleteFileAsync(string bucketName, IFormFile objectName)
 	{
 		await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
 			.WithBucket(bucketName)
-			.WithObject(objectName));
+			.WithObject(objectName.FileName));
 	}
 
 	public async Task CreateBucketAsync(string bucketName)
