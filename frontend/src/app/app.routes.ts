@@ -30,30 +30,6 @@ export const routes: Routes = [
 
   //all other pages
   {
-<<<<<<< HEAD
-	path: '',
-	component: AppLayoutComponent,
-	// canActivate: [guestGuard],
-	children: [
-		// {
-		// 	path: 'profile',
-		// 	loadComponent: () => import('<url from component'),
-		// },
-		{
-			path: 'plan-a-trip',
-			component: PlanATripComponent
-		},
-		{
-			//route to edit the trip that will point to the same component
-			path: 'plan-a-trip/edit/:id',
-			component: PlanATripComponent
-		},
-		{
-			path: 'trip-dashboard/:id',
-			component: TripDashboardComponent
-		}
-	]
-=======
     path: '',
     component: AppLayoutComponent,
     // canActivate: [guestGuard],
@@ -81,6 +57,5 @@ export const routes: Routes = [
     path: 'itinerary/:tripId',
     loadComponent: () => import('./core/feature/itinerary/itinerary.component'),
     canActivate: [authGuard],
->>>>>>> feature/trips
   },
 ];

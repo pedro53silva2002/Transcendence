@@ -1,10 +1,7 @@
 import { computed, inject, Injectable, Signal, signal } from '@angular/core';
 import { BaseApiService } from '../../../logic/services/base-api.service';
 import { TripDto } from '../dtos/trip.dto';
-<<<<<<< HEAD
-=======
 import { TripMemberDto } from '../../dtos/trip/member.dto';
->>>>>>> feature/trips
 
 /* This service will store the info od the trip so we 
 	don't need to keep making requests to the backend
@@ -20,14 +17,11 @@ export class TripStateService {
 	//the trip information that any component can read
 	public trip = this.tripSignal.asReadonly();
 
-<<<<<<< HEAD
-=======
 	//signal that stores the trip members so the form and dashboard share one source of truth
 	private readonly membersSignal = signal<TripMemberDto[]>([]);
 	//the members list that any component can read
 	public members = this.membersSignal.asReadonly();
 
->>>>>>> feature/trips
 	//this signal looks to the tripSignal() to check if the trip is loaded - can be used to activate the spinner
 	public isLoaded: Signal<boolean> = computed(() => this.tripSignal() !== null);
 
@@ -38,11 +32,6 @@ export class TripStateService {
 
 	//ver se é preciso fazer um update trip por causa de guardar despesas + itinerario
 
-<<<<<<< HEAD
-	// useful method to clear the state when the user leaves the trip dashboard
-	clearTrip(): void {
-		this.tripSignal.set(null);
-=======
 	// replaces the whole members list (e.g. after loading them from the backend)
 	setMembers(members: TripMemberDto[]): void {
 		this.membersSignal.set(members);
@@ -64,7 +53,6 @@ export class TripStateService {
 	clearTrip(): void {
 		this.tripSignal.set(null);
 		this.membersSignal.set([]);
->>>>>>> feature/trips
 	  }
 
 }
