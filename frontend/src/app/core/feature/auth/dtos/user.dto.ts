@@ -23,7 +23,7 @@ export interface UpdateUserDto {
   displayName: string;
   password: string | null;
   bio: string | null;
-  profilePhotoUrl: string | null;
+  profilePhotoUrl: File | null;
 }
 
 export interface AuthResponseDto {

@@ -172,13 +172,15 @@ export class EditProfileComponent {
 
 		const user = this.userData?.user;
 
+		const avatarValue = this.editProfileForm.value.avatar;
+
 		const updateDto: UpdateUserDto = {
 			email: user.email,
 			username: user.username,
 			displayName: this.editProfileForm.getRawValue().displayName ?? user.displayName,
 			password: this.editProfileForm.getRawValue().password ? this.editProfileForm.getRawValue().password : null,
 			bio: this.editProfileForm.getRawValue().description ?? user.bio,
-			profilePhotoUrl: typeof this.editProfileForm.value.avatar === 'string' ? this.editProfileForm.value.avatar : user.profilePhotoUrl
+			profilePhotoUrl: avatarValue instanceof File ? avatarValue : null
 		}
 
 		this.userService.update(updateDto).subscribe(response => {
