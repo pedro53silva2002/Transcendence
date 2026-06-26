@@ -1,8 +1,6 @@
-
-import { computed, inject, Injectable, Signal, signal } from '@angular/core';
-import { BaseApiService } from '../../../logic/services/base-api.service';
+import { computed, Injectable, Signal, signal } from '@angular/core';
 import { TripDto } from '../dtos/trip.dto';
-import { TripMemberDto } from '../../member-form/dtos/member.dto';
+import { TripMemberDto } from '../../itinerary/dtos/member.dto';
 
 /* This service will store the info of the trip so we 
 	don't need to keep making requests to the backend

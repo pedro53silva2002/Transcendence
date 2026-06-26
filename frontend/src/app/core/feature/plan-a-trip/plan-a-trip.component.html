@@ -1,12 +1,5 @@
 <form class="main-container" [formGroup]="planATripForm" (submit)="submitTrip()">
   <h1 class="page-title">{{ 'plan-a-trip.title' | transloco }}</h1>
-<<<<<<< HEAD
-  <div class="form-column">
-    <app-trip-form [tripGroup]="planATripForm.controls['trip']"></app-trip-form>
-  </div>
-  <div class="crew-column">
-    <app-member-form [tripId]="currentTripId()"></app-member-form>
-=======
   <div class="full-form">
     <div class="form-column">
       <app-trip-form [tripGroup]="planATripForm.controls['trip']"></app-trip-form>
@@ -14,7 +7,6 @@
     <div class="crew-column">
       <app-member-form [tripId]="currentTripId()" [showRole]="false"></app-member-form>
     </div>
->>>>>>> dev
   </div>
   <div class="actions-row">
     <button

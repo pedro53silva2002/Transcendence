@@ -1,4 +1,4 @@
-import { CreateTripMemberDto, TripMemberDto } from '../../member-form/dtos/member.dto';
+import { CreateTripMemberDto, TripMemberDto } from '../../itinerary/dtos/member.dto';
 import { CityDto } from './city.dto';
 import { CountryDto } from './country.dto';
 

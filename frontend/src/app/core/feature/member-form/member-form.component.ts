@@ -1,14 +1,5 @@
 import { NgOptimizedImage } from '@angular/common';
 import {
-<<<<<<< HEAD
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  input,
-  OnInit,
-  signal,
-  ViewEncapsulation,
-=======
 	ChangeDetectionStrategy,
 	Component,
 	effect,
@@ -16,13 +7,13 @@ import {
 	input,
 	signal,
 	ViewEncapsulation,
->>>>>>> dev
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslocoModule } from '@jsverse/transloco';
 import { MatDialog } from '@angular/material/dialog';
+<<<<<<< HEAD
 <<<<<<< HEAD
 import { TripMemberService } from '../service/trip/member.service';
 import { AddMemberDialogComponent } from './add-member-dialog/add-member-dialog.component';
@@ -100,6 +91,8 @@ export class MemberFormComponent implements OnInit {
     this.tripState.updateMemberRole(userId, role);
   }
 =======
+=======
+>>>>>>> feature/social
 import { TripMemberService } from './services/member.service';
 import { AddMemberDialogComponent } from './add-member-dialog/add-member-dialog.component';
 import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
@@ -212,5 +205,4 @@ export class MemberFormComponent {
 		}
 		this.tripState.removeMember(userId);
 	}
->>>>>>> dev
 }
