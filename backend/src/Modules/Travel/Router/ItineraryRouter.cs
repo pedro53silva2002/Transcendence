@@ -57,6 +57,15 @@ public sealed class ItineraryRouter(ItineraryService service, IUserContext userC
         return itinerary is null ? NotFound() : Ok(itinerary);
     }
 
+    [HttpGet("{id}/total-price")]
+    public async Task<ActionResult<TripTotalPriceDto>> GetTotalPrice(int id, CancellationToken ct)
+    {
+        var userId = userContext.Require().UserId;
+
+        var result = await service.GetTotalPriceAsync(userId, id, ct);
+        return result is null ? NotFound() : Ok(result);
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {

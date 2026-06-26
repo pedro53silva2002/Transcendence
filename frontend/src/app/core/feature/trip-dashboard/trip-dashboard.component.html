@@ -1,4 +1,5 @@
 <div class="main-container">
+<<<<<<< HEAD
 	<div class="trip-details">
 		<h1>{{ tripStateService.trip()?.tripName }}</h1>
 		<h2>
@@ -26,3 +27,61 @@
 	</div>
 </div>
 
+=======
+	<div class="header">
+		<div class="trip-details">
+			<h1>{{ tripStateService.trip()?.tripName }}</h1>
+			<div class="location-and-budget">
+				<h2>
+					@if (tripStateService.trip()?.city && tripStateService.trip()!.city!.length > 0) {
+					@for (city of tripStateService.trip()?.city; track city; let last = $last) {
+					<span>{{ city.name }}{{ !last ? ', ' : '' }}</span>
+					}
+					}
+					@else {
+					<span>{{ tripStateService.trip()?.country?.name }}</span>
+					}
+				</h2>
+				<!-- budget meter -->
+				<div class="budget-container">
+					<div class="budget-base"></div>
+					<div [style.width.%]="budgetPercentage()" [class]="progressBarClass()"></div>
+					<div class="budget-numbers">
+						<p class="spent">{{ totalItineraryPrice() }}</p>
+						<p class="budget">/{{ tripStateService.trip()?.budget }}</p>
+						<p class="money-symbol">€</p>
+					</div>
+				</div>
+			</div>
+			<div class="description">
+				<p>{{ tripStateService.trip()?.description }}</p>
+			</div>
+		</div>
+		<div class="trip-dates">
+			<div class="start-date">
+				<p class="day">{{ tripStateService.trip()?.startDate | date: 'dd' }}</p>
+				<p class="month">{{ tripStateService.trip()?.startDate | date: 'MMM' }}</p>
+			</div>
+			<img class="double-arrow" src="/images/double-ended-arrow.png"/>
+			<div class="end-date">
+				<p class="day">{{ tripStateService.trip()?.endDate | date: 'dd' }}</p>
+				<p class="month">{{ tripStateService.trip()?.endDate | date: 'MMM' }}</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="cards">
+		<app-itinerary [isAdmin]="isAdmin()" (totalPriceChanged)="onPriceChange($event)"></app-itinerary>
+		<app-member-form [isAdmin]="isAdmin()" [columns]="1" [compact]="true" [tripId]="tripStateService.trip()?.id ?? null" [showAddButton]="false"></app-member-form>
+		<!-- container expenses (vai ter agora um container existente só para efeitos de mockup)-->
+		<app-itinerary [isAdmin]="isAdmin()"></app-itinerary>
+	</div>
+
+	@if (isAdmin()) {
+		<div class="management-buttons">
+			<button class="tertiary-btn" matButton [routerLink]="['/plan-a-trip/edit', tripStateService.trip()?.id]">{{ 'trip-dashboard.edit-trip-btn' | transloco }}</button>
+			<button class="tertiary-btn" (click)="deleteTrip()" matButton>{{ 'trip-dashboard.delete-trip-btn' | transloco }}</button>
+		</div>
+	}
+</div>
+>>>>>>> dev

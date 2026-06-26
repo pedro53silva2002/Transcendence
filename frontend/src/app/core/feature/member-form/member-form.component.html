@@ -1,4 +1,5 @@
 <section class="crew-panel" [attr.aria-label]="'trips.members.title' | transloco">
+<<<<<<< HEAD
   <div class="crew-header">
     <h2 class="crew-title">{{ 'trips.members.title' | transloco }}</h2>
     <button type="button" mat-stroked-button class="add-member-btn" (click)="openAddMember()">
@@ -53,4 +54,77 @@
       </div>
     }
   </app-custom-scrollbar>
+=======
+	@if (!isDashboardRoute()) {
+	<div class="crew-header">
+		<h2 class="crew-title">{{ 'trips.members.title' | transloco }}</h2>
+		@if (showAddButton()) {
+		<button type="button" mat-stroked-button class="add-member-btn tertiary-btn" [class.compact]="compact()"
+			(click)="openAddMember()">
+			<mat-icon>person_search</mat-icon>
+			{{ 'trips.members.addMember' | transloco }}
+		</button>
+		}
+	</div>
+	} @else {
+	<div class="crew-header-dashboard">
+		<h1 class="crew-title-dashboard">{{ 'trip-dashboard.crew-title' | transloco }}</h1>
+		@if (isAdmin()) {
+		<button class="add-btn" (click)="openAddMember()">
+			<mat-icon class="add-remove">add</mat-icon>
+		</button>
+		}
+	</div>
+	}
+
+	<app-custom-scrollbar>
+		@if (loading()) {
+		<app-loading-spinner></app-loading-spinner>
+		}
+
+		@if (!loading()) {
+		<div class="crew-grid" [style.grid-template-columns]="'repeat(' + columns() + ', 1fr)'">
+			@for (member of members(); track member.userId) {
+			<div class="crew-card">
+				<div class="avatar" [attr.aria-label]="member.displayName" role="img">
+					@if (member.profilePicture) {
+					<img [ngSrc]="member.profilePicture" [alt]="member.displayName" [width]="84" [height]="84"
+						class="avatar-img" />
+					} @else {
+					<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
+					}
+				</div>
+
+				<div class="crew-info">
+					<div class="name-and-delete">
+						<span class="crew-username">{{ member.displayName }}</span>
+						@if (isAdmin() || !isDashboardRoute()) {
+						<button type="button" class="del-btn"
+							[attr.aria-label]="'trips.members.remove' | transloco: { name: member.displayName }"
+							(click)="removeMember(member.id, member.userId)">
+							<mat-icon class="delete-icon">close</mat-icon>
+						</button>
+						}
+					</div>
+					@if (isAdmin() || !isDashboardRoute()) {
+					<mat-select class="role-select" [value]="member.role"
+						[attr.aria-label]="'crew.roleFor' | transloco: { name: member.displayName }"
+						(valueChange)="updateRole(member.id, member.userId, $event)">
+						<mat-option value="Member">{{
+							'trips.members.role.member' | transloco
+							}}</mat-option>
+						<mat-option value="Admin">{{ 'trips.members.role.admin' | transloco }}</mat-option>
+					</mat-select>
+					} @else {
+					<p class="role">{{ member.role }}</p>
+					}
+				</div>
+			</div>
+			} @empty {
+			<p class="crew-empty">{{ 'trips.members.noMembers' | transloco }}</p>
+			}
+		</div>
+		}
+	</app-custom-scrollbar>
+>>>>>>> dev
 </section>

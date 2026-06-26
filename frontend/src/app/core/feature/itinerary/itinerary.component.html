@@ -1,10 +1,13 @@
 <div class="page">
+<<<<<<< HEAD
   <app-navbar
     [showSearch]="true"
     [showProfile]="true"
     [showLanguageSelector]="true"
     [showLogout]="true"
   ></app-navbar>
+=======
+>>>>>>> dev
   <div class="page-content">
     <div class="itin-card">
       <!-- Header -->
@@ -40,6 +43,7 @@
               </div>
               <div class="row-end">
                 <span class="row-cost">{{ item.expectedPrice }}€</span>
+<<<<<<< HEAD
                 <button
                   class="del-btn"
                   (click)="removeItem(item.id)"
@@ -47,6 +51,17 @@
                 >
                   <mat-icon class="add-remove">close</mat-icon>
                 </button>
+=======
+                <!-- so aparece para o admin ou para o autor desta entrada -->
+                 @if (isAdmin() || loggedUserId === item.createdBy) {
+                   <button
+                     class="del-btn"
+                     (click)="removeItem(item.id)"
+                     [attr.aria-label]="'itinerary.remove' | transloco: { title: item.title }">
+                     <mat-icon class="add-remove">close</mat-icon>
+                   </button>
+                 }
+>>>>>>> dev
               </div>
             </li>
           }
@@ -79,6 +94,10 @@
                 (keydown)="onKeyDown($event)"
                 inputmode="decimal"
               />
+<<<<<<< HEAD
+=======
+              
+>>>>>>> dev
             </div>
             <div class="form-errors">
               @if (itemForm.controls.title.touched) {
@@ -88,8 +107,13 @@
                   <mat-error>{{ 'itinerary.form.errors.titleMaxLength' | transloco }}</mat-error>
                 }
               }
+<<<<<<< HEAD
               @if (itemForm.controls.expectedPrice.touched && itemForm.controls.expectedPrice.hasError('min')) {
                 <mat-error>{{ 'itinerary.form.errors.priceMin' | transloco }}</mat-error>
+=======
+              @if (itemForm.controls.expectedPrice.touched && itemForm.controls.expectedPrice.hasError('pattern')) {
+                <mat-error>{{ 'plan-a-trip.budget-numbers-error' | transloco }}</mat-error>
+>>>>>>> dev
               }
             </div>
             <div class="form-line">

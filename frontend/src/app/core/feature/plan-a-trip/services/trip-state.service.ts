@@ -1,9 +1,10 @@
+
 import { computed, inject, Injectable, Signal, signal } from '@angular/core';
 import { BaseApiService } from '../../../logic/services/base-api.service';
 import { TripDto } from '../dtos/trip.dto';
 import { TripMemberDto } from '../../member-form/dtos/member.dto';
 
-/* This service will store the info od the trip so we 
+/* This service will store the info of the trip so we 
 	don't need to keep making requests to the backend
 */
 
@@ -40,6 +41,11 @@ export class TripStateService {
 	// appends a single member (e.g. after adding one through the dialog)
 	addMember(member: TripMemberDto): void {
 		this.membersSignal.update((list) => [...list, member]);
+	}
+
+	// removes a single member by userId
+	removeMember(userId: number): void {
+		this.membersSignal.update((list) => list.filter((m) => m.userId !== userId));
 	}
 
 	// updates the role of a single member

@@ -16,18 +16,18 @@ import { StatCardsComponent } from "../../../shared/stat-cards/stat-cards.compon
   styleUrl: './user-dashboard.component.scss',
 })
 export class UserDashboardComponent implements OnInit {
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
   private readonly authService = inject(SessionService);
   public user = signal<MeDto | null>(null);
 
   ngOnInit(): void {
-    try {
+	
       const response = this.authService.me();
       if (response) {
         this.user.set(response);
       }
-    } catch (error) {
-      console.error('Erro ao carregar utilizador:', error);
-      this.user.set(null);
-    }
   }
 }

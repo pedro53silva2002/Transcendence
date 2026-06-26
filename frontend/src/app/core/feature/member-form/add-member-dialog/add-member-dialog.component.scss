@@ -2,6 +2,11 @@
   border: 2px solid var(--mat-sys-on-primary-container) !important;
   border-radius: 29px !important;
   background-color: var(--mat-sys-primary-container) !important;
+<<<<<<< HEAD
+=======
+  min-width: 400px;
+  min-height: 400px;
+>>>>>>> dev
 }
 
 .friends-dialog {
@@ -14,6 +19,7 @@
   justify-content: space-between;
 
   h2 {
+<<<<<<< HEAD
     font-family: 'BBH Hegarty', sans-serif;
     font-size: 1rem;
     font-weight: 700;
@@ -25,6 +31,17 @@
 
 .close-btn {
   color: var(--mat-sys-on-primary-container) !important;
+=======
+    font-family: 'BBH Bogle', sans-serif !important;
+    color: var(--mat-sys-on-primary-container) !important;
+    opacity: 0.9 !important;
+    letter-spacing: 1% !important;
+  }
+
+  app-close-button {
+   margin-right: 15px;
+  }
+>>>>>>> dev
 }
 
 .friends-grid {
@@ -46,11 +63,15 @@
   cursor: pointer;
   border-radius: 12px;
   padding: 8px;
+<<<<<<< HEAD
   transition: background-color 150ms ease;
 
   &:hover:not(:disabled) {
     background-color: rgba(0, 0, 0, 0.06);
   }
+=======
+  // transition: background-color 150ms ease;
+>>>>>>> dev
 
   &:disabled {
     opacity: 0.5;

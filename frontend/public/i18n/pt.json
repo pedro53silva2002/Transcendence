@@ -50,6 +50,17 @@
       "admin": "Admin"
     }
   },
+<<<<<<< HEAD
+=======
+  "my-trips": {
+    "title": "As Minhas Viagens",
+    "empty": "Ainda não tens viagens. Começa a planear uma!",
+    "loading": "A carregar as tuas viagens…",
+    "upcoming-badge": "Viagem em breve",
+    "upcoming-badge-line1": "PRÓXIMA",
+    "upcoming-badge-line2": "VIAGEM"
+  },
+>>>>>>> dev
   "itinerary": {
     "title": "Itinerário",
     "addItem": "Adicionar paragem",
