@@ -29,6 +29,7 @@ public sealed class RefreshTokenRequestDto
 
 public sealed class MeDto
 {
+    public required int Id { get; set; }
     public required string Username { get; set; }
     public required string DisplayName { get; set; }
     public required string Email { get; set; }

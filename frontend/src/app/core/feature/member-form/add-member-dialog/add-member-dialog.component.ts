@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
+<<<<<<< HEAD
 import { TripMemberService } from '../../service/trip/member.service';
 import { UserService } from '../../auth/services/user.service';
 import { UserDto } from '../../auth/dtos/user.dto';
@@ -19,6 +20,17 @@ import { TripMemberDto } from '../../dtos/trip/member.dto';
 @Component({
   selector: 'app-add-member-dialog',
   imports: [MatDialogModule, MatButtonModule, MatIconModule, NgOptimizedImage, TranslocoModule],
+=======
+import { TripMemberService } from '../services/member.service';
+import { UserService } from '../../auth/services/user.service';
+import { UserDto } from '../../auth/dtos/user.dto';
+import { TripMemberDto } from '../../itinerary/dtos/member.dto';
+import { CloseButtonComponent } from '../../../../shared/components/close-button/close-button.component';
+
+@Component({
+  selector: 'app-add-member-dialog',
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, NgOptimizedImage, TranslocoModule, CloseButtonComponent],
+>>>>>>> dev
   templateUrl: './add-member-dialog.component.html',
   styleUrl: './add-member-dialog.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -71,8 +83,12 @@ export class AddMemberDialogComponent implements OnInit {
     this.adding.set(true);
     this.memberService.create({ tripId, userIds: [friend.id] }, tripId).subscribe({
       next: (result) => {
+<<<<<<< HEAD
         // backend returns the persisted member (real id, tripId, timestamps)
         if (result.data) this.dialogRef.close(result.data);
+=======
+        if (result.data?.[0]) this.dialogRef.close(result.data[0]);
+>>>>>>> dev
       },
       complete: () => this.adding.set(false),
       error: () => this.adding.set(false),

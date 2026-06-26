@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 import { computed, inject, Injectable, Signal, signal } from '@angular/core';
 import { BaseApiService } from '../../../logic/services/base-api.service';
 import { TripDto } from '../dtos/trip.dto';
 import { TripMemberDto } from '../../dtos/trip/member.dto';
+=======
+import { computed, Injectable, Signal, signal } from '@angular/core';
+import { TripDto } from '../dtos/trip.dto';
+import { TripMemberDto } from '../../itinerary/dtos/member.dto';
+>>>>>>> dev
 
 /* This service will store the info od the trip so we 
 	don't need to keep making requests to the backend
@@ -42,6 +48,14 @@ export class TripStateService {
 		this.membersSignal.update((list) => [...list, member]);
 	}
 
+<<<<<<< HEAD
+=======
+	// removes a single member by userId
+	removeMember(userId: number): void {
+		this.membersSignal.update((list) => list.filter((m) => m.userId !== userId));
+	}
+
+>>>>>>> dev
 	// updates the role of a single member
 	updateMemberRole(userId: number, role: 'Admin' | 'Member'): void {
 		this.membersSignal.update((list) =>

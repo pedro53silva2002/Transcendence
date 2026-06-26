@@ -1,11 +1,21 @@
+<<<<<<< HEAD
 import { CreateTripMemberDto, TripMemberDto } from '../../dtos/trip/member.dto';
+=======
+import { CreateTripMemberDto, TripMemberDto } from '../../itinerary/dtos/member.dto';
+>>>>>>> dev
 import { CityDto } from './city.dto';
 import { CountryDto } from './country.dto';
 
 export enum TripVisibility {
+<<<<<<< HEAD
   Private = 0,
   Public = 1,
   FriendsOnly = 2,
+=======
+  Private = 'Private',
+  Public = 'Public',
+  FriendsOnly = 'Friends',
+>>>>>>> dev
 }
 
 //what i send in http post request to create a trip
@@ -35,6 +45,10 @@ export interface TripDto {
   createdBy: number;
   createdAt: string;
   updatedAt?: string;
+<<<<<<< HEAD
+=======
+  members?: TripMemberDto[];
+>>>>>>> dev
 }
 
 //what i send in http put request to update a trip
