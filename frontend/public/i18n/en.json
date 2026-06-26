@@ -18,11 +18,9 @@
       "special": "1 special character",
       "digits": "1 digit"
     },
-	"error-login": "Invalid username or password.",
-	"error-oauth": "Google Authentication failed."
-
+    "error-login": "Invalid username or password.",
+    "error-oauth": "Google Authentication failed."
   },
-
   "navbar": {
     "profile": "Profile",
     "trip": "Plan a Trip",
@@ -30,22 +28,125 @@
     "my-friends": "My Friends",
     "my-expenses": "My Expenses"
   },
-
   "card": {
     "trip-description": "Click here to start planning your next trip.",
     "my-trips-description": "Click here to view your past, present and future trips.",
     "my-friends-description": "Click here to view your list of friends.",
     "my-expenses-description": "Click here to check where your money wandered."
   },
-
   "dashboard": {
     "greet": "Hello, ",
     "intro": "Ready for your next adventure?"
   },
-
   "stats": {
     "countries": "Visited Countries",
     "trips": "Trips Booked This Year",
     "countdown": "Days Until Next Trip"
+  },
+  "plan-a-trip": {
+    "title": "Plan your trip",
+    "trip-name": "trip name",
+    "trip-description": "trip description",
+    "start-date": "start date",
+    "end-date": "end date",
+    "country": "country",
+    "city": "city",
+    "privacy-text": "Would you like to allow friends/public to view your trip?",
+    "private-option": "private",
+    "friends-option": "friends",
+    "public-option": "public",
+    "create-trip": "Create Trip",
+    "update-trip": "Update Trip",
+    "name-error": "The trip's name is required.",
+    "name-min-length-error": "The trip's name must be at least 3 characters long.",
+    "name-max-length-error": "The trip's name can't be more than 25 characters long.",
+    "date-error": "Selecting the start and end dates for your trip is required.",
+    "description-max-length-error": "The trip's description can't be more than 256 characters long.",
+    "country-error": "A country's selection is required.",
+    "country-string-error": "Please select a valid country.",
+    "city-string-error": "Please select a valid city.",
+    "trip-budget": "budget (€)",
+    "budget-error": "A budget is required.",
+    "budget-numbers-error": "A budget can only contain numbers."
+  },
+  "trip-dashboard": {
+    "delete-trip-title": "Are you sure?",
+    "delete-trip-message": "If you confirm this decision, you will delete everything about this trip.",
+    "city": "city",
+    "privacy-text": "Would you like to allow friends/public to view your trip?",
+    "private-option": "private",
+    "friends-option": "friends",
+    "public-option": "public",
+    "create-trip": "Create Trip",
+    "update-trip": "Update Trip",
+    "name-error": "The trip's name is required.",
+    "name-min-length-error": "The trip's name must be at least 3 characters long.",
+    "name-max-length-error": "The trip's name can't be more than 25 characters long.",
+    "date-error": "Selecting the start and end dates for your trip is required.",
+    "description-max-length-error": "The trip's description can't be more than 256 characters long.",
+    "country-error": "A country's selection is required.",
+    "country-string-error": "Please select a valid country.",
+    "city-string-error": "Please select a valid city.",
+    "trip-budget": "budget (€)",
+    "budget-error": "A budget is required.",
+    "budget-numbers-error": "A budget can only contain numbers.",
+    "crew-title": "Crew",
+    "delete-trip-btn": "Delete Trip",
+    "edit-trip-btn": "Edit Trip Details"
+  },
+  "trips": {
+    "members": {
+      "title": "Choose Your Crew",
+      "addMember": "Add Member",
+      "noMembers": "No trip members",
+      "role": {
+        "title": "Role",
+        "admin": "Admin",
+        "member": "Member"
+      }
+    }
+  },
+  "my-trips": {
+    "title": "My Trips",
+    "empty": "You have no trips yet. Start planning one!",
+    "loading": "Loading your trips…",
+    "upcoming-badge": "Upcoming trip",
+    "upcoming-badge-line1": "UPCOMING",
+    "upcoming-badge-line2": "TRIP"
+  },
+  "itinerary": {
+    "title": "Itinerary",
+    "addItem": "Add itinerary item",
+    "closeForm": "Close add form",
+    "stops": "Itinerary stops",
+    "empty": "No stops yet — tap + to add one.",
+    "remove": "Remove {{ title }}",
+    "day": "DAY",
+    "dayNav": "Day navigation",
+    "prevDay": "Previous day",
+    "nextDay": "Next day",
+    "form": {
+      "titleLabel": "Title",
+      "title": "title",
+      "costLabel": "Cost in euros",
+      "cost": "cost (€)",
+      "infoLabel": "More info",
+      "info": "more info",
+      "save": "Save",
+      "errors": {
+        "titleRequired": "Title is required",
+        "titleMaxLength": "Title cannot exceed 20 characters",
+        "priceMin": "Price must be 0 or greater",
+        "descriptionMaxLength": "Description cannot exceed 30 characters"
+      }
+    }
+  },
+  "crew": {
+    "addMember": "Add Member",
+    "allFriendsAdded": "All your friends have been added to the crew."
+  },
+  "popup": {
+    "cancel-btn": "Cancel",
+    "confirm-btn": "Confirm"
   }
 }

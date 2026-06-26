@@ -1,0 +1,36 @@
+<div class="friends-dialog">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>{{ 'crew.addMember' | transloco }}</h2>
+    <app-close-button color="var(--mat-sys-on-primary-container)"></app-close-button>
+  </div>
+
+  <mat-dialog-content>
+    @if (loading()) {
+    <div class="friends-loading" role="status">
+      <mat-icon>hourglass_empty</mat-icon>
+    </div>
+    }
+
+    @if (!loading()) {
+    <div class="friends-grid">
+      @for (friend of friends(); track friend.id) {
+      <button type="button" class="friend-card" [disabled]="adding()"
+        [attr.aria-label]="'crew.addFriend' | transloco: { name: friend.displayName }" (click)="addMember(friend)">
+        <!-- Avatar -->
+        <div class="avatar">
+          @if (friend.profilePhotoUrl) {
+          <img [ngSrc]="friend.profilePhotoUrl" [alt]="friend.displayName" width="64" height="64" class="avatar-img" />
+          } @else {
+          <mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
+          }
+        </div>
+
+        <span class="friend-username">{{ friend.username }}</span>
+      </button>
+      } @empty {
+      <p class="friends-empty">{{ 'crew.allFriendsAdded' | transloco }}</p>
+      }
+    </div>
+    }
+  </mat-dialog-content>
+</div>

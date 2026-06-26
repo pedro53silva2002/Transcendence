@@ -1,5 +1,3 @@
-using Trippie.Common.Services.Search.Model;
-
 namespace Trippie.Modules.Auth.Dtos;
 
 public sealed class CreateUserDto
@@ -28,10 +26,10 @@ public sealed class UserDto
 
 public sealed class UpdateUserDto
 {
-    public required int Id { get; set; }
     public required string Email { get; set; }
     public required string Username { get; set; }
     public required string DisplayName { get; set; }
     public string? Bio { get; set; }
     public string? ProfilePhotoUrl { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

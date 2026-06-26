@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -6,6 +5,7 @@ using Trippie.Common.Services.Authentication.Extensions;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Service;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Trippie.Modules.Auth.Router;
 

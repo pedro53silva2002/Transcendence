@@ -1,0 +1,61 @@
+h1 {
+  font-family: 'BBH Hegarty';
+  font-weight: 400;
+  font-size: 64px;
+}
+
+.main-container {
+  width: 75%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 0 auto;
+  margin-bottom: 50px;
+  margin-top: 80px;
+}
+
+.create-btn {
+  width: 160px;
+}
+
+.form-column {
+  flex: 1 1 650px;
+  max-width: 650px;
+}
+
+.crew-column {
+  height: 360px;
+  flex: 1 1 650px;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+}
+
+.actions-row {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+
+  @media (max-width: 1730px) {
+    max-width: 650px;
+  }
+}
+
+.page-title {
+  width: 100%;
+  font-family: 'BBH Hegarty';
+  font-weight: 400;
+  font-size: 64px;
+  margin: 0;
+}
+
+.full-form {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+

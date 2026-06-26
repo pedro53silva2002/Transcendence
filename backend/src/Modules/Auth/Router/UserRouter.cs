@@ -28,10 +28,25 @@ public sealed class UserRouter(UserService service) : ControllerBase
     [HttpGet("search")]
     public async Task<ActionResult<CursorPage<UserDto>>> Search([FromQuery] string q, CancellationToken ct)
     {
-        var json = Encoding.UTF8.GetString(Convert.FromBase64String(q));
-        var payload = JsonSerializer.Deserialize<SearchPayload>(json, SearchJsonOptions) ?? new SearchPayload();
-        var page = await service.SearchAsync(payload, ct);
-        return Ok(page);
+        try
+        {
+            var json = Encoding.UTF8.GetString(Convert.FromBase64String(q));
+            var payload = JsonSerializer.Deserialize<SearchPayload>(json, SearchJsonOptions) ?? new SearchPayload();
+
+            if (payload is null)
+                return BadRequest("Invalid pauload");
+
+            var page = await service.SearchAsync(payload, ct);
+            return Ok(page);
+        }
+        catch (FormatException)
+        {
+            return BadRequest("Invalid Base64 query");
+        }
+        catch (JsonException)
+        {
+            return BadRequest("Invalid JSON payload");
+        }
     }
 
     [HttpPut("{id}")]

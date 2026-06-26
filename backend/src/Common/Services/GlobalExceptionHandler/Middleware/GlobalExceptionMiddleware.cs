@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trippie.Common.Services.GlobalExceptionHandler.Config;
