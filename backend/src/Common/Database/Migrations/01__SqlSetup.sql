@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS "auth"."visited_countries" (
 
 ALTER TABLE "auth"."cities" ADD CONSTRAINT "auth_cities_fk_country" FOREIGN KEY ("country_id") REFERENCES "auth"."countries"("id") ON DELETE CASCADE;
 ALTER TABLE "auth"."visited_countries" ADD CONSTRAINT "auth_visited_countries_fk_user" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
-ALTER TABLE "auth"."visited_countries" ADD CONSTRAINT "auth_visited_countries_fk_country" FOREIGN KEY ("country_id") REFERENCES "auth"."countries"("id") ON DELETE CASCADE;
+ALTER TABLE "auth"."visited_countries" ADD CONSTRAINT "auth_visited_countries_fk_country" FOREIGN KEY ("country_id") REFERENCES "auth"."countries"("id") ON DELETE RESTRICT;
 CREATE INDEX IF NOT EXISTS auth_cities_i_country_id ON auth.cities(country_id);
 
 CREATE TABLE IF NOT EXISTS "social"."friend_requests" (
