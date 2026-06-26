@@ -1,22 +1,17 @@
-<div class="page">
-  <div class="main-container">
-    <h1 class="page-title">{{ 'my-trips.title' | transloco }}</h1>
+<div class="main-container">
+  <h1 class="page-title">{{ 'my-trips.title' | transloco }}</h1>
 
-    @if (isLoading()) {
-      <div class="loading-state" role="status" [attr.aria-label]="'my-trips.loading' | transloco">
-        <span class="sr-only">{{ 'my-trips.loading' | transloco }}</span>
-      </div>
-    } @else if (trips().length === 0) {
-      <p class="empty-state">{{ 'my-trips.empty' | transloco }}</p>
-    } @else {
-      <div class="trips-grid">
-        @for (trip of displayTrips(); track trip.id) {
-          <app-trip-card
-            [trip]="trip"
-            [isUpcoming]="trip.id === upcomingTripId()"
-          />
-        }
-      </div>
+  @if (isLoading()) {
+  <div class="loading-state" role="status" [attr.aria-label]="'my-trips.loading' | transloco">
+    <span class="sr-only">{{ 'my-trips.loading' | transloco }}</span>
+  </div>
+  } @else if (trips().length === 0) {
+  <p class="empty-state">{{ 'my-trips.empty' | transloco }}</p>
+  } @else {
+  <div class="trips-grid">
+    @for (trip of displayTrips(); track trip.id) {
+    <app-trip-card [trip]="trip" [isUpcoming]="trip.id === upcomingTripId()" />
     }
   </div>
+  }
 </div>

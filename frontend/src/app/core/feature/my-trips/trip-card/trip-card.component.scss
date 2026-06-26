@@ -4,28 +4,15 @@
   cursor: pointer;
   text-decoration: none;
   color: inherit;
-  /* No overflow clip here: the bubble is pinned outside the card and must not
-     be clipped. The image is clipped by the inner .card instead. */
-
-  &:focus-visible .card {
-    outline: 3px solid var(--mat-sys-on-primary-container);
-    outline-offset: 3px;
-  }
-
-  /* The bubble belongs to the card: it lifts together with it on hover. */
-  &:hover .bubble-anchor {
-    transform: rotate(25deg) translateY(-2px);
-  }
 }
 
 /* The bubble is pinned near the top-right of the card. */
 .bubble-anchor {
   position: absolute;
-  top: -30px;
-  right: -30px;
+  top: -25px;
+  right: -25px;
   z-index: 3;
-  transform: rotate(25deg);
-  transition: transform 0.2s ease;
+  transform: rotate(20deg);
   font-family: 'BBH Bogle', sans-serif;
   color: var(--mat-sys-on-primary-container);
 }
@@ -58,8 +45,8 @@
   }
 
   .card-wrapper:hover & {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
-    transform: translateY(-2px);
+   	cursor: pointer;
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.55);
   }
 }
 
@@ -90,12 +77,13 @@
   flex-direction: column;
   gap: 2px;
   text-align: right;
+  margin-right: 20px;
 }
 
 .trip-name {
   font-family: 'BBH Hegarty', sans-serif;
   font-size: 30px;
-  font-weight: 700;
+  font-weight: 200;
   color: var(--mat-sys-on-primary);
   margin: 0;
   line-height: 1.1;
@@ -103,11 +91,10 @@
 
 .destination {
   font-family: 'BBH Bogle', sans-serif;
-  font-size: 18px;
-  font-weight: 900;
+  font-size: 14px;
+  font-weight: 200;
   color: var(--mat-sys-on-primary-container);
   text-transform: uppercase;
-  letter-spacing: 1.4px;
   margin: 2px 0 0;
 }
 
@@ -116,8 +103,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 2px;
-  margin-top: 6px;
+  gap: 4px;
+  margin-top: 4px;
+  opacity: 0.6;
 }
 
 .members {
