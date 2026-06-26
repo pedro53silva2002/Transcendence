@@ -1,17 +1,16 @@
-using System.Drawing;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Trippie.Common.Database;
+
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
-using Trippie.Modules.Auth.Model;
+using Trippie.Modules.Auth.Service;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 
-
 namespace Trippie.Modules.Travel.Service;
 
-public sealed class TripService(TripModel tripModel, TripMembersModel tripMembersModel)
+public sealed class TripService(
+	TripModel tripModel,
+	TripMembersModel tripMembersModel,
+	VisitedCountriesService visitedCountriesService)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
@@ -20,6 +19,10 @@ public sealed class TripService(TripModel tripModel, TripMembersModel tripMember
 		dto.Members.TripId = trip.Id;
 		var members = await new TripMembersService(tripMembersModel).CreateAsync(userId, dto.Members, ct);
 		trip.Members = [.. members];
+
+		await visitedCountriesService.SyncSingleTripAsync(
+            userId, dto.Country.Id, trip.Id, dto.EndDate, ct);
+
 		return trip;
 	}
 
@@ -30,6 +33,9 @@ public sealed class TripService(TripModel tripModel, TripMembersModel tripMember
 	{
 		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
 		var trip = await tripModel.UpdateAsync(userId, id, dto, ct) ?? throw new NotFoundException($"Trip {id} not found.", id);
+
+		await visitedCountriesService.SyncSingleTripAsync(
+            userId, dto.Country.Id, trip.Id, dto.EndDate, ct);
 
 		return trip;
 	}

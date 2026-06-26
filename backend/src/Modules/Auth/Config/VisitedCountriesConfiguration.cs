@@ -22,6 +22,10 @@ internal sealed class VisitedCountriesConfiguration : IEntityTypeConfiguration<V
 			.HasColumnName("added_at")
 			.HasDefaultValueSql("NOW()");
 
+		vc.Property(x => x.SourceTripId)
+            .HasColumnName("source_trip_id")
+            .IsRequired();
+
 		vc.HasOne(vc => vc.User)
 			.WithMany()
 			.HasForeignKey(vc => vc.UserId)
@@ -33,5 +37,15 @@ internal sealed class VisitedCountriesConfiguration : IEntityTypeConfiguration<V
 			.HasForeignKey(vc => vc.CountryId)
 			.HasConstraintName("auth_visited_countries_fk_country")
 			.OnDelete(DeleteBehavior.Restrict);
+
+		vc.HasOne<Trip>()
+            .WithMany()
+            .HasForeignKey(x => x.SourceTripId)
+            .HasConstraintName("auth_visited_countries_fk_source_trip")
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
+
+		vc.HasIndex(x => x.SourceTripId)
+            .HasDatabaseName("ix_auth_visited_countries_source_trip_id");
 	}
 }
