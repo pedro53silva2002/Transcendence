@@ -15,10 +15,6 @@ import { RouterModule } from '@angular/router';
   styleUrl: './user-dashboard.component.scss',
 })
 export class UserDashboardComponent implements OnInit {
-<<<<<<< HEAD
-=======
-
->>>>>>> dev
   private readonly authService = inject(SessionService);
   public user = signal<MeDto | null>(null);
 

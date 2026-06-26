@@ -1,33 +1,4 @@
 <div class="main-container">
-<<<<<<< HEAD
-	<div class="trip-details">
-		<h1>{{ tripStateService.trip()?.tripName }}</h1>
-		<h2>
-			@if (tripStateService.trip()?.city && tripStateService.trip()!.city!.length > 0) {
-				@for (city of tripStateService.trip()?.city; track city; let last = $last) {
-					<span>{{ city.name }}{{ !last ? ', ' : '' }}</span>
-				}
-			}
-			@else {
-				<span>{{ tripStateService.trip()?.country?.name }}</span>
-			}
-		</h2>
-		<p>{{ tripStateService.trip()?.description }}</p>
-	</div>
-	
-	<div class="cards">
-		<!-- container itinerário -->
-		<!-- container crew -->
-		<!-- container expenses -->
-	</div>
-
-	<div class="management-buttons">
-		<button class="tertiary-btn" matButton [routerLink]="['/plan-a-trip/edit', tripStateService.trip()?.id]">Edit Trip Details</button>
-		<button class="tertiary-btn" matButton>Delete Trip</button>
-	</div>
-</div>
-
-=======
 	<div class="header">
 		<div class="trip-details">
 			<h1>{{ tripStateService.trip()?.tripName }}</h1>
@@ -84,4 +55,3 @@
 		</div>
 	}
 </div>
->>>>>>> dev
