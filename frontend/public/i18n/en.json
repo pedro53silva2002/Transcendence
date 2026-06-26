@@ -106,6 +106,14 @@
       }
     }
   },
+  "my-trips": {
+    "title": "My Trips",
+    "empty": "You have no trips yet. Start planning one!",
+    "loading": "Loading your trips…",
+    "upcoming-badge": "Upcoming trip",
+    "upcoming-badge-line1": "UPCOMING",
+    "upcoming-badge-line2": "TRIP"
+  },
   "itinerary": {
     "title": "Itinerary",
     "addItem": "Add itinerary item",
