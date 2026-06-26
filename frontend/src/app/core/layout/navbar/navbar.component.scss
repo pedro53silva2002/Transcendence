@@ -218,11 +218,11 @@ h1 {
 }
 
 .register {
-	border: 2px solid var(--mat-sys-secondary) !important;
-	color: var(--mat-sys-secondary) !important;
+	border: 2px solid var(--mat-sys-on-primary-container) !important;
+	color: var(--mat-sys-on-primary-container) !important;
 
 	&:hover {
-		background-color: var(--mat-sys-secondary) !important;
+		background-color: var(--mat-sys-on-primary-container) !important;
 		color: var(--mat-sys-primary-container) !important;
 	}
 }
