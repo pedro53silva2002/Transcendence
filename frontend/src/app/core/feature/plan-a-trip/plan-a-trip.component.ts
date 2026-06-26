@@ -18,6 +18,7 @@ import { CityDto } from './dtos/city.dto';
 import { DateTime } from 'luxon';
 import { MemberFormComponent } from '../member-form/member-form.component';
 import { SessionService } from '../../logic/services/session.service';
+import { concatMap, map } from 'rxjs';
 
 @Component({
 	selector: 'app-plan-a-trip',
@@ -80,7 +81,7 @@ export class PlanATripComponent implements OnInit {
 						currentTrip?.visibility ?? TripVisibility.Private,
 						currentTrip?.country?.id
 					);
-				} catch(e) {
+				} catch (e) {
 					//we use this to ignore any error of the inputs on the first try of this effect
 				}
 			}
@@ -130,13 +131,23 @@ export class PlanATripComponent implements OnInit {
 						},
 					};
 
-					this.tripService.create(dto).subscribe({
-						next: (response) => {
-							if (response.data?.id)
-								this.currentTripId.set(response.data.id);
+					this.tripService.create(dto).pipe(
+						concatMap((response) => {
+
 							if (response.data !== undefined)
 								this.tripStateService.setTrip(response.data);
-							this.router.navigate(['/trip-dashboard', response.data?.id]);
+
+							const newTripId = response.data?.id;
+
+							return this.authService.loadMe().pipe(
+								map(() => newTripId)
+							);
+						})
+					).subscribe({
+						next: (newTripId) => {
+							if (newTripId)
+								this.currentTripId.set(newTripId);
+							this.router.navigate(['/trip-dashboard', newTripId]);
 						},
 						error: (error) => {
 							console.error('Error creating trip:', error);
