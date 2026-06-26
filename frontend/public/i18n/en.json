@@ -69,11 +69,6 @@
     "budget-error": "A budget is required.",
     "budget-numbers-error": "A budget can only contain numbers."
   },
-<<<<<<< HEAD
-  "trips": {
-    "members": {
-      "title": "Trip Members",
-=======
   "trip-dashboard": {
     "delete-trip-title": "Are you sure?",
     "delete-trip-message": "If you confirm this decision, you will delete everything about this trip.",
@@ -102,7 +97,6 @@
   "trips": {
     "members": {
       "title": "Choose Your Crew",
->>>>>>> dev
       "addMember": "Add Member",
       "noMembers": "No trip members",
       "role": {
@@ -112,8 +106,6 @@
       }
     }
   },
-<<<<<<< HEAD
-=======
   "my-trips": {
     "title": "My Trips",
     "empty": "You have no trips yet. Start planning one!",
@@ -122,7 +114,6 @@
     "upcoming-badge-line1": "UPCOMING",
     "upcoming-badge-line2": "TRIP"
   },
->>>>>>> dev
   "itinerary": {
     "title": "Itinerary",
     "addItem": "Add itinerary item",
@@ -149,8 +140,6 @@
         "descriptionMaxLength": "Description cannot exceed 30 characters"
       }
     }
-<<<<<<< HEAD
-=======
   },
   "crew": {
     "addMember": "Add Member",
@@ -159,6 +148,5 @@
   "popup": {
     "cancel-btn": "Cancel",
     "confirm-btn": "Confirm"
->>>>>>> dev
   }
 }
