@@ -92,6 +92,7 @@ export default class ProfileComponent {
 
 		//to send the user data to the mat-dialog
 		const dialogRef = this.dialog.open(EditProfileComponent, {
+			panelClass: 'custom-profile-dialog',
 			data: { user: userToEdit }
 		});
 

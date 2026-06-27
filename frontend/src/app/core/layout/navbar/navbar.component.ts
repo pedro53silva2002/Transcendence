@@ -97,7 +97,9 @@ export class NavbarComponent implements OnInit {
 	}
 
 	openLogin(): void {
-		const loginPopup = this.dialog.open(LoginComponent, {});
+		const loginPopup = this.dialog.open(LoginComponent, {
+			panelClass: 'custom-login-dialog'
+		});
 
 		//to remove the google error message when we close and open the component again
 		loginPopup.afterClosed().subscribe(() => {
@@ -106,9 +108,7 @@ export class NavbarComponent implements OnInit {
 	}
 
 	openRegister(): void {
-		const registerPopup = this.dialog.open(RegisterComponent, {
-			panelClass: 'register-dialog',
-		});
+		const registerPopup = this.dialog.open(RegisterComponent, {});
 
 		//to remove the google error message when we close and open the component again
 		registerPopup.afterClosed().subscribe(() => {

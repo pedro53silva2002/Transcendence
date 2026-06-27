@@ -38,7 +38,6 @@ import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
-  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
