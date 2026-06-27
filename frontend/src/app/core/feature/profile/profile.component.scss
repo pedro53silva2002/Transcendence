@@ -2,6 +2,7 @@
 	width: 80%;
 	margin: 0 auto;
 	margin-top: 100px;
+	min-height: 800px;
 }
 
 .avatar {
@@ -71,6 +72,7 @@ mat-icon.avatar-icon {
 }
 
 .countries-section, .my-itineraries-section {
+	margin-top: 55px;
 
 	h1 {
 		font-family: "BBH Bogle";
@@ -80,4 +82,30 @@ mat-icon.avatar-icon {
 		opacity: 0.8;
 	}
 }
+
+.list-of-countries {
+	display: flex;
+	gap: 10px 12px;
+	flex-wrap: wrap;
+}
+
+.country-card {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 45px;
+	width: fit-content;
+	background: var(--mat-sys-on-primary-container);
+	border-radius: 15px;
+
+	h2 {
+		color: var(--mat-sys-primary);
+		font-family: "BBH Bogle";
+		font-weight: 200;
+		padding: 20px;
+		font-size: 20px;
+	}
+}
+
+
 

@@ -13,10 +13,11 @@ import { SessionService } from '../../logic/services/session.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserDto, UserOrderByFieldsDto, UserSearchFieldsDto } from '../auth/dtos/user.dto';
 import { SearchParams } from '../../logic/services/search.service';
+import { TripCardComponent } from "../my-trips/trip-card/trip-card.component";
 
 @Component({
 	selector: 'app-profile',
-	imports: [MatIcon, TranslocoModule, StatCardsComponent, MatAnchor],
+	imports: [MatIcon, TranslocoModule, StatCardsComponent, MatAnchor, TripCardComponent],
 	templateUrl: './profile.component.html',
 	styleUrl: './profile.component.scss',
 })
