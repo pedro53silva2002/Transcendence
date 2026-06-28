@@ -105,6 +105,8 @@ export class PlanATripComponent implements OnInit {
 				});
 			}
 		}
+		else
+			this.tripStateService.clearTrip();
 	}
 
 	submitTrip() {
