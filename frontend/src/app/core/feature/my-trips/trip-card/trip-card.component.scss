@@ -1,134 +1,136 @@
 .card-wrapper {
-  position: relative;
-  display: block;
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
+	position: relative;
+	display: block;
+	cursor: pointer;
+	text-decoration: none;
+	color: inherit;
 }
 
 /* The bubble is pinned near the top-right of the card. */
 .bubble-anchor {
-  position: absolute;
-  top: -25px;
-  right: -25px;
-  z-index: 3;
-  transform: rotate(20deg);
-  font-family: 'BBH Bogle', sans-serif;
-  color: var(--mat-sys-on-primary-container);
+	position: absolute;
+	top: -25px;
+	right: -25px;
+	z-index: 3;
+	transform: rotate(20deg);
+	font-family: 'BBH Bogle', sans-serif;
+	color: var(--mat-sys-on-primary-container);
 }
 
 .card {
-  position: relative;
-  display: flex;
-  align-items: center;
-  /* Clip the oversized image to the card's rounded shape. The border lives on
+	position: relative;
+	display: flex;
+	align-items: center;
+	/* Clip the oversized image to the card's rounded shape. The border lives on
      ::before (below the image) so the image paints over the border edge. */
-  overflow: hidden;
-  background-color: var(--mat-sys-primary-container) !important;
-  border-radius: 25px;
-  padding: 18px 28px;
-  min-height: 130px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+	overflow: hidden;
+	background-color: var(--mat-sys-primary-container) !important;
+	border-radius: 25px;
+	padding: 18px 28px;
+	min-height: 130px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	transition:
+		box-shadow 0.2s ease,
+		transform 0.2s ease;
 
-  /* Border as an underlay: the overlay image (z-index: 2) paints over it. */
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    border: 4px solid var(--mat-sys-on-primary-container);
-    border-radius: 25px;
-    pointer-events: none;
-  }
+	/* Border as an underlay: the overlay image (z-index: 2) paints over it. */
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		border: 4px solid var(--mat-sys-on-primary-container);
+		border-radius: 25px;
+		pointer-events: none;
+	}
 
-  .card-wrapper:hover & {
-   	cursor: pointer;
+	.card-wrapper:hover & {
+		cursor: pointer;
 		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.55);
-  }
+	}
 }
 
 /* Oversized season image overlaid on the card. The card's overflow:hidden +
    rounded corners clip the off-edge portion. Same effect as the dashboard card. */
 .overlay-container {
-  position: absolute;
-  left: 0;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+	position: absolute;
+	left: 0;
+	z-index: 2;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
 
-  img {
-    width: 240px;
-    opacity: 0.82;
-    margin-left: -40px;
-  }
+	img {
+		width: 240px;
+		opacity: 0.82;
+		margin-left: -40px;
+	}
 }
 
 .card-content {
-  position: relative;
-  z-index: 3;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  text-align: right;
-  margin-right: 20px;
+	align-items: flex-end;
+	position: relative;
+	z-index: 3;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	text-align: right;
+	margin-right: 20px;
 }
 
 .trip-name {
-  font-family: 'BBH Hegarty', sans-serif;
-  font-size: 30px;
-  font-weight: 200;
-  color: var(--mat-sys-on-primary);
-  margin: 0;
-  line-height: 1.1;
+	font-family: 'BBH Hegarty', sans-serif;
+	font-size: 28px;
+	font-weight: 200;
+	color: var(--mat-sys-on-primary);
+	margin: 0;
+	line-height: 1.1;
+	width: 250px;
 }
 
 .destination {
-  font-family: 'BBH Bogle', sans-serif;
-  font-size: 14px;
-  font-weight: 200;
-  color: var(--mat-sys-on-primary-container);
-  text-transform: uppercase;
-  margin: 2px 0 0;
+	font-family: 'BBH Bogle', sans-serif;
+	font-size: 14px;
+	font-weight: 200;
+	color: var(--mat-sys-on-primary-container);
+	text-transform: uppercase;
+	margin: 2px 0 0;
 }
 
 /* Members on one line, dates on the line below. */
 .trip-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  margin-top: 4px;
-  opacity: 0.6;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 4px;
+	margin-top: 4px;
+	opacity: 0.6;
 }
 
 .members {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-family: 'BBH Bogle', sans-serif;
-  font-size: 13px;
-  font-weight: 200;
-  color: var(--mat-sys-on-primary-container);
+	display: flex;
+	align-items: center;
+	gap: 3px;
+	font-family: 'BBH Bogle', sans-serif;
+	font-size: 13px;
+	font-weight: 200;
+	color: var(--mat-sys-on-primary-container);
 }
 
 .person-icon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 16px;
 }
 
 .dates {
-  font-family: 'BBH Bogle', sans-serif;
-  font-size: 13px;
-  font-weight: 200;
-  color: var(--mat-sys-on-primary-container);
-  letter-spacing: 0.6px;
+	font-family: 'BBH Bogle', sans-serif;
+	font-size: 13px;
+	font-weight: 200;
+	color: var(--mat-sys-on-primary-container);
+	letter-spacing: 0.6px;
 }
