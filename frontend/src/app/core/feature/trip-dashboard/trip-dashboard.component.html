@@ -15,8 +15,9 @@
 				</h2>
 				<!-- budget meter -->
 				<div class="budget-container">
-					<div class="budget-base"></div>
-					<div [style.width.%]="budgetPercentage()" [class]="progressBarClass()"></div>
+					<div class="budget-base">
+						<div [style.width.%]="budgetPercentage()" [class]="progressBarClass()"></div>
+					</div>
 					<div class="budget-numbers">
 						<p class="spent">{{ totalItineraryPrice() }}</p>
 						<p class="budget">/{{ tripStateService.trip()?.budget }}</p>
@@ -33,7 +34,7 @@
 				<p class="day">{{ tripStateService.trip()?.startDate | date: 'dd' }}</p>
 				<p class="month">{{ tripStateService.trip()?.startDate | date: 'MMM' }}</p>
 			</div>
-			<img class="double-arrow" src="/images/double-ended-arrow.png"/>
+			<img class="double-arrow" src="/images/double-ended-arrow.png" />
 			<div class="end-date">
 				<p class="day">{{ tripStateService.trip()?.endDate | date: 'dd' }}</p>
 				<p class="month">{{ tripStateService.trip()?.endDate | date: 'MMM' }}</p>
@@ -43,15 +44,18 @@
 
 	<div class="cards">
 		<app-itinerary [isAdmin]="isAdmin()" (totalPriceChanged)="onPriceChange($event)"></app-itinerary>
-		<app-member-form [isAdmin]="isAdmin()" [columns]="1" [compact]="true" [tripId]="tripStateService.trip()?.id ?? null" [showAddButton]="false"></app-member-form>
+		<app-member-form [isAdmin]="isAdmin()" [columns]="1" [compact]="true"
+			[tripId]="tripStateService.trip()?.id ?? null" [showAddButton]="false"></app-member-form>
 		<!-- container expenses (vai ter agora um container existente só para efeitos de mockup)-->
 		<app-itinerary [isAdmin]="isAdmin()"></app-itinerary>
 	</div>
 
 	@if (isAdmin()) {
-		<div class="management-buttons">
-			<button class="tertiary-btn" matButton [routerLink]="['/plan-a-trip/edit', tripStateService.trip()?.id]">{{ 'trip-dashboard.edit-trip-btn' | transloco }}</button>
-			<button class="tertiary-btn" (click)="deleteTrip()" matButton>{{ 'trip-dashboard.delete-trip-btn' | transloco }}</button>
-		</div>
+	<div class="management-buttons">
+		<button class="tertiary-btn" matButton [routerLink]="['/plan-a-trip/edit', tripStateService.trip()?.id]">{{
+			'trip-dashboard.edit-trip-btn' | transloco }}</button>
+		<button class="tertiary-btn" (click)="deleteTrip()" matButton>{{ 'trip-dashboard.delete-trip-btn' | transloco
+			}}</button>
+	</div>
 	}
 </div>

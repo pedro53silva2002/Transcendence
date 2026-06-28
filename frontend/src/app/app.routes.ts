@@ -9,6 +9,7 @@ import { PlanATripComponent } from './core/feature/plan-a-trip/plan-a-trip.compo
 import { TripDashboardComponent } from './core/feature/trip-dashboard/trip-dashboard.component';
 import { MyTripsComponent } from './core/feature/my-trips/my-trips.component';
 import { tripMemberGuard } from './core/feature/trip-dashboard/guards/trip-member-guard';
+import ProfileComponent from './core/feature/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -36,10 +37,10 @@ export const routes: Routes = [
     component: AppLayoutComponent,
     canActivate: [authGuard],
     children: [
-      // {
-      // 	path: 'profile',
-      // 	loadComponent: () => import('<url from component'),
-      // },
+      {
+      	path: 'profile/:username',
+      	component: ProfileComponent,
+      },
       {
         path: 'plan-a-trip',
         component: PlanATripComponent,

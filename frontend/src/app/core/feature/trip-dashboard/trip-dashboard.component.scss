@@ -63,6 +63,7 @@
 
 .location-and-budget {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: 20px;
 }
@@ -85,6 +86,7 @@
 	height: 30px;
 	background-color: color-mix(in srgb, var(--mat-sys-on-primary) 25%, transparent);
 	border-radius: 25px;
+	overflow: hidden;
 }
 
 .budget-bar {
@@ -133,6 +135,7 @@
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
+	gap: 20px;
 }
 
 .trip-dates {
