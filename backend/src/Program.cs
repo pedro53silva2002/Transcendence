@@ -118,6 +118,9 @@ try
 	builder.Services.AddScoped<FriendRequestService>();
 	builder.Services.AddScoped<FriendshipModel>();
 	builder.Services.AddScoped<FriendshipService>();
+	builder.Services.AddScoped<ItineraryModel>();
+	builder.Services.AddScoped<ItineraryService>();
+
 
 	//Add Http request limiter
 	builder.Services.AddRateLimiter(options =>

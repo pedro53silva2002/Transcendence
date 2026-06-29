@@ -15,8 +15,8 @@ public sealed class Trip()
 	public required string TripName { get; set; }
 	public string? Description { get; set; }
 	public required int Duration { get; set; }
-	public required DateTime StartDate { get; set; }
-	public required DateTime EndDate { get; set; }
+	public required DateOnly StartDate { get; set; }
+	public required DateOnly EndDate { get; set; }
 	public required int Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
@@ -78,7 +78,7 @@ public sealed class TripModel(AppDbContext db)
 			Id = 0,
 			TripName = dto.TripName,
 			Description = dto.Description,
-			Duration = (dto.EndDate - dto.StartDate).Days,
+			Duration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1,
 			StartDate = dto.StartDate,
 			EndDate = dto.EndDate,
 			Budget = dto.Budget == 0 ? 0 : dto.Budget, // --- IGNORE ---
@@ -115,7 +115,7 @@ public sealed class TripModel(AppDbContext db)
 
 		var country = db.TripCountries.Include(tc => tc.Country);
 		var cities = db.TripCities.Include(tc => tc.City);
-		var members = db.TripMembers.Include(tm => tm.TripId);
+		var members = db.TripMembers.Include(tm => tm.User);
 
 		var res = await new SearchQueryBuilder<Trip>(db.Trips)
 		.WithKey("id", x => x.Id)
@@ -175,17 +175,70 @@ public sealed class TripModel(AppDbContext db)
 			}).ToList();
 
 			var tripMembers = members.Where(tm => tm.TripId == trip.Id).ToList();
-			trip.Members = tripMembers.Select(tm => new TripMembersDto
+			trip.Members = [.. tripMembers.Select(tm => new TripMembersDto
 			{
 				Id = tm.Id,
 				TripId = tm.TripId,
 				UserId = tm.UserId,
 				DisplayName = tm.User?.DisplayName ?? tm.User?.Username ?? string.Empty,
 				Role = tm.Role
-			}).ToList();
+			})];
 		});
 		return res;
 	}
+
+	public async Task<CursorPage<TripDto>> GetTripsForUser(int userId, CancellationToken ct = default)
+	{
+		// Get trip ids where the user is a member
+		var tripIds = await db.TripMembers
+			.Where(tm => tm.UserId == userId)
+			.Select(tm => tm.TripId)
+			.Distinct()
+			.ToListAsync(ct);
+
+		if (!tripIds.Any())
+			return new CursorPage<TripDto>(new List<TripDto>(), null, false, 0);
+
+		// Load trips with related country and city data
+		var trips = await db.Trips
+			.Where(t => tripIds.Contains(t.Id))
+			.Include(t => t.TripCountries)
+				.ThenInclude(tc => tc.Country)
+			.Include(t => t.TripCities)
+				.ThenInclude(tc => tc.City)
+			.ToListAsync(ct);
+
+		// Load members for these trips (with user info)
+		var members = await db.TripMembers
+			.Include(tm => tm.User)
+			.Where(tm => tripIds.Contains(tm.TripId))
+			.ToListAsync(ct);
+
+		var dtoList = trips.Select(t =>
+		{
+			var dto = Trip.ToDto(t);
+			var tripMembers = members
+				.Where(tm => tm.TripId == t.Id)
+				.Select(tm => new TripMembersDto
+				{
+					Id = tm.Id,
+					TripId = tm.TripId,
+					UserId = tm.UserId,
+					DisplayName = tm.User?.DisplayName ?? tm.User?.Username ?? string.Empty,
+					Role = tm.Role,
+					JoinedAt = tm.JoinedAt,
+					UpdatedAt = tm.UpdatedAt
+				})
+				.ToList();
+
+			dto.Members = tripMembers;
+			return dto;
+		}).ToList();
+
+		return new CursorPage<TripDto>(dtoList, null, false, dtoList.Count);
+	}
+
+
 	public async Task<TripDto?> UpdateAsync(int userId, int id, UpdateTripDto dto, CancellationToken ct = default)
 	{
 		var query = db.Trips
@@ -194,19 +247,22 @@ public sealed class TripModel(AppDbContext db)
 		var trip = await query.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return null;
 
-		// if (db.Set<TripMember>().AnyAsync(tm => tm.TripId == trip.Id
-		//     && tm.UserId == userId
-		//     && tm.Role != MemberRole.Admin))
-		// {
-		//     throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
-		// }
+		var isAdmin = await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == trip.Id
+			&& tm.UserId == userId
+			&& tm.Role == TripMemberRole.Admin, ct);
+
+		if (!isAdmin)
+		{
+			throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
+		}
 
 		if (dto.TripName is not null) trip.TripName = dto.TripName;
 		if (dto.Visibility != trip.Visibility) trip.Visibility = dto.Visibility;
 		if (dto.Description is not null) trip.Description = dto.Description;
 		if (dto.StartDate != trip.StartDate) trip.StartDate = dto.StartDate;
 		if (dto.EndDate != trip.EndDate) trip.EndDate = dto.EndDate;
-		if ((dto.EndDate - dto.StartDate).Days != trip.Duration) trip.Duration = (dto.EndDate - dto.StartDate).Days;
+		var calculatedDuration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
+		if (calculatedDuration != trip.Duration) trip.Duration = calculatedDuration;
 		if (dto.Budget is not 0) trip.Budget = dto.Budget;
 		trip.UpdatedAt = DateTime.UtcNow;
 
@@ -240,6 +296,7 @@ public sealed class TripModel(AppDbContext db)
 
 	public async Task<TripDto?> GetById(int id, CancellationToken ct = default)
 	{
+		var members = db.TripMembers.Include(tm => tm.User);
 		var trip = await db.Trips
 		.Include(t => t.TripCountries)
 			.ThenInclude(tc => tc.Country)
@@ -248,7 +305,34 @@ public sealed class TripModel(AppDbContext db)
 		.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return null;
 
+		trip.Members = [.. members.Where(tm => tm.TripId == trip.Id).Select(tm => new TripMembersDto
+		{
+			Id = tm.Id,
+			TripId = tm.TripId,
+			UserId = tm.UserId,
+			DisplayName = tm.User.DisplayName ?? tm.User.Username ?? string.Empty,
+			Role = tm.Role,
+			JoinedAt = tm.JoinedAt,
+			UpdatedAt = tm.UpdatedAt
+		})];
+
 		return Trip.ToDto(trip);
+	}
+
+	public async Task<TripTotalPriceDto?> GetTotalPriceAsync(int tripId, CancellationToken ct = default)
+	{
+		var tripExists = await db.Trips.AnyAsync(t => t.Id == tripId, ct);
+		if (!tripExists) return null;
+
+		var totalPrice = await db.Itineraries
+			.Where(i => i.TripId == tripId)
+			.SumAsync(i => i.ExpectedPrice, ct);
+
+		return new TripTotalPriceDto
+		{
+			TripId = tripId,
+			TotalPrice = totalPrice
+		};
 	}
 
 	public async Task<bool> DeleteAsync(int userId, int id, CancellationToken ct = default)
@@ -256,13 +340,16 @@ public sealed class TripModel(AppDbContext db)
 
 		var trip = await db.Trips.FirstOrDefaultAsync(t => t.Id == id, ct);
 		if (trip is null) return false;
-		// Only allow deletion if user is creator of trip
-		// var deleted = await db.Trip.Where(i => i.Id == id
-		//     && (db.Set<TripMember>().AnyAsync(tm => tm.TripId == i.TripId
-		//             && tm.UserId == userId
-		//             && tm.Role == MemberRole.Admin)
-		//     */))
-		//     .ExecuteDeleteAsync(ct); apagar a debaixo depois de descomentar isto
+
+		var isAdmin = await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == trip.Id
+			&& tm.UserId == userId
+			&& tm.Role == TripMemberRole.Admin, ct);
+
+		if (!isAdmin)
+		{
+			throw new UnauthorizedAccessException("You are not authorized to delete this Trip.");
+		}
+
 		var rows = await db.Trips.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
 		return rows > 0;
 	}

@@ -5,7 +5,7 @@ h1 {
 }
 
 .main-container {
-  width: 80%;
+  width: 75%;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -13,24 +13,34 @@ h1 {
   gap: 2rem;
   margin: 0 auto;
   margin-bottom: 50px;
+  margin-top: 80px;
 }
 
 .create-btn {
-  width: 200px;
+  width: 160px;
 }
 
 .form-column {
-  flex: 1 1 400px;
+  flex: 1 1 650px;
+  max-width: 650px;
 }
 
 .crew-column {
-  flex: 1 1 380px;
+  height: 360px;
+  flex: 1 1 650px;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
 }
 
 .actions-row {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: end;
+
+  @media (max-width: 1730px) {
+    max-width: 650px;
+  }
 }
 
 .page-title {
@@ -40,3 +50,12 @@ h1 {
   font-size: 64px;
   margin: 0;
 }
+
+.full-form {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+

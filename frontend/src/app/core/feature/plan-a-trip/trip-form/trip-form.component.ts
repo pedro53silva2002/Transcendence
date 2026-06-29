@@ -1,6 +1,6 @@
-import { Component, ElementRef, inject, input, OnInit, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, Injectable, input, OnInit, signal, viewChild } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, NativeDateAdapter, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,20 +8,30 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { TranslocoModule } from '@jsverse/transloco';
 import { LocationsService } from '../services/locations.service';
 import { Observable, debounceTime, delay, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { TripVisibility } from '../dtos/trip.dto';
 import { CountryDto } from '../dtos/country.dto';
 import { MatChipsModule } from '@angular/material/chips';
-import { ImportsNotUsedAsValues } from 'typescript';
 import { MatIconModule } from '@angular/material/icon';
 import { CityDto } from '../dtos/city.dto';
+import { DateTime } from 'luxon';
 
 //Defining the date format
 export const FORMAT_DMY = {
 	parse: { dateInput: 'DD/MM/YYYY' },
 	display: { dateInput: 'DD/MM/YYYY', monthYearLabel: 'MMM YYYY', dateA11yLabel: 'LL', monthYearA11yLabel: 'MMMM YYYY' },
 };
+
+
+@Injectable()
+export class PlainDateAdapter extends NativeDateAdapter {
+	// Altera a forma como o Angular Material serializa a data para o formulário
+	override toIso8601(date: Date): string {
+		// Retorna rigorosamente YYYY-MM-DD no fuso horário local, sem horas
+		return DateTime.fromJSDate(date).toISODate()!;
+	}
+}
 
 @Component({
 	selector: 'app-trip-form',
@@ -38,14 +48,14 @@ export const FORMAT_DMY = {
 		MatFormFieldModule,
 		MatSelectModule,
 		MatChipsModule,
-		MatIconModule
+		MatIconModule,
 	],
 	templateUrl: './trip-form.component.html',
 	styleUrl: './trip-form.component.scss',
 	providers: [
 		{ provide: MAT_DATE_LOCALE, useValue: 'pt-PT' },
 		{ provide: MAT_DATE_FORMATS, useValue: FORMAT_DMY },
-		provideNativeDateAdapter()
+		{ provide: DateAdapter, useClass: PlainDateAdapter }
 	]
 })
 export class TripFormComponent implements OnInit {
@@ -147,6 +157,17 @@ export class TripFormComponent implements OnInit {
 	//to customize the display of the country in the autocomplete input
 	displayCountryFn(country: CountryDto | null): string {
 		return country && country.name ? country.name : '';
+	}
+
+	public updateFormFields(cities: CityDto[], visibility: TripVisibility, countryId?: number | null): void {
+		this.selectedCities.set(cities ?? []);
+		if (countryId) {
+			this.selectedCountryId.set(countryId);
+		}
+
+		if (visibility !== undefined) {
+			this.visibility.setValue(visibility, { emitEvent: false });
+		}
 	}
 
 	get tripName() { return this.tripGroup().controls['tripName']; }

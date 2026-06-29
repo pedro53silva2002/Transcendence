@@ -9,17 +9,18 @@ namespace Trippie.Common.Database;
 
 public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    //Everytime we create a module/submodule, add here the set.
-    public DbSet<User> Users => Set<User>();
-    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-    public DbSet<Country> Countries => Set<Country>();
-    public DbSet<City> Cities => Set<City>();
-	public DbSet<TripMembers> TripMembers => Set<TripMembers>();
+	//Everytime we create a module/submodule, add here the set.
+	public DbSet<User> Users => Set<User>();
+	public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+	public DbSet<Country> Countries => Set<Country>();
 	public DbSet<Trip> Trips => Set<Trip>();
+	public DbSet<City> Cities => Set<City>();
 	public DbSet<TripCountry> TripCountries => Set<TripCountry>();
-    public DbSet<TripCity> TripCities => Set<TripCity>();
+	public DbSet<TripCity> TripCities => Set<TripCity>();
 	public DbSet<FriendRequest> FriendRequests => Set<FriendRequest>();
 	public DbSet<Friendship> Friendships => Set<Friendship>();
+	public DbSet<TripMembers> TripMembers => Set<TripMembers>();
+	public DbSet<Itinerary> Itineraries => Set<Itinerary>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -27,7 +28,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 		modelBuilder.HasPostgresEnum<TripVisibility>(name: "trip_visibility");
 		modelBuilder.HasPostgresEnum<TripMemberRole>(name: "member_role");
 		modelBuilder.HasPostgresEnum<FriendRequestStatus>(name: "friend_request_status");
-		
+
 		modelBuilder.Entity<TripCountry>(e =>
 		{
 			e.HasKey(tc => new { tc.TripId, tc.CountryId });

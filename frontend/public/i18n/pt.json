@@ -49,5 +49,37 @@
       "member": "Membro",
       "admin": "Admin"
     }
+  },
+<<<<<<< HEAD
+=======
+  "my-trips": {
+    "title": "As Minhas Viagens",
+    "empty": "Ainda não tens viagens. Começa a planear uma!",
+    "loading": "A carregar as tuas viagens…",
+    "upcoming-badge": "Viagem em breve",
+    "upcoming-badge-line1": "PRÓXIMA",
+    "upcoming-badge-line2": "VIAGEM"
+  },
+>>>>>>> dev
+  "itinerary": {
+    "title": "Itinerário",
+    "addItem": "Adicionar paragem",
+    "closeForm": "Fechar formulário",
+    "stops": "Paragens do itinerário",
+    "empty": "Sem paragens — toca em + para adicionar.",
+    "remove": "Remover {{ title }}",
+    "day": "DIA",
+    "dayNav": "Navegação por dia",
+    "prevDay": "Dia anterior",
+    "nextDay": "Próximo dia",
+    "form": {
+      "titleLabel": "Título",
+      "title": "título",
+      "costLabel": "Custo em euros",
+      "cost": "custo (€)",
+      "infoLabel": "Mais informação",
+      "info": "mais info",
+      "save": "Guardar"
+    }
   }
 }

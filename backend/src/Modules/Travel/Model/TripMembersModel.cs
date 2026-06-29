@@ -49,7 +49,7 @@ public sealed class TripMembersModel(AppDbContext db)
 			throw new SearchValidationException("Duplicate user IDs were provided in the request.");
 
 		if (userIds.Count(id => id == callerId) != 1)
-			throw new SearchValidationException("The trip creator must appear exactly once in the member list.");
+		 	throw new SearchValidationException("The trip creator must appear exactly once in the member list.");
 	}
 
 	private async Task<int> CountAdminsAsync(int tripId, int excludedMemberId, CancellationToken ct)
@@ -106,7 +106,19 @@ public sealed class TripMembersModel(AppDbContext db)
 		ArgumentNullException.ThrowIfNull(dto.UserIds);
 
 		var userIds = dto.UserIds.ToArray();
-		ValidateCreateRequest(callerId, dto, userIds);
+
+		var hasExistingMembers = await db.TripMembers.AnyAsync(tm => tm.TripId == dto.TripId, ct);
+		if (!hasExistingMembers)
+			ValidateCreateRequest(callerId, dto, userIds);
+		else
+		{
+			if (dto.TripId <= 0)
+				throw new SearchValidationException("Trip ID must be greater than zero.");
+			if (userIds.Length == 0)
+				throw new SearchValidationException("At least one user ID must be provided.");
+			if (userIds.Distinct().Count() != userIds.Length)
+				throw new SearchValidationException("Duplicate user IDs were provided in the request.");
+		}
 
 		var existingUserIds = await db.TripMembers
 			.Where(tm => tm.TripId == dto.TripId && userIds.Contains(tm.UserId))
@@ -228,4 +240,7 @@ public sealed class TripMembersModel(AppDbContext db)
 			return true;
 		}, ct);
 	}
+
+	public async Task<bool> IsMemberAsync(int userId, int tripId, CancellationToken ct = default)
+    	=> await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == tripId && tm.UserId == userId, ct);
 }
