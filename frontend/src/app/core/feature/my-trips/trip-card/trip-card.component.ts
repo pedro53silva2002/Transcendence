@@ -25,6 +25,8 @@ import { catchError, map, of } from 'rxjs';
 export class TripCardComponent implements OnInit {
   private readonly tripService = inject(TripService);
 
+  showTripTitle = input<boolean>(false);
+  showMemberCount = input<boolean>(false);
   trip = input.required<TripDto>();
   /* Set by the parent; only one card in the list is the upcoming trip. */
   isUpcoming = input<boolean>(false);

@@ -10,7 +10,7 @@
   } @else {
   <div class="trips-grid">
     @for (trip of displayTrips(); track trip.id) {
-    <app-trip-card [trip]="trip" [isUpcoming]="trip.id === upcomingTripId()" />
+    <app-trip-card [showTripTitle]="true" [showMemberCount]="true" [trip]="trip" [isUpcoming]="trip.id === upcomingTripId()" />
     }
   </div>
   }
