@@ -6,9 +6,22 @@
     "google": "Iniciar Sesión con",
     "username": "nombre de usuario",
     "password-confirmation": "confirmar contraseña",
-    "email": "Email"
+    "email": "Email",
+    "usernameTaken": "Este nombre de usuario ya está en uso.",
+    "invalidEmail": "Correo electrónico no válido.",
+    "emailTaken": "Este correo electrónico ya está registrado.",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "passwordRules": {
+      "length": "Entre 8 y 20 caracteres de longitud",
+      "lowercase": "1 carácter en minúscula",
+      "uppercase": "1 carácter en mayúscula",
+      "special": "1 carácter especial",
+      "digits": "1 dígito"
+    },
+    "error-login": "Nombre de usuario o contraseña incorrectos.",
+    "error-oauth": "La autenticación de Google ha fallado.",
+    "new-password": "nueva contraseña"
   },
-
   "navbar": {
     "profile": "Perfil",
     "trip": "Planear Viaje",
@@ -16,42 +29,98 @@
     "my-friends": "Mis Amigos",
     "my-expenses": "Mis Gastos"
   },
-
   "card": {
     "trip-description": "Haz clic aquí para empezar a planificar tu próximo viaje.",
     "my-trips-description": "Haz clic aquí para ver tus viajes pasados, presentes y futuros.",
     "my-friends-description": "Haz clic aquí para ver tu lista de amigos.",
     "my-expenses-description": "Haz clic aquí para ver en qué gastaste tu dinero."
   },
-
-	"dashboard": {
-		"greet": "Hola, ",
-		"intro": "¿Listo para tu aventura?" 
-	},
-
-	"stats": {
-		"countries": "Paises Visitados",
-		"trips": "Viajes Este Ano",
-		"countdown": "Dias Para El Viaje"
-	},
-
+  "dashboard": {
+    "greet": "Hola, ",
+    "intro": "¿Listo para tu aventura?"
+  },
+  "stats": {
+    "countries": "Paises Visitados",
+    "trips": "Viajes Este Ano",
+    "countdown": "Dias Para El Viaje"
+  },
+  "plan-a-trip": {
+    "title": "Planifica tu viaje",
+    "trip-name": "nombre del viaje",
+    "trip-description": "descripción del viaje",
+    "start-date": "fecha de inicio",
+    "end-date": "fecha de finalización",
+    "country": "país",
+    "city": "ciudad",
+    "privacy-text": "¿Te gustaría permitir que tus amigos o el público vean tu viaje?",
+    "private-option": "privado",
+    "friends-option": "amigos",
+    "public-option": "público",
+    "create-trip": "Crear Viaje",
+    "update-trip": "Actualizar Viaje",
+    "name-error": "El nombre del viaje es obligatorio.",
+    "name-min-length-error": "El nombre del viaje debe tener al menos 3 caracteres.",
+    "name-max-length-error": "El nombre del viaje no puede tener más de 25 caracteres.",
+    "date-error": "Es obligatorio seleccionar las fechas de inicio y finalización de tu viaje.",
+    "description-max-length-error": "La descripción del viaje no puede tener más de 256 caracteres.",
+    "country-error": "Es obligatorio seleccionar un país.",
+    "country-string-error": "Por favor, selecciona un país válido.",
+    "city-string-error": "Por favor, selecciona una ciudad válida.",
+    "trip-budget": "presupuesto (€)",
+    "budget-error": "El presupuesto es obligatorio.",
+    "budget-numbers-error": "El presupuesto solo puede contener números."
+  },
+  "profile": {
+    "countries-section-title": "Por dónde he estado viajando",
+    "itineraries-section-title": "Mis Itinerarios",
+    "edit-title": "Editar Perfil",
+    "update-button": "Actualizar Perfil",
+    "description": "descripción",
+    "delete-button": "Eliminar Cuenta",
+    "delete-user-title": "¿Estás seguro?",
+    "delete-user-message": "If confirmas esta decisión, tu cuenta será eliminada permanentemente.",
+    "description-error": "No puede tener más de 150 caracteres.",
+    "name-error": "Debes definir un nombre de perfil.",
+    "add-friend-btn": "Añadir Amigo",
+    "edit-btn": "Editar Perfil"
+  },
+  "trip-dashboard": {
+    "delete-trip-title": "¿Estás seguro?",
+    "delete-trip-message": "Si confirmas esta decisión, borrarás todo lo relacionado con este viaje.",
+    "city": "ciudad",
+    "privacy-text": "¿Te gustaría permitir que tus amigos o el público vean tu viaje?",
+    "private-option": "privado",
+    "friends-option": "amigos",
+    "public-option": "público",
+    "create-trip": "Crear Viaje",
+    "update-trip": "Actualizar Viaje",
+    "name-error": "El nombre del viaje es obligatorio.",
+    "name-min-length-error": "El nombre del viaje debe tener al menos 3 caracteres.",
+    "name-max-length-error": "El nombre del viaje no puede tener más de 25 caracteres.",
+    "date-error": "Es obligatorio seleccionar las fechas de inicio y finalización de tu viaje.",
+    "description-max-length-error": "La descripción del viaje no puede tener más de 256 caracteres.",
+    "country-error": "Es obligatorio seleccionar un país.",
+    "country-string-error": "Por favor, selecciona un país válido.",
+    "city-string-error": "Por favor, selecciona una ciudad válida.",
+    "trip-budget": "presupuesto (€)",
+    "budget-error": "El presupuesto es obligatorio.",
+    "budget-numbers-error": "El presupuesto solo puede contener números.",
+    "crew-title": "Equipo",
+    "delete-trip-btn": "Eliminar Viaje",
+    "edit-trip-btn": "Editar Detalles del Viaje"
+  },
   "trips": {
     "members": {
       "title": "Elige Tu Equipo",
-      "addMember": "Amigos"
+      "addMember": "Amigos",
+      "noMembers": "Sin miembros todavía",
+      "role": {
+        "title": "Rol",
+        "admin": "Admin",
+        "member": "Miembro"
+      }
     }
   },
-
-  "crew": {
-    "noMembers": "Sin miembros todavía",
-    "roleFor": "Rol de {{ name }}",
-    "role": {
-      "member": "Miembro",
-      "admin": "Admin"
-    }
-  },
-<<<<<<< HEAD
-=======
   "my-trips": {
     "title": "Mis Viajes",
     "empty": "Aún no tienes viajes. ¡Empieza a planear uno!",
@@ -60,7 +129,6 @@
     "upcoming-badge-line1": "PRÓXIMO",
     "upcoming-badge-line2": "VIAJE"
   },
->>>>>>> dev
   "itinerary": {
     "title": "Itinerario",
     "addItem": "Agregar parada",
@@ -68,7 +136,7 @@
     "stops": "Paradas del itinerario",
     "empty": "Sin paradas — toca + para agregar una.",
     "remove": "Eliminar {{ title }}",
-    "day": "DÍA",
+    "day": "DIA",
     "dayNav": "Navegación por día",
     "prevDay": "Día anterior",
     "nextDay": "Día siguiente",
@@ -79,7 +147,21 @@
       "cost": "coste (€)",
       "infoLabel": "Más información",
       "info": "más info",
-      "save": "Guardar"
+      "save": "Guardar",
+      "errors": {
+        "titleRequired": "El título es obligatorio",
+        "titleMaxLength": "El título no puede superar los 20 caracteres",
+        "priceMin": "El precio debe ser igual o mayor que 0",
+        "descriptionMaxLength": "La descripción no puede superar los 30 caracteres"
+      }
     }
+  },
+  "crew": {
+    "addMember": "Añadir Miembro",
+    "allFriendsAdded": "Todos tus amigos ya han sido añadidos al equipo."
+  },
+  "popup": {
+    "cancel-btn": "Cancelar",
+    "confirm-btn": "Confirmar"
   }
 }
