@@ -21,11 +21,11 @@ internal sealed class ItineraryConfiguration : IEntityTypeConfiguration<Itinerar
         b.Property(i => i.CreatedAt).HasColumnName("created_at").IsRequired().HasDefaultValueSql("NOW()");
         b.Property(i => i.UpdatedAt).HasColumnName("updated_at");
 
-        /* To remove after Coletes finish this implementation
-        b.HasOne(i => i.Trip)
-            .WithMany(t => t.Itineraries)
-            .HasForeignKey(i => i.TripId)
-            .HasConstraintName("travel_itineraries_fk_trip")
-            .OnDelete(DeleteBehavior.Cascade); */
+        
+        b.HasOne(i => i.User)
+            .WithMany()
+            .HasForeignKey(i => i.CreatedBy)
+            .HasConstraintName("travel_itineraries_fk_created_by")
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

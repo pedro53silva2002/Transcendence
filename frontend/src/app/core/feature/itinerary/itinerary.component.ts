@@ -10,7 +10,7 @@ import {
 	input,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
@@ -30,6 +30,7 @@ import { ItineraryDto } from './dtos/itinerary.dto';
 		MatError,
 		TranslocoModule,
 		ReactiveFormsModule,
+		RouterLink
 	],
 	templateUrl: './itinerary.component.html',
 	styleUrl: './itinerary.component.scss',
@@ -193,5 +194,17 @@ export default class ItineraryComponent {
 
 	onKeyDown(event: KeyboardEvent): void {
 		if (event.key === 'Enter') this.saveItem();
+	}
+
+		protected getAvatarUrl(photoUrl: string | null): string {
+		if (!photoUrl)
+			return 'images/default-avatar.png';
+
+		if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
+			return photoUrl.replace(/=s\d+(-c)?$/, '=s0');
+		}
+
+		// Se for o caminho relativo do teu MinIO local
+		return `http://localhost:9000/${photoUrl}`;
 	}
 }

@@ -1,5 +1,5 @@
 .main-container {
-	width: 85%;
+	width: 65%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -7,6 +7,10 @@
 	flex-wrap: wrap;
 	margin: 0 auto;
 	margin-bottom: 28px;
+
+	@media (max-width: 960px) {
+		width: 85%;
+	}
 }
 
 .trip-details {
@@ -71,7 +75,7 @@
 .budget-container {
 	position: relative;
 	display: grid !important;
-    grid-template-areas: "stack" !important;
+	grid-template-areas: "stack" !important;
 }
 
 .budget-base,
@@ -147,7 +151,8 @@
 	margin-bottom: 50px;
 }
 
-.start-date, .end-date {
+.start-date,
+.end-date {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -173,7 +178,7 @@
 .double-arrow {
 	position: absolute;
 	width: 40px;
-	z-index: 1;	
+	z-index: 1;
 	margin-left: 60px;
 	margin-bottom: 30px;
 }
@@ -188,8 +193,10 @@
 	align-items: start;
 
 	app-member-form {
-		max-height: 468px;
+		max-height: 472px;
+	}
+
+	@media (max-width: 960px) {
+		width: 60%;
 	}
 }
-
-

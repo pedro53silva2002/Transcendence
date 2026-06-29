@@ -16,7 +16,6 @@
 				<button mat-menu-item routerLink="/plan-a-trip">{{ 'navbar.plan-a-trip' | transloco }}</button>
 				<button mat-menu-item routerLink="/my-trips">{{ 'navbar.my-trips' | transloco }}</button>
 				<button mat-menu-item routerLink="/friends">{{ 'navbar.friends' | transloco }}</button>
-				<button mat-menu-item routerLink="/my-expenses">{{ 'navbar.my-expenses' | transloco }}</button>
 			</mat-menu>
 		</div>
 		}
@@ -40,9 +39,6 @@
 			 <button routerLinkActive="active-link" routerLink="/friends" class="primary-btn"
 				 matButton="outlined">{{ 'navbar.friends' | transloco }}</button>
 			 }
-			 @if (showMyExpenses()) {
-			 <button routerLinkActive="active-link" routerLink="/my-expenses" class="primary-btn" matButton="outlined">{{ 'navbar.my-expenses' | transloco }}</button>
-			 } 
 		</div>
 		@if (showSearch()) {
 		<mat-form-field appearance="outline" class="search">

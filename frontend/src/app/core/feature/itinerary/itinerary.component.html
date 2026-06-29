@@ -4,15 +4,9 @@
       <!-- Header -->
       <div class="itin-head">
         <h1 class="itin-title">{{ 'itinerary.title' | transloco }}</h1>
-        <button
-          class="add-btn"
-          [class.open]="showForm()"
-          (click)="toggleForm()"
-          [attr.aria-label]="
+        <button class="add-btn" [class.open]="showForm()" (click)="toggleForm()" [attr.aria-label]="
             showForm() ? ('itinerary.closeForm' | transloco) : ('itinerary.addItem' | transloco)
-          "
-          [attr.aria-expanded]="showForm()"
-        >
+          " [attr.aria-expanded]="showForm()">
           <mat-icon class="add-remove">add</mat-icon>
         </button>
       </div>
@@ -21,30 +15,33 @@
       <app-custom-scrollbar #scrollbar>
         <ul class="itin-list" role="list" [attr.aria-label]="'itinerary.stops' | transloco">
           @if (items().length === 0) {
-            <li class="empty">{{ 'itinerary.empty' | transloco }}</li>
+          <li class="empty">{{ 'itinerary.empty' | transloco }}</li>
           }
           @for (item of items(); track item.id) {
-            <li class="itin-row">
-              <div class="avatar" aria-hidden="true">
-                <mat-icon class="person">person</mat-icon>
-              </div>
-              <div class="row-main">
-                <span class="row-title">{{ item.title }}</span>
-                <span class="row-sub">{{ item.description }}</span>
-              </div>
-              <div class="row-end">
-                <span class="row-cost">{{ item.expectedPrice }}€</span>
-                <!-- so aparece para o admin ou para o autor desta entrada -->
-                 @if (isAdmin() || loggedUserId === item.createdBy) {
-                   <button
-                     class="del-btn"
-                     (click)="removeItem(item.id)"
-                     [attr.aria-label]="'itinerary.remove' | transloco: { title: item.title }">
-                     <mat-icon class="add-remove">close</mat-icon>
-                   </button>
-                 }
-              </div>
-            </li>
+          <li class="itin-row">
+            <div class="avatar" role="img">
+              @if (item.profilePicture) {
+              <img [src]="getAvatarUrl(item.profilePicture)" [width]="84" [height]="84"
+                class="avatar-img" />
+              } @else {
+              <mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
+              }
+            </div>
+            <div class="row-main">
+              <span class="row-title">{{ item.title }}</span>
+              <span class="row-sub">{{ item.description }}</span>
+            </div>
+            <div class="row-end">
+              <span class="row-cost">{{ item.expectedPrice }}€</span>
+              <!-- so aparece para o admin ou para o autor desta entrada -->
+              @if (isAdmin() || loggedUserId === item.createdBy) {
+              <button class="del-btn" (click)="removeItem(item.id)"
+                [attr.aria-label]="'itinerary.remove' | transloco: { title: item.title }">
+                <mat-icon class="add-remove">close</mat-icon>
+              </button>
+              }
+            </div>
+          </li>
           }
         </ul>
       </app-custom-scrollbar>
@@ -56,57 +53,41 @@
             <div class="form-line">
               <label class="sr-only" for="itin-title">{{
                 'itinerary.form.titleLabel' | transloco
-              }}</label>
-              <input
-                id="itin-title"
-                class="pill grow"
-                formControlName="title"
-                [placeholder]="'itinerary.form.title' | transloco"
-                (keydown)="onKeyDown($event)"
-              />
+                }}</label>
+              <input id="itin-title" class="pill grow" formControlName="title"
+                [placeholder]="'itinerary.form.title' | transloco" (keydown)="onKeyDown($event)" />
               <label class="sr-only" for="itin-cost">{{
                 'itinerary.form.costLabel' | transloco
-              }}</label>
-              <input
-                id="itin-cost"
-                class="pill cost"
-                formControlName="expectedPrice"
-                [placeholder]="'itinerary.form.cost' | transloco"
-                (keydown)="onKeyDown($event)"
-                inputmode="decimal"
-              />
-              
+                }}</label>
+              <input id="itin-cost" class="pill cost" formControlName="expectedPrice"
+                [placeholder]="'itinerary.form.cost' | transloco" (keydown)="onKeyDown($event)" inputmode="decimal" />
+
             </div>
             <div class="form-errors">
               @if (itemForm.controls.title.touched) {
-                @if (itemForm.controls.title.hasError('required')) {
-                  <mat-error>{{ 'itinerary.form.errors.titleRequired' | transloco }}</mat-error>
-                } @else if (itemForm.controls.title.hasError('maxlength')) {
-                  <mat-error>{{ 'itinerary.form.errors.titleMaxLength' | transloco }}</mat-error>
-                }
+              @if (itemForm.controls.title.hasError('required')) {
+              <mat-error>{{ 'itinerary.form.errors.titleRequired' | transloco }}</mat-error>
+              } @else if (itemForm.controls.title.hasError('maxlength')) {
+              <mat-error>{{ 'itinerary.form.errors.titleMaxLength' | transloco }}</mat-error>
+              }
               }
               @if (itemForm.controls.expectedPrice.touched && itemForm.controls.expectedPrice.hasError('pattern')) {
-                <mat-error>{{ 'plan-a-trip.budget-numbers-error' | transloco }}</mat-error>
+              <mat-error>{{ 'plan-a-trip.budget-numbers-error' | transloco }}</mat-error>
               }
             </div>
             <div class="form-line">
               <label class="sr-only" for="itin-info">{{
                 'itinerary.form.infoLabel' | transloco
-              }}</label>
-              <input
-                id="itin-info"
-                class="pill grow"
-                formControlName="description"
-                [placeholder]="'itinerary.form.info' | transloco"
-                (keydown)="onKeyDown($event)"
-              />
+                }}</label>
+              <input id="itin-info" class="pill grow" formControlName="description"
+                [placeholder]="'itinerary.form.info' | transloco" (keydown)="onKeyDown($event)" />
               <button class="save-btn" (click)="saveItem()" [disabled]="!canSave()">
                 {{ 'itinerary.form.save' | transloco }}
               </button>
             </div>
             <div class="form-errors">
               @if (itemForm.controls.description.touched && itemForm.controls.description.hasError('maxlength')) {
-                <mat-error>{{ 'itinerary.form.errors.descriptionMaxLength' | transloco }}</mat-error>
+              <mat-error>{{ 'itinerary.form.errors.descriptionMaxLength' | transloco }}</mat-error>
               }
             </div>
           </div>
@@ -116,23 +97,13 @@
       <!-- Day navigation -->
       <div class="day-bar">
         <div class="day-pill" role="group" [attr.aria-label]="'itinerary.dayNav' | transloco">
-          <button
-            class="day-arrow"
-            (click)="changeDay(-1)"
-            [disabled]="prevDisabled()"
-            [attr.aria-label]="'itinerary.prevDay' | transloco"
-          >
+          <button class="day-arrow" (click)="changeDay(-1)" [disabled]="prevDisabled()"
+            [attr.aria-label]="'itinerary.prevDay' | transloco">
             <mat-icon>chevron_left</mat-icon>
           </button>
-          <span class="day-label" aria-live="polite"
-            >{{ 'itinerary.day' | transloco }} {{ currentDay() }}</span
-          >
-          <button
-            class="day-arrow"
-            (click)="changeDay(1)"
-            [disabled]="nextDisabled()"
-            [attr.aria-label]="'itinerary.nextDay' | transloco"
-          >
+          <span class="day-label" aria-live="polite">{{ 'itinerary.day' | transloco }} {{ currentDay() }}</span>
+          <button class="day-arrow" (click)="changeDay(1)" [disabled]="nextDisabled()"
+            [attr.aria-label]="'itinerary.nextDay' | transloco">
             <mat-icon>chevron_right</mat-icon>
           </button>
         </div>

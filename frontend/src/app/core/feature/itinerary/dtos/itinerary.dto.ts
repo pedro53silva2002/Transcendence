@@ -6,6 +6,7 @@ export interface ItineraryDto {
   expectedPrice: number;
   day: number;
   createdBy: number;
+  profilePicture: string | null;
   createdAt: string;
   updatedAt: string | null;
 }

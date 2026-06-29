@@ -18,6 +18,7 @@ public sealed class ItineraryDto
     public required int ExpectedPrice { get; set; }
     public required int Day { get; set; }
     public required int CreatedBy { get; set; }
+    public string? ProfilePicture { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }
