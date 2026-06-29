@@ -22,13 +22,6 @@
     "error-oauth": "La autenticación de Google ha fallado.",
     "new-password": "nueva contraseña"
   },
-  "navbar": {
-    "profile": "Perfil",
-    "trip": "Planear Viaje",
-    "my-trips": "Mis Viajes",
-    "my-friends": "Mis Amigos",
-    "my-expenses": "Mis Gastos"
-  },
   "card": {
     "trip-description": "Haz clic aquí para empezar a planificar tu próximo viaje.",
     "my-trips-description": "Haz clic aquí para ver tus viajes pasados, presentes y futuros.",
@@ -163,5 +156,15 @@
   "popup": {
     "cancel-btn": "Cancelar",
     "confirm-btn": "Confirmar"
+  },
+  "navbar": {
+    "home": "Inicio",
+    "profile": "Perfil",
+    "plan-a-trip": "Planear Viaje",
+    "my-trips": "Mis Viajes",
+    "friends": "Amigos",
+    "my-expenses": "Mis Gastos",
+    "search-users": "Buscar Usuarios",
+    "logout": "Cerrar Sesión"
   }
 }

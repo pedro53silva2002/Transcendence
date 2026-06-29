@@ -22,13 +22,6 @@
     "error-oauth": "Google Authentication failed.",
     "new-password": "new password"
   },
-  "navbar": {
-    "profile": "Profile",
-    "trip": "Plan a Trip",
-    "my-trips": "My Trips",
-    "my-friends": "My Friends",
-    "my-expenses": "My Expenses"
-  },
   "card": {
     "trip-description": "Click here to start planning your next trip.",
     "my-trips-description": "Click here to view your past, present and future trips.",
@@ -163,5 +156,15 @@
   "popup": {
     "cancel-btn": "Cancel",
     "confirm-btn": "Confirm"
+  },
+  "navbar": {
+    "home": "Home",
+    "profile": "Profile",
+    "plan-a-trip": "Plan a Trip",
+    "my-trips": "My Trips",
+    "friends": "Friends",
+    "my-expenses": "My Expenses",
+    "search-users": "Search Users",
+    "logout": "Logout"
   }
 }

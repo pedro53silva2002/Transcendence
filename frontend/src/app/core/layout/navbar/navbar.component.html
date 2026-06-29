@@ -11,12 +11,12 @@
 				<mat-icon>menu</mat-icon>
 			</button>
 			<mat-menu #mobileMenu="matMenu" yPosition="below" xPosition="after" class="hamburguer-menu-panel">
-				<button mat-menu-item routerLink="/home">Home</button>
-				<button mat-menu-item [routerLink]="['/profile', authUsername()]">Profile</button>
-				<button mat-menu-item routerLink="/plan-a-trip">Plan A Trip</button>
-				<button mat-menu-item routerLink="/my-trips">My Trips</button>
-				<button mat-menu-item routerLink="/friends">Friends</button>
-				<button mat-menu-item routerLink="/my-expenses">My Expenses</button>
+				<button mat-menu-item routerLink="/home">{{ 'navbar.home' | transloco }}</button>
+				<button mat-menu-item [routerLink]="['/profile', authUsername()]">{{ 'navbar.profile' | transloco }}</button>
+				<button mat-menu-item routerLink="/plan-a-trip">{{ 'navbar.plan-a-trip' | transloco }}</button>
+				<button mat-menu-item routerLink="/my-trips">{{ 'navbar.my-trips' | transloco }}</button>
+				<button mat-menu-item routerLink="/friends">{{ 'navbar.friends' | transloco }}</button>
+				<button mat-menu-item routerLink="/my-expenses">{{ 'navbar.my-expenses' | transloco }}</button>
 			</mat-menu>
 		</div>
 		}
@@ -24,33 +24,30 @@
 		<!-- MAIN MENU -->
 		 <div class="full-screen-buttons">
 			 @if (showHome()) {
-			 <button routerLinkActive="active-link" routerLink="/home" class="primary-btn" matButton="outlined">Home</button>
+			 <button routerLinkActive="active-link" routerLink="/home" class="primary-btn" matButton="outlined">{{ 'navbar.home' | transloco }}</button>
 			 }
 			 @if (showProfile()) {
 			 <button routerLinkActive="active-link" [routerLink]="['/profile', authUsername()]" class="primary-btn" [class.keep-visible]="isDashboardRoute"
-				 matButton="outlined">Profile</button>
+				 matButton="outlined">{{ 'navbar.profile' | transloco }}</button>
 			 }
 			 @if (showPlanATrip()) {
-			 <button routerLinkActive="active-link" routerLink="/plan-a-trip" class="primary-btn" matButton="outlined">Plan A
-				 Trip</button>
+			 <button routerLinkActive="active-link" routerLink="/plan-a-trip" class="primary-btn" matButton="outlined">{{ 'navbar.plan-a-trip' | transloco }}</button>
 			 }
 			 @if (showMyTrips()) {
-			 <button routerLinkActive="active-link" routerLink="/my-trips" class="primary-btn" matButton="outlined">My
-				 Trips</button>
+			 <button routerLinkActive="active-link" routerLink="/my-trips" class="primary-btn" matButton="outlined">{{ 'navbar.my-trips' | transloco }}</button>
 			 }
 			 @if (showFriends()) {
 			 <button routerLinkActive="active-link" routerLink="/friends" class="primary-btn"
-				 matButton="outlined">Friends</button>
+				 matButton="outlined">{{ 'navbar.friends' | transloco }}</button>
 			 }
 			 @if (showMyExpenses()) {
-			 <button routerLinkActive="active-link" routerLink="/my-expenses" class="primary-btn" matButton="outlined">My
-				 Expenses</button>
+			 <button routerLinkActive="active-link" routerLink="/my-expenses" class="primary-btn" matButton="outlined">{{ 'navbar.my-expenses' | transloco }}</button>
 			 } 
 		</div>
 		@if (showSearch()) {
 		<mat-form-field appearance="outline" class="search">
 			<mat-icon class="search-icon" matPrefix>search</mat-icon>
-			<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users" (focus)="clearOnFocus()" />
+			<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="{{ 'navbar.search-users' | transloco }}" (focus)="clearOnFocus()" />
 			<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel" (optionSelected)="goToProfile($event)">
 				@for (user of filteredUsers | async; track user) {
 				<mat-option [value]="user">
@@ -77,8 +74,8 @@
 		</button>
 
 		<mat-menu #menu="matMenu" yPosition="below" xPosition="after" class="centered-menu">
-			<button mat-menu-item>Account</button>
-			<button (click)="logout()" mat-menu-item>Logout</button>
+			<!-- <button mat-menu-item>{{ 'navbar.account' | transloco }} </button> -->
+			<button (click)="logout()" mat-menu-item>{{ 'navbar.logout' | transloco }}</button>
 		</mat-menu>
 		}
 

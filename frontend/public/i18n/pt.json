@@ -22,13 +22,6 @@
     "error-oauth": "A autenticação do Google falhou.",
     "new-password": "nova palavra-passe"
   },
-  "navbar": {
-    "profile": "Perfil",
-    "trip": "Planear Viagem",
-    "my-trips": "Lista de Viagens",
-    "my-friends": "Amigos",
-    "my-expenses": "Despesas"
-  },
   "card": {
     "trip-description": "Carrega aqui para começares a planear a próxima viagem.",
     "my-trips-description": "Carrega aqui para veres as tuas viagens passadas, presentes e futuras.",
@@ -72,7 +65,7 @@
   },
   "profile": {
     "countries-section-title": "Por onde tenho andado a viajar",
-    "itineraries-section-title": "Meus Roteiros",
+    "itineraries-section-title": "Meus Itinerarios",
     "edit-title": "Editar Perfil",
     "update-button": "Atualizar Perfil",
     "description": "descrição",
@@ -163,5 +156,15 @@
   "popup": {
     "cancel-btn": "Cancelar",
     "confirm-btn": "Confirmar"
+  },
+  "navbar": {
+    "home": "Inicio",
+    "profile": "Perfil",
+    "plan-a-trip": "Planeia a Viagem",
+    "my-trips": "As Minhas Viagens",
+    "friends": "Amigos",
+    "my-expenses": "Despesas",
+    "search-users": "Pesquisa Utilizadores",
+    "logout": "Sair"
   }
 }
