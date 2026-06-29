@@ -52,10 +52,19 @@
 			<mat-icon matPrefix>search</mat-icon>
 			<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users" />
 			<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel">
-				@for (user of filteredUsers | async; track user) {
+				@for (user of filteredUsers | async; track user.id) {
 				<mat-option [value]="user">
-					<div>
+					<div class="user-option">
 						<span>{{user.displayName}}</span>
+						@if (user.id !== currentUserId()) {
+						<button
+							mat-icon-button
+							class="add-friend-btn"
+							[attr.aria-label]="'Send friend request to ' + user.displayName"
+							(click)="sendFriendRequest(user, $event)">
+							<mat-icon>{{ sentRequests().has(user.id) ? 'check' : 'person_add' }}</mat-icon>
+						</button>
+						}
 					</div>
 				</mat-option>
 				}

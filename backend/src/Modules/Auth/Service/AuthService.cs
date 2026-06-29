@@ -42,6 +42,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
 
         var me = new MeDto
         {
+            Id = userId,
             Username = user.Username,
             DisplayName = user.DisplayName,
             Email = user.Email,
