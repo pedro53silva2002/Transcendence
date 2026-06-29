@@ -19,14 +19,10 @@ export class UserDashboardComponent implements OnInit {
   public user = signal<MeDto | null>(null);
 
   ngOnInit(): void {
-    try {
+	
       const response = this.authService.me();
       if (response) {
         this.user.set(response);
       }
-    } catch (error) {
-      console.error('Erro ao carregar utilizador:', error);
-      this.user.set(null);
-    }
   }
 }

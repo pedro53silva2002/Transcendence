@@ -5,6 +5,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-	<button class="primary-btn" mat-button (click)="onCancel()">Cancel</button>
-	<button class="primary-btn" mat-button color="primary" (click)="onConfirm()">Confirm</button>
+	<button class="tertiary-btn btn" mat-button (click)="onCancel()">{{ 'popup.cancel-btn' | transloco }}</button>
+	<button class="primary-btn btn" mat-button color="primary" (click)="onConfirm()">{{ 'popup.confirm-btn' | transloco }}</button>
 </mat-dialog-actions>

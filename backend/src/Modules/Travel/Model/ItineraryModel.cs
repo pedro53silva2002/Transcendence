@@ -34,31 +34,31 @@ public sealed class Itinerary
     };
 }
 
-public sealed class ItineraryModel(AppDbContext db)
+public sealed class ItineraryModel(AppDbContext db, TripMembersModel tripMembersModel)
 {
     public async Task<ItineraryDto> CreateAsync(int userId, CreateItineraryDto dto, CancellationToken ct = default)
     {
-        var isMember = await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == dto.TripId && tm.UserId == userId, ct);
+        var isMember = await tripMembersModel.IsMemberAsync(userId, dto.TripId, ct);
 
         if (!isMember)
             throw new UnauthorizedAccessException("You are not authorized to create an itinerary for this trip.");
 
         var itinerary = new Itinerary
         {
-			Id = 0,
+            Id = 0,
             TripId = dto.TripId,
             Title = dto.Title,
             Description = dto.Description,
-        	ExpectedPrice = dto.ExpectedPrice,
-        	Day = dto.Day,
-        	CreatedBy = userId,
-    	};
+            ExpectedPrice = dto.ExpectedPrice,
+            Day = dto.Day,
+            CreatedBy = userId,
+        };
 
-    	db.Itineraries.Add(itinerary);
-		await db.SaveChangesAsync(ct);
+        db.Itineraries.Add(itinerary);
+        await db.SaveChangesAsync(ct);
 
-	    return Itinerary.ToDto(itinerary);
-	}
+        return Itinerary.ToDto(itinerary);
+    }
 
     public async Task<CursorPage<ItineraryDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
     {
@@ -125,9 +125,9 @@ public sealed class ItineraryModel(AppDbContext db)
             && tm.Role == TripMemberRole.Admin, ct);
 
         if (itinerary.CreatedBy != userId && !isAdmin)
-		{
-			throw new UnauthorizedAccessException("You are not authorized to delete this itinerary.");
-		}
+        {
+            throw new UnauthorizedAccessException("You are not authorized to delete this itinerary.");
+        }
 
         var deleted = await db.Itineraries.Where(i => i.Id == id)
             .ExecuteDeleteAsync(ct);
