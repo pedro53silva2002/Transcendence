@@ -10,6 +10,7 @@ public sealed class FriendshipDto
 
 public sealed class FriendDto
 {
+	public required int Id { get; set; }
 	public required int FriendId { get; set; }
 	public required string Username { get; set; }
     public string? ProfilePhotoUrl { get; set; }

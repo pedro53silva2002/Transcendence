@@ -15,7 +15,8 @@ export interface CreateFriendshipDto {
 }
 
 export interface FriendDto {
+  id: number;
   friendId: number;
   username: string;
-  profilePhotoUrl: string;
+  profilePhotoUrl: string | null;
 }

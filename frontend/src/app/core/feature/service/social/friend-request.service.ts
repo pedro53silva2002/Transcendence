@@ -16,12 +16,17 @@ export class FriendRequestService extends BaseApiService {
     return res;
   }
 
+  public reject(id: number): Observable<ApiResponse<FriendshipDto>> {
+    const res = this._post<FriendshipDto>(`/friend-requests/${id}/reject`, id);
+    return res;
+  }
+
   public delete(id: number): Observable<ApiResponse<void>> {
     const res = this._delete<void>(`/friend-requests/${id}`);
     return res;
   }
 
   public getAll(): Observable<ApiResponse<FriendRequestDto[]>> {
-    return this._get<FriendRequestDto[]>('/friend-requests');
+    return this._get<FriendRequestDto[]>('/friend-requests/received');
   }
 }

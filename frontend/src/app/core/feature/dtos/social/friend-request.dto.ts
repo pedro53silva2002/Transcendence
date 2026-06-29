@@ -8,6 +8,8 @@ export interface CreateFriendRequestDto {
 export interface FriendRequestDto {
   id: number;
   senderId: number;
+  senderUsername: string;
+  senderProfilePhotoUrl: string | null;
   receiverId: number;
   status: FriendRequestStatus;
   createdAt: string;

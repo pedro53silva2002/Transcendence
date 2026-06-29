@@ -21,10 +21,12 @@ public sealed class FriendRequest
 	public DateTime CreatedAt { get; set; }
 	public DateTime? UpdatedAt { get; set; }
 
-	public static FriendRequestDto ToDto(FriendRequest fr) => new()
+	public static FriendRequestDto ToDto(FriendRequest fr, string senderUsername = "", string? senderProfilePhotoUrl = null) => new()
 	{
 		Id = fr.Id,
 		SenderId = fr.SenderId,
+		SenderUsername = senderUsername,
+		SenderProfilePhotoUrl = senderProfilePhotoUrl,
 		ReceiverId = fr.ReceiverId,
 		Status = fr.Status,
 		CreatedAt = fr.CreatedAt,
@@ -86,10 +88,21 @@ public sealed class FriendRequestModel(AppDbContext db)
 
 	public async Task<List<FriendRequestDto>> GetReceivedAsync(int id, CancellationToken ct = default)
 	{
-		return await db.FriendRequests
-			.AsNoTracking()
-			.Where(fr => fr.ReceiverId == id)
-			.Select(fr => FriendRequest.ToDto(fr))
+		return await (
+			from fr in db.FriendRequests.AsNoTracking()
+			where fr.ReceiverId == id
+			join u in db.Users.AsNoTracking() on fr.SenderId equals u.Id
+			select new FriendRequestDto
+			{
+				Id = fr.Id,
+				SenderId = fr.SenderId,
+				SenderUsername = u.Username,
+				SenderProfilePhotoUrl = u.ProfilePhotoUrl,
+				ReceiverId = fr.ReceiverId,
+				Status = fr.Status,
+				CreatedAt = fr.CreatedAt,
+				UpdatedAt = fr.UpdatedAt,
+			})
 			.ToListAsync(ct);
 	}
 
@@ -98,7 +111,17 @@ public sealed class FriendRequestModel(AppDbContext db)
 		return await db.FriendRequests
 			.AsNoTracking()
 			.Where(fr => fr.SenderId == senderId)
-			.Select(fr => FriendRequest.ToDto(fr))
+			.Select(fr => new FriendRequestDto
+			{
+				Id = fr.Id,
+				SenderId = fr.SenderId,
+				SenderUsername = "",
+				SenderProfilePhotoUrl = null,
+				ReceiverId = fr.ReceiverId,
+				Status = fr.Status,
+				CreatedAt = fr.CreatedAt,
+				UpdatedAt = fr.UpdatedAt,
+			})
 			.ToListAsync(ct);
 	}
 

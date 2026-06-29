@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
-import { CreateFriendshipDto, FriendshipDto } from '../../dtos/social/friendship.dto';
+import { CreateFriendshipDto, FriendDto, FriendshipDto } from '../../dtos/social/friendship.dto';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -10,8 +10,8 @@ export class FriendshipService extends BaseApiService {
     return res;
   }
 
-  public getAll(): Observable<ApiResponse<FriendshipDto[]>> {
-    const res = this._get<FriendshipDto[]>(`/friendships`);
+  public getAll(): Observable<ApiResponse<FriendDto[]>> {
+    const res = this._get<FriendDto[]>(`/friendships`);
     return res;
   }
 

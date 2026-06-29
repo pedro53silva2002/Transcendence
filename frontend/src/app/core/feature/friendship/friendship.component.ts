@@ -5,17 +5,10 @@ import { FooterComponent } from '../../layout/footer/footer.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { FriendshipService } from '../service/social/friendship.service';
 import { FriendRequestService } from '../service/social/friend-request.service';
-import { SessionService } from '../../logic/services/session.service';
-import { FriendshipDto } from '../dtos/social/friendship.dto';
+import { FriendDto } from '../dtos/social/friendship.dto';
 import { FriendRequestDto } from '../dtos/social/friend-request.dto';
-import { UserDto } from '../auth/dtos/user.dto';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-
-interface FriendEntry {
-  friendshipId: number;
-  friend: UserDto;
-}
 
 @Component({
   selector: 'app-friendship',
@@ -34,39 +27,31 @@ interface FriendEntry {
 export default class FriendshipComponent implements OnInit {
   private readonly friendshipService = inject(FriendshipService);
   private readonly friendRequestService = inject(FriendRequestService);
-  private readonly sessionService = inject(SessionService);
 
   readonly isLoading = signal(true);
-  readonly friendships = signal<FriendshipDto[]>([]);
+  readonly friends = signal<FriendDto[]>([]);
   readonly pendingRequests = signal<FriendRequestDto[]>([]);
   readonly searchControl = new FormControl('');
   readonly searchTerm = signal('');
   readonly showRequests = signal(false);
 
-  readonly pendingCount = computed(() =>
-    this.pendingRequests().filter(r => r.status === 'Pending').length,
+  readonly pendingRequests$ = computed(() =>
+    this.pendingRequests().filter(r => r.status === 'Pending'),
   );
 
-  readonly filteredFriends = computed<FriendEntry[]>(() => {
+  readonly pendingCount = computed(() => this.pendingRequests$().length);
+
+  readonly filteredFriends = computed<FriendDto[]>(() => {
     const term = this.searchTerm().toLowerCase().trim();
-    const me = this.sessionService.me()?.username;
-    return this.friendships()
-      .map(f => ({
-        friendshipId: f.id,
-        friend: f.user1.username === me ? f.user2 : f.user1,
-      }))
-      .filter(
-        ({ friend }) =>
-          !term ||
-          friend.username.toLowerCase().includes(term) ||
-          friend.displayName.toLowerCase().includes(term),
-      );
+    return this.friends().filter(
+      f => !term || f.username.toLowerCase().includes(term),
+    );
   });
 
   ngOnInit(): void {
     this.friendshipService.getAll().subscribe({
       next: res => {
-        this.friendships.set(res.data ?? []);
+        this.friends.set(res.data ?? []);
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false),
@@ -82,7 +67,22 @@ export default class FriendshipComponent implements OnInit {
 
   removeFriend(friendshipId: number): void {
     this.friendshipService.delete(friendshipId).subscribe(() => {
-      this.friendships.update(list => list.filter(f => f.id !== friendshipId));
+      this.friends.update(list => list.filter(f => f.id !== friendshipId));
+    });
+  }
+
+  acceptRequest(requestId: number): void {
+    this.friendRequestService.accept(requestId).subscribe(() => {
+      this.pendingRequests.update(list => list.filter(r => r.id !== requestId));
+      this.friendshipService.getAll().subscribe({
+        next: res => this.friends.set(res.data ?? []),
+      });
+    });
+  }
+
+  denyRequest(requestId: number): void {
+    this.friendRequestService.delete(requestId).subscribe(() => {
+      this.pendingRequests.update(list => list.filter(r => r.id !== requestId));
     });
   }
 }
