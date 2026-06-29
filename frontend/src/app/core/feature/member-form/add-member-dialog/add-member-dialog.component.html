@@ -7,7 +7,7 @@
   <mat-dialog-content>
     @if (loading()) {
     <div class="friends-loading" role="status">
-      <mat-icon>hourglass_empty</mat-icon>
+      <app-loading-spinner></app-loading-spinner>
     </div>
     }
 
@@ -19,7 +19,7 @@
         <!-- Avatar -->
         <div class="avatar">
           @if (friend.profilePhotoUrl) {
-          <img [ngSrc]="friend.profilePhotoUrl" [alt]="friend.displayName" width="64" height="64" class="avatar-img" />
+          <img [ngSrc]="getAvatarUrl(friend.profilePhotoUrl)" [alt]="friend.displayName" width="64" height="64" class="avatar-img" />
           } @else {
           <mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
           }

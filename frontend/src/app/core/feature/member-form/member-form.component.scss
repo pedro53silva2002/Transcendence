@@ -74,10 +74,11 @@ app-member-form {
 
 .crew-card {
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	flex-direction: row;
 	align-items: center;
 	gap: 12px;
+	margin-left: 40px;
 }
 
 .name-and-delete {

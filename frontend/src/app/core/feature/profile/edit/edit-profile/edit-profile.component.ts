@@ -184,7 +184,8 @@ export class EditProfileComponent {
 		}
 
 		this.userService.update(updateDto).subscribe(response => {
-			const updatedUser = response.data ?? response;
+			const updatedUser: any = response && 'data' in response ? response.data : response;
+			
 			this.authService.loadMe().subscribe();
 			this.dialogRef.close(updatedUser);
 		});

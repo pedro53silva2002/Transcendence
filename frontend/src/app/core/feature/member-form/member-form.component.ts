@@ -125,4 +125,16 @@ export class MemberFormComponent {
 		}
 		this.tripState.removeMember(userId);
 	}
+
+	protected getAvatarUrl(photoUrl: string | null): string {
+		if (!photoUrl)
+			return 'images/default-avatar.png';
+
+		if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
+			return photoUrl.replace(/=s\d+(-c)?$/, '=s0');
+		}
+
+		// Se for o caminho relativo do teu MinIO local
+		return `http://localhost:9000/${photoUrl}`;
+	}
 }

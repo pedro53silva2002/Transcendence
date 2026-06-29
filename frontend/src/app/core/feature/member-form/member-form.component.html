@@ -32,8 +32,8 @@
 			<div class="crew-card">
 				<div class="avatar" [attr.aria-label]="member.displayName" role="img">
 					@if (member.profilePicture) {
-					<img [ngSrc]="member.profilePicture" [alt]="member.displayName" [width]="84" [height]="84"
-						class="avatar-img" />
+					<img [ngSrc]="getAvatarUrl(member.profilePicture)"
+						[alt]="member.displayName" [width]="84" [height]="84" class="avatar-img" />
 					} @else {
 					<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
 					}

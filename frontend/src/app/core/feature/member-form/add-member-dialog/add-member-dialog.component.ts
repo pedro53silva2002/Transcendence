@@ -16,10 +16,11 @@ import { UserService } from '../../auth/services/user.service';
 import { UserDto } from '../../auth/dtos/user.dto';
 import { TripMemberDto } from '../../itinerary/dtos/member.dto';
 import { CloseButtonComponent } from '../../../../shared/components/close-button/close-button.component';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-add-member-dialog',
-  imports: [MatDialogModule, MatButtonModule, MatIconModule, NgOptimizedImage, TranslocoModule, CloseButtonComponent],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, NgOptimizedImage, TranslocoModule, CloseButtonComponent, LoadingSpinnerComponent],
   templateUrl: './add-member-dialog.component.html',
   styleUrl: './add-member-dialog.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -81,5 +82,17 @@ export class AddMemberDialogComponent implements OnInit {
 
   protected cancel(): void {
     this.dialogRef.close();
+  }
+
+  protected getAvatarUrl(photoUrl: string | null): string {
+    if (!photoUrl)
+      return 'images/default-avatar.png';
+
+    if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
+      return photoUrl.replace(/=s\d+(-c)?$/, '=s0');
+    }
+
+    // Se for o caminho relativo do teu MinIO local
+    return `http://localhost:9000/${photoUrl}`;
   }
 }
