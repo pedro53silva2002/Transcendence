@@ -21,6 +21,9 @@ import { MatError } from '@angular/material/form-field';
 import { TranslocoModule } from '@jsverse/transloco';
 import { SessionService } from '../../logic/services/session.service';
 import { ItineraryDto } from './dtos/itinerary.dto';
+import { TripDto } from '../plan-a-trip/dtos/trip.dto';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DIALOG_DATA } from '@angular/cdk/dialog';
 
 @Component({
 	selector: 'app-itinerary',
@@ -46,12 +49,17 @@ export default class ItineraryComponent {
 	public totalPriceChanged = output<number>(); //the channel to send the totalPrice to the main component
 
 	public isAdmin = input.required<boolean>();
+	
+	protected readonly dialogData = inject<{ itinerary: TripDto; showAddButton: boolean, profileRoute: boolean, showAvatar: boolean }>(
+		MAT_DIALOG_DATA, 
+		{ optional: true }
+	  );
 
 	protected loggedUserId = this.authService?.me()?.id;
 
-	readonly tripId = toSignal(
-		inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('id')))),
-		{ initialValue: 0 },
+	readonly tripId = this.dialogData ? signal<number>(this.dialogData.itinerary.id) : toSignal(
+		inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('id') || 0))),
+		{ initialValue: 0}
 	);
 
 	// Signals can't do async work directly. toObservable() lets us pipe the signal

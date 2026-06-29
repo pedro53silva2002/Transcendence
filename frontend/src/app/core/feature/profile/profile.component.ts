@@ -2,8 +2,8 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatIcon } from "@angular/material/icon";
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService } from '../auth/services/auth.service';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { map, of } from 'rxjs';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { filter, map, Observable, of, switchMap } from 'rxjs';
 import { StatCardsComponent } from "../../../shared/stat-cards/stat-cards.component";
 import { MatAnchor } from "@angular/material/button";
 import { UserService } from '../auth/services/user.service';
@@ -13,11 +13,15 @@ import { SessionService } from '../../logic/services/session.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserDto, UserOrderByFieldsDto, UserSearchFieldsDto } from '../auth/dtos/user.dto';
 import { SearchParams } from '../../logic/services/search.service';
-import { TripCardComponent } from "../my-trips/trip-card/trip-card.component";
+import { TripDto } from '../plan-a-trip/dtos/trip.dto';
+import { TripService } from '../plan-a-trip/services/trip.service';
+import { AsyncPipe } from '@angular/common';
+import { TripCardComponent } from '../../../shared/trip-card/trip-card.component';
+import { ProfileItineraryCardComponent } from './profile-itinerary-card/profile-itinerary-card.component';
 
 @Component({
 	selector: 'app-profile',
-	imports: [MatIcon, TranslocoModule, StatCardsComponent, MatAnchor, TripCardComponent],
+	imports: [MatIcon, TranslocoModule, StatCardsComponent, MatAnchor, TripCardComponent, AsyncPipe, ProfileItineraryCardComponent],
 	templateUrl: './profile.component.html',
 	styleUrl: './profile.component.scss',
 })
@@ -27,6 +31,7 @@ export default class ProfileComponent {
 	private dialog = inject(MatDialog);
 	private route = inject(ActivatedRoute);
 	private userService = inject(UserService);
+	private readonly tripService = inject(TripService);
 
 	//logged username
 	protected readonly authUsername = computed(() => this.authService.user()?.username ?? null);
@@ -37,7 +42,7 @@ export default class ProfileComponent {
 	//bool signal to check if the profile is from the logged user or not
 	protected readonly isOwnProfile = computed(() => this.authUsername() === this.profileUsername());
 
-	protected readonly finalAvatarUrl = computed (() => {
+	protected readonly finalAvatarUrl = computed(() => {
 		const photoUrl = this.visitedUser()?.profilePhotoUrl;
 
 		if (!photoUrl)
@@ -51,6 +56,12 @@ export default class ProfileComponent {
 		//if not, we append the MINIO_ENDPOINT
 		return `http://localhost:9000/${photoUrl}`;
 	})
+
+	protected readonly itineraries$ = toObservable(this.visitedUser).pipe(
+		filter((user): user is UserDto => user !== null && user.id !== undefined),
+		switchMap(user => this.tripService.searchTripsByUserId(user.id)),
+		map(response => response.data)
+	);
 
 	constructor() {
 		//extract profileUsername from URL

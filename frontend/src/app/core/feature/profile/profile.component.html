@@ -5,7 +5,7 @@
 			<div class="avatar" [attr.aria-label]="currentUser.displayName" role="img">
 				@if (finalAvatarUrl()) {
 				<img [src]="finalAvatarUrl()" [alt]="currentUser.displayName" [width]="84" [height]="84"
-					class="avatar-img" referrerpolicy="no-referrer"/>
+					class="avatar-img" referrerpolicy="no-referrer" />
 				} @else {
 				<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
 				}
@@ -14,10 +14,11 @@
 				<h2>{{ currentUser.displayName }}</h2>
 				<p>{{ currentUser.bio }}</p>
 				@if (isOwnProfile()) {
-					<button mat-button (click)="openEditProfile()" class="tertiary-btn profile-btn">{{ 'profile.edit-btn' | transloco }}</button>
+				<button mat-button (click)="openEditProfile()" class="tertiary-btn profile-btn">{{ 'profile.edit-btn' |
+					transloco }}</button>
 				} @else {
-					<!-- inserir aqui a lógica do add friend/remove friend consoante as friendships -->
-					<button mat-button class="tertiary-btn profile-btn">{{ 'profile.add-friend-btn' | transloco }}</button>
+				<!-- inserir aqui a lógica do add friend/remove friend consoante as friendships -->
+				<button mat-button class="tertiary-btn profile-btn">{{ 'profile.add-friend-btn' | transloco }}</button>
 				}
 			</div>
 			}
@@ -29,42 +30,46 @@
 	<div class="countries-section">
 		<h1>{{ 'profile.countries-section-title' | transloco }}</h1>
 		<!-- loop sobre todos os países que o user visitou -->
-		 <div class="list-of-countries">
+		<div class="list-of-countries">
 			<!-- nao esquecer do delete button -->
-			 <div class="country-card">
+			<div class="country-card">
 				<h2>ENGLAND</h2>
-			 </div>
-			 <div class="country-card">
+			</div>
+			<div class="country-card">
 				<h2>ENGLAND</h2>
-			 </div>
-			 <div class="country-card">
+			</div>
+			<div class="country-card">
 				<h2>ENGLAND</h2>
-			 </div>
-			 <div class="country-card">
+			</div>
+			<div class="country-card">
 				<h2>ENGLAND</h2>
-			 </div>
-			 <div class="country-card">
+			</div>
+			<div class="country-card">
 				<h2>ENGLAND</h2>
-			 </div>
-			 <div class="country-card">
+			</div>
+			<div class="country-card">
 				<h2>ENGLAND</h2>
-			 </div>
-			 <div class="country-card">
+			</div>
+			<div class="country-card">
 				<h2>ENGLAND</h2>
-			 </div>
-			 <div class="country-card">
+			</div>
+			<div class="country-card">
 				<h2>ENGLAND</h2>
-			 </div>
-			 <div class="country-card">
+			</div>
+			<div class="country-card">
 				<h2>ENGLAND</h2>
-			 </div>
-		 </div>
+			</div>
+		</div>
 	</div>
 	<div class="my-itineraries-section">
 		<h1>{{ 'profile.itineraries-section-title' | transloco }}</h1>
-		<!-- loop sobre os itinerarios publicos/friends do user -->
-		 <div class="list-of-itineraries">
-			<!-- <app-trip-card [trip]="trip"></app-trip-card> -->
-		 </div>
+		@if (itineraries$ | async; as itinerariesList)
+		{
+			<div class="list-of-itineraries">
+				@for (itinerary of itinerariesList; track itinerary.id) {
+					<app-profile-itinerary-card [itinerary]="itinerary"></app-profile-itinerary-card>
+				}
+			</div>
+		}
 	</div>
 </div>

@@ -42,7 +42,7 @@ import {
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthService as ApiAuthService } from '../../feature/auth/services/auth.service';
 import { TokenStorageService } from '../../logic/services/token-storage.service';
-import { CloseButtonComponent } from '../../../shared/components/close-button/close-button.component';
+import { CloseButtonComponent } from '../../../shared/close-button/close-button.component';
 import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-auth-button.component';
 import { UserService } from '../../feature/auth/services/user.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

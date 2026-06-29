@@ -20,7 +20,7 @@ import { TripStateService } from '../plan-a-trip/services/trip-state.service';
 import { TripMemberDto } from '../itinerary/dtos/member.dto';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoadingService } from '../../logic/services/loading.service';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { LoadingSpinnerComponent } from '../../../shared/loading-spinner/loading-spinner.component';
 
 @Component({
 	selector: 'app-member-form',

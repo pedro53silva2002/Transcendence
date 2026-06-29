@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
-import { CreateTripDto, TripDto, TripOrderByFieldsDto, TripSearchFieldsDto, UpdateTripDto } from '../dtos/trip.dto';
+import { CreateTripDto, ProfileTripsDto, TripDto, TripOrderByFieldsDto, TripSearchFieldsDto, UpdateTripDto } from '../dtos/trip.dto';
 import { Observable } from 'rxjs';
 import { CursorPage, SearchParams, searchToQuery } from '../../../logic/services/search.service';
 
@@ -18,6 +18,10 @@ export class TripService extends BaseApiService {
   public search(search: SearchParams<TripSearchFieldsDto, TripOrderByFieldsDto>): Observable<ApiResponse<CursorPage<TripDto>>> {
     const query = searchToQuery(search);
     return this._get<CursorPage<TripDto>>(`/trips/search?q=${query}`);
+  }
+
+  public searchTripsByUserId(userId: number): Observable<ApiResponse<ProfileTripsDto[]>> {
+	return this._get<ProfileTripsDto[]>(`/trips/trip/${userId}`);
   }
 
   //Get trips by id (GET)

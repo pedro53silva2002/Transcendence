@@ -4,11 +4,13 @@
       <!-- Header -->
       <div class="itin-head">
         <h1 class="itin-title">{{ 'itinerary.title' | transloco }}</h1>
-        <button class="add-btn" [class.open]="showForm()" (click)="toggleForm()" [attr.aria-label]="
-            showForm() ? ('itinerary.closeForm' | transloco) : ('itinerary.addItem' | transloco)
-          " [attr.aria-expanded]="showForm()">
-          <mat-icon class="add-remove">add</mat-icon>
-        </button>
+		@if (dialogData?.showAddButton ?? true) {
+			<button class="add-btn" [class.open]="showForm()" (click)="toggleForm()" [attr.aria-label]="
+				showForm() ? ('itinerary.closeForm' | transloco) : ('itinerary.addItem' | transloco)
+			  " [attr.aria-expanded]="showForm()">
+			  <mat-icon class="add-remove">add</mat-icon>
+			</button>
+		}
       </div>
 
       <!-- Stop list -->
@@ -19,14 +21,16 @@
           }
           @for (item of items(); track item.id) {
           <li class="itin-row">
-            <div class="avatar" role="img">
-              @if (item.profilePicture) {
-              <img [src]="getAvatarUrl(item.profilePicture)" [width]="84" [height]="84"
-                class="avatar-img" />
-              } @else {
-              <mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
-              }
-            </div>
+			@if (dialogData?.showAvatar ?? true) {
+				<div class="avatar" role="img">
+				  @if (item.profilePicture) {
+				  <img [src]="getAvatarUrl(item.profilePicture)" [width]="84" [height]="84"
+					class="avatar-img" />
+				  } @else {
+				  <mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
+				  }
+				</div>
+			}
             <div class="row-main">
               <span class="row-title">{{ item.title }}</span>
               <span class="row-sub">{{ item.description }}</span>

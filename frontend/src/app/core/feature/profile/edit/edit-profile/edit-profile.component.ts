@@ -1,7 +1,7 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { CloseButtonComponent } from '../../../../../shared/components/close-button/close-button.component';
+import { CloseButtonComponent } from '../../../../../shared/close-button/close-button.component';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';

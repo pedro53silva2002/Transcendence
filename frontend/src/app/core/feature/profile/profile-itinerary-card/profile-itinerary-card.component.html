@@ -1,0 +1,33 @@
+<div class="card-wrapper" (click)="openItinerary()">
+	<div class="card">
+		<div class="overlay-container">
+			<img [src]="imagePath()" alt="season-image" />
+		</div>
+		<div class="card-content">
+			<p class="destination">
+				@let currentItinerary = itinerary();
+				@let cities = currentItinerary?.city;
+
+				@if (cities && cities.length > 0) {
+				@let visibleCities = cities.slice(0, 3);
+
+				@for (city of visibleCities; track city.name; let last = $last) {
+				<span>{{ city.name }}{{ !last ? ', ' : '' }}</span>
+				}
+
+				@if (cities.length > 3) {
+				<span>...</span>
+				}
+				} @else {
+				<span>{{ currentItinerary?.country }}</span>
+				}
+			</p>
+			<div class="trip-meta">
+				<span class="dates">
+					{{ itinerary().startDate | date : 'd MMM' | uppercase }} &ndash; {{ itinerary().endDate | date :
+					'dMMM' | uppercase }}
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

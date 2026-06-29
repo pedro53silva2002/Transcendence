@@ -1,3 +1,4 @@
+import { ItineraryDto } from '../../itinerary/dtos/itinerary.dto';
 import { CreateTripMemberDto, TripMemberDto } from '../../itinerary/dtos/member.dto';
 import { CityDto } from './city.dto';
 import { CountryDto } from './country.dto';
@@ -36,6 +37,17 @@ export interface TripDto {
   createdAt: string;
   updatedAt?: string;
   members?: TripMemberDto[];
+}
+
+export interface ProfileTripsDto {
+	id: number;
+	duration: number;
+	startDate: string;
+	endDate: string;
+	visibility: TripVisibility;
+	country: CountryDto;
+	city?: CityDto[];
+	itinerary: ItineraryDto[];
 }
 
 //what i send in http put request to update a trip
