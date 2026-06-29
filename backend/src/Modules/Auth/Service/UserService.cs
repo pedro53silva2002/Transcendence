@@ -4,15 +4,21 @@ using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Model;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Trippie.Modules.Auth.Service;
 
 public sealed class UserService(AppDbContext db, UserModel userModel)
 {
+    private const int UsernameMaxLength = 15;
+    private const int SuffixLength = 6;
+
     public async Task<UserDto> CreateAsync(CreateUserDto dto, CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(dto.Email)) throw new ValidationException("email", "Email is required.");
         if (string.IsNullOrWhiteSpace(dto.Username)) throw new ValidationException("username", "Username is required.");
+		if (dto.Username.Length > UsernameMaxLength) throw new ValidationException("username", $"Username cannot exceed {UsernameMaxLength} characters.");
 
         var existsUsername = await userModel.GetByUsername(dto.Username, ct);
         var existsEmails = await userModel.GetByEmail(dto.Email, ct);
@@ -36,6 +42,10 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
             throw new ValidationException("email", "Email can not be empty.");
         if (dto.Username is not null && string.IsNullOrWhiteSpace(dto.Username))
             throw new ValidationException("username", "Username can not be blank.");
+		if (dto.Username is not null && dto.Username.Length > UsernameMaxLength)
+			throw new ValidationException("username", $"Username cannot exceed {UsernameMaxLength} characters.");
+		if (dto.DisplayName is not null && dto.DisplayName.Length > UsernameMaxLength)
+			throw new ValidationException("displayName", $"Display name cannot exceed {UsernameMaxLength} characters.");
 
         if (dto.Email is not null || dto.Username is not null)
         {
@@ -82,27 +92,49 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
             return null;
         return res;
     }
-    public async Task<string> GenerateUniqueUsername(string baseUsername, CancellationToken ct = default)
+    public string GenerateUniqueUsername(string baseUsername)
     {
-        var searchResult = await userModel.SearchAsync(new SearchPayload
+        if (string.IsNullOrWhiteSpace(baseUsername))
+            throw new ValidationException("baseUsername", "Base username is required.");
+
+        var prefix = NormalizeUsername(baseUsername);
+        var maxPrefixLength = UsernameMaxLength - SuffixLength - 1;
+
+        if (prefix.Length > maxPrefixLength)
+            prefix = prefix[..maxPrefixLength];
+
+        var suffix = GenerateRandomSuffix(SuffixLength);
+        var username = $"{prefix}_{suffix}";
+        
+        return username;
+    }
+
+    private static string NormalizeUsername(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+            throw new ValidationException("username", "Username is required.");
+
+        var sb = new StringBuilder();
+
+        foreach (var c in username.ToLowerInvariant())
         {
-            Filters = [new FilterCriterion("username", FilterOperator.StartsWith, baseUsername)],
-            Sort = [new SortCriterion("username", SortDirection.Asc)],
-            Page = new CursorPageRequest
-            {
-                PageSize = 100
-            }
-        }, ct);
-        var existingUsers = searchResult?.Content;
+            if (char.IsLetterOrDigit(c))
+                sb.Append(c);
+        }
 
-        if (existingUsers is null || !existingUsers.Any())
-            return baseUsername;
+        return sb.Length == 0 ? "user" : sb.ToString();
+    }
 
-        int number = 1;
-        while (existingUsers.Any(u => u.Username.Equals($"{baseUsername}{number}", StringComparison.OrdinalIgnoreCase)))
-            number++;
-        var candidateUsername = $"{baseUsername}{number}";
-        return candidateUsername;
+    public static string GenerateRandomSuffix(int length)
+    {
+        const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        
+        char[] buffer = new char[length];
+
+        for (int i = 0; i < length; i++)
+            buffer[i] = chars[RandomNumberGenerator.GetInt32(chars.Length)];
+
+        return new string(buffer);
     }
 
     public async Task<UserDto?> GetByOAuthIdAsync(string oauthProvider, string oauthId, CancellationToken ct = default)
