@@ -3,6 +3,7 @@ export interface TripMemberDto {
   tripId?: number;
   userId: number;
   displayName: string;
+  username: string;
   profilePicture: string | null;
   role: 'Admin' | 'Member';
   joinedAt?: string;

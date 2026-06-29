@@ -183,6 +183,7 @@ public sealed class TripModel(AppDbContext db)
 				TripId = tm.TripId,
 				UserId = tm.UserId,
 				DisplayName = tm.User?.DisplayName ?? tm.User?.Username ?? string.Empty,
+				Username = tm.User?.Username ?? string.Empty,
 				Role = tm.Role
 			})];
 		});
@@ -227,6 +228,7 @@ public sealed class TripModel(AppDbContext db)
 					TripId = tm.TripId,
 					UserId = tm.UserId,
 					DisplayName = tm.User?.DisplayName ?? tm.User?.Username ?? string.Empty,
+					Username = tm.User?.Username ?? string.Empty,
 					Role = tm.Role,
 					JoinedAt = tm.JoinedAt,
 					UpdatedAt = tm.UpdatedAt
@@ -317,6 +319,7 @@ public sealed class TripModel(AppDbContext db)
 			TripId = tm.TripId,
 			UserId = tm.UserId,
 			DisplayName = tm.User.DisplayName ?? tm.User.Username ?? string.Empty,
+			Username = tm.User.Username ?? string.Empty,
 			Role = tm.Role,
 			JoinedAt = tm.JoinedAt,
 			UpdatedAt = tm.UpdatedAt

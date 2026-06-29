@@ -30,10 +30,10 @@
 		<div class="crew-grid" [style.grid-template-columns]="'repeat(' + columns() + ', 1fr)'">
 			@for (member of members(); track member.userId) {
 			<div class="crew-card">
-				<div class="avatar" [attr.aria-label]="member.displayName" role="img">
+				<div [routerLink]="['/profile', member.username]" class="avatar" [attr.aria-label]="member.displayName" role="img">
 					@if (member.profilePicture) {
-					<img [ngSrc]="getAvatarUrl(member.profilePicture)"
-						[alt]="member.displayName" [width]="84" [height]="84" class="avatar-img" />
+					<img [ngSrc]="getAvatarUrl(member.profilePicture)" [alt]="member.displayName" [width]="84"
+						[height]="84" class="avatar-img" />
 					} @else {
 					<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
 					}
@@ -41,8 +41,9 @@
 
 				<div class="crew-info">
 					<div class="name-and-delete">
-						<span class="crew-username">{{ member.displayName }}</span>
-						@if (isAdmin() || !isDashboardRoute()) {
+						<span class="crew-username">
+							{{ member.displayName }}
+						</span> @if (isAdmin() || !isDashboardRoute()) {
 						<button type="button" class="del-btn"
 							[attr.aria-label]="'trips.members.remove' | transloco: { name: member.displayName }"
 							(click)="removeMember(member.id, member.userId)">

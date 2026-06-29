@@ -63,6 +63,7 @@ export class AddMemberDialogComponent implements OnInit {
       const pending: TripMemberDto = {
         userId: friend.id,
         displayName: friend.displayName,
+        username: friend.username,
         profilePicture: friend.profilePhotoUrl,
         role: 'Member',
       };

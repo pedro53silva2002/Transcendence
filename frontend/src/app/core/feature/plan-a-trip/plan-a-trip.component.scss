@@ -37,6 +37,7 @@ h1 {
   width: 100%;
   display: flex;
   justify-content: end;
+  margin-bottom: 58px;
 
   @media (max-width: 1730px) {
     max-width: 650px;
@@ -58,4 +59,5 @@ h1 {
   justify-content: space-between;
   flex-wrap: wrap;
 }
+
 
