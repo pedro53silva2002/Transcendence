@@ -8,12 +8,14 @@ import {
 	output,
 	effect,
 	input,
+	NgZone,
+	ChangeDetectorRef,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
+import { CustomScrollbarComponent } from '../../../shared/custom-scrollbar/custom-scrollbar.component';
 import { ItineraryService } from './services/itinerary.service';
 import { TripService } from '../plan-a-trip/services/trip.service';
 import { MatIcon } from '@angular/material/icon';
@@ -48,18 +50,18 @@ export default class ItineraryComponent {
 	protected totalPrice = signal<number>(0);
 	public totalPriceChanged = output<number>(); //the channel to send the totalPrice to the main component
 
-	public isAdmin = input.required<boolean>();
-	
-	protected readonly dialogData = inject<{ itinerary: TripDto; showAddButton: boolean, profileRoute: boolean, showAvatar: boolean }>(
-		MAT_DIALOG_DATA, 
+	public isAdmin = input<boolean>(false);
+
+	protected readonly dialogData = inject<{ itinerary: TripDto; showAddButton: boolean, profileRoute: boolean, showAvatar: boolean, showDeleteButton: boolean }>(
+		MAT_DIALOG_DATA,
 		{ optional: true }
-	  );
+	);
 
 	protected loggedUserId = this.authService?.me()?.id;
 
 	readonly tripId = this.dialogData ? signal<number>(this.dialogData.itinerary.id) : toSignal(
 		inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('id') || 0))),
-		{ initialValue: 0}
+		{ initialValue: 0 }
 	);
 
 	// Signals can't do async work directly. toObservable() lets us pipe the signal
@@ -131,7 +133,8 @@ export default class ItineraryComponent {
 				),
 			)
 			.subscribe((res) => {
-				this.items.set(res.data?.content ?? [])
+				console.log(res.data?.content);
+				this.items.set(res.data?.content ?? []);
 			});
 
 		effect(() => {
@@ -204,7 +207,7 @@ export default class ItineraryComponent {
 		if (event.key === 'Enter') this.saveItem();
 	}
 
-		protected getAvatarUrl(photoUrl: string | null): string {
+	protected getAvatarUrl(photoUrl: string | null): string {
 		if (!photoUrl)
 			return 'images/default-avatar.png';
 

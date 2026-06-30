@@ -15,7 +15,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { MatDialog } from '@angular/material/dialog';
 import { TripMemberService } from './services/member.service';
 import { AddMemberDialogComponent } from './add-member-dialog/add-member-dialog.component';
-import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
+import { CustomScrollbarComponent } from '../../../shared/custom-scrollbar/custom-scrollbar.component';
 import { TripStateService } from '../plan-a-trip/services/trip-state.service';
 import { TripMemberDto } from '../itinerary/dtos/member.dto';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';

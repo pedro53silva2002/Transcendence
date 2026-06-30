@@ -89,23 +89,13 @@ mat-icon.avatar-icon {
 	flex-wrap: wrap;
 }
 
-.country-card {
+.list-of-itineraries {
 	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 45px;
-	width: fit-content;
-	background: var(--mat-sys-on-primary-container);
-	border-radius: 15px;
-
-	h2 {
-		color: var(--mat-sys-primary);
-		font-family: "BBH Bogle";
-		font-weight: 200;
-		padding: 20px;
-		font-size: 20px;
-	}
+	flex-wrap: wrap;
+	gap: 70px;
 }
+
+
 
 
 

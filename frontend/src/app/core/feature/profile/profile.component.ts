@@ -18,10 +18,11 @@ import { TripService } from '../plan-a-trip/services/trip.service';
 import { AsyncPipe } from '@angular/common';
 import { TripCardComponent } from '../../../shared/trip-card/trip-card.component';
 import { ProfileItineraryCardComponent } from './profile-itinerary-card/profile-itinerary-card.component';
+import { VisitedCountryCardComponent } from "./visited-country-card/visited-country-card.component";
 
 @Component({
 	selector: 'app-profile',
-	imports: [MatIcon, TranslocoModule, StatCardsComponent, MatAnchor, TripCardComponent, AsyncPipe, ProfileItineraryCardComponent],
+	imports: [MatIcon, TranslocoModule, StatCardsComponent, MatAnchor, TripCardComponent, AsyncPipe, ProfileItineraryCardComponent, VisitedCountryCardComponent],
 	templateUrl: './profile.component.html',
 	styleUrl: './profile.component.scss',
 })

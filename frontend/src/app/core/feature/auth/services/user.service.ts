@@ -23,7 +23,6 @@ export class UserService extends BaseApiService {
     return this._get<CursorPage<UserDto>>(`/users/search?q=${query}`);
   }
 
-  //ver o endpoint do backend
   public update(dto: UpdateUserDto): Observable<ApiResponse<UserDto>> {
 
     const formData = new FormData();

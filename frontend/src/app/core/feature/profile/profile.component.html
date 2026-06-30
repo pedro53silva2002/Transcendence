@@ -31,45 +31,21 @@
 		<h1>{{ 'profile.countries-section-title' | transloco }}</h1>
 		<!-- loop sobre todos os países que o user visitou -->
 		<div class="list-of-countries">
-			<!-- nao esquecer do delete button -->
-			<div class="country-card">
-				<h2>ENGLAND</h2>
-			</div>
-			<div class="country-card">
-				<h2>ENGLAND</h2>
-			</div>
-			<div class="country-card">
-				<h2>ENGLAND</h2>
-			</div>
-			<div class="country-card">
-				<h2>ENGLAND</h2>
-			</div>
-			<div class="country-card">
-				<h2>ENGLAND</h2>
-			</div>
-			<div class="country-card">
-				<h2>ENGLAND</h2>
-			</div>
-			<div class="country-card">
-				<h2>ENGLAND</h2>
-			</div>
-			<div class="country-card">
-				<h2>ENGLAND</h2>
-			</div>
-			<div class="country-card">
-				<h2>ENGLAND</h2>
-			</div>
+			<app-visited-country-card [isOwnProfile]="isOwnProfile()"></app-visited-country-card>
 		</div>
 	</div>
+	<!-- falta fazer o filtro de amigos/público/privado de acordo com a visibilidade -->
 	<div class="my-itineraries-section">
-		<h1>{{ 'profile.itineraries-section-title' | transloco }}</h1>
 		@if (itineraries$ | async; as itinerariesList)
 		{
-			<div class="list-of-itineraries">
-				@for (itinerary of itinerariesList; track itinerary.id) {
-					<app-profile-itinerary-card [itinerary]="itinerary"></app-profile-itinerary-card>
-				}
-			</div>
+		@if (itinerariesList.length > 0) {
+		<h1>{{ 'profile.itineraries-section-title' | transloco }}</h1>
+		<div class="list-of-itineraries">
+			@for (itinerary of itinerariesList; track itinerary.id) {
+			<app-profile-itinerary-card [itinerary]="itinerary"></app-profile-itinerary-card>
+			}
+		</div>
+		}
 		}
 	</div>
 </div>

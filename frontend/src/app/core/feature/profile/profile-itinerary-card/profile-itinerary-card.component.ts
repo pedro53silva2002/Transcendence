@@ -7,10 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import ItineraryComponent from '../../itinerary/itinerary.component';
 
 @Component({
-  selector: 'app-profile-itinerary-card',
-  imports: [DatePipe, UpperCasePipe, ItineraryComponent],
-  templateUrl: './profile-itinerary-card.component.html',
-  styleUrl: './profile-itinerary-card.component.scss',
+	selector: 'app-profile-itinerary-card',
+	imports: [DatePipe, UpperCasePipe, ItineraryComponent],
+	templateUrl: './profile-itinerary-card.component.html',
+	styleUrl: './profile-itinerary-card.component.scss',
 })
 export class ProfileItineraryCardComponent {
 
@@ -23,12 +23,15 @@ export class ProfileItineraryCardComponent {
 
 
 	openItinerary(): void {
+
 		this.dialog.open(ItineraryComponent, {
+			width: '660px',
 			data: {
 				itinerary: this.itinerary(),
 				showAddButton: false,
 				profileRoute: true,
-				showAvatar: false
+				showAvatar: false,
+				showDeleteButton: false,
 			}
 		});
 	}

@@ -35,7 +35,8 @@ app-custom-scrollbar {
 	display: flex;
 	flex-direction: column;
 	gap: 18px;
-	min-height: 360px;
+	height: 360px;
+	overflow: hidden;
 }
 
 // ===== Header =====
