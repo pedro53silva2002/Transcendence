@@ -5,11 +5,6 @@ using Trippie.Common.Services.Search.Linq;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Auth.Dtos;
-using Trippie.Modules.Auth.Model;
-using System.Transactions;
-using Trippie.Modules.Auth.Router;
-using Trippie.Modules.Auth.Service;
-using System.Runtime.InteropServices;
 
 namespace Trippie.Modules.Travel.Model;
 
@@ -111,18 +106,6 @@ public sealed class TripModel(AppDbContext db)
 				.Include(t => t.TripCities)
 					.ThenInclude(tc => tc.City)
 				.FirstAsync(t => t.Id == trip.Id, ct);
-
-			if (dto.EndDate > DateOnly.FromDateTime(DateTime.UtcNow))
-			{
-				foreach (var memberId in dto.Members.UserIds)
-				{
-					await new VisitedCountriesService(new VisitedCountriesModel(db)).SyncSingleTripAsync(
-						memberId,
-						dto.Country.Id,
-						trip.Id,
-						ct);
-				}
-			}
 
 			return Trip.ToDto(createdTrip);
 		}

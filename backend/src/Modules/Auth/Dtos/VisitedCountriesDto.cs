@@ -9,12 +9,6 @@ public sealed class VisitedCountryDto
 	public int? SourceTripId { get; set; }
 }
 
-public sealed class CreateVisitedCountryDto
-{
-	public required int CountryId { get; set; }
-	public int? SourceTripId { get; set; }
-}
-
 public sealed class SyncVisitedCountriesResultDto
 {
     public required int NewlyAddedCount { get; set; }

@@ -5,6 +5,7 @@ namespace Trippie.Modules.Auth.Model;
 
 public sealed class VisitedCountry
 {
+	public long Id { get; set; }
 	public required int UserId { get; set; }
 	public required int CountryId { get; set; }
 	public int? SourceTripId { get; set; }
@@ -106,7 +107,10 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 	public async Task<int> GetNumberOfVisitedCountriesAsync(int userId, CancellationToken ct = default)
 	{
 		return await db.VisitedCountries
-			.CountAsync(vc => vc.UserId == userId && vc.DeletedAt == null, ct);
+			.Where(vc => vc.UserId == userId && vc.DeletedAt == null)
+			.Select(vc => vc.CountryId)
+			.Distinct()
+			.CountAsync();
 	}
 
 	public async Task<bool> RemoveManualVisitedCountryAsync(int userId, int countryId, CancellationToken ct = default)

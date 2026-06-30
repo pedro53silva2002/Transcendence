@@ -24,6 +24,7 @@ public sealed class VisitedCountriesRouter(
 
 		var dtos = visitedCountries.Select(vc => new VisitedCountryDto
 		{
+			Id = vc.Id,
 			Country = new CountryDto
 			{
 				Id = vc.Country.Id,

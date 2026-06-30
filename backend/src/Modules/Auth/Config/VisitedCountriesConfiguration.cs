@@ -9,7 +9,13 @@ internal sealed class VisitedCountriesConfiguration : IEntityTypeConfiguration<V
 {
     public void Configure(EntityTypeBuilder<VisitedCountry> vc)
 	{
+		vc.HasKey(x => x.Id);
+
 		vc.ToTable("visited_countries", "auth");
+
+		vc.Property(x => x.Id)
+			.HasColumnName("id")
+			.ValueGeneratedOnAdd();
 
 		vc.Property(vc => vc.UserId)
 			.HasColumnName("user_id");
@@ -34,7 +40,7 @@ internal sealed class VisitedCountriesConfiguration : IEntityTypeConfiguration<V
 			.HasForeignKey(vc => vc.UserId)
 			.HasConstraintName("auth_visited_countries_fk_user")
 			.OnDelete(DeleteBehavior.Cascade);
-		
+
 		vc.HasOne(vc => vc.Country)
 			.WithMany()
 			.HasForeignKey(vc => vc.CountryId)
