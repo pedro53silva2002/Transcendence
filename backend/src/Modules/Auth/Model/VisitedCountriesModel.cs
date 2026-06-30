@@ -7,8 +7,9 @@ public sealed class VisitedCountry
 {
 	public required int UserId { get; set; }
 	public required int CountryId { get; set; }
+	public int? SourceTripId { get; set; }
 	public required DateTime AddedAt { get; set; }
-	public required int SourceTripId { get; set; }
+	public DateTime? DeletedAt { get; set; }
 	public Country Country { get; set; } = null!;
 	public User User { get; set; } = null!;
 }
@@ -19,7 +20,9 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 	{
 		var alreadyVisted = await db.VisitedCountries
 			.AsNoTracking()
-			.AnyAsync(vc => vc.UserId == userId && vc.CountryId == countryId, ct);
+			.AnyAsync(vc => vc.UserId == userId && 
+				vc.CountryId == countryId && 
+				vc.SourceTripId == tripId, ct);
 		
 		if (alreadyVisted)
 			return false;
@@ -95,7 +98,7 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 		return await db.VisitedCountries
 			.AsNoTracking()
 			.Include(vc => vc.Country)
-			.Where(vc => vc.UserId == userId)
+			.Where(vc => vc.UserId == userId && vc.DeletedAt == null)
 			.OrderByDescending(vc => vc.AddedAt)
 			.ToListAsync(ct);
 	}
@@ -103,24 +106,26 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 	public async Task<int> GetNumberOfVisitedCountriesAsync(int userId, CancellationToken ct = default)
 	{
 		return await db.VisitedCountries
-			.CountAsync(vc => vc.UserId == userId, ct);
+			.CountAsync(vc => vc.UserId == userId && vc.DeletedAt == null, ct);
 	}
 
 	public async Task<bool> RemoveManualVisitedCountryAsync(int userId, int countryId, CancellationToken ct = default)
 	{
-		var rows = await db.VisitedCountries
-			.Where(vc => 
-				vc.UserId == userId && 
-				vc.CountryId == countryId)
-			.ExecuteDeleteAsync(ct);
+		var deletedAt = DateTime.UtcNow;
 
-		return rows > 0;
+		var affectedRows = await db.VisitedCountries
+			.Where(vc => vc.UserId == userId && 
+				vc.CountryId == countryId && 
+				vc.DeletedAt == null)
+			.ExecuteUpdateAsync(x => x.SetProperty(vc => vc.DeletedAt, deletedAt), ct);
+
+		return affectedRows > 0;
 	}
 
 	public async Task<bool> IsCountryVisitedAsync(int userId, int countryId, CancellationToken ct = default)
 	{
 		return await db.VisitedCountries
 			.AsNoTracking()
-			.AnyAsync(vc => vc.UserId == userId && vc.CountryId == countryId, ct);
+			.AnyAsync(vc => vc.UserId == userId && vc.CountryId == countryId && vc.DeletedAt == null, ct);
 	}
 }

@@ -26,7 +26,6 @@ public sealed class VisitedCountriesService(VisitedCountriesModel visitedCountri
 		int userId,
 		int countryId,
 		int tripId,
-		DateOnly tripEndDate,
 		CancellationToken ct = default)
 	{
 		ValidateUserId(userId);
@@ -35,11 +34,6 @@ public sealed class VisitedCountriesService(VisitedCountriesModel visitedCountri
 			throw new ValidationException("countryId", "Not a valid Country ID.");
 		if (tripId <= 0)
 			throw new ValidationException("tripId", "Trip ID must be a positive integer.");
-		
-		var today = DateOnly.FromDateTime(DateTime.UtcNow);
-
-		if (tripEndDate >= today)
-			return;
 		
 		await visitedCountriesModel.SyncFromTripsAsync(userId, countryId, tripId, ct);
 	}

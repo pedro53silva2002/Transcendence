@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trippie.Modules.Auth.Model;
+using Trippie.Modules.Travel.Model;
 
 namespace Trippie.Modules.Auth.Config;
 
@@ -10,21 +11,23 @@ internal sealed class VisitedCountriesConfiguration : IEntityTypeConfiguration<V
 	{
 		vc.ToTable("visited_countries", "auth");
 
-		vc.HasKey(vc => new { vc.UserId, vc.CountryId });
-
 		vc.Property(vc => vc.UserId)
 			.HasColumnName("user_id");
 
 		vc.Property(vc => vc.CountryId)
 			.HasColumnName("country_id");
 
+		vc.Property(x => x.SourceTripId)
+            .HasColumnName("source_trip_id")
+            .IsRequired(false);
+		
 		vc.Property(vc => vc.AddedAt)
 			.HasColumnName("added_at")
 			.HasDefaultValueSql("NOW()");
 
-		vc.Property(x => x.SourceTripId)
-            .HasColumnName("source_trip_id")
-            .IsRequired();
+		vc.Property(vc => vc.DeletedAt)
+			.HasColumnName("deleted_at")
+			.IsRequired(false);
 
 		vc.HasOne(vc => vc.User)
 			.WithMany()
