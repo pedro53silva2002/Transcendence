@@ -62,10 +62,6 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 
 		if (newlyExpiredTripIds.Count > 0)
 		{
-			await db.Trips
-				.Where(t => newlyExpiredTripIds.Contains(t.Id))
-				.ExecuteUpdateAsync(x => x.SetProperty(t => t.IsExpired, true), ct);
-
 			var memberTripCountry = await db.TripMembers
 				.Where(tm => newlyExpiredTripIds.Contains(tm.TripId))
 				.Join(db.TripCountries,
@@ -105,6 +101,13 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 					newlyAddedCountryIds.AddRange(toInsert.Select(x => x.CountryId));
 				}
 			}
+
+			// IsExpired is written last so that a crash before this point leaves the trip
+			// still un-expired. The next sync will re-process it; existingPairs guards
+			// against duplicate inserts.
+			await db.Trips
+				.Where(t => newlyExpiredTripIds.Contains(t.Id))
+				.ExecuteUpdateAsync(x => x.SetProperty(t => t.IsExpired, true), ct);
 		}
 
 		// syncB option: trips un-expiring
@@ -117,10 +120,6 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 
 		if (unexpiringTripIds.Count > 0)
 		{
-			await db.Trips
-				.Where(t => unexpiringTripIds.Contains(t.Id))
-				.ExecuteUpdateAsync(x => x.SetProperty(t => t.IsExpired, false), ct);
-		
 			var deleteQuery = db.VisitedCountries
 				.Where(vc => vc.SourceTripId != null
 					&& unexpiringTripIds.Contains(vc.SourceTripId.Value)
@@ -129,6 +128,12 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 				deleteQuery = deleteQuery.Where(vc => vc.UserId == userId);
 
 			await deleteQuery.ExecuteDeleteAsync(ct);
+
+			// IsExpired is written last so that a crash before this point leaves the trip
+			// still expired. The next sync will re-run the delete (no-op) then clear the flag.
+			await db.Trips
+				.Where(t => unexpiringTripIds.Contains(t.Id))
+				.ExecuteUpdateAsync(x => x.SetProperty(t => t.IsExpired, false), ct);
 		}
 
 		// syncC option: country reconciliation for already-expired trips

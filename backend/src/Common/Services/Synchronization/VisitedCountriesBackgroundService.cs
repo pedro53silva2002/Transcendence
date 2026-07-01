@@ -8,6 +8,8 @@ public sealed class VisitedCountriesSyncBackgroundService(
 {
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
+		await RunSyncAsync(stoppingToken);
+
 		while (!stoppingToken.IsCancellationRequested)
 		{
 			var delay = GetDelayUntilNextRun();
