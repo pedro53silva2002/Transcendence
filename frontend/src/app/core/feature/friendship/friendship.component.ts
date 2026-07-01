@@ -2,14 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } 
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
 import { FooterComponent } from '../../layout/footer/footer.component';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
-import { FriendshipService } from '../service/social/friendship.service';
-import { FriendRequestService } from '../service/social/friend-request.service';
-import { FriendDto } from '../dtos/social/friendship.dto';
-import { FriendRequestDto } from '../dtos/social/friend-request.dto';
+import { FriendshipService } from '../../logic/services/friendship.service';
+import { FriendDto } from '../../logic/dtos/friendship.dto';
+import { FriendRequestDto } from '../../logic/dtos/friend-request.dto';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslocoModule } from '@jsverse/transloco';
+import { FriendRequestService } from '../../logic/services/friend-request.service';
 
 @Component({
   selector: 'app-friendship',
@@ -17,7 +16,6 @@ import { TranslocoModule } from '@jsverse/transloco';
   imports: [
     NavbarComponent,
     FooterComponent,
-    LoadingSpinnerComponent,
     ReactiveFormsModule,
     MatIconModule,
     MatButtonModule,

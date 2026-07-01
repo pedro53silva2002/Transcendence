@@ -14,14 +14,14 @@ import { ActivatedRoute } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomScrollbarComponent } from '../../../shared/custom-scrollbar/custom-scrollbar.component';
-import { ItineraryService } from './services/itinerary.service';
-import { TripService } from '../plan-a-trip/services/trip.service';
+import { ItineraryService } from '../../logic/services/itinerary.service';
+import { TripService } from '../../logic/services/trip.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatError } from '@angular/material/form-field';
 import { TranslocoModule } from '@jsverse/transloco';
 import { SessionService } from '../../logic/services/session.service';
-import { ItineraryDto } from './dtos/itinerary.dto';
-import { TripDto } from '../plan-a-trip/dtos/trip.dto';
+import { ItineraryDto } from '../../logic/dtos/itinerary.dto';
+import { TripDto } from '../../logic/dtos/trip.dto';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({

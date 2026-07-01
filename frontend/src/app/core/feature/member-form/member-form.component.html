@@ -22,10 +22,11 @@
 	}
 
 	<app-custom-scrollbar>
-		<div class="crew-grid" [style.grid-template-columns]="'repeat(' + columns() + ', 1fr)'">
+		<div class="crew-grid" [class.dashboard-crew-card]="isDashboardRoute()" [style.grid-template-columns]="'repeat(' + columns() + ', 1fr)'">
 			@for (member of members(); track member.userId) {
 			<div class="crew-card">
-				<div [routerLink]="['/profile', member.username]" class="avatar" [attr.aria-label]="member.displayName" role="img">
+				<div [routerLink]="['/profile', member.username]" class="avatar" [attr.aria-label]="member.displayName"
+					role="img">
 					@if (member.profilePicture) {
 					<img [ngSrc]="getAvatarUrl(member.profilePicture)" [alt]="member.displayName" [width]="84"
 						[height]="84" class="avatar-img" />
@@ -36,9 +37,8 @@
 
 				<div class="crew-info">
 					<div class="name-and-delete">
-						<span class="crew-username">
-							{{ member.displayName }}
-						</span> @if (isAdmin() || !isDashboardRoute()) {
+						<span class="crew-username">{{ member.username }}</span>
+						@if (canDeleteMember(member.userId)) {
 						<button type="button" class="del-btn"
 							[attr.aria-label]="'trips.members.remove' | transloco: { name: member.displayName }"
 							(click)="removeMember(member.id, member.userId)">

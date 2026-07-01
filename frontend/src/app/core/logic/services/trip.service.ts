@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
+import { ApiResponse, BaseApiService } from './base-api.service';
 import { CreateTripDto, ProfileTripsDto, TripDto, TripOrderByFieldsDto, TripSearchFieldsDto, UpdateTripDto } from '../dtos/trip.dto';
 import { Observable } from 'rxjs';
-import { CursorPage, SearchParams, searchToQuery } from '../../../logic/services/search.service';
+import { CursorPage, SearchParams, searchToQuery } from './search.service';
 
 @Injectable({
   providedIn: 'root',

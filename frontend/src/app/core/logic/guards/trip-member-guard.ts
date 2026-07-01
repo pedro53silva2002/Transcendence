@@ -1,5 +1,5 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { SessionService } from '../../../logic/services/session.service';
+import { SessionService } from '../services/session.service';
 import { inject } from '@angular/core';
 
 export const tripMemberGuard: CanActivateFn = (route, state) => {

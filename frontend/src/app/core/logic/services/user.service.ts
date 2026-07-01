@@ -1,14 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
-import {
-  CreateUserDto,
-  UpdateUserDto,
-  UserDto,
-  UserOrderByFieldsDto,
-  UserSearchFieldsDto,
-} from '../dtos/user.dto';
-import { CursorPage, SearchParams, searchToQuery } from '../../../logic/services/search.service';
+import { ApiResponse, BaseApiService } from './base-api.service';
+
+import { CursorPage, SearchParams, searchToQuery } from './search.service';
 import { Observable } from 'rxjs';
+import { CreateUserDto, UpdateUserDto, UserDto, UserOrderByFieldsDto, UserSearchFieldsDto } from '../dtos/user.dto';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends BaseApiService {

@@ -1,5 +1,5 @@
-import { ItineraryDto } from '../../itinerary/dtos/itinerary.dto';
-import { CreateTripMemberDto, TripMemberDto } from '../../itinerary/dtos/member.dto';
+import { ItineraryDto } from './itinerary.dto';
+import { CreateTripMemberDto, TripMemberDto } from './member.dto';
 import { CityDto } from './city.dto';
 import { CountryDto } from './country.dto';
 

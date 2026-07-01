@@ -35,12 +35,12 @@ import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
 import { TranslocoModule } from '@jsverse/transloco';
 import { LanguageButtonComponent } from '../../../shared/language-button/language-button.component';
-import { UserService } from '../../feature/auth/services/user.service';
-import { UserDto } from '../../feature/auth/dtos/user.dto';
+import { UserService } from '../../logic/services/user.service';
 import { SessionService } from '../../logic/services/session.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AuthService as OtherAuth } from '../../feature/auth/services/auth.service';
-import { FriendRequestService } from '../../feature/service/social/friend-request.service';
+import { AuthService as OtherAuth } from '../../logic/services/auth.service';
+import { FriendRequestService } from '../../logic/services/friend-request.service';
+import { UserDto } from '../../logic/dtos/user.dto';
 
 @Component({
 	selector: 'app-navbar',

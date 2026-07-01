@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
-import { SearchParams, searchToQuery } from '../../../logic/services/search.service';
+import { ApiResponse, BaseApiService } from './base-api.service';
+import { SearchParams, searchToQuery } from './search.service';
 import { HttpClient } from '@angular/common/http';
 import { CountryDto } from '../dtos/country.dto';
 import { map, Observable } from 'rxjs';

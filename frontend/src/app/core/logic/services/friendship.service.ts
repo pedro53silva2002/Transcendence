@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
-import { CreateFriendshipDto, FriendDto, FriendshipDto } from '../../dtos/social/friendship.dto';
+import { ApiResponse, BaseApiService } from './base-api.service';
+import { CreateFriendshipDto, FriendDto, FriendshipDto } from '../dtos/friendship.dto';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })

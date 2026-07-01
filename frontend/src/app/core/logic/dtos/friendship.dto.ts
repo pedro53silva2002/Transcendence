@@ -1,4 +1,4 @@
-import { UserDto } from '../../auth/dtos/user.dto';
+import { UserDto } from "./user.dto";
 
 export interface FriendshipDto {
   id: number;

@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { DashboardCardComponent } from '../../../shared/dashboard-card/dashboard-card.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { SessionService } from '../../logic/services/session.service';
-import { MeDto } from '../../feature/auth/dtos/auth.dto';
+import { MeDto } from '../../logic/dtos/auth.dto';
 import { FooterComponent } from '../footer/footer.component';
 import { RouterModule } from '@angular/router';
 import { StatCardsComponent } from "../../../shared/stat-cards/stat-cards.component";

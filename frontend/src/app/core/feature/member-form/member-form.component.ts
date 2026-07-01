@@ -2,6 +2,7 @@ import { NgOptimizedImage } from '@angular/common';
 import {
 	ChangeDetectionStrategy,
 	Component,
+	computed,
 	effect,
 	inject,
 	input,
@@ -13,13 +14,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslocoModule } from '@jsverse/transloco';
 import { MatDialog } from '@angular/material/dialog';
-import { TripMemberService } from './services/member.service';
 import { AddMemberDialogComponent } from './add-member-dialog/add-member-dialog.component';
 import { CustomScrollbarComponent } from '../../../shared/custom-scrollbar/custom-scrollbar.component';
-import { TripStateService } from '../plan-a-trip/services/trip-state.service';
-import { TripMemberDto } from '../itinerary/dtos/member.dto';
+import { TripStateService } from '../../logic/services/trip-state.service';
+import { TripMemberDto } from '../../logic/dtos/member.dto';
 import { Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../logic/services/session.service';
+import { TripMemberService } from '../../logic/services/member.service';
 
 @Component({
 	selector: 'app-member-form',
@@ -50,9 +51,10 @@ export class MemberFormComponent {
 	readonly showRole = input(true);
 	readonly showAddButton = input(true);
 	readonly isDashboardRoute = signal(false);
+	public readonly tripCreatorUserId = signal<number>(-1);
 
 	// members are stored in TripStateService so the dashboard can read the same list
-	public readonly members = this.tripState.members;
+	public readonly members = computed(() => this.tripState.members());
 	protected readonly loading = signal(false);
 
 	public isAdmin = input<boolean>();
@@ -65,42 +67,46 @@ export class MemberFormComponent {
 		// Only fetch when tripId is a real id; skip null
 		effect(() => {
 			const id = this.tripId();
-			if (id === null) return;
 
-			this.loading.set(true);
-			this.memberService
-				.search(
-					{
-						search: { tripId: { op: 'EQUAL', value: id } },
-						orderBy: [{ field: 'userId', descending: false }],
-						pageSize: 10,
-					},
-					id,
-				)
-				.subscribe({
-					next: (result) => {
-						if (result.data) this.tripState.setMembers(result.data.content);
-					},
-					complete: () => this.loading.set(false),
-					error: () => this.loading.set(false),
-				});
-		}, { allowSignalWrites: true });
-
-		// For the create flow (no tripId yet), seed the list with the creator as Admin.
-		if (this.tripId() === null) {
-			const me = this.sessionService.me();
-			if (me) {
-				this.tripState.setMembers([{
-					userId: me.id,
-					username: me.username,
-					displayName: me.displayName,
-					profilePicture: me.profilePhotoUrl,
-					role: 'Admin',
-				}]);
-			} else {
-				this.tripState.setMembers([]);
+			// For the create flow (no tripId yet), seed the list with the creator as Admin.
+			if (id === null) {
+				const me = this.sessionService.me();
+				if (me) {
+					this.tripState.setMembers([{
+						userId: me.id,
+						username: me.username,
+						displayName: me.displayName,
+						profilePicture: me.profilePhotoUrl,
+						role: 'Admin',
+					}]);
+					this.tripCreatorUserId.set(me.id);
+				} else {
+					this.tripState.setMembers([]);
+				}
 			}
-		}
+			else {
+				this.loading.set(true);
+				this.memberService
+					.search(
+						{
+							search: { tripId: { op: 'EQUAL', value: id } },
+							orderBy: [{ field: 'userId', descending: false }],
+							pageSize: 10,
+						},
+						id,
+					)
+					.subscribe({
+						next: (result) => {
+							if (result.data) this.tripState.setMembers(result.data.content);
+
+							if (this.tripState.trip()?.createdBy)
+								this.tripCreatorUserId.set(this.tripState.trip()?.createdBy ?? -1);
+						},
+						complete: () => this.loading.set(false),
+						error: () => this.loading.set(false),
+					});
+				}
+			}, { allowSignalWrites: true });
 	}
 
 	protected openAddMember(): void {
@@ -135,6 +141,13 @@ export class MemberFormComponent {
 			this.memberService.delete(memberId, tripId).subscribe();
 		}
 		this.tripState.removeMember(userId);
+	}
+
+	protected canDeleteMember(memberUserId: number): boolean {
+		if (!this.isAdmin())
+			return false;
+
+		return memberUserId !== this.tripCreatorUserId();
 	}
 
 	protected getAvatarUrl(photoUrl: string | null): string {

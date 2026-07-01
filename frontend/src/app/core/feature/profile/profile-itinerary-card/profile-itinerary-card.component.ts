@@ -1,5 +1,5 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { ProfileTripsDto } from '../../plan-a-trip/dtos/trip.dto';
+import { ProfileTripsDto } from '../../../logic/dtos/trip.dto';
 import { DatePipe, UpperCasePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import ItineraryComponent from '../../itinerary/itinerary.component';

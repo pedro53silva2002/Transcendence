@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
+import { ApiResponse, BaseApiService } from './base-api.service';
 import {
   CreateItineraryDto,
   ItineraryDto,
   ItineraryOrderByDto,
   ItinerarySearchFieldsDto,
-} from '../../itinerary/dtos/itinerary.dto';
+  TripTotalPriceDto,
+} from '../dtos/itinerary.dto';
 import { Observable } from 'rxjs';
-import { CursorPage, SearchParams, searchToQuery } from '../../../logic/services/search.service';
+import { CursorPage, SearchParams, searchToQuery } from './search.service';
 
 @Injectable({ providedIn: 'root' })
 export class ItineraryService extends BaseApiService {
@@ -28,5 +29,9 @@ export class ItineraryService extends BaseApiService {
   public delete(id: number): Observable<ApiResponse<void>> {
     const res = this._delete<void>(`/trips/itinerary/${id}`);
     return res;
+  }
+
+  public getTotalPrice(id: number): Observable<ApiResponse<TripTotalPriceDto>> {
+	return this._get<TripTotalPriceDto>(`/trips/itinerary/${id}/total-price`);
   }
 }

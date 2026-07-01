@@ -12,7 +12,7 @@ app-member-form {
 	border: 2px solid var(--mat-sys-on-primary-container);
 	border-radius: 25px;
 	padding: 40px;
-	min-height: 280px;
+	min-height: 360px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -66,10 +66,12 @@ app-member-form {
 }
 
 .crew-grid {
-	display: grid;
-	row-gap: 28px;
-	//column-gap: 35px;
-	justify-content: space-between;
+	margin-top: 10px;
+	width: 90%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 65px;
+	justify-content: center;
 }
 
 .crew-card {
@@ -78,7 +80,13 @@ app-member-form {
 	flex-direction: row;
 	align-items: center;
 	gap: 12px;
+	margin-right: 0;
+}
+
+.dashboard-crew-card {
+	justify-content: flex-start;
 	margin-left: 100px;
+	gap: 30px;
 }
 
 .name-and-delete {

@@ -87,11 +87,7 @@
         </div>
       }
     } @else {
-      @if (isLoading()) {
-        <div class="loading-state" role="status" [attr.aria-label]="'friends.loadingAriaLabel' | transloco">
-          <app-loading-spinner></app-loading-spinner>
-        </div>
-      } @else if (filteredFriends().length === 0) {
+       @if (filteredFriends().length === 0) {
         <p class="empty-state">{{ 'friends.noFriendsFound' | transloco }}</p>
       } @else {
         <div class="friends-grid">

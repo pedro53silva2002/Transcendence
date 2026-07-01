@@ -1,16 +1,16 @@
 import { Routes } from '@angular/router';
 import { UserDashboardComponent } from './core/layout/user-dashboard/user-dashboard.component';
 import { LandingPageComponent } from './core/layout/landing-page/landing-page.component';
-import { authGuard } from './core/logic/services/authGuard.service';
 import { guestGuard } from './core/logic/services/guestGuard.service';
 import { AuthCallbackComponent } from './core/auth/auth-callback/auth-callback.component';
 import { AppLayoutComponent } from './core/layout/app-layout/app-layout.component';
 import { PlanATripComponent } from './core/feature/plan-a-trip/plan-a-trip.component';
 import { TripDashboardComponent } from './core/feature/trip-dashboard/trip-dashboard.component';
 import { MyTripsComponent } from './core/feature/my-trips/my-trips.component';
-import { tripMemberGuard } from './core/feature/trip-dashboard/guards/trip-member-guard';
+import { tripMemberGuard } from './core/logic/guards/trip-member-guard';
 import ProfileComponent from './core/feature/profile/profile.component';
 import FriendshipComponent from './core/feature/friendship/friendship.component';
+import { authGuard } from './core/logic/services/authGuard.service';
 
 export const routes: Routes = [
   {

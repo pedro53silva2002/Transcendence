@@ -1,19 +1,13 @@
-import { CursorPage } from '../../../logic/services/search.service';
-import {
-  CreateTripMemberDto,
-  TripMemberDto,
-  TripMemberOrderByDto,
-  TripMemberSearchFieldsDto,
-  UpdateTripMemberDto,
-} from '../../member-form/dtos/member.dto';
-import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
+import { CursorPage } from './search.service';
+import { ApiResponse, BaseApiService } from './base-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   buildSearchUrl,
   SearchParams,
   searchToQuery,
-} from '../../../logic/services/search.service';
+} from './search.service';
+import { CreateTripMemberDto, TripMemberDto, TripMemberOrderByDto, TripMemberSearchFieldsDto, UpdateTripMemberDto } from '../dtos/member.dto';
 
 @Injectable({ providedIn: 'root' })
 export class TripMemberService extends BaseApiService {

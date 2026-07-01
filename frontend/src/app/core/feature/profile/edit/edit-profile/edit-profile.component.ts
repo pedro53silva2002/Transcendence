@@ -5,7 +5,7 @@ import { CloseButtonComponent } from '../../../../../shared/close-button/close-b
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { AuthService } from '../../../auth/services/auth.service';
+import { AuthService } from '../../../../logic/services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -13,9 +13,9 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { ConfirmationPopUpComponent } from '../../../../../shared/pop-up/confirmation-pop-up/confirmation-pop-up.component';
 import { EMPTY, filter, of, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
-import { UserService } from '../../../auth/services/user.service';
-import { UpdateUserDto, UserDto } from '../../../auth/dtos/user.dto';
+import { UserService } from '../../../../logic/services/user.service';
 import { SessionService } from '../../../../logic/services/session.service';
+import { UpdateUserDto, UserDto } from '../../../../logic/dtos/user.dto';
 
 //shows the errors in real time
 export class InstantErrorStateMatcher implements ErrorStateMatcher {

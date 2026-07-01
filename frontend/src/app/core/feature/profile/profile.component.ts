@@ -5,17 +5,17 @@ import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-i
 import { filter, map, switchMap } from 'rxjs';
 import { StatCardsComponent } from "../../../shared/stat-cards/stat-cards.component";
 import { MatAnchor } from "@angular/material/button";
-import { UserService } from '../auth/services/user.service';
+import { UserService } from '../../logic/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditProfileComponent } from './edit/edit-profile/edit-profile.component';
 import { SessionService } from '../../logic/services/session.service';
 import { ActivatedRoute } from '@angular/router';
-import { UserDto, UserOrderByFieldsDto, UserSearchFieldsDto } from '../auth/dtos/user.dto';
 import { SearchParams } from '../../logic/services/search.service';
-import { TripService } from '../plan-a-trip/services/trip.service';
+import { TripService } from '../../logic/services/trip.service';
 import { AsyncPipe } from '@angular/common';
 import { ProfileItineraryCardComponent } from './profile-itinerary-card/profile-itinerary-card.component';
 import { VisitedCountryCardComponent } from "./visited-country-card/visited-country-card.component";
+import { UserDto, UserOrderByFieldsDto, UserSearchFieldsDto } from '../../logic/dtos/user.dto';
 
 @Component({
 	selector: 'app-profile',

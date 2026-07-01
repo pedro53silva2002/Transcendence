@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
 import { Observable } from 'rxjs';
-import { CreateFriendRequestDto, FriendRequestDto } from '../../dtos/social/friend-request.dto';
-import { FriendshipDto } from '../../dtos/social/friendship.dto';
+import { ApiResponse, BaseApiService } from './base-api.service';
+import { CreateFriendRequestDto, FriendRequestDto } from '../dtos/friend-request.dto';
+import { FriendshipDto } from '../dtos/friendship.dto';
 
 @Injectable({ providedIn: 'root' })
 export class FriendRequestService extends BaseApiService {
