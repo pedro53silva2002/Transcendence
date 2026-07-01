@@ -186,6 +186,10 @@ nav {
 
 @media (max-width: 1254px) {
 
+	nav {
+		width: 80%;
+	}
+
 	.full-screen-buttons {
 		display: contents !important; //prevents gap from some invisible buttons to appear
 
