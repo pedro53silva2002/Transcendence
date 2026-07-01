@@ -60,4 +60,9 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'my-friends',
+    loadComponent: () => import('./core/feature/friendship/friendship.component'),
+    canActivate: [authGuard],
+  },
 ];

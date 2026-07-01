@@ -137,8 +137,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             return await BuildAuthResponse(existingEmailUser, [], ct);
 		}
 
-        var baseUsername = dto.Email.Split('@')[0];
-        var uniqueUsername = await userService.GenerateUniqueUsername(baseUsername, ct);
+        var uniqueUsername = userService.GenerateUniqueUsername(dto.Email.Split('@')[0]);
 
         var newUser = await userService.CreateAsync(new CreateUserDto
         {
@@ -154,6 +153,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
     }
 
     private static string GenerateRefreshToken() => Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
     private async Task<AuthResponseDto> BuildAuthResponse(UserDto user, IReadOnlyList<JwtTripClaim> trips, CancellationToken ct)
     {
         var (accessToken, expiresAt) = jwt.GenerateToken(new JwtUserClaims
