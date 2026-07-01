@@ -1,5 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   computed,
@@ -37,11 +38,13 @@ import { LanguageButtonComponent } from '../../../shared/components/language-but
 import { UserService } from '../../feature/auth/services/user.service';
 import { UserDto } from '../../feature/auth/dtos/user.dto';
 import { SessionService } from '../../logic/services/session.service';
-import { AuthService, AuthService as OtherAuth } from '../../feature/auth/services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService as OtherAuth } from '../../feature/auth/services/auth.service';
+import { FriendRequestService } from '../../feature/service/social/friend-request.service';
 
 @Component({
   selector: 'app-navbar',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     MatButtonModule,
@@ -74,16 +77,21 @@ export class NavbarComponent implements OnInit {
   showLogin = input(false);
   showRegister = input(false);
 
+  constructor(private readonly dialog: MatDialog) {}
+
   private readonly userService = inject(UserService);
   private readonly authService = inject(SessionService);
   private readonly router = inject(Router);
   private readonly otherAuth = inject(OtherAuth);
-  private readonly dialog = inject(MatDialog);
   private readonly cd = inject(ChangeDetectorRef);
 
   public isDashboardRoute = false;
 
   public authUsername = computed(() => this.authService.user()?.username ?? null);
+  private readonly friendRequestService = inject(FriendRequestService);
+
+  readonly currentUserId = computed(() => this.authService.me()?.id);
+  readonly sentRequests = signal<Set<number>>(new Set());
 
   ngOnInit(): void {
     if (!this.authService.getOAuthResult()) {
@@ -139,8 +147,21 @@ export class NavbarComponent implements OnInit {
     }),
   );
 
-  async logout() {
-    await this.otherAuth.logout();
+  sendFriendRequest(user: UserDto, event: Event): void {
+    event.stopPropagation();
+    const myId = this.currentUserId();
+    if (!myId) return;
+
+    this.friendRequestService
+      .create({ senderId: myId, receiverId: user.id })
+      .subscribe({
+        next: () => this.sentRequests.update((s) => new Set([...s, user.id])),
+        error: () => this.sentRequests.update((s) => new Set([...s, user.id])),
+      });
+  }
+
+  logout(): void {
+    this.otherAuth.logout();
     this.router.navigate(['/']);
   }
 
@@ -156,8 +177,8 @@ export class NavbarComponent implements OnInit {
   //to close the side menu when the screen is resized to desktop size (if it's open)
   @ViewChild(MatMenuTrigger) menuTrigger!: MatMenuTrigger;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
+  @HostListener('window:resize')
+  onResize() {
     if (window.innerWidth > 938 && this.menuTrigger && this.menuTrigger.menuOpen) {
       this.menuTrigger.closeMenu();
     }

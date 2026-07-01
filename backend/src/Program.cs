@@ -14,7 +14,9 @@ using Microsoft.AspNetCore.RateLimiting;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 using Trippie.Modules.Travel.Service;
-using Trippie.Common.Services.MinIO;
+using Trippie.Modules.Social.Config;
+using Trippie.Modules.Social.Model;
+using Trippie.Modules.Social.Service;
 
 Env.TraversePath().Load();
 
@@ -48,11 +50,13 @@ try
 	var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
 	dataSourceBuilder.MapEnum<TripVisibility>("trip_visibility");
 	dataSourceBuilder.MapEnum<TripMemberRole>("member_role");
+	dataSourceBuilder.MapEnum<FriendRequestStatus>("friend_request_status");
 	var dataSource = dataSourceBuilder.Build();
 	builder.Services.AddDbContext<AppDbContext>(opts =>
 		opts.UseNpgsql(dataSource, npgsqlOptions => npgsqlOptions
 			.MapEnum<TripVisibility>("trip_visibility")
 			.MapEnum<TripMemberRole>("member_role")
+			.MapEnum<FriendRequestStatus>("friend_request_status")
 			));
 
 	// Replace MS logging with Serilog (reads "Serilog" + "ErrorHandling" sections).
@@ -142,8 +146,12 @@ try
 	builder.Services.AddScoped<CityModel>();
 	builder.Services.AddScoped<TripMembersModel>();
 	builder.Services.AddScoped<TripMembersService>();
+	builder.Services.AddScoped<FriendRequestModel>();
+	builder.Services.AddScoped<FriendRequestService>();
+	builder.Services.AddScoped<FriendshipModel>();
+	builder.Services.AddScoped<FriendshipService>();
 	builder.Services.AddScoped<ItineraryModel>();
-    builder.Services.AddScoped<ItineraryService>();
+	builder.Services.AddScoped<ItineraryService>();
 
 
 	//Add Http request limiter
