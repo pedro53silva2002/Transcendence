@@ -71,7 +71,8 @@ app-member-form {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 65px;
-	justify-content: center;
+	justify-content: flex-start;
+	margin-left: 30px;
 }
 
 .crew-card {
@@ -84,7 +85,6 @@ app-member-form {
 }
 
 .dashboard-crew-card {
-	justify-content: flex-start;
 	margin-left: 100px;
 	gap: 30px;
 }

@@ -11,7 +11,7 @@ import { forkJoin } from 'rxjs';
 import { TripService } from '../../logic/services/trip.service';
 import { TripDto } from '../../logic/dtos/trip.dto';
 import { SessionService } from '../../logic/services/session.service';
-import { TripCardComponent } from '../../../shared/trip-card/trip-card.component';
+import { TripCardComponent } from './trip-card/trip-card.component';
 
 @Component({
   selector: 'app-my-trips',

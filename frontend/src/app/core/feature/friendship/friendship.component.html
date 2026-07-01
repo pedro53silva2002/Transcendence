@@ -1,119 +1,85 @@
-<div class="page">
-  <app-navbar
-    [showHome]="true"
-    [showProfile]="true"
-    [showPlanATrip]="true"
-    [showMyTrips]="true"
-    [showFriends]="true"
-    [showMyExpenses]="true"
-    [showSearch]="true"
-    [showLanguageSelector]="true"
-    [showLogout]="true"
-  ></app-navbar>
+<div class="main-container">
+	<div class="header-row">
+		<h1 class="page-title">{{ 'friends.pageTitle' | transloco }}</h1>
+		<div class="header-actions">
+			<div class="search-field">
+				<mat-icon aria-hidden="true">search</mat-icon>
+				<input type="text" [placeholder]="'friends.searchPlaceholder' | transloco" [formControl]="searchControl"
+					[attr.aria-label]="'friends.searchAriaLabel' | transloco" />
+			</div>
+			<div class="requests-wrapper">
+				@if (!showRequests()) {
+				<button class="friend-requests-btn" (click)="showRequests.set(true)"
+					[attr.aria-label]="'friends.showRequestsAriaLabel' | transloco">
+					{{ 'friends.requestsBtn' | transloco }}
+				</button>
+				@if (pendingCount() > 0) {
+				<span class="count-badge"
+					[attr.aria-label]="'friends.pendingAriaLabel' | transloco: { count: pendingCount() }">
+					{{ pendingCount() }}
+				</span>
+				}
+				} @else {
+				<button class="friend-requests-btn" (click)="showRequests.set(false)"
+					[attr.aria-label]="'friends.showListAriaLabel' | transloco">
+					{{ 'friends.listBtn' | transloco }}
+				</button>
+				}
+			</div>
+		</div>
+	</div>
 
-  <div class="main-container">
-    <div class="header-row">
-      <h1 class="page-title">{{ 'friends.pageTitle' | transloco }}</h1>
-      <div class="header-actions">
-        <div class="search-field">
-          <mat-icon aria-hidden="true">search</mat-icon>
-          <input
-            type="text"
-            [placeholder]="'friends.searchPlaceholder' | transloco"
-            [formControl]="searchControl"
-            [attr.aria-label]="'friends.searchAriaLabel' | transloco"
-          />
-        </div>
-        <div class="requests-wrapper">
-          @if (!showRequests()) {
-            <button
-              class="friend-requests-btn"
-              (click)="showRequests.set(true)"
-              [attr.aria-label]="'friends.showRequestsAriaLabel' | transloco"
-            >
-              {{ 'friends.requestsBtn' | transloco }}
-            </button>
-            @if (pendingCount() > 0) {
-              <span class="count-badge" [attr.aria-label]="'friends.pendingAriaLabel' | transloco: { count: pendingCount() }">
-                {{ pendingCount() }}
-              </span>
-            }
-          } @else {
-            <button
-              class="friend-requests-btn"
-              (click)="showRequests.set(false)"
-              [attr.aria-label]="'friends.showListAriaLabel' | transloco"
-            >
-              {{ 'friends.listBtn' | transloco }}
-            </button>
-          }
-        </div>
-      </div>
-    </div>
-
-    @if (showRequests()) {
-      @if (pendingRequests$().length === 0) {
-        <p class="empty-state">{{ 'friends.noPendingRequests' | transloco }}</p>
-      } @else {
-        <div class="friends-grid" role="list" [attr.aria-label]="'friends.requestsListAriaLabel' | transloco">
-          @for (req of pendingRequests$(); track req.id) {
-            <div class="friend-card" role="listitem">
-              <div class="avatar">
-                @if (req.senderProfilePhotoUrl) {
-                  <img [src]="req.senderProfilePhotoUrl" [alt]="req.senderUsername" />
-                } @else {
-                  <mat-icon aria-hidden="true">person</mat-icon>
-                }
-              </div>
-              <span class="friend-username">{{ req.senderUsername }}</span>
-              <div class="request-actions">
-                <button
-                  class="deny-btn"
-                  (click)="denyRequest(req.id)"
-                  [attr.aria-label]="'friends.denyAriaLabel' | transloco: { name: req.senderUsername }"
-                >
-                  {{ 'friends.deny' | transloco }}
-                </button>
-                <button
-                  class="accept-btn"
-                  (click)="acceptRequest(req.id)"
-                  [attr.aria-label]="'friends.acceptAriaLabel' | transloco: { name: req.senderUsername }"
-                >
-                  {{ 'friends.accept' | transloco }}
-                </button>
-              </div>
-            </div>
-          }
-        </div>
-      }
-    } @else {
-       @if (filteredFriends().length === 0) {
-        <p class="empty-state">{{ 'friends.noFriendsFound' | transloco }}</p>
-      } @else {
-        <div class="friends-grid">
-          @for (entry of filteredFriends(); track entry.id) {
-            <div class="friend-card">
-              <div class="avatar">
-                @if (entry.profilePhotoUrl) {
-                  <img [src]="entry.profilePhotoUrl" [alt]="entry.username" />
-                } @else {
-                  <mat-icon aria-hidden="true">person</mat-icon>
-                }
-              </div>
-              <span class="friend-username">{{ entry.username }}</span>
-              <button
-                class="remove-btn"
-                (click)="removeFriend(entry.id)"
-                [attr.aria-label]="'friends.removeAriaLabel' | transloco: { name: entry.username }"
-              >
-                {{ 'friends.remove' | transloco }}
-              </button>
-            </div>
-          }
-        </div>
-      }
-    }
-  </div>
-
-  <app-footer></app-footer>
+	@if (showRequests()) {
+	@if (pendingRequests$().length === 0) {
+	<p class="empty-state">{{ 'friends.noPendingRequests' | transloco }}</p>
+	} @else {
+	<div class="friends-grid" role="list" [attr.aria-label]="'friends.requestsListAriaLabel' | transloco">
+		@for (req of pendingRequests$(); track req.id) {
+		<div class="friend-card" role="listitem">
+			<div class="avatar">
+				@if (req.senderProfilePhotoUrl) {
+				<img [src]="req.senderProfilePhotoUrl" [alt]="req.senderUsername" />
+				} @else {
+				<mat-icon aria-hidden="true">person</mat-icon>
+				}
+			</div>
+			<span class="friend-username">{{ req.senderUsername }}</span>
+			<div class="request-actions">
+				<button class="deny-btn" (click)="denyRequest(req.id)"
+					[attr.aria-label]="'friends.denyAriaLabel' | transloco: { name: req.senderUsername }">
+					{{ 'friends.deny' | transloco }}
+				</button>
+				<button class="accept-btn" (click)="acceptRequest(req.id)"
+					[attr.aria-label]="'friends.acceptAriaLabel' | transloco: { name: req.senderUsername }">
+					{{ 'friends.accept' | transloco }}
+				</button>
+			</div>
+		</div>
+		}
+	</div>
+	}
+	} @else {
+	@if (filteredFriends().length === 0) {
+	<p class="empty-state">{{ 'friends.noFriendsFound' | transloco }}</p>
+	} @else {
+	<div class="friends-grid">
+		@for (entry of filteredFriends(); track entry.id) {
+		<div class="friend-card">
+			<div class="avatar">
+				@if (entry.profilePhotoUrl) {
+				<img [src]="entry.profilePhotoUrl" [alt]="entry.username" />
+				} @else {
+				<mat-icon aria-hidden="true">person</mat-icon>
+				}
+			</div>
+			<span class="friend-username">{{ entry.username }}</span>
+			<button class="remove-btn" (click)="removeFriend(entry.id)"
+				[attr.aria-label]="'friends.removeAriaLabel' | transloco: { name: entry.username }">
+				{{ 'friends.remove' | transloco }}
+			</button>
+		</div>
+		}
+	</div>
+	}
+	}
 </div>

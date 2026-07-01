@@ -15,7 +15,7 @@
 				<button mat-menu-item [routerLink]="['/profile', authUsername()]">{{ 'navbar.profile' | transloco }}</button>
 				<button mat-menu-item routerLink="/plan-a-trip">{{ 'navbar.plan-a-trip' | transloco }}</button>
 				<button mat-menu-item routerLink="/my-trips">{{ 'navbar.my-trips' | transloco }}</button>
-				<button mat-menu-item routerLink="/friends">{{ 'navbar.friends' | transloco }}</button>
+				<button mat-menu-item routerLink="/my-friends">{{ 'navbar.friends' | transloco }}</button>
 			</mat-menu>
 		</div>
 		}
@@ -36,7 +36,7 @@
 			 <button routerLinkActive="active-link" routerLink="/my-trips" class="primary-btn" matButton="outlined">{{ 'navbar.my-trips' | transloco }}</button>
 			 }
 			 @if (showFriends()) {
-			 <button routerLinkActive="active-link" routerLink="/friends" class="primary-btn"
+			 <button routerLinkActive="active-link" routerLink="/my-friends" class="primary-btn"
 				 matButton="outlined">{{ 'navbar.friends' | transloco }}</button>
 			 }
 		</div>

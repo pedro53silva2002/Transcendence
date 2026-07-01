@@ -11,10 +11,10 @@ import { DatePipe, UpperCasePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
-import { UtripBubbleComponent } from '../../core/feature/my-trips/utrip-bubble/utrip-bubble.component';
-import { TripService } from '../../core/logic/services/trip.service';
-import { TripDto } from '../../core/logic/dtos/trip.dto';
 import { MatDialog } from '@angular/material/dialog';
+import { UtripBubbleComponent } from '../utrip-bubble/utrip-bubble.component';
+import { TripService } from '../../../logic/services/trip.service';
+import { TripDto } from '../../../logic/dtos/trip.dto';
 
 @Component({
 	selector: 'app-trip-card',

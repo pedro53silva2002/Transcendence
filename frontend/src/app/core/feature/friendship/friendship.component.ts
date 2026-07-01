@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { NavbarComponent } from '../../layout/navbar/navbar.component';
-import { FooterComponent } from '../../layout/footer/footer.component';
 import { FriendshipService } from '../../logic/services/friendship.service';
 import { FriendDto } from '../../logic/dtos/friendship.dto';
 import { FriendRequestDto } from '../../logic/dtos/friend-request.dto';
@@ -14,8 +12,6 @@ import { FriendRequestService } from '../../logic/services/friend-request.servic
   selector: 'app-friendship',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    NavbarComponent,
-    FooterComponent,
     ReactiveFormsModule,
     MatIconModule,
     MatButtonModule,
@@ -28,7 +24,6 @@ export default class FriendshipComponent implements OnInit {
   private readonly friendshipService = inject(FriendshipService);
   private readonly friendRequestService = inject(FriendRequestService);
 
-  readonly isLoading = signal(true);
   readonly friends = signal<FriendDto[]>([]);
   readonly pendingRequests = signal<FriendRequestDto[]>([]);
   readonly searchControl = new FormControl('');
@@ -52,9 +47,7 @@ export default class FriendshipComponent implements OnInit {
     this.friendshipService.getAll().subscribe({
       next: res => {
         this.friends.set(res.data ?? []);
-        this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false),
     });
 
     this.friendRequestService.getAll().subscribe({

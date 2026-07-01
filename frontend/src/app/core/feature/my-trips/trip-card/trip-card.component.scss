@@ -4,13 +4,14 @@
 	cursor: pointer;
 	text-decoration: none;
 	color: inherit;
+	width: 360px;
 }
 
 /* The bubble is pinned near the top-right of the card. */
 .bubble-anchor {
 	position: absolute;
 	top: -25px;
-	right: -25px;
+	right: -80px;
 	z-index: 3;
 	transform: rotate(20deg);
 	font-family: 'BBH Bogle', sans-serif;
@@ -27,7 +28,8 @@
 	background-color: var(--mat-sys-primary-container) !important;
 	border-radius: 25px;
 	padding: 18px 28px;
-	min-height: 130px;
+	height: 120px;
+	width: 360px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 	transition:
 		box-shadow 0.2s ease,
@@ -63,7 +65,7 @@
 	justify-content: flex-start;
 
 	img {
-		width: 240px;
+		width: 200px;
 		opacity: 0.82;
 		margin-left: -40px;
 	}
@@ -83,7 +85,7 @@
 
 .trip-name {
 	font-family: 'BBH Hegarty', sans-serif;
-	font-size: 28px;
+	font-size: 24px;
 	font-weight: 200;
 	color: var(--mat-sys-on-primary);
 	margin: 0;
