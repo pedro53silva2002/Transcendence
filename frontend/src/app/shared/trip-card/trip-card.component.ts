@@ -14,13 +14,12 @@ import { catchError, map, of } from 'rxjs';
 import { UtripBubbleComponent } from '../../core/feature/my-trips/utrip-bubble/utrip-bubble.component';
 import { TripService } from '../../core/feature/plan-a-trip/services/trip.service';
 import { TripDto } from '../../core/feature/plan-a-trip/dtos/trip.dto';
-import ItineraryComponent from '../../core/feature/itinerary/itinerary.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
 	selector: 'app-trip-card',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [DatePipe, UpperCasePipe, MatIconModule, RouterLink, UtripBubbleComponent, ItineraryComponent],
+	imports: [DatePipe, UpperCasePipe, MatIconModule, RouterLink, UtripBubbleComponent],
 	templateUrl: './trip-card.component.html',
 	styleUrl: './trip-card.component.scss',
 })

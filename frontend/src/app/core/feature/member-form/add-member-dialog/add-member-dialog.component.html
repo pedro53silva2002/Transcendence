@@ -5,13 +5,6 @@
   </div>
 
   <mat-dialog-content>
-    @if (loading()) {
-    <div class="friends-loading" role="status">
-      <app-loading-spinner></app-loading-spinner>
-    </div>
-    }
-
-    @if (!loading()) {
     <div class="friends-grid">
       @for (friend of friends(); track friend.id) {
       <button type="button" class="friend-card" [disabled]="adding()"
@@ -31,6 +24,5 @@
       <p class="friends-empty">{{ 'crew.allFriendsAdded' | transloco }}</p>
       }
     </div>
-    }
   </mat-dialog-content>
 </div>

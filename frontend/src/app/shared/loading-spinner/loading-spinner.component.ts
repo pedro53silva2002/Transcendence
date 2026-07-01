@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoadingService } from '../../core/logic/services/loading.service';
 
 @Component({
   selector: 'app-loading-spinner',
@@ -9,5 +10,5 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './loading-spinner.component.scss',
 })
 export class LoadingSpinnerComponent {
-  @Input() fullPage: boolean = false;
+  protected readonly loadingService = inject(LoadingService);
 }

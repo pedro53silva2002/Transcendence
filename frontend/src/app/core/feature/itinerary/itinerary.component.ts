@@ -8,11 +8,9 @@ import {
 	output,
 	effect,
 	input,
-	NgZone,
-	ChangeDetectorRef,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomScrollbarComponent } from '../../../shared/custom-scrollbar/custom-scrollbar.component';
@@ -25,7 +23,6 @@ import { SessionService } from '../../logic/services/session.service';
 import { ItineraryDto } from './dtos/itinerary.dto';
 import { TripDto } from '../plan-a-trip/dtos/trip.dto';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DIALOG_DATA } from '@angular/cdk/dialog';
 
 @Component({
 	selector: 'app-itinerary',
@@ -35,7 +32,6 @@ import { DIALOG_DATA } from '@angular/cdk/dialog';
 		MatError,
 		TranslocoModule,
 		ReactiveFormsModule,
-		RouterLink
 	],
 	templateUrl: './itinerary.component.html',
 	styleUrl: './itinerary.component.scss',

@@ -22,11 +22,6 @@
 	}
 
 	<app-custom-scrollbar>
-		@if (loading()) {
-		<app-loading-spinner></app-loading-spinner>
-		}
-
-		@if (!loading()) {
 		<div class="crew-grid" [style.grid-template-columns]="'repeat(' + columns() + ', 1fr)'">
 			@for (member of members(); track member.userId) {
 			<div class="crew-card">
@@ -69,6 +64,5 @@
 			<p class="crew-empty">{{ 'trips.members.noMembers' | transloco }}</p>
 			}
 		</div>
-		}
 	</app-custom-scrollbar>
 </section>

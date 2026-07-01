@@ -94,13 +94,13 @@
 }
 
 .budget-bar {
-	width: 150px;
 	height: 30px;
 	background-color: var(--mat-sys-on-primary-container);
 	border-radius: 25px;
 }
 
 .budget-fullbar {
+	height: 30px;
 	background-color: var(--mat-sys-error);
 	border-radius: 25px;
 }
@@ -113,7 +113,6 @@
 	justify-content: flex-end;
 	margin-right: 15px;
 }
-
 
 .spent {
 	color: color-mix(in srgb, var(--mat-sys-on-primary) 80%, transparent) !important;

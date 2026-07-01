@@ -1,28 +1,25 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatIcon } from "@angular/material/icon";
 import { TranslocoModule } from '@jsverse/transloco';
-import { AuthService } from '../auth/services/auth.service';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { filter, map, Observable, of, switchMap } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs';
 import { StatCardsComponent } from "../../../shared/stat-cards/stat-cards.component";
 import { MatAnchor } from "@angular/material/button";
 import { UserService } from '../auth/services/user.service';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { EditProfileComponent } from './edit/edit-profile/edit-profile.component';
 import { SessionService } from '../../logic/services/session.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserDto, UserOrderByFieldsDto, UserSearchFieldsDto } from '../auth/dtos/user.dto';
 import { SearchParams } from '../../logic/services/search.service';
-import { TripDto } from '../plan-a-trip/dtos/trip.dto';
 import { TripService } from '../plan-a-trip/services/trip.service';
 import { AsyncPipe } from '@angular/common';
-import { TripCardComponent } from '../../../shared/trip-card/trip-card.component';
 import { ProfileItineraryCardComponent } from './profile-itinerary-card/profile-itinerary-card.component';
 import { VisitedCountryCardComponent } from "./visited-country-card/visited-country-card.component";
 
 @Component({
 	selector: 'app-profile',
-	imports: [MatIcon, TranslocoModule, StatCardsComponent, MatAnchor, TripCardComponent, AsyncPipe, ProfileItineraryCardComponent, VisitedCountryCardComponent],
+	imports: [MatIcon, TranslocoModule, StatCardsComponent, MatAnchor, AsyncPipe, ProfileItineraryCardComponent, VisitedCountryCardComponent],
 	templateUrl: './profile.component.html',
 	styleUrl: './profile.component.scss',
 })

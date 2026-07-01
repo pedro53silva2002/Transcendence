@@ -16,11 +16,10 @@ import { UserService } from '../../auth/services/user.service';
 import { UserDto } from '../../auth/dtos/user.dto';
 import { TripMemberDto } from '../../itinerary/dtos/member.dto';
 import { CloseButtonComponent } from '../../../../shared/close-button/close-button.component';
-import { LoadingSpinnerComponent } from '../../../../shared/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-add-member-dialog',
-  imports: [MatDialogModule, MatButtonModule, MatIconModule, NgOptimizedImage, TranslocoModule, CloseButtonComponent, LoadingSpinnerComponent],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, NgOptimizedImage, TranslocoModule, CloseButtonComponent],
   templateUrl: './add-member-dialog.component.html',
   styleUrl: './add-member-dialog.component.scss',
   encapsulation: ViewEncapsulation.None,

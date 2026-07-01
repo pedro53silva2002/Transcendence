@@ -1,5 +1,5 @@
-<div class="spinner-container" [class.full-page]="fullPage">
-  <div class="loader">
-    <img src = "./images/globe.png" alt="Loading..." />
-  </div>
+@if (loadingService.isLoading()) {
+<div class="spinner-overlay">
+  <img src="images/logo-globe.png" alt="Loading..." />
 </div>
+}

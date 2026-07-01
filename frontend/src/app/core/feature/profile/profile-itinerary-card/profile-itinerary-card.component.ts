@@ -1,14 +1,12 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { ProfileTripsDto } from '../../plan-a-trip/dtos/trip.dto';
 import { DatePipe, UpperCasePipe } from '@angular/common';
-import { CityDto } from '../../plan-a-trip/dtos/city.dto';
-import { CountryDto } from '../../plan-a-trip/dtos/country.dto';
 import { MatDialog } from '@angular/material/dialog';
 import ItineraryComponent from '../../itinerary/itinerary.component';
 
 @Component({
 	selector: 'app-profile-itinerary-card',
-	imports: [DatePipe, UpperCasePipe, ItineraryComponent],
+	imports: [DatePipe, UpperCasePipe],
 	templateUrl: './profile-itinerary-card.component.html',
 	styleUrl: './profile-itinerary-card.component.scss',
 })
