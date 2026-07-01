@@ -76,6 +76,7 @@ public sealed class FriendshipModel(AppDbContext db)
     		join u in db.Users.AsNoTracking() on f.FriendId equals u.Id
     		select new FriendDto
     		{
+    		    Id = f.Id,
     		    FriendId = u.Id,
     		    Username = u.Username,
     		    ProfilePhotoUrl = u.ProfilePhotoUrl
