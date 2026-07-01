@@ -6,7 +6,7 @@ import { delay, finalize, of, switchMap, timeout } from 'rxjs';
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const loadingService = inject(LoadingService);
 
-  const threshold = 0;
+  const threshold = 500;
   let isSpinnerShowing = false;
 
   //activates the spinner after 500ms
@@ -25,20 +25,3 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   }))
 };
 
-//testing version
-// export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
-//     const loadingService = inject(LoadingService);
-
-//     // 🌟 FORÇA o incremento do contador mal o pedido entra no interceptor
-//     loadingService.show();
-
-//     // Bloqueia o envio na rede por 2.5 segundos para dar tempo de ver
-//     return of(null).pipe(
-//         delay(2500),
-//         switchMap(() => next(req)),
-//         finalize(() => {
-//             // 🌟 FORÇA o decremento mal qualquer pedido termine
-//             loadingService.hide();
-//         })
-//     );
-// };
