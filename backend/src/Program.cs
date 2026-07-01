@@ -10,13 +10,13 @@ using Trippie.Common.Services.GlobalExceptionHandler.Logging;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.RateLimiting;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 using Trippie.Modules.Travel.Service;
 using Trippie.Modules.Social.Config;
 using Trippie.Modules.Social.Model;
 using Trippie.Modules.Social.Service;
+using Trippie.Common.Services.MinIO;
 
 Env.TraversePath().Load();
 
