@@ -9,8 +9,7 @@ namespace Trippie.Modules.Travel.Service;
 
 public sealed class TripService(
 	TripModel tripModel,
-	TripMembersModel tripMembersModel,
-	VisitedCountriesService visitedCountriesService)
+	TripMembersModel tripMembersModel)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
@@ -19,9 +18,6 @@ public sealed class TripService(
 		dto.Members.TripId = trip.Id;
 		var members = await new TripMembersService(tripMembersModel).CreateAsync(userId, dto.Members, ct);
 		trip.Members = [.. members];
-
-		await visitedCountriesService.SyncSingleTripAsync(
-            userId, dto.Country.Id, trip.Id, dto.EndDate, ct);
 
 		return trip;
 	}
@@ -33,9 +29,6 @@ public sealed class TripService(
 	{
 		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
 		var trip = await tripModel.UpdateAsync(userId, id, dto, ct) ?? throw new NotFoundException($"Trip {id} not found.", id);
-
-		await visitedCountriesService.SyncSingleTripAsync(
-            userId, dto.Country.Id, trip.Id, dto.EndDate, ct);
 
 		return trip;
 	}

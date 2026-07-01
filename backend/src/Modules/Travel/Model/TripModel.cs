@@ -19,9 +19,9 @@ public sealed class Trip()
 	public required int Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
+	public required bool IsExpired { get; set; }
 	public DateTime? CreatedAt { get; set; }
 	public DateTime? UpdatedAt { get; set; }
-
 	public TripCountry? TripCountries { get; set; }
 	public ICollection<TripCity> TripCities { get; set; } = [];
 	public IReadOnlyList<TripMembersDto> Members { get; set; } = [];
@@ -38,6 +38,7 @@ public sealed class Trip()
 			Budget = t.Budget,
 			Visibility = t.Visibility,
 			CreatedBy = t.CreatedBy,
+			IsExpired = t.IsExpired,
 			CreatedAt = t.CreatedAt ?? DateTime.UtcNow,
 			UpdatedAt = t.UpdatedAt,
 			Country = t.TripCountries?.Country != null ? new CountryDto
@@ -80,9 +81,10 @@ public sealed class TripModel(AppDbContext db)
 			Duration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1,
 			StartDate = dto.StartDate,
 			EndDate = dto.EndDate,
-			Budget = dto.Budget == 0 ? 0 : dto.Budget, // --- IGNORE ---
+			Budget = dto.Budget == 0 ? 0 : dto.Budget,
 			Visibility = dto.Visibility == 0 ? TripVisibility.Public : dto.Visibility,
 			CreatedBy = userId,
+			IsExpired = dto.EndDate < DateOnly.FromDateTime(DateTime.UtcNow),
 			CreatedAt = DateTime.UtcNow
 		};
 
@@ -127,6 +129,7 @@ public sealed class TripModel(AppDbContext db)
 		.WithKey("id", x => x.Id)
 		.AddFilters(payload.Filters, field => field.ToLowerInvariant() switch
 		{
+			"isexpired" => x => x.IsExpired,
 			"tripname" => x => x.TripName,
 			"createdat" => x => x.CreatedAt,
 			"id" => x => x.Id,
@@ -269,6 +272,7 @@ public sealed class TripModel(AppDbContext db)
 		var calculatedDuration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
 		if (calculatedDuration != trip.Duration) trip.Duration = calculatedDuration;
 		if (dto.Budget is not 0) trip.Budget = dto.Budget;
+		trip.IsExpired = dto.EndDate < DateOnly.FromDateTime(DateTime.UtcNow);
 		trip.UpdatedAt = DateTime.UtcNow;
 
 		try

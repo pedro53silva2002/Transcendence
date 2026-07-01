@@ -22,6 +22,12 @@ public sealed class VisitedCountriesService(VisitedCountriesModel visitedCountri
 			
 	}
 
+	public async Task<int> SyncAllTripsAsync(CancellationToken ct = default)
+	{
+		var newCountryIds = await visitedCountriesModel.SyncAllTripsAsync(ct);
+		return newCountryIds.Count;
+	}
+	
 	public async Task SyncSingleTripAsync(
 		int userId,
 		int countryId,
@@ -38,11 +44,11 @@ public sealed class VisitedCountriesService(VisitedCountriesModel visitedCountri
 		await visitedCountriesModel.SyncFromTripsAsync(userId, countryId, tripId, ct);
 	}
 
-	public async Task<List<VisitedCountry>> GetVisitedCountriesAsync(int userId, CancellationToken ct = default)
+	public async Task<List<VisitedCountry>> GetUniqueVisitedCountriesAsync(int userId, CancellationToken ct = default)
 	{
 		ValidateUserId(userId);
 
-		return await visitedCountriesModel.GetVisitedCountriesAsync(userId, ct);
+		return await visitedCountriesModel.GetUniqueVisitedCountriesAsync(userId, ct);
 	}
 
 	public async Task<int> GetNumberOfVisitedCountriesAsync(int userId, CancellationToken ct = default)

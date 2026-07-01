@@ -13,6 +13,10 @@ internal sealed class VisitedCountriesConfiguration : IEntityTypeConfiguration<V
 
 		vc.ToTable("visited_countries", "auth");
 
+		vc.HasIndex(x => new { x.UserId, x.SourceTripId })
+			.IsUnique()
+			.HasDatabaseName("auth_visited_countries_u_user_trip");
+
 		vc.Property(x => x.Id)
 			.HasColumnName("id")
 			.ValueGeneratedOnAdd();

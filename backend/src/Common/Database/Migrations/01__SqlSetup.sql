@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS "auth"."visited_countries" (
 	"deleted_at" TIMESTAMPTZ
 );
  
+ ALTER TABLE "auth"."visited_countries" ADD CONSTRAINT "auth_visited_countries_u_user_trip" UNIQUE ("user_id", "source_trip_id");
 ALTER TABLE "auth"."visited_countries" ADD CONSTRAINT "auth_visited_countries_fk_user" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
 ALTER TABLE "auth"."visited_countries" ADD CONSTRAINT "auth_visited_countries_fk_country" FOREIGN KEY ("country_id") REFERENCES "auth"."countries"("id") ON DELETE RESTRICT;
 ALTER TABLE "auth"."visited_countries" ADD CONSTRAINT "auth_visited_countries_fk_source_trip" FOREIGN KEY ("source_trip_id") REFERENCES "travel"."trips"("id") ON DELETE SET NULL;
@@ -102,6 +103,7 @@ CREATE TABLE IF NOT EXISTS "travel"."trips" (
     "budget" NUMERIC(10, 2) NOT NULL DEFAULT 0,
     "visibility" trip_visibility NOT NULL DEFAULT 'private',
     "created_by" INT NOT NULL,
+	"is_expired" BOOLEAN NOT NULL DEFAULT FALSE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
 );
