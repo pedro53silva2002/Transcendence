@@ -13,15 +13,15 @@
 
   <div class="main-container">
     <div class="header-row">
-      <h1 class="page-title">My Friends</h1>
+      <h1 class="page-title">{{ 'friends.pageTitle' | transloco }}</h1>
       <div class="header-actions">
         <div class="search-field">
           <mat-icon aria-hidden="true">search</mat-icon>
           <input
             type="text"
-            placeholder="Friends"
+            [placeholder]="'friends.searchPlaceholder' | transloco"
             [formControl]="searchControl"
-            aria-label="Search friends"
+            [attr.aria-label]="'friends.searchAriaLabel' | transloco"
           />
         </div>
         <div class="requests-wrapper">
@@ -29,12 +29,12 @@
             <button
               class="friend-requests-btn"
               (click)="showRequests.set(true)"
-              aria-label="Show friend requests"
+              [attr.aria-label]="'friends.showRequestsAriaLabel' | transloco"
             >
-              Friend Requests
+              {{ 'friends.requestsBtn' | transloco }}
             </button>
             @if (pendingCount() > 0) {
-              <span class="count-badge" [attr.aria-label]="pendingCount() + ' pending friend requests'">
+              <span class="count-badge" [attr.aria-label]="'friends.pendingAriaLabel' | transloco: { count: pendingCount() }">
                 {{ pendingCount() }}
               </span>
             }
@@ -42,9 +42,9 @@
             <button
               class="friend-requests-btn"
               (click)="showRequests.set(false)"
-              aria-label="Show friends list"
+              [attr.aria-label]="'friends.showListAriaLabel' | transloco"
             >
-              Friend's List
+              {{ 'friends.listBtn' | transloco }}
             </button>
           }
         </div>
@@ -53,9 +53,9 @@
 
     @if (showRequests()) {
       @if (pendingRequests$().length === 0) {
-        <p class="empty-state">No pending friend requests.</p>
+        <p class="empty-state">{{ 'friends.noPendingRequests' | transloco }}</p>
       } @else {
-        <div class="friends-grid" role="list" aria-label="Friend requests">
+        <div class="friends-grid" role="list" [attr.aria-label]="'friends.requestsListAriaLabel' | transloco">
           @for (req of pendingRequests$(); track req.id) {
             <div class="friend-card" role="listitem">
               <div class="avatar">
@@ -70,16 +70,16 @@
                 <button
                   class="deny-btn"
                   (click)="denyRequest(req.id)"
-                  [attr.aria-label]="'Deny friend request from ' + req.senderUsername"
+                  [attr.aria-label]="'friends.denyAriaLabel' | transloco: { name: req.senderUsername }"
                 >
-                  Deny
+                  {{ 'friends.deny' | transloco }}
                 </button>
                 <button
                   class="accept-btn"
                   (click)="acceptRequest(req.id)"
-                  [attr.aria-label]="'Accept friend request from ' + req.senderUsername"
+                  [attr.aria-label]="'friends.acceptAriaLabel' | transloco: { name: req.senderUsername }"
                 >
-                  Accept
+                  {{ 'friends.accept' | transloco }}
                 </button>
               </div>
             </div>
@@ -88,11 +88,11 @@
       }
     } @else {
       @if (isLoading()) {
-        <div class="loading-state" role="status" aria-label="Loading friends">
+        <div class="loading-state" role="status" [attr.aria-label]="'friends.loadingAriaLabel' | transloco">
           <app-loading-spinner></app-loading-spinner>
         </div>
       } @else if (filteredFriends().length === 0) {
-        <p class="empty-state">No friends found.</p>
+        <p class="empty-state">{{ 'friends.noFriendsFound' | transloco }}</p>
       } @else {
         <div class="friends-grid">
           @for (entry of filteredFriends(); track entry.id) {
@@ -108,9 +108,9 @@
               <button
                 class="remove-btn"
                 (click)="removeFriend(entry.id)"
-                [attr.aria-label]="'Remove ' + entry.username + ' from friends'"
+                [attr.aria-label]="'friends.removeAriaLabel' | transloco: { name: entry.username }"
               >
-                Remove
+                {{ 'friends.remove' | transloco }}
               </button>
             </div>
           }

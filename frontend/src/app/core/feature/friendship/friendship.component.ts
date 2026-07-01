@@ -9,6 +9,7 @@ import { FriendDto } from '../dtos/social/friendship.dto';
 import { FriendRequestDto } from '../dtos/social/friend-request.dto';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-friendship',
@@ -20,6 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
     ReactiveFormsModule,
     MatIconModule,
     MatButtonModule,
+    TranslocoModule,
   ],
   templateUrl: './friendship.component.html',
   styleUrl: './friendship.component.scss',
