@@ -9,6 +9,7 @@ import {
 	OnInit,
 	signal,
 	ViewChild,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -37,8 +38,9 @@ import { LanguageButtonComponent } from '../../../shared/language-button/languag
 import { UserService } from '../../feature/auth/services/user.service';
 import { UserDto } from '../../feature/auth/dtos/user.dto';
 import { SessionService } from '../../logic/services/session.service';
-import { AuthService, AuthService as OtherAuth } from '../../feature/auth/services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService as OtherAuth } from '../../feature/auth/services/auth.service';
+import { FriendRequestService } from '../../feature/service/social/friend-request.service';
 
 @Component({
 	selector: 'app-navbar',
@@ -84,6 +86,10 @@ export class NavbarComponent implements OnInit {
 	public isDashboardRoute = false;
 
 	public authUsername = computed(() => this.authService.user()?.username ?? null);
+	private readonly friendRequestService = inject(FriendRequestService);
+
+	readonly currentUserId = computed(() => this.authService.me()?.id);
+	readonly sentRequests = signal<Set<number>>(new Set());
 
 	ngOnInit(): void {
 		if (!this.authService.getOAuthResult()) {
@@ -133,7 +139,7 @@ export class NavbarComponent implements OnInit {
 				map((res) => {
 					const users = res.data?.content ?? [];
 					const me = this.authUsername();
-					
+
 					//to prevent the me profile to appear in the search
 					return users.filter(user => user.username !== me);
 				}),
@@ -145,10 +151,23 @@ export class NavbarComponent implements OnInit {
 		}),
 	);
 
-	async logout() {
-		await this.otherAuth.logout();
-		this.router.navigate(['/']);
-	}
+  sendFriendRequest(user: UserDto, event: Event): void {
+    event.stopPropagation();
+    const myId = this.currentUserId();
+    if (!myId) return;
+
+    this.friendRequestService
+      .create({ senderId: myId, receiverId: user.id })
+      .subscribe({
+        next: () => this.sentRequests.update((s) => new Set([...s, user.id])),
+        error: () => this.sentRequests.update((s) => new Set([...s, user.id])),
+      });
+  }
+
+  logout(): void {
+    this.otherAuth.logout();
+    this.router.navigate(['/']);
+  }
 
 	displayUser(user: UserDto | string | null): string {
 		if (!user || typeof user === 'string') return user ?? '';
@@ -175,7 +194,7 @@ export class NavbarComponent implements OnInit {
 		if (selectedUser && selectedUser.username) {
 			this.router.navigate(['/profile', selectedUser.username]);
 			//reset to clean the selected state
-			this.searchControl.setValue(null, {emitEvent: false});
+			this.searchControl.setValue(null, { emitEvent: false });
 			//to clean the input focus in the panel and close it
 			event.option.deselect();
 		}
@@ -183,7 +202,7 @@ export class NavbarComponent implements OnInit {
 
 	//to prevent the previous search from appearing again when we click a second time in the search users field
 	clearOnFocus() {
-		this.searchControl.setValue('', {emitEvent: true});
+		this.searchControl.setValue('', { emitEvent: true });
 	}
 
 	//to close the side menu when the screen is resized to desktop size (if it's open)

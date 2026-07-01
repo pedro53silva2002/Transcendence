@@ -73,6 +73,15 @@
 	text-align: center;
 }
 
+.custom-search-panel .mat-mdc-option {
+	position: relative !important;
+	overflow: visible !important;
+}
+
+.custom-search-panel .add-friend-btn .mat-icon {
+	color: var(--mat-sys-on-primary) !important;
+}
+
 .mat-mdc-form-field {
 
 	mat-icon {

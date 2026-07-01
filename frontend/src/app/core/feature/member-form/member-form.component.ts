@@ -19,6 +19,7 @@ import { CustomScrollbarComponent } from '../../../shared/custom-scrollbar/custo
 import { TripStateService } from '../plan-a-trip/services/trip-state.service';
 import { TripMemberDto } from '../itinerary/dtos/member.dto';
 import { Router, RouterLink } from '@angular/router';
+import { SessionService } from '../../logic/services/session.service';
 
 @Component({
 	selector: 'app-member-form',
@@ -41,6 +42,7 @@ export class MemberFormComponent {
 	private readonly memberService = inject(TripMemberService);
 	private readonly tripState = inject(TripStateService);
 	private readonly route = inject(Router);
+	private readonly sessionService = inject(SessionService);
 
 	readonly tripId = input<number | null>(null);
 	readonly columns = input(2);
@@ -84,9 +86,20 @@ export class MemberFormComponent {
 				});
 		}, { allowSignalWrites: true });
 
-		// For the create flow (no tripId yet), start with an empty list.
+		// For the create flow (no tripId yet), seed the list with the creator as Admin.
 		if (this.tripId() === null) {
-			this.tripState.setMembers([]);
+			const me = this.sessionService.me();
+			if (me) {
+				this.tripState.setMembers([{
+					userId: me.id,
+					username: me.username,
+					displayName: me.displayName,
+					profilePicture: me.profilePhotoUrl,
+					role: 'Admin',
+				}]);
+			} else {
+				this.tripState.setMembers([]);
+			}
 		}
 	}
 

@@ -10,6 +10,7 @@ import { TripDashboardComponent } from './core/feature/trip-dashboard/trip-dashb
 import { MyTripsComponent } from './core/feature/my-trips/my-trips.component';
 import { tripMemberGuard } from './core/feature/trip-dashboard/guards/trip-member-guard';
 import ProfileComponent from './core/feature/profile/profile.component';
+import FriendshipComponent from './core/feature/friendship/friendship.component';
 
 export const routes: Routes = [
   {
@@ -59,6 +60,10 @@ export const routes: Routes = [
         path: 'my-trips',
         component: MyTripsComponent,
       },
+	  {
+		path: 'my-friends',
+		component: FriendshipComponent,
+	  }
     ],
   },
 ];

@@ -68,7 +68,7 @@ app-member-form {
 .crew-grid {
 	display: grid;
 	row-gap: 28px;
-	column-gap: 65px;
+	//column-gap: 35px;
 	justify-content: space-between;
 }
 
@@ -84,7 +84,7 @@ app-member-form {
 .name-and-delete {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 }
 
 .del-btn {
@@ -107,9 +107,10 @@ app-member-form {
 .crew-info {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
+	align-items: stretch;
 	justify-content: flex-start;
 	gap: 3px;
+	min-width: 0;
 }
 
 .avatar {

@@ -6,20 +6,20 @@
     </div>
     <div class="crew-column">
       <app-member-form [tripId]="currentTripId()" [showRole]="false"></app-member-form>
+      <div class="actions-row">
+        <button
+          type="submit"
+          class="tertiary-btn create-btn"
+          matButton="filled"
+          [disabled]="planATripForm.invalid"
+        >
+          @if (!isEditMode) {
+            {{ 'plan-a-trip.create-trip' | transloco }}
+          } @else {
+            {{ 'plan-a-trip.update-trip' | transloco }}
+          }
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="actions-row">
-    <button
-      type="submit"
-      class="tertiary-btn create-btn"
-      matButton="filled"
-      [disabled]="planATripForm.invalid"
-    >
-      @if (!isEditMode) {
-        {{ 'plan-a-trip.create-trip' | transloco }}
-      } @else {
-        {{ 'plan-a-trip.update-trip' | transloco }}
-      }
-    </button>
   </div>
 </form>

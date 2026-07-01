@@ -6,13 +6,13 @@
 
   <mat-dialog-content>
     <div class="friends-grid">
-      @for (friend of friends(); track friend.id) {
+      @for (friend of friends(); track friend.friendId) {
       <button type="button" class="friend-card" [disabled]="adding()"
-        [attr.aria-label]="'crew.addFriend' | transloco: { name: friend.displayName }" (click)="addMember(friend)">
+        [attr.aria-label]="'crew.addFriend' | transloco: { name: friend.username }" (click)="addMember(friend)">
         <!-- Avatar -->
         <div class="avatar">
           @if (friend.profilePhotoUrl) {
-          <img [ngSrc]="getAvatarUrl(friend.profilePhotoUrl)" [alt]="friend.displayName" width="64" height="64" class="avatar-img" />
+          <img [ngSrc]="getAvatarUrl(friend.profilePhotoUrl)" [alt]="friend.username" width="64" height="64" class="avatar-img" />
           } @else {
           <mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
           }

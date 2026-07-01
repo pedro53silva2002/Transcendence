@@ -28,10 +28,12 @@
     "my-friends-description": "Carrega aqui para veres a tua lista de amigos.",
     "my-expenses-description": "Carrega aqui para verificares para onde fugiu o teu dinheiro."
   },
+
   "dashboard": {
     "greet": "Bem-vindo, ",
     "intro": "Preparado para a tua aventura?"
   },
+
   "stats": {
     "countries": "Paises Visitados",
     "trips": "Viagens Este Ano",
@@ -102,6 +104,7 @@
     "delete-trip-btn": "Eliminar Viagem",
     "edit-trip-btn": "Editar Detalhes da Viagem"
   },
+
   "trips": {
     "members": {
       "title": "Escolhe a Tua Equipa",
@@ -114,6 +117,18 @@
       }
     }
   },
+
+  "crew": {
+    "addMember": "Adicionar Membro",
+    "allFriendsAdded": "Todos os teus amigos já foram adicionados à equipa.",
+    "noMembers": "Ainda sem membros",
+    "roleFor": "Papel de {{ name }}",
+    "role": {
+      "member": "Membro",
+      "admin": "Admin"
+    }
+  },
+
   "my-trips": {
     "title": "As Minhas Viagens",
     "empty": "Ainda não tens viagens. Começa a planear uma!",
@@ -122,6 +137,28 @@
     "upcoming-badge-line1": "PRÓXIMA",
     "upcoming-badge-line2": "VIAGEM"
   },
+
+  "friends": {
+    "pageTitle": "Os Meus Amigos",
+    "searchPlaceholder": "Amigos",
+    "searchAriaLabel": "Pesquisar amigos",
+    "showRequestsAriaLabel": "Mostrar pedidos de amizade",
+    "requestsBtn": "Pedidos de Amizade",
+    "pendingAriaLabel": "{{ count }} pedidos de amizade pendentes",
+    "showListAriaLabel": "Mostrar lista de amigos",
+    "listBtn": "Lista de Amigos",
+    "noPendingRequests": "Sem pedidos de amizade pendentes.",
+    "requestsListAriaLabel": "Pedidos de amizade",
+    "deny": "Recusar",
+    "denyAriaLabel": "Recusar pedido de amizade de {{ name }}",
+    "accept": "Aceitar",
+    "acceptAriaLabel": "Aceitar pedido de amizade de {{ name }}",
+    "loadingAriaLabel": "A carregar amigos",
+    "noFriendsFound": "Nenhum amigo encontrado.",
+    "remove": "Remover",
+    "removeAriaLabel": "Remover {{ name }} dos amigos"
+  },
+
   "itinerary": {
     "title": "Itinerario",
     "addItem": "Adicionar paragem",
@@ -148,10 +185,6 @@
         "descriptionMaxLength": "A descrição não pode exceder 30 caracteres"
       }
     }
-  },
-  "crew": {
-    "addMember": "Adicionar Membro",
-    "allFriendsAdded": "Todos os teus amigos já foram adicionados à equipa."
   },
   "popup": {
     "cancel-btn": "Cancelar",

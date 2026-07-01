@@ -12,10 +12,10 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { TripMemberService } from '../services/member.service';
-import { UserService } from '../../auth/services/user.service';
-import { UserDto } from '../../auth/dtos/user.dto';
+import { FriendDto } from '../../dtos/social/friendship.dto';
 import { TripMemberDto } from '../../itinerary/dtos/member.dto';
 import { CloseButtonComponent } from '../../../../shared/close-button/close-button.component';
+import { FriendshipService } from '../../service/social/friendship.service';
 
 @Component({
   selector: 'app-add-member-dialog',
@@ -31,9 +31,9 @@ export class AddMemberDialogComponent implements OnInit {
     MAT_DIALOG_DATA,
   );
   private readonly memberService = inject(TripMemberService);
-  private readonly userService = inject(UserService);
+  private readonly friendshipService = inject(FriendshipService);
 
-  protected readonly friends = signal<UserDto[]>([]);
+  protected readonly friends = signal<FriendDto[]>([]);
   protected readonly loading = signal(false);
   protected readonly adding = signal(false);
 
@@ -42,10 +42,12 @@ export class AddMemberDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading.set(true);
-    this.userService.search({ pageSize: 50 }).subscribe({
+    this.friendshipService.getAll().subscribe({
       next: (result) => {
         if (result.data) {
-          this.friends.set(result.data.content.filter((u) => !this.alreadyAdded.includes(u.id)));
+          this.friends.set(
+            result.data.filter((f) => !this.alreadyAdded.includes(f.friendId)),
+          );
         }
       },
       complete: () => this.loading.set(false),
@@ -53,16 +55,16 @@ export class AddMemberDialogComponent implements OnInit {
     });
   }
 
-  protected addMember(friend: UserDto): void {
+  protected addMember(friend: FriendDto): void {
     if (this.adding()) return;
     const tripId = this.tripId;
 
     // No trip yet (create flow): return a pending member; id/tripId/timestamps fill in once saved.
     if (tripId === null) {
       const pending: TripMemberDto = {
-        userId: friend.id,
-        displayName: friend.displayName,
-        username: friend.username,
+        userId: friend.friendId,
+		username: friend.username,
+        displayName: friend.username,
         profilePicture: friend.profilePhotoUrl,
         role: 'Member',
       };
@@ -71,7 +73,7 @@ export class AddMemberDialogComponent implements OnInit {
     }
 
     this.adding.set(true);
-    this.memberService.create({ tripId, userIds: [friend.id] }, tripId).subscribe({
+    this.memberService.create({ tripId, userIds: [friend.friendId] }, tripId).subscribe({
       next: (result) => {
         if (result.data?.[0]) this.dialogRef.close(result.data[0]);
       },
