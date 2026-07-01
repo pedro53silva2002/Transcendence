@@ -16,6 +16,7 @@ import { UserService } from '../../auth/services/user.service';
 import { UserDto } from '../../auth/dtos/user.dto';
 import { TripMemberDto } from '../../itinerary/dtos/member.dto';
 import { CloseButtonComponent } from '../../../../shared/components/close-button/close-button.component';
+import { SessionService } from '../../../logic/services/session.service';
 
 @Component({
   selector: 'app-add-member-dialog',
@@ -32,6 +33,7 @@ export class AddMemberDialogComponent implements OnInit {
   );
   private readonly memberService = inject(TripMemberService);
   private readonly userService = inject(UserService);
+  private readonly sessionService = inject(SessionService);
 
   protected readonly friends = signal<UserDto[]>([]);
   protected readonly loading = signal(false);
@@ -41,11 +43,16 @@ export class AddMemberDialogComponent implements OnInit {
   readonly alreadyAdded = this.data.alreadyAdded;
 
   ngOnInit(): void {
+    const currentUserId = this.sessionService.me()?.id;
     this.loading.set(true);
     this.userService.search({ pageSize: 50 }).subscribe({
       next: (result) => {
         if (result.data) {
-          this.friends.set(result.data.content.filter((u) => !this.alreadyAdded.includes(u.id)));
+          this.friends.set(
+            result.data.content.filter(
+              (u) => !this.alreadyAdded.includes(u.id) && u.id !== currentUserId,
+            ),
+          );
         }
       },
       complete: () => this.loading.set(false),
