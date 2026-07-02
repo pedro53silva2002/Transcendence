@@ -80,15 +80,16 @@ export class RegisterComponent implements OnInit {
   protected readonly confirmPasswordVisible = signal(false);
   protected readonly submitting = signal(false);
   protected readonly passwordValue = signal('');
+  protected readonly emailValue = signal('');
   private readonly submitTrigger$ = new Subject<void>();
 
   constructor() {
     this.form.controls.username.statusChanges
       .pipe(takeUntilDestroyed(this.destroyRef)) // ← prevents memory leak
       .subscribe(() => this.cdr.detectChanges());
-    this.form.controls.email.statusChanges
+    this.form.controls.email.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef)) // ← prevents memory leak
-      .subscribe(() => this.cdr.detectChanges());
+      .subscribe((value) => this.emailValue.set(value));
     this.form.controls.password.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => this.passwordValue.set(value));
@@ -204,6 +205,14 @@ export class RegisterComponent implements OnInit {
       uppercase: /[A-Z]/.test(v),
       digits: /[0-9]/.test(v),
       special: /[^A-Za-z0-9]/.test(v),
+    };
+  });
+
+  protected readonly emailValidator = computed(() => {
+    const v = this.emailValue();
+    if (!v) return undefined;
+    return {
+      emailRegex: /^[^@.]{2,}@[^@.]{2,}\.[^@.]{2,}$/.test(v),
     };
   });
 
