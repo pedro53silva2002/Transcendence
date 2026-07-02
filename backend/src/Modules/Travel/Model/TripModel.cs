@@ -5,7 +5,7 @@ using Trippie.Common.Services.Search.Linq;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Auth.Dtos;
-using Trippie.Modules.Auth.Model;
+using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 
 namespace Trippie.Modules.Travel.Model;
 
@@ -81,7 +81,7 @@ public sealed class TripModel(AppDbContext db)
 			Duration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1,
 			StartDate = dto.StartDate,
 			EndDate = dto.EndDate,
-			Budget = dto.Budget == 0 ? 0 : dto.Budget, // --- IGNORE ---
+			Budget = dto.Budget == 0 ? 0 : (int)dto.Budget,
 			Visibility = dto.Visibility == 0 ? TripVisibility.Public : dto.Visibility,
 			CreatedBy = userId,
 			CreatedAt = DateTime.UtcNow
@@ -263,8 +263,13 @@ public sealed class TripModel(AppDbContext db)
 		if (dto.EndDate != trip.EndDate) trip.EndDate = dto.EndDate;
 		var calculatedDuration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
 		if (calculatedDuration != trip.Duration) trip.Duration = calculatedDuration;
-		if (dto.Budget is not 0) trip.Budget = dto.Budget;
+		if (dto.Budget > 0 && dto.Budget < int.MaxValue)
+			trip.Budget = (int)dto.Budget;
+		else
+			throw new ValidationException("budget", "Invalid budget");
 		trip.UpdatedAt = DateTime.UtcNow;
+
+		Console.WriteLine($"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBUDGET=${trip.Budget}");
 
 		db.Trips.Update(trip);
 
