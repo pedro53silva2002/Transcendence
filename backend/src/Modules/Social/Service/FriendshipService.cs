@@ -49,4 +49,15 @@ public sealed class FriendshipService(FriendshipModel friendshipModel)
 			throw new NotFoundException("Friendship.NotFound",
 				$"Friendship with ID {id} not found for user with ID {userId}.");
 	}
+
+	public async Task<bool> FriendshipExistsAsync(int myId, int otherId, CancellationToken ct = default)
+	{
+		if (myId <= 0 || otherId <= 0)
+			throw new ValidationException("InvalidUserId", "User IDs must be greater than zero.");
+		if (myId == otherId)
+			throw new ValidationException("Self.Friendship", "User IDs cannot be the same.");
+		if (await friendshipModel.FriendshipExistsAsync(myId, otherId, ct))
+			return true;
+		return false;
+	}
 }
