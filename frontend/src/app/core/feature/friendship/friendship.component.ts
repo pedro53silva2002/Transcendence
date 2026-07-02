@@ -61,15 +61,15 @@ export default class FriendshipComponent implements OnInit {
     this.searchControl.valueChanges.subscribe(v => this.searchTerm.set(v ?? ''));
   }
 
-  removeFriend(friendshipId: number): void {
-    this.friendshipService.delete(friendshipId).subscribe(() => {
-      this.friends.update(list => list.filter(f => f.id !== friendshipId));
+  removeFriend(friendId: number): void {
+    this.friendshipService.delete(friendId).subscribe(() => {
+      this.friends.update(list => list.filter(f => f.friendId !== friendId));
     });
   }
 
   acceptRequest(requestId: number): void {
     this.friendRequestService.accept(requestId).subscribe(() => {
-      this.pendingRequests.update(list => list.filter(r => r.id !== requestId));
+      this.pendingRequests.update(list => list.filter(r => r.senderId !== requestId));
       this.friendshipService.getAll().subscribe({
         next: res => this.friends.set(res.data ?? []),
       });
@@ -78,7 +78,7 @@ export default class FriendshipComponent implements OnInit {
 
   denyRequest(requestId: number): void {
     this.friendRequestService.delete(requestId).subscribe(() => {
-      this.pendingRequests.update(list => list.filter(r => r.id !== requestId));
+      this.pendingRequests.update(list => list.filter(r => r.senderId !== requestId));
     });
   }
 }

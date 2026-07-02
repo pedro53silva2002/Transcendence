@@ -45,11 +45,11 @@
 			</div>
 			<span class="friend-username">{{ req.senderUsername }}</span>
 			<div class="request-actions">
-				<button class="deny-btn" (click)="denyRequest(req.id)"
+				<button class="deny-btn" (click)="denyRequest(req.senderId)"
 					[attr.aria-label]="'friends.denyAriaLabel' | transloco: { name: req.senderUsername }">
 					{{ 'friends.deny' | transloco }}
 				</button>
-				<button class="accept-btn" (click)="acceptRequest(req.id)"
+				<button class="accept-btn" (click)="acceptRequest(req.senderId)"
 					[attr.aria-label]="'friends.acceptAriaLabel' | transloco: { name: req.senderUsername }">
 					{{ 'friends.accept' | transloco }}
 				</button>
@@ -73,7 +73,7 @@
 				}
 			</div>
 			<span class="friend-username">{{ entry.username }}</span>
-			<button class="remove-btn" (click)="removeFriend(entry.id)"
+			<button class="remove-btn" (click)="removeFriend(entry.friendId)"
 				[attr.aria-label]="'friends.removeAriaLabel' | transloco: { name: entry.username }">
 				{{ 'friends.remove' | transloco }}
 			</button>
