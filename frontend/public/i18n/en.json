@@ -72,10 +72,14 @@
     "delete-button": "Delete Account",
     "delete-user-title": "Are you sure?",
     "delete-user-message": "If you confirm this decision, your account will be deleted.",
+    "delete-friend-message": "If you confirm this decision, you won't be friends anymore.",
     "description-error": "Can't be more than 150 characters long.",
     "name-error": "You must define a display name.",
     "add-friend-btn": "Add Friend",
-    "edit-btn": "Edit Profile"
+    "remove-friend-btn": "Remove Friend",
+    "edit-btn": "Edit Profile",
+    "cancel-request-btn": "Cancel Request",
+    "delete-friend-request-message": "If you confirm this decision, the friend request will be canceled."
   },
   "trip-dashboard": {
     "delete-trip-title": "Are you sure?",

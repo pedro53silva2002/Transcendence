@@ -13,13 +13,8 @@
 			<div class="name-and-description">
 				<h2>{{ currentUser.displayName }}</h2>
 				<p>{{ currentUser.bio }}</p>
-				@if (isOwnProfile()) {
-				<button mat-button (click)="openEditProfile()" class="tertiary-btn profile-btn">{{ 'profile.edit-btn' |
+				<button mat-button (click)="handleButtonFunction()" class="tertiary-btn profile-btn">{{ buttonLabel() |
 					transloco }}</button>
-				} @else {
-				<!-- inserir aqui a lógica do add friend/remove friend consoante as friendships -->
-				<button mat-button class="tertiary-btn profile-btn">{{ 'profile.add-friend-btn' | transloco }}</button>
-				}
 			</div>
 			}
 		</div>

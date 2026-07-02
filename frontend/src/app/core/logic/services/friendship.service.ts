@@ -25,6 +25,10 @@ export class FriendshipService extends BaseApiService {
     return res;
   }
 
+  public friendshipExists(username: string): Observable<ApiResponse<boolean>> {
+    return this._get<boolean>(`/friendships/exists/${username}`);
+  }
+
   public delete(id: number): Observable<ApiResponse<void>> {
     const res = this._delete<void>(`/friendships/${id}`);
     return res;
