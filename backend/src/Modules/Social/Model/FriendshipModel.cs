@@ -117,4 +117,13 @@ public sealed class FriendshipModel(AppDbContext db)
 
     	return deleted == 2;
 	}
+
+	public async Task<bool> FriendshipExistsAsync(int myId, int otherId, CancellationToken ct = default)
+	{
+		return await db.Friendships
+			.AsNoTracking()
+			.AnyAsync(f =>
+				(f.UserId == myId && f.FriendId == otherId) ||
+			    (f.UserId == otherId && f.FriendId == myId), ct);
+	}
 }

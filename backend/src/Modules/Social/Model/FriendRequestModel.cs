@@ -46,11 +46,7 @@ public sealed class FriendRequestModel(AppDbContext db)
 		if (sameDuplicate)
 			throw new ValidationException("FriendRequest.Duplicate", "A friend request already exists between these users.");
 
-		var existingFriendship = await db.Friendships
-			.AsNoTracking()
-			.AnyAsync(f =>
-				(f.UserId == senderId && f.FriendId == receiverId) ||
-			    (f.UserId == receiverId && f.FriendId == senderId), ct);
+		var existingFriendship = await FriendshipExistsAsync(senderId, receiverId, ct);
 
 		if (existingFriendship)
 			throw new ValidationException("Friendship.Exists", "A friendship already exists between these users.");
@@ -142,6 +138,15 @@ public sealed class FriendRequestModel(AppDbContext db)
 			.Where(fr => fr.Id == id).ExecuteDeleteAsync(ct);
 
 		return rows > 0;
+	}
+
+	public async Task<bool> FriendshipExistsAsync(int senderId, int receiverId, CancellationToken ct = default)
+	{
+		return await db.Friendships
+			.AsNoTracking()
+			.AnyAsync(f =>
+				(f.UserId == senderId && f.FriendId == receiverId) ||
+			    (f.UserId == receiverId && f.FriendId == senderId), ct);
 	}
 
 	//to deal with race conditions where two friend requests are sent at the same time, we check for unique constraint violation
