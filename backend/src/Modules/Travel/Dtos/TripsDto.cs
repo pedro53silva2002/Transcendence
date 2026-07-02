@@ -63,3 +63,15 @@ public sealed class TripTotalPriceDto
     public required int TripId { get; set; }
     public required int TotalPrice { get; set; }
 }
+
+public sealed class ProfileTripsDto
+{
+	public required int Id { get; set; }
+	public required int Duration { get; set; }
+	public required DateOnly StartDate { get; set; }
+	public required DateOnly EndDate { get; set; }
+	public required TripVisibility Visibility { get; set; }
+	public required CountryDto Country { get; set; }
+	public List<CityDto> City { get; set; } = [];
+	public List<ItineraryDto> Itinerary { get; set; }
+}

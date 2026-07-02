@@ -1,6 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   computed,
   HostListener,
@@ -37,6 +38,7 @@ import { LanguageButtonComponent } from '../../../shared/components/language-but
 import { UserService } from '../../feature/auth/services/user.service';
 import { UserDto } from '../../feature/auth/dtos/user.dto';
 import { SessionService } from '../../logic/services/session.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService as OtherAuth } from '../../feature/auth/services/auth.service';
 import { FriendRequestService } from '../../feature/service/social/friend-request.service';
 
@@ -81,6 +83,11 @@ export class NavbarComponent implements OnInit {
   private readonly authService = inject(SessionService);
   private readonly router = inject(Router);
   private readonly otherAuth = inject(OtherAuth);
+  private readonly cd = inject(ChangeDetectorRef);
+
+  public isDashboardRoute = false;
+
+  public authUsername = computed(() => this.authService.user()?.username ?? null);
   private readonly friendRequestService = inject(FriendRequestService);
 
   readonly currentUserId = computed(() => this.authService.me()?.id);
@@ -94,6 +101,7 @@ export class NavbarComponent implements OnInit {
         this.openLogin();
       }
     }
+	this.isDashboardRoute = this.router.url.includes('home');
   }
 
   openLogin(): void {

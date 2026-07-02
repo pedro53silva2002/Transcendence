@@ -35,45 +35,11 @@
 	display: flex;
 	justify-content: space-between;
 	gap: 32px;
-	margin-top: 30px;
+	margin-top: 60px;
 	flex-wrap: wrap; //allows the cards to be responsive
 }
 
-.stats {
-	display: flex;
-	width: 330px;
-	justify-content: space-between;
-	align-items: center;
-	margin: 0 auto;
-	margin-bottom: 15px;
-	
 
-	.circle {
-		background-color: var(--mat-sys-on-primary-container);
-		border-radius: 50%;
-		width: 100px;
-		height: 100px;
-		color: var(--mat-sys-primary);
-		text-align: center;
-	}
-
-	h1 {
-		margin-bottom: 0;
-		margin-top: 15px;
-		font-family: "BBH Hegarty";
-		font-weight: 100;
-		font-size: 26px;
-	}
-
-	p {
-		margin-top: 0;
-		font-family: "BBH Bogle";
-		width: 80%;
-		margin: 0 auto;
-		font-size: 14px;
-		letter-spacing: 0.4px;
-	}
-}
 
 .slogan {
 	font-family: "BBH Bogle";
@@ -83,5 +49,9 @@
 	font-size: 22px;
 	margin: 0 auto;
 	margin-bottom: 15px;
+}
+
+app-stat-cards {
+	margin-top: 35px;
 }
 

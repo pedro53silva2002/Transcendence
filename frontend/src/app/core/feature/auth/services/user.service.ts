@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiResponse, BaseApiService } from '../../../logic/services/base-api.service';
 import {
   CreateUserDto,
+  UpdateUserDto,
   UserDto,
   UserOrderByFieldsDto,
   UserSearchFieldsDto,
@@ -22,7 +23,31 @@ export class UserService extends BaseApiService {
     return this._get<CursorPage<UserDto>>(`/users/search?q=${query}`);
   }
 
-  public delete(id: number): Observable<ApiResponse<void>> {
-    return this._delete<void>(`/users/${id}`);
+  //ver o endpoint do backend
+  public update(dto: UpdateUserDto): Observable<ApiResponse<UserDto>> {
+
+    const formData = new FormData();
+
+    formData.append('Email', dto.email);
+    formData.append('Username', dto.username);
+    formData.append('DisplayName', dto.displayName);
+
+    if (dto.bio) {
+      formData.append('Bio', dto.bio);
+    }
+
+    if (dto.password) {
+      formData.append('Password', dto.password);
+    }
+
+    if (dto.profilePhotoUrl instanceof File) {
+      formData.append('ProfilePhotoUrl', dto.profilePhotoUrl, dto.profilePhotoUrl.name);
+    }
+
+    return this._put<UserDto>(`/users`, formData as any);
+  }
+
+  public delete(): Observable<ApiResponse<void>> {
+    return this._delete<void>(`/users`);
   }
 }

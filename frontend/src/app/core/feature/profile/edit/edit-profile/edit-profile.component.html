@@ -1,0 +1,100 @@
+<div class="dialog-header">
+	<app-close-button color="var(--mat-sys-on-primary)"></app-close-button>
+</div>
+<div class="title">
+	<h2 mat-dialog-title>{{ 'profile.edit-title' | transloco }}</h2>
+	<hr>
+</div>
+
+<form [formGroup]="editProfileForm" (ngSubmit)="saveUpdate()" class="edit-profile-form">
+	<mat-dialog-content>
+
+		<div class="avatar-container">
+			<div class="avatar">
+				<div class="edit-avatar">
+					<input type="file" #fileInput class="input-file" accept="image/*"
+						(change)="onFileSelected($event)" />
+					<button mat-icon-button (click)="searchFile(fileInput)" type="button" class="edit-icon">
+						<mat-icon>edit</mat-icon>
+					</button>
+				</div>
+				@if (avatarPreview()) {
+				<img referrerpolicy="no-referrer" [src]="avatarPreview()" alt="avatar" class="avatar-preview" />
+				} @else {
+				<mat-icon class="avatar-icon">person</mat-icon>
+				}
+			</div>
+		</div>
+
+		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
+			<input formControlName="displayName" matInput placeholder="{{ 'plan-a-trip.trip-name' | transloco }}">
+			@if (editProfileForm.controls.displayName.errors?.['required']) {
+			<mat-error>{{ 'profile.name-error' | transloco }}</mat-error>
+			}
+		</mat-form-field>
+
+		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
+			<textarea formControlName="description" matInput
+				placeholder="{{ 'profile.description' | transloco }}"></textarea>
+			@if (editProfileForm.controls.description.errors?.['maxlength']) {
+			<mat-error>{{ 'profile.description-error' | transloco }}</mat-error>
+			}
+		</mat-form-field>
+
+		@if (isGoogleAccount() === false) {
+		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
+			<input matInput [type]="passwordVisible() ? 'text' : 'password'" formControlName="newPassword"
+				[errorStateMatcher]="matcher" placeholder="{{ 'auth.new-password' | transloco }}" />
+			<button type="button" mat-icon-button matSuffix (click)="passwordVisible.set(!passwordVisible())">
+				<mat-icon>{{ passwordVisible() ? 'visibility' : 'visibility_off' }}</mat-icon>
+			</button>
+
+			@if (editProfileForm.controls.newPassword.invalid && editProfileForm.controls.newPassword.value) {
+			<mat-error>
+				<ul class="password-checklist">
+					<li [class.ok]="passwordRules()?.length" [class.error]="!passwordRules()?.length">
+						{{ 'auth.passwordRules.length' | transloco }}
+					</li>
+					<li [class.ok]="passwordRules()?.lowercase" [class.error]="!passwordRules()?.lowercase">
+						{{ 'auth.passwordRules.lowercase' | transloco }}
+					</li>
+					<li [class.ok]="passwordRules()?.uppercase" [class.error]="!passwordRules()?.uppercase">
+						{{ 'auth.passwordRules.uppercase' | transloco }}
+					</li>
+					<li [class.ok]="passwordRules()?.digits" [class.error]="!passwordRules()?.digits">
+						{{ 'auth.passwordRules.digits' | transloco }}
+					</li>
+					<li [class.ok]="passwordRules()?.special" [class.error]="!passwordRules()?.special">
+						{{ 'auth.passwordRules.special' | transloco }}
+					</li>
+				</ul>
+			</mat-error>
+			}
+		</mat-form-field>
+
+		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
+			<input matInput [type]="confirmPasswordVisible() ? 'text' : 'password'" formControlName="confirmPassword"
+				[errorStateMatcher]="matcher" placeholder="{{ 'auth.password-confirmation' | transloco }}" />
+			<button type="button" mat-icon-button matSuffix
+				(click)="confirmPasswordVisible.set(!confirmPasswordVisible())">
+				<mat-icon>{{ confirmPasswordVisible() ? 'visibility' : 'visibility_off' }}</mat-icon>
+			</button>
+
+			@if (editProfileForm.controls.confirmPassword.hasError('passwordMismatch')) {
+			<mat-error>{{ 'auth.passwordMismatch' | transloco }}</mat-error>
+			}
+		</mat-form-field>
+		}
+
+	</mat-dialog-content>
+
+	<mat-dialog-actions>
+		<button matButton="filled" type="submit" class="tertiary-btn update-btn"
+			[disabled]="editProfileForm.invalid || editProfileForm.pristine">
+			{{ 'profile.update-button' | transloco }}
+		</button>
+		<button matButton="filled" type="button" class="primary-btn delete-btn" (click)="deleteAccount()">
+			{{ 'profile.delete-button' | transloco }}
+		</button>
+	</mat-dialog-actions>
+</form>

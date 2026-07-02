@@ -57,4 +57,20 @@ public sealed class TripService(
 		if (budget < 0) throw new ValidationException("budget", "Budget value invalid.");
 		if (description != null && description.Length > 250) throw new ValidationException("description", "Description cannot be longer than 250 characters.");
 	}
+
+	public async Task<List<TripDto>> GetTripsForUser(int userId, CancellationToken ct = default)
+	{
+		var trips = await tripModel.GetTripsForUser(userId, ct);
+		if (trips is null)
+			return new List<TripDto>();
+		return trips.Content.ToList();
+	}
+
+	public async Task<List<ProfileTripsDto>> GetTripsItinerariesForUser(int userId, CancellationToken ct = default)
+	{
+		var trips = await tripModel.GetTripsItinerariesForUser(userId, ct);
+		if (trips is null)
+			return new List<ProfileTripsDto>();
+		return trips.Content.ToList();
+	}
 }

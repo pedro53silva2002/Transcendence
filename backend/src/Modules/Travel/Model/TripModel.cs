@@ -69,6 +69,54 @@ public sealed class Trip()
 	}
 }
 
+public sealed class TripProfile()
+{
+	public required int Id { get; set; }
+	public required int Duration { get; set; }
+	public required DateOnly StartDate { get; set; }
+	public required DateOnly EndDate { get; set; }
+	public required TripVisibility Visibility { get; set; }
+	public TripCountry? TripCountries { get; set; }
+	public ICollection<TripCity> TripCities { get; set; } = [];
+	public  ICollection<Itinerary> Itinerary { get; set; }
+
+	public static ProfileTripsDto ToDto(Trip t)
+	{
+		return new()
+		{
+			Id = t.Id,
+			Duration = t.Duration,
+			StartDate = t.StartDate,
+			EndDate = t.EndDate,
+			Visibility = t.Visibility,
+			Country = t.TripCountries?.Country != null ? new CountryDto
+			{
+				Id = t.TripCountries.Country.Id,
+				Name = t.TripCountries.Country.Name,
+				Code = t.TripCountries.Country.Code
+			} : new CountryDto
+			{
+				Id = 0,
+				Name = string.Empty,
+				Code = string.Empty
+			},
+			City = t.TripCities.Select(tc => tc.City is null ? new CityDto
+			{
+				Id = 0,
+				Name = string.Empty,
+				CountryId = 0
+			}
+			: new CityDto
+			{
+				Id = tc.City.Id,
+				Name = tc.City.Name,
+				CountryId = tc.City.CountryId
+			}).ToList(),
+			Itinerary = null,
+		};
+	}
+}
+
 public sealed class TripModel(AppDbContext db)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
@@ -102,12 +150,14 @@ public sealed class TripModel(AppDbContext db)
 
 			await db.SaveChangesAsync(ct);
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 			var createdTrip = await db.Trips
 				.Include(t => t.TripCountries)
 					.ThenInclude(tc => tc.Country)
 				.Include(t => t.TripCities)
 					.ThenInclude(tc => tc.City)
 				.FirstAsync(t => t.Id == trip.Id, ct);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 			return Trip.ToDto(createdTrip);
 		}
@@ -115,7 +165,6 @@ public sealed class TripModel(AppDbContext db)
 		{
 			throw new Exception("An error occurred while creating the trip. Please try again.");
 		}
-
 	}
 
 	public async Task<CursorPage<TripDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
@@ -247,6 +296,69 @@ public sealed class TripModel(AppDbContext db)
 		return new CursorPage<TripDto>(dtoList, null, false, dtoList.Count);
 	}
 
+	public async Task<CursorPage<ProfileTripsDto>> GetTripsItinerariesForUser(int userId, CancellationToken ct = default)
+	{
+		// Get trip ids where the user is a member
+		var tripIds = await db.TripMembers
+			.Where(tm => tm.UserId == userId)
+			.Select(tm => tm.TripId)
+			.Distinct()
+			.ToListAsync(ct);
+
+		if (!tripIds.Any())
+			return new CursorPage<ProfileTripsDto>(new List<ProfileTripsDto>(), null, false, 0);
+
+		// Load trips with related country and city data
+		var trips = await db.Trips
+			.Where(t => tripIds.Contains(t.Id))
+			.Include(t => t.TripCountries)
+				.ThenInclude(tc => tc.Country)
+			.Include(t => t.TripCities)
+				.ThenInclude(tc => tc.City)
+			/*.Include(t => t.Iteneraries)
+				.ThenInclude(tc => tc.Itenerary)*/
+			.ToListAsync(ct);
+
+		// Load members for these trips (with user info)
+		var members = await db.TripMembers
+			.Include(tm => tm.User)
+			.Where(tm => tripIds.Contains(tm.TripId))
+			.ToListAsync(ct);
+
+		// Load itinerary for these trips
+		var itinerary = await db.Itineraries
+			//.Include(tm => tm.User)
+			.Where(tm => tripIds.Contains(tm.TripId))
+			.ToListAsync(ct);
+
+		var currentDate = DateOnly.FromDateTime(DateTime.Now);
+		var dtoList = trips
+		.Where(t => t.EndDate < currentDate)
+		.Select(t =>
+		{
+			var dto = TripProfile.ToDto(t);
+			var tripItinerary = itinerary
+				.Where(ti => ti.TripId == t.Id)
+				.Select(ti => new ItineraryDto
+				{
+					Id = ti.Id,
+					TripId = ti.TripId,
+					Title = ti.Title,
+					Description = ti.Description,
+					ExpectedPrice = ti.ExpectedPrice,
+					Day = ti.Day,
+					CreatedBy = ti.CreatedBy,
+					CreatedAt = ti.CreatedAt,
+					UpdatedAt = ti.UpdatedAt
+				})
+				.ToList();
+			dto.Itinerary = tripItinerary;
+			return dto;
+		}).ToList();
+
+		return new CursorPage<ProfileTripsDto>(dtoList, null, false, dtoList.Count);
+	}
+
 
 	public async Task<TripDto?> UpdateAsync(int userId, int id, UpdateTripDto dto, CancellationToken ct = default)
 	{
@@ -295,12 +407,14 @@ public sealed class TripModel(AppDbContext db)
 
 			await db.SaveChangesAsync(ct);
 
-			var updatedTrip = await db.Trips
-				.Include(t => t.TripCountries)
-					.ThenInclude(tc => tc.Country)
-				.Include(t => t.TripCities)
-					.ThenInclude(tc => tc.City)
-				.FirstAsync(t => t.Id == id, ct);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+		var updatedTrip = await db.Trips
+			.Include(t => t.TripCountries)
+				.ThenInclude(tc => tc.Country)
+			.Include(t => t.TripCities)
+				.ThenInclude(tc => tc.City)
+			.FirstAsync(t => t.Id == id, ct);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 			return Trip.ToDto(updatedTrip);
 		}
@@ -312,6 +426,7 @@ public sealed class TripModel(AppDbContext db)
 
 	public async Task<TripDto?> GetById(int id, CancellationToken ct = default)
 	{
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 		var members = db.TripMembers.Include(tm => tm.User);
 		var trip = await db.Trips
 		.Include(t => t.TripCountries)
@@ -319,6 +434,7 @@ public sealed class TripModel(AppDbContext db)
 		.Include(t => t.TripCities)
 			.ThenInclude(tc => tc.City)
 		.FirstOrDefaultAsync(t => t.Id == id, ct);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 		if (trip is null) return null;
 
 		trip.Members = [.. members.Where(tm => tm.TripId == trip.Id).Select(tm => new TripMembersDto

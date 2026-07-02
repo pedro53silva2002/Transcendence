@@ -55,9 +55,11 @@ public sealed class UserModel(AppDbContext db)
 			OauthId = dto.OAuthId,
 			ProfilePhotoUrl = dto.ProfilePhotoUrl
         };
-
+		
         db.Users.Add(user);
         await db.SaveChangesAsync(ct);
+
+		
         return User.ToDto(user);
     }
 
@@ -95,10 +97,12 @@ public sealed class UserModel(AppDbContext db)
 
         if (dto.Email is not null) user.Email = dto.Email;
         if (dto.Username is not null) user.Username = dto.Username;
+		if (dto.Password is not null) user.PasswordHash = new BCryptPasswordHasher().Hash(dto.Password);
         if (dto.DisplayName is not null) user.DisplayName = dto.DisplayName;
-        user.ProfilePhotoUrl = dto.ProfilePhotoUrl;
+		if (dto.ProfilePhotoPath is not null && dto.ProfilePhotoPath != user.ProfilePhotoUrl) user.ProfilePhotoUrl = dto.ProfilePhotoPath;
         user.Bio = dto.Bio;
         user.UpdatedAt = DateTime.UtcNow;
+
 
         db.Users.Update(user);
         await db.SaveChangesAsync(ct);
@@ -155,6 +159,7 @@ public sealed class UserModel(AppDbContext db)
 
     public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
     {
+
         var rows = await db.Users.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
         return rows > 0;
     }

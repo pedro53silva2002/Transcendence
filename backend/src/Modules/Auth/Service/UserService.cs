@@ -4,12 +4,15 @@ using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Model;
+using Trippie.Common.Services.MinIO;
+using Trippie.Modules.Auth.Service;
+using Minio;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Trippie.Modules.Auth.Service;
 
-public sealed class UserService(AppDbContext db, UserModel userModel)
+public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOService minioClient)
 {
     private const int UsernameMaxLength = 15;
     private const int SuffixLength = 6;
@@ -28,13 +31,29 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
             var field = existsEmails is not null ? "email" : "username";
             throw new ConflictException($"User with this {field} already exists.");
         }
-
+		if (dto.OAuthProvider == "none")
+			dto.ProfilePhotoUrl = await minioClient.UploadFileAsync("profile-photos", $"{dto.Username}_{Guid.NewGuid()}", new MemoryStream(), "application/octet-stream");
         var user = await userModel.CreateAsync(dto, ct);
         return user;
     }
 
     public async Task<CursorPage<UserDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
-        => await userModel.SearchAsync(payload, ct);
+	{
+		var res = await userModel.SearchAsync(payload, ct);
+		/*Console.WriteLine($"ProfilePhotoUrl: {res.Content[0].ProfilePhotoUrl}");
+		Console.WriteLine($"Path: {res.Content[0].ProfilePhotoUrl.Split('/')[0]}");
+		Console.WriteLine($"Path: {res.Content[0].ProfilePhotoUrl.Split('/')[1]}");*/
+		res.Content.Select(u => 
+		{
+			if (u.ProfilePhotoUrl is not null && u.ProfilePhotoUrl[0] == '/')
+				u.ProfilePhotoUrl = minioClient.GetObjectUrl(
+					u.ProfilePhotoUrl.Split('/')[1], 
+					u.ProfilePhotoUrl.Split('/')[2])
+					.GetAwaiter().GetResult();
+			return u;
+		}).ToList();
+		return res;
+	}
 
     public async Task<UserDto> UpdateAsync(int id, UpdateUserDto dto, CancellationToken ct = default)
     {
@@ -42,6 +61,8 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
             throw new ValidationException("email", "Email can not be empty.");
         if (dto.Username is not null && string.IsNullOrWhiteSpace(dto.Username))
             throw new ValidationException("username", "Username can not be blank.");
+		if (dto.Password is not null)
+			AuthService.PasswordVerification(dto.Password);
 		if (dto.Username is not null && dto.Username.Length > UsernameMaxLength)
 			throw new ValidationException("username", $"Username cannot exceed {UsernameMaxLength} characters.");
 		if (dto.DisplayName is not null && dto.DisplayName.Length > UsernameMaxLength)
@@ -58,7 +79,39 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
             if (clash is not null)
                 throw new ConflictException("Email or username already in use.");
         }
+		Console.WriteLine($"Username: {dto.Username}");
+		Console.WriteLine($"ProfilePhotoUrl: {dto.ProfilePhotoUrl}");
+		Console.WriteLine($"ProfilePhotoPath: {dto.ProfilePhotoPath}");
+		
+        if (dto.ProfilePhotoUrl != null)
+		{
+			const string bucketName = "profile-photos";
 
+        // 1. Procuramos o user atual para saber o nome do ficheiro antigo que está no MinIO
+        var currentUser = await userModel.GetById(id, ct);
+        
+        if (currentUser is not null && !string.IsNullOrWhiteSpace(currentUser.ProfilePhotoUrl))
+        {
+            // Extrai o nome real do ficheiro antigo (ex: nome_guid.jpg)
+            var oldFileName = currentUser.ProfilePhotoUrl.Split('/').Last();
+
+            // Verifica se o ficheiro antigo existe e apaga-o para não deixar lixo no MinIO
+            var found = await minioClient.FileExistsAsync(bucketName, oldFileName);
+            if (found)
+            {
+                await minioClient.DeleteFileAsync(bucketName, oldFileName);
+            }
+        }
+
+        // 2. Faz o upload do NOVO ficheiro enviado pelo Frontend
+        var newFileName = $"{dto.Username}_{Guid.NewGuid()}";
+        dto.ProfilePhotoPath = await minioClient.UploadFileAsync(
+            bucketName, 
+            newFileName, 
+            dto.ProfilePhotoUrl.OpenReadStream(),  
+            dto.ProfilePhotoUrl.ContentType
+        );
+		}
         var user = await userModel.UpdateAsync(id, dto, ct) ?? throw new NotFoundException($"User {id} not found.", id);
     
         return user;
@@ -72,7 +125,13 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         if (email is null) throw new ValidationException("email", $"Email cannot be empty.");
 
         var res = await userModel.GetByEmail(email, ct);
-
+		if (res is null)
+			return null;
+		if (res.ProfilePhotoUrl is not null && res.ProfilePhotoUrl[0] == '/')
+		{
+			var path_url = res.ProfilePhotoUrl.Split('/');
+			res.ProfilePhotoUrl = await minioClient.GetObjectUrl(path_url[1], path_url[2]);
+		}
         return res;
     }
 
@@ -81,7 +140,13 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         if (username is null) throw new ValidationException("username", $"Username cannot be empty.");
 
         var res = await userModel.GetByUsername(username, ct);
-
+		if (res is null)
+			return null;
+		if (res.ProfilePhotoUrl is not null && res.ProfilePhotoUrl[0] == '/')
+		{
+			var path_url = res.ProfilePhotoUrl.Split('/');
+			res.ProfilePhotoUrl = await minioClient.GetObjectUrl(path_url[1], path_url[2]);
+		}
         return res;
     }
 
@@ -90,6 +155,12 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         var res = await userModel.GetById(id, ct);
         if (res is null)
             return null;
+		if (res.ProfilePhotoUrl is not null && res.ProfilePhotoUrl[0] == '/')
+		{
+			var path_url = res.ProfilePhotoUrl.Split('/');
+			res.ProfilePhotoUrl = await minioClient.GetObjectUrl(path_url[1], path_url[2]);
+		}
+
         return res;
     }
     public async Task<string> GenerateUniqueUsername(string baseUsername)
@@ -153,14 +224,44 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         if (string.IsNullOrWhiteSpace(oauthId))
             throw new ValidationException("oauthId", "OAuth ID is required.");
 
-        return await userModel.GetByOAuthIdAsync(oauthProvider, oauthId, ct);
+		var res = await userModel.GetByOAuthIdAsync(oauthProvider, oauthId, ct);
+		if (res is null)
+			return null;
+		if (res.ProfilePhotoUrl is not null && res.ProfilePhotoUrl[0] == '/')
+		{
+			var path_url = res.ProfilePhotoUrl.Split('/');
+			res.ProfilePhotoUrl = await minioClient.GetObjectUrl(path_url[1], path_url[2]);
+		}
+        return res;
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
+{
+    // 1. Procura o utilizador
+    var user = await userModel.GetById(id, ct);
+    if (user is null) throw new NotFoundException($"User {id} not found.", id);
+
+    // 2. Se o utilizador tiver foto de perfil, trata da remoção no MinIO
+    if (!string.IsNullOrWhiteSpace(user.ProfilePhotoUrl))
     {
-        var deleted = await userModel.DeleteAsync(id, ct);
-        if (!deleted) throw new NotFoundException($"User {id} not found.", id);
+        const string bucketName = "profile-photos";
+        
+        // Extrai apenas o nome do ficheiro (ex: mjbalouta_e8ccd763-947b...)
+        var fileName = user.ProfilePhotoUrl.Split('/').Last();
+
+        // 🌟 Verifica se o ficheiro existe usando a string do nome
+        var found = await minioClient.FileExistsAsync(bucketName, fileName);
+        if (found)
+        {
+            // 🌟 Apaga o ficheiro diretamente usando o await correto
+            await minioClient.DeleteFileAsync(bucketName, fileName);
+        }
     }
+
+    // 3. Apaga o utilizador da Base de Dados
+    var deleted = await userModel.DeleteAsync(id, ct);
+    if (!deleted) throw new NotFoundException($"User {id} not found for deleting.", id);
+}
 
     public async Task<string?> GetPasswordByUsername(string username, CancellationToken ct = default)
     {

@@ -1,7 +1,10 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Trippie.Common.Services.Authentication.Context;
+using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Service;
@@ -9,8 +12,9 @@ using Trippie.Modules.Auth.Service;
 namespace Trippie.Modules.Auth.Router;
 
 [ApiController]
+[Authorize]
 [Route("api/users")]
-public sealed class UserRouter(UserService service) : ControllerBase
+public sealed class UserRouter(UserService service, IUserContext userContext) : ControllerBase
 {
     private static readonly JsonSerializerOptions SearchJsonOptions = new()
     {
@@ -49,17 +53,18 @@ public sealed class UserRouter(UserService service) : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<UserDto>> Update(int id, [FromBody] UpdateUserDto dto, CancellationToken ct)
+    [HttpPut]
+    public async Task<ActionResult<UserDto>> Update([FromForm] UpdateUserDto dto, CancellationToken ct)
     {
-        var user = await service.UpdateAsync(id, dto, ct);
+        var user = await service.UpdateAsync(userContext.UserId ?? throw new UnauthorizedException("User not authenticated."), dto, ct);
         return Ok(user);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id, CancellationToken ct)
+    [HttpDelete]
+    public async Task<IActionResult> Delete(CancellationToken ct)
     {
-        await service.DeleteAsync(id, ct);
+		var userId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
+        await service.DeleteAsync(userId, ct);
         return NoContent();
     }
 }

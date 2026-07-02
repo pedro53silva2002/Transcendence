@@ -19,7 +19,8 @@
       "digits": "1 digit"
     },
     "error-login": "Invalid username or password.",
-    "error-oauth": "Google Authentication failed."
+    "error-oauth": "Google Authentication failed.",
+    "new-password": "new password"
   },
   "navbar": {
     "profile": "Profile",
@@ -68,6 +69,20 @@
     "trip-budget": "budget (€)",
     "budget-error": "A budget is required.",
     "budget-numbers-error": "A budget can only contain numbers."
+  },
+  "profile": {
+    "countries-section-title": "Where I've Been Wandering",
+    "itineraries-section-title": "My Itineraries",
+    "edit-title": "Edit Profile",
+    "update-button": "Update Profile",
+    "description": "description",
+    "delete-button": "Delete Account",
+    "delete-user-title": "Are you sure?",
+    "delete-user-message": "If you confirm this decision, your account will be deleted.",
+    "description-error": "Can't be more than 150 characters long.",
+    "name-error": "You must define a display name.",
+    "add-friend-btn": "Add Friend",
+    "edit-btn": "Edit Profile"
   },
   "trip-dashboard": {
     "delete-trip-title": "Are you sure?",

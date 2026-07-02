@@ -18,12 +18,12 @@ export interface UserDto {
 }
 
 export interface UpdateUserDto {
-  id: number;
   email: string;
   username: string;
   displayName: string;
-  bio: string;
-  profilePhotoUrl: string;
+  password: string | null;
+  bio: string | null;
+  profilePhotoUrl: File | null;
 }
 
 export interface AuthResponseDto {

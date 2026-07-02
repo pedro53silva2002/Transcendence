@@ -15,13 +15,12 @@ import { filter, map, switchMap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
 import { ItineraryService } from './services/itinerary.service';
-import { ItineraryDto } from './dtos/itinerary.dto';
 import { TripService } from '../plan-a-trip/services/trip.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatError } from '@angular/material/form-field';
 import { TranslocoModule } from '@jsverse/transloco';
 import { SessionService } from '../../logic/services/session.service';
-import { MeDto } from '../auth/dtos/auth.dto';
+import { ItineraryDto } from './dtos/itinerary.dto';
 
 @Component({
 	selector: 'app-itinerary',
