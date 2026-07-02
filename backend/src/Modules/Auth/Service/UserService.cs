@@ -100,11 +100,15 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         var prefix = NormalizeUsername(baseUsername);
         var maxPrefixLength = UsernameMaxLength - SuffixLength - 1;
 
-        if (prefix.Length <= UsernameMaxLength && await userModel.GetByUsername(prefix) is null)
-			return prefix;
+        if (prefix.Length <= UsernameMaxLength)
+		{
+		    var existingUser = await userModel.GetByUsername(prefix);
 
-		if (prefix.Length > maxPrefixLength)
-    		prefix = prefix[..maxPrefixLength];
+		    if (existingUser is null)
+		        return prefix;
+		}
+
+    	prefix = prefix[..Math.Min(prefix.Length, maxPrefixLength)];
 
 		while (true)
 		{
