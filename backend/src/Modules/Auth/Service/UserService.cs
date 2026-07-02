@@ -135,7 +135,7 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
         return res;
     }
 
-	 public async Task<UserDto?> GetByUsername(string username, CancellationToken ct = default)
+	public async Task<UserDto?> GetByUsername(string username, CancellationToken ct = default)
     {
         if (username is null) throw new ValidationException("username", $"Username cannot be empty.");
 
