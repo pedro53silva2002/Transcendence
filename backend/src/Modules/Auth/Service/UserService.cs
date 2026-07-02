@@ -92,7 +92,7 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
             return null;
         return res;
     }
-    public string GenerateUniqueUsername(string baseUsername)
+    public async Task<string> GenerateUniqueUsername(string baseUsername)
     {
         if (string.IsNullOrWhiteSpace(baseUsername))
             throw new ValidationException("baseUsername", "Base username is required.");
@@ -100,15 +100,20 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         var prefix = NormalizeUsername(baseUsername);
         var maxPrefixLength = UsernameMaxLength - SuffixLength - 1;
 
-        if (prefix.Length <= UsernameMaxLength)
+        if (prefix.Length <= UsernameMaxLength && await userModel.GetByUsername(prefix) is null)
 			return prefix;
 
-		prefix = prefix[..maxPrefixLength];
+		if (prefix.Length > maxPrefixLength)
+    		prefix = prefix[..maxPrefixLength];
 
-        var suffix = GenerateRandomSuffix(SuffixLength);
-        var username = $"{prefix}_{suffix}";
-        
-        return username;
+		while (true)
+		{
+        	var suffix = GenerateRandomSuffix(SuffixLength);
+        	var username = $"{prefix}_{suffix}";
+
+			if (await userModel.GetByUsername(username) is null)
+				return username;
+		}
     }
 
     private static string NormalizeUsername(string username)
