@@ -24,16 +24,16 @@
     "my-expenses-description": "Carrega aqui para verificares para onde fugiu o teu dinheiro."
   },
 
-	"dashboard": {
-		"greet": "Bem-vindo, ",
-		"intro": "Preparado para a tua aventura?" 
-	},
+  "dashboard": {
+    "greet": "Bem-vindo, ",
+    "intro": "Preparado para a tua aventura?"
+  },
 
-	"stats": {
-		"countries": "Paises Visitados",
-		"trips": "Viagens Este Ano",
-		"countdown": "Dias Para Viagem"
-	},
+  "stats": {
+    "countries": "Paises Visitados",
+    "trips": "Viagens Este Ano",
+    "countdown": "Dias Para Viagem"
+  },
 
   "trips": {
     "members": {
@@ -50,6 +50,37 @@
       "admin": "Admin"
     }
   },
+
+  "my-trips": {
+    "title": "As Minhas Viagens",
+    "empty": "Ainda não tens viagens. Começa a planear uma!",
+    "loading": "A carregar as tuas viagens…",
+    "upcoming-badge": "Viagem em breve",
+    "upcoming-badge-line1": "PRÓXIMA",
+    "upcoming-badge-line2": "VIAGEM"
+  },
+
+  "friends": {
+    "pageTitle": "Os Meus Amigos",
+    "searchPlaceholder": "Amigos",
+    "searchAriaLabel": "Pesquisar amigos",
+    "showRequestsAriaLabel": "Mostrar pedidos de amizade",
+    "requestsBtn": "Pedidos de Amizade",
+    "pendingAriaLabel": "{{ count }} pedidos de amizade pendentes",
+    "showListAriaLabel": "Mostrar lista de amigos",
+    "listBtn": "Lista de Amigos",
+    "noPendingRequests": "Sem pedidos de amizade pendentes.",
+    "requestsListAriaLabel": "Pedidos de amizade",
+    "deny": "Recusar",
+    "denyAriaLabel": "Recusar pedido de amizade de {{ name }}",
+    "accept": "Aceitar",
+    "acceptAriaLabel": "Aceitar pedido de amizade de {{ name }}",
+    "loadingAriaLabel": "A carregar amigos",
+    "noFriendsFound": "Nenhum amigo encontrado.",
+    "remove": "Remover",
+    "removeAriaLabel": "Remover {{ name }} dos amigos"
+  },
+
   "itinerary": {
     "title": "Itinerário",
     "addItem": "Adicionar paragem",

@@ -1,11 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-confirmation-pop-up',
 //   standalone: true,
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [MatDialogModule, MatButtonModule, TranslocoModule],
   templateUrl: './confirmation-pop-up.component.html',
   styleUrl: './confirmation-pop-up.component.scss'
 })
