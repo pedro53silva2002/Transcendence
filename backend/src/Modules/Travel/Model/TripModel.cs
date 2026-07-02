@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
 using Trippie.Common.Services.Search.Exception;
+using Trippie.Common.Services.Authentication.Context;
 using Trippie.Common.Services.Search.Linq;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Travel.Dtos;
@@ -78,7 +79,7 @@ public sealed class TripProfile()
 	public required TripVisibility Visibility { get; set; }
 	public TripCountry? TripCountries { get; set; }
 	public ICollection<TripCity> TripCities { get; set; } = [];
-	public  ICollection<Itinerary> Itinerary { get; set; }
+	public  ICollection<Itinerary>? Itinerary { get; set; }
 
 	public static ProfileTripsDto ToDto(Trip t)
 	{
@@ -117,7 +118,7 @@ public sealed class TripProfile()
 	}
 }
 
-public sealed class TripModel(AppDbContext db)
+public sealed class TripModel(AppDbContext db, IUserContext userContext)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
@@ -250,6 +251,7 @@ public sealed class TripModel(AppDbContext db)
 			return new CursorPage<TripDto>(new List<TripDto>(), null, false, 0);
 
 		// Load trips with related country and city data
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 		var trips = await db.Trips
 			.Where(t => tripIds.Contains(t.Id))
 			.Include(t => t.TripCountries)
@@ -257,6 +259,8 @@ public sealed class TripModel(AppDbContext db)
 			.Include(t => t.TripCities)
 				.ThenInclude(tc => tc.City)
 			.ToListAsync(ct);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
 
 		// Load members for these trips (with user info)
 		var members = await db.TripMembers
@@ -290,6 +294,13 @@ public sealed class TripModel(AppDbContext db)
 
 	public async Task<CursorPage<ProfileTripsDto>> GetTripsItinerariesForUser(int userId, CancellationToken ct = default)
 	{
+		/*List<TripVisibility> options = new List<TripVisibility>();
+		if (userId != userContext.userId)
+		{
+			options.Add(TripVisibility.Public);
+			if (userId && userContext.userID are Friends)
+				options.Add(TripVisibility.Friends);
+		}*/
 		// Get trip ids where the user is a member
 		var tripIds = await db.TripMembers
 			.Where(tm => tm.UserId == userId)
@@ -301,6 +312,7 @@ public sealed class TripModel(AppDbContext db)
 			return new CursorPage<ProfileTripsDto>(new List<ProfileTripsDto>(), null, false, 0);
 
 		// Load trips with related country and city data
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 		var trips = await db.Trips
 			.Where(t => tripIds.Contains(t.Id))
 			.Include(t => t.TripCountries)
@@ -310,6 +322,8 @@ public sealed class TripModel(AppDbContext db)
 			/*.Include(t => t.Iteneraries)
 				.ThenInclude(tc => tc.Itenerary)*/
 			.ToListAsync(ct);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
 
 		// Load members for these trips (with user info)
 		var members = await db.TripMembers
@@ -325,7 +339,8 @@ public sealed class TripModel(AppDbContext db)
 
 		var currentDate = DateOnly.FromDateTime(DateTime.Now);
 		var dtoList = trips
-		.Where(t => t.EndDate < currentDate)
+		.Where(t => t.EndDate < currentDate
+			/*&& (!visibilityOptions.Any() || visibilityOptions.Contains(t.Visibility))*/)
 		.Select(t =>
 		{
 			var dto = TripProfile.ToDto(t);
@@ -422,6 +437,7 @@ public sealed class TripModel(AppDbContext db)
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 		if (trip is null) return null;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 		trip.Members = [.. members.Where(tm => tm.TripId == trip.Id).Select(tm => new TripMembersDto
 		{
 			Id = tm.Id,
@@ -432,6 +448,7 @@ public sealed class TripModel(AppDbContext db)
 			JoinedAt = tm.JoinedAt,
 			UpdatedAt = tm.UpdatedAt
 		})];
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 		return Trip.ToDto(trip);
 	}
@@ -451,6 +468,59 @@ public sealed class TripModel(AppDbContext db)
 			TotalPrice = totalPrice
 		};
 	}
+
+	public async Task<StatusTripsDto> GetTripStatus(int userId, CancellationToken ct = default)
+	{
+		var tripIds = await db.TripMembers
+		.Where(tm => tm.UserId == userId)
+		.Select(tm => tm.TripId)
+		.Distinct()
+		.ToListAsync(ct);
+		var today = DateOnly.FromDateTime(DateTime.Today);
+		var startOfYear = new DateOnly(today.Year, 1, 1);
+		var endOfYear = new DateOnly(today.Year, 12, 31);
+		var trips = await db.Trips
+			.Where(t => tripIds.Contains(t.Id) && t.StartDate >= startOfYear && t.StartDate <= endOfYear)
+			.ToListAsync(ct);
+		var nbTrips = trips.Count;
+		var closestTrip = await db.Trips
+			.Where(t => tripIds.Contains(t.Id) && t.StartDate >= today)
+			.OrderBy(t => t.StartDate)
+			.Select(t => t.StartDate)
+			.FirstOrDefaultAsync(ct);
+		var closestTripDays = closestTrip == default
+        ? -1
+        : closestTrip.DayNumber - today.DayNumber;
+
+		return new StatusTripsDto
+		{
+			TripsTy = nbTrips,
+			NTrip = closestTripDays
+		};
+	}
+
+	/*public async Task<DateOnly?> GetClosestUpcomingTripStartDateAsync(int userId, CancellationToken ct = default)
+	{
+		var tripIds = await db.TripMembers
+			.Where(tm => tm.UserId == userId)
+			.Select(tm => tm.TripId)
+			.Distinct()
+			.ToListAsync(ct);
+
+		if (tripIds.Count == 0)
+			return null;
+
+		var today = DateOnly.FromDateTime(DateTime.Today);
+		var closestTripPage = await new SearchQueryBuilder<Trip>(db.Trips)
+			.WithKey("id", x => x.Id)
+			.Where(t => tripIds.Contains(t.Id))
+			.Where(t => t.StartDate >= today)
+			.SetOrderBy([new SortCriterion("startdate", SortDirection.Asc)])
+			.SetCursorPagination(new CursorPageRequest(1))
+			.RunAsync(x => x.StartDate, ct);
+
+		return closestTripPage.Content.Count > 0 ? closestTripPage.Content[0] : null;
+	}*/
 
 	public async Task<bool> DeleteAsync(int userId, int id, CancellationToken ct = default)
 	{

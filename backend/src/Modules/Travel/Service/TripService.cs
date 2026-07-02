@@ -74,4 +74,12 @@ public sealed class TripService(TripModel tripModel, TripMembersModel tripMember
 			return new List<ProfileTripsDto>();
 		return trips.Content.ToList();
 	}
+
+	public async Task<StatusTripsDto> GetTripStatus(int userId, CancellationToken ct = default)
+	{
+		var tripStatus = await tripModel.GetTripStatus(userId, ct);
+		if (tripStatus is null)
+			return null;
+		return tripStatus;
+	}
 }
