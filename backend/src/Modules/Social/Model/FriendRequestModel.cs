@@ -5,11 +5,6 @@ using Trippie.Modules.Social.Dtos;
 using Trippie.Common.Database;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 
-using Trippie.Common.Services.Search.Exception;
-using Trippie.Common.Services.Search.Linq;
-using Trippie.Common.Services.Search.Model;
-using Trippie.Modules.Auth.Model;
-
 namespace Trippie.Modules.Social.Model;
 
 public sealed class FriendRequest
@@ -147,6 +142,23 @@ public sealed class FriendRequestModel(AppDbContext db)
 			.AnyAsync(f =>
 				(f.UserId == senderId && f.FriendId == receiverId) ||
 			    (f.UserId == receiverId && f.FriendId == senderId), ct);
+	}
+
+	public async Task<FriendRequestExistsDto?> FriendRequestExistsAsync(int myId, int otherId, CancellationToken ct = default)
+	{
+		var request = await db.FriendRequests
+			.AsNoTracking()
+			.Where(fr =>
+				(fr.SenderId == myId && fr.ReceiverId == otherId) ||
+				(fr.SenderId == otherId && fr.ReceiverId == myId))
+			.Select(fr => new FriendRequestExistsDto
+			{
+				SenderId = fr.SenderId,
+				ReceiverId = fr.ReceiverId
+			})
+			.FirstOrDefaultAsync(ct);
+
+		return request;
 	}
 
 	//to deal with race conditions where two friend requests are sent at the same time, we check for unique constraint violation
