@@ -15,3 +15,8 @@ export interface FriendRequestDto {
   createdAt: string;
   updatedAt: string | null;
 }
+
+export interface FriendRequestExistsDto {
+  senderId: number;
+  receiverId: number;
+}

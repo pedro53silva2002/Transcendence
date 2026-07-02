@@ -99,12 +99,12 @@ export default class ProfileComponent {
 			const usernameFromUrl = params.get('username') ?? "";
 			this.profileUsername.set(usernameFromUrl);
 
-			this.loadProfileData(usernameFromUrl);
+			this.areFriends.set(false);
+            this.isPendingRequestSent.set(false);
+            this.isPendingRequestReceived.set(false);
 
-			//check the relation between auth user and visited user
-			// if (!this.isOwnProfile())
-			// 	this.checkFriendshipStatus(username);
-		})
+            this.loadProfileData(usernameFromUrl);
+		});
 	}
 
 	private loadProfileData(username: string | null): void {
@@ -124,6 +124,9 @@ export default class ProfileComponent {
 
 				if (users.length > 0) {
 					this.visitedUser.set(users[0]);
+
+					if (!this.isOwnProfile())
+                        this.checkFriendshipStatus(username);
 				}
 			}
 		});
@@ -134,8 +137,23 @@ export default class ProfileComponent {
 			this.areFriends.set(result.data ?? false);
 		});
 
-		this.friendshipService
-
+		this.friendRequestService.getFriendRequest(this.visitedUser().username).subscribe((response) => {
+			if (response.data?.receiverId || response.data?.senderId)
+			{
+				if (response.data?.receiverId === this.authService.me()?.id) {
+					this.isPendingRequestReceived.set(true);
+					this.isPendingRequestSent.set(false);
+				}
+				else if (response.data?.senderId === this.authService.me()?.id) {
+					this.isPendingRequestSent.set(true);
+					this.isPendingRequestReceived.set(false);
+				}
+			}
+			else {
+				this.isPendingRequestReceived.set(false);
+                this.isPendingRequestSent.set(false);
+			}
+		})
 	}
 
 	protected handleButtonFunction(): void {

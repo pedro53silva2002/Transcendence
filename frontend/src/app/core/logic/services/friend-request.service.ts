@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiResponse, BaseApiService } from './base-api.service';
-import { CreateFriendRequestDto, FriendRequestDto } from '../dtos/friend-request.dto';
+import { CreateFriendRequestDto, FriendRequestDto, FriendRequestExistsDto } from '../dtos/friend-request.dto';
 import { FriendshipDto } from '../dtos/friendship.dto';
 
 @Injectable({ providedIn: 'root' })
@@ -28,5 +28,9 @@ export class FriendRequestService extends BaseApiService {
 
   public getAll(): Observable<ApiResponse<FriendRequestDto[]>> {
     return this._get<FriendRequestDto[]>('/friend-requests/received');
+  }
+
+  public getFriendRequest(username: string): Observable<ApiResponse<FriendRequestExistsDto>> {
+    return this._get<FriendRequestExistsDto>(`/friend-requests/exists/${username}`);
   }
 }
