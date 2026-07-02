@@ -31,7 +31,7 @@ public sealed class VisitedCountriesSyncBackgroundService(
 	{
 		using var scope = scopeFactory.CreateScope();
 		var visitedCountriesService = scope.ServiceProvider.GetRequiredService<VisitedCountriesService>();
-		
+
 		try
 		{
 			logger.LogInformation("Starting visited countries sync background task.");
