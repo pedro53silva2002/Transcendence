@@ -100,8 +100,10 @@ public sealed class UserService(AppDbContext db, UserModel userModel)
         var prefix = NormalizeUsername(baseUsername);
         var maxPrefixLength = UsernameMaxLength - SuffixLength - 1;
 
-        if (prefix.Length > maxPrefixLength)
-            prefix = prefix[..maxPrefixLength];
+        if (prefix.Length <= UsernameMaxLength)
+			return prefix;
+
+		prefix = prefix[..maxPrefixLength];
 
         var suffix = GenerateRandomSuffix(SuffixLength);
         var username = $"{prefix}_{suffix}";
