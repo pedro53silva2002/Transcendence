@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trippie.Modules.Travel.Model;
-using Trippie.Modules.Auth.Model;
 
 namespace Trippie.Modules.Travel.Config;
 

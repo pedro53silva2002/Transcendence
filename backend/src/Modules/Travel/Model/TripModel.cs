@@ -79,7 +79,11 @@ public sealed class TripProfile()
 	public required TripVisibility Visibility { get; set; }
 	public TripCountry? TripCountries { get; set; }
 	public ICollection<TripCity> TripCities { get; set; } = [];
+<<<<<<< HEAD
 	public  ICollection<Itinerary>? Itinerary { get; set; }
+=======
+	public  ICollection<Itinerary> Itinerary { get; set; }
+>>>>>>> social-profile
 
 	public static ProfileTripsDto ToDto(Trip t)
 	{
@@ -118,7 +122,11 @@ public sealed class TripProfile()
 	}
 }
 
+<<<<<<< HEAD
 public sealed class TripModel(AppDbContext db, IUserContext userContext)
+=======
+public sealed class TripModel(AppDbContext db)
+>>>>>>> social-profile
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
