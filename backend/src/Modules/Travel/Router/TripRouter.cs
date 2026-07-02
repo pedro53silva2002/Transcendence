@@ -64,7 +64,7 @@ public sealed class TripRouter(TripService service, IUserContext userContext) : 
 	}
 
 	[HttpGet("status/{userID}")]
-	public async Task<ActionResult<TripsLeftThisYearDto>> GetTripStatus(int userID, CancellationToken ct)
+	public async Task<ActionResult<TripStatCardsDto>> GetTripStatus(int userID, CancellationToken ct)
 	{
 		var trip = await service.GetTripStatus(userID, ct);
 		if (trip is null) return NotFound();

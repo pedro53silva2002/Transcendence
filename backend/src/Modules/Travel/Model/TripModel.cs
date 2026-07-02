@@ -470,7 +470,7 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 		};
 	}
 
-	public async Task<TripsLeftThisYearDto> GetTripStatus(int userId, CancellationToken ct = default)
+	public async Task<TripStatCardsDto> GetTripStatus(int userId, CancellationToken ct = default)
 	{
 		var tripIds = await db.TripMembers
 		.Where(tm => tm.UserId == userId)
@@ -493,10 +493,10 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
         ? -1
         : closestTrip.DayNumber - today.DayNumber;
 
-		return new TripsLeftThisYearDto
+		return new TripStatCardsDto
 		{
-			TripsTotal = nbTrips,
-			NTrip = closestTripDays
+			TripsLeftThisYear = nbTrips,
+			DaysUntilNextTrip = closestTripDays
 		};
 	}
 

@@ -75,7 +75,7 @@ public sealed class TripService(TripModel tripModel, TripMembersModel tripMember
 		return trips.Content.ToList();
 	}
 
-	public async Task<TripsLeftThisYearDto> GetTripStatus(int userId, CancellationToken ct = default)
+	public async Task<TripStatCardsDto> GetTripStatus(int userId, CancellationToken ct = default)
 	{
 		var tripStatus = await tripModel.GetTripStatus(userId, ct);
 		if (tripStatus is null)

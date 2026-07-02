@@ -75,8 +75,8 @@ public sealed class ProfileTripsDto
 	public List<ItineraryDto>? Itinerary { get; set; }
 }
 
-public sealed class TripsLeftThisYearDto
+public sealed class TripStatCardsDto
 {
-	public int TripsTotal { get; set; }
-	public int NTrip { get; set; }
+	public int TripsLeftThisYear { get; set; }
+	public int DaysUntilNextTrip { get; set; }
 }
