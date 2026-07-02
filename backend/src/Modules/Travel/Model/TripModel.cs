@@ -470,7 +470,7 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 		};
 	}
 
-	public async Task<StatusTripsDto> GetTripStatus(int userId, CancellationToken ct = default)
+	public async Task<TripsLeftThisYearDto> GetTripStatus(int userId, CancellationToken ct = default)
 	{
 		var tripIds = await db.TripMembers
 		.Where(tm => tm.UserId == userId)
@@ -493,35 +493,12 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
         ? -1
         : closestTrip.DayNumber - today.DayNumber;
 
-		return new StatusTripsDto
+		return new TripsLeftThisYearDto
 		{
-			TripsTy = nbTrips,
+			TripsTotal = nbTrips,
 			NTrip = closestTripDays
 		};
 	}
-
-	/*public async Task<DateOnly?> GetClosestUpcomingTripStartDateAsync(int userId, CancellationToken ct = default)
-	{
-		var tripIds = await db.TripMembers
-			.Where(tm => tm.UserId == userId)
-			.Select(tm => tm.TripId)
-			.Distinct()
-			.ToListAsync(ct);
-
-		if (tripIds.Count == 0)
-			return null;
-
-		var today = DateOnly.FromDateTime(DateTime.Today);
-		var closestTripPage = await new SearchQueryBuilder<Trip>(db.Trips)
-			.WithKey("id", x => x.Id)
-			.Where(t => tripIds.Contains(t.Id))
-			.Where(t => t.StartDate >= today)
-			.SetOrderBy([new SortCriterion("startdate", SortDirection.Asc)])
-			.SetCursorPagination(new CursorPageRequest(1))
-			.RunAsync(x => x.StartDate, ct);
-
-		return closestTripPage.Content.Count > 0 ? closestTripPage.Content[0] : null;
-	}*/
 
 	public async Task<bool> DeleteAsync(int userId, int id, CancellationToken ct = default)
 	{
