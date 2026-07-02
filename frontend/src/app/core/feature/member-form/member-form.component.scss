@@ -84,9 +84,14 @@ app-member-form {
 	margin-right: 0;
 }
 
-.dashboard-crew-card {
-	margin-left: 100px;
+.dashboard-crew-grid{
+	margin-left: 110px;
 	gap: 30px;
+	margin-top: 10px;
+	width: 70%;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 }
 
 .name-and-delete {
