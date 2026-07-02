@@ -25,3 +25,9 @@ public sealed class CreateFriendRequestResult
 	public FriendshipDto? Friendship { get; set; }
 	public bool WasAutoAccepted => Friendship is not null;
 }
+
+public sealed class FriendRequestExistsDto
+{
+	public required int SenderId { get; set; }
+	public required int ReceiverId { get; set; }
+}
