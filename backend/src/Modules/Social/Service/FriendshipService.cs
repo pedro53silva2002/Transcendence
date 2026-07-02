@@ -35,19 +35,19 @@ public sealed class FriendshipService(FriendshipModel friendshipModel)
 		return friendship is null ? null : friendship;
 	}
 
-	public async Task UnfriendAsync(int id, int userId, CancellationToken ct = default)
+	public async Task UnfriendAsync(int friendId, int userId, CancellationToken ct = default)
 	{
-		if (id <= 0)
+		if (friendId <= 0)
 			throw new ArgumentException("Friendship ID must be greater than zero.");
 		
 		if (userId <= 0)
 			throw new ArgumentException("User ID must be greater than zero.");
 
-		var deleted = await friendshipModel.DeleteAsync(id, userId, ct);
+		var deleted = await friendshipModel.DeleteAsync(friendId, userId, ct);
 
 		if (!deleted)
 			throw new NotFoundException("Friendship.NotFound",
-				$"Friendship with ID {id} not found for user with ID {userId}.");
+				$"Friend with ID {friendId} not found for user with ID {userId}.");
 	}
 
 	public async Task<bool> FriendshipExistsAsync(int myId, int otherId, CancellationToken ct = default)
