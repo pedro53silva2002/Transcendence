@@ -5,11 +5,6 @@ using Trippie.Modules.Social.Dtos;
 using Trippie.Common.Database;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 
-using Trippie.Common.Services.Search.Exception;
-using Trippie.Common.Services.Search.Linq;
-using Trippie.Common.Services.Search.Model;
-using Trippie.Modules.Auth.Model;
-
 namespace Trippie.Modules.Social.Model;
 
 public sealed class FriendRequest

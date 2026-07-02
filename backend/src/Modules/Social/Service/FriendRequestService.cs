@@ -1,6 +1,4 @@
-using Azure.Core;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using Trippie.Common.Database;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;

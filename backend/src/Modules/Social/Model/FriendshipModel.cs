@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
-using Trippie.Modules.Social.Config;
 using Trippie.Modules.Social.Dtos;
 
 namespace Trippie.Modules.Social.Model;
