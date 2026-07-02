@@ -56,7 +56,6 @@ public sealed class UpdateTripDto
 	public required TripVisibility Visibility { get; set; }
 	public required CountryDto Country { get; set; }
 	public List<CityDto> City { get; set; } = [];
-	public required bool IsExpired { get; set; }
 }
 
 public sealed class TripTotalPriceDto
