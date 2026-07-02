@@ -149,6 +149,23 @@ public sealed class FriendRequestModel(AppDbContext db)
 			    (f.UserId == receiverId && f.FriendId == senderId), ct);
 	}
 
+	public async Task<FriendRequestExistsDto?> FriendRequestExistsAsync(int myId, int otherId, CancellationToken ct = default)
+	{
+		var request = await db.FriendRequests
+			.AsNoTracking()
+			.Where(fr =>
+				(fr.SenderId == myId && fr.ReceiverId == otherId) ||
+				(fr.SenderId == otherId && fr.ReceiverId == myId))
+			.Select(fr => new FriendRequestExistsDto
+			{
+				SenderId = fr.SenderId,
+				ReceiverId = fr.ReceiverId
+			})
+			.FirstOrDefaultAsync(ct);
+
+		return request;
+	}
+
 	//to deal with race conditions where two friend requests are sent at the same time, we check for unique constraint violation
 	private static bool IsUniqueViolation(DbUpdateException ex)
 		=> ex.InnerException is PostgresException pg && pg.SqlState == "23505";

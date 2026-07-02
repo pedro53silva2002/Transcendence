@@ -1,3 +1,4 @@
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
@@ -17,7 +18,6 @@ public sealed class FriendRequestService(
 	{
 		if (callerId == dto.ReceiverId)
 			throw new ValidationException("Self.Request", "Sender ID and Receiver ID cannot be the same.");
-
 
 		if (dto.ReceiverId <= 0)
 			throw new ValidationException("ReceiverID", "Receiver ID must be greater than zero.");
@@ -116,6 +116,17 @@ public sealed class FriendRequestService(
 			await transaction.RollbackAsync(ct);
 			throw;
 		}
+	}
+
+	public async Task<FriendRequestExistsDto?> FriendRequestExistsAsync(int myId, int otherId, CancellationToken ct = default)
+	{
+		if (myId == otherId)
+			throw new ValidationException("Self.Request", "Cannot check friend request existence with oneself.");
+		if (myId <= 0 || otherId <= 0)
+			throw new ValidationException("Invalid.UserId", "User IDs must be greater than zero.");
+		var request = await friendRequestModel.FriendRequestExistsAsync(myId, otherId, ct);
+
+		return request;
 	}
 
 	private static bool IsUniqueViolation(DbUpdateException ex) =>
