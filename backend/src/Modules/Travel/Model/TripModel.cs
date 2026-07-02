@@ -7,6 +7,9 @@ using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Model;
+using Trippie.Modules.Social.Model;
+using Trippie.Common.Services.Authentication.Context;
+
 
 namespace Trippie.Modules.Travel.Model;
 
@@ -79,11 +82,7 @@ public sealed class TripProfile()
 	public required TripVisibility Visibility { get; set; }
 	public TripCountry? TripCountries { get; set; }
 	public ICollection<TripCity> TripCities { get; set; } = [];
-<<<<<<< HEAD
 	public  ICollection<Itinerary>? Itinerary { get; set; }
-=======
-	public  ICollection<Itinerary> Itinerary { get; set; }
->>>>>>> social-profile
 
 	public static ProfileTripsDto ToDto(Trip t)
 	{
@@ -122,11 +121,7 @@ public sealed class TripProfile()
 	}
 }
 
-<<<<<<< HEAD
-public sealed class TripModel(AppDbContext db, IUserContext userContext)
-=======
-public sealed class TripModel(AppDbContext db)
->>>>>>> social-profile
+public sealed class TripModel(AppDbContext db, IUserContext userContext, FriendshipModel friendshipModel)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
@@ -302,13 +297,11 @@ public sealed class TripModel(AppDbContext db)
 
 	public async Task<CursorPage<ProfileTripsDto>> GetTripsItinerariesForUser(int userId, CancellationToken ct = default)
 	{
-		/*List<TripVisibility> options = new List<TripVisibility>();
-		if (userId != userContext.userId)
-		{
-			options.Add(TripVisibility.Public);
-			if (userId && userContext.userID are Friends)
-				options.Add(TripVisibility.Friends);
-		}*/
+		List<TripVisibility> visibilityOptions = new List<TripVisibility>();
+		var currentUser = userContext.Require().UserId;
+		visibilityOptions.Add(TripVisibility.Public);
+		if (userId == currentUser || (userId != currentUser && await friendshipModel.FriendshipExistsAsync(currentUser, userId, ct)))
+				visibilityOptions.Add(TripVisibility.Friends);
 		// Get trip ids where the user is a member
 		var tripIds = await db.TripMembers
 			.Where(tm => tm.UserId == userId)
@@ -348,7 +341,7 @@ public sealed class TripModel(AppDbContext db)
 		var currentDate = DateOnly.FromDateTime(DateTime.Now);
 		var dtoList = trips
 		.Where(t => t.EndDate < currentDate
-			/*&& (!visibilityOptions.Any() || visibilityOptions.Contains(t.Visibility))*/)
+			&& visibilityOptions.Contains(t.Visibility))
 		.Select(t =>
 		{
 			var dto = TripProfile.ToDto(t);
