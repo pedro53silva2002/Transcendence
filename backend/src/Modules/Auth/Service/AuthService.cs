@@ -137,7 +137,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             return await BuildAuthResponse(existingEmailUser, [], ct);
 		}
 
-        var uniqueUsername = userService.GenerateUniqueUsername(dto.Email.Split('@')[0]);
+        var uniqueUsername = await userService.GenerateUniqueUsername(dto.Email.Split('@')[0]);
 
         var newUser = await userService.CreateAsync(new CreateUserDto
         {
