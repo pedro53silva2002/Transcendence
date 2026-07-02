@@ -12,7 +12,7 @@
         <!-- Avatar -->
         <div class="avatar">
           @if (friend.profilePhotoUrl) {
-          <img [ngSrc]="getAvatarUrl(friend.profilePhotoUrl)" [alt]="friend.username" width="64" height="64" class="avatar-img" />
+          <img [ngSrc]="getUserAvatarUrl(friend.profilePhotoUrl)" [alt]="friend.username" width="64" height="64" class="avatar-img" />
           } @else {
           <mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
           }

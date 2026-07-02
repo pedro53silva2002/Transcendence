@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslocoModule } from '@jsverse/transloco';
 import { FriendRequestService } from '../../logic/services/friend-request.service';
+import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
 
 @Component({
   selector: 'app-friendship',
@@ -29,6 +30,8 @@ export default class FriendshipComponent implements OnInit {
   readonly searchControl = new FormControl('');
   readonly searchTerm = signal('');
   readonly showRequests = signal(false);
+
+  protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
   readonly pendingRequests$ = computed(() =>
     this.pendingRequests().filter(r => r.status === 'Pending'),

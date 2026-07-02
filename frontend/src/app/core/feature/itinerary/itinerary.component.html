@@ -24,7 +24,7 @@
 			@if (dialogData?.showAvatar ?? true) {
 				<div class="avatar" role="img">
 				  @if (item.profilePicture) {
-				  <img [src]="getAvatarUrl(item.profilePicture)" [width]="84" [height]="84"
+				  <img [src]="getUserAvatarUrl(item.profilePicture)" [width]="84" [height]="84"
 					class="avatar-img" />
 				  } @else {
 				  <mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>

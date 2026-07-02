@@ -38,7 +38,7 @@
 		<div class="friend-card" role="listitem">
 			<div class="avatar">
 				@if (req.senderProfilePhotoUrl) {
-				<img [src]="req.senderProfilePhotoUrl" [alt]="req.senderUsername" />
+				<img [src]="getUserAvatarUrl(req.senderProfilePhotoUrl)" [alt]="req.senderUsername" />
 				} @else {
 				<mat-icon aria-hidden="true">person</mat-icon>
 				}
@@ -67,7 +67,7 @@
 		<div class="friend-card">
 			<div class="avatar">
 				@if (entry.profilePhotoUrl) {
-				<img [src]="entry.profilePhotoUrl" [alt]="entry.username" />
+				<img [src]="getUserAvatarUrl(entry.profilePhotoUrl)" [alt]="entry.username" />
 				} @else {
 				<mat-icon aria-hidden="true">person</mat-icon>
 				}

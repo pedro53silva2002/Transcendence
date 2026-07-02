@@ -16,6 +16,7 @@ import { TripMemberDto } from '../../../logic/dtos/member.dto';
 import { CloseButtonComponent } from '../../../../shared/close-button/close-button.component';
 import { FriendshipService } from '../../../logic/services/friendship.service';
 import { TripMemberService } from '../../../logic/services/member.service';
+import { getUserAvatarUrl } from '../../../logic/utils/minio-url.util';
 
 @Component({
   selector: 'app-add-member-dialog',
@@ -35,6 +36,7 @@ export class AddMemberDialogComponent implements OnInit {
 
   protected readonly friends = signal<FriendDto[]>([]);
   protected readonly adding = signal(false);
+  protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
   readonly tripId = this.data.tripId;
   readonly alreadyAdded = this.data.alreadyAdded;
@@ -81,17 +83,5 @@ export class AddMemberDialogComponent implements OnInit {
 
   protected cancel(): void {
     this.dialogRef.close();
-  }
-
-  protected getAvatarUrl(photoUrl: string | null): string {
-    if (!photoUrl)
-      return 'images/default-avatar.png';
-
-    if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
-      return photoUrl.replace(/=s\d+(-c)?$/, '=s0');
-    }
-
-    // Se for o caminho relativo do teu MinIO local
-    return `http://localhost:9000/${photoUrl}`;
   }
 }

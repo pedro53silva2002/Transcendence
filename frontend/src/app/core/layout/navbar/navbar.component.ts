@@ -41,6 +41,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService as OtherAuth } from '../../logic/services/auth.service';
 import { FriendRequestService } from '../../logic/services/friend-request.service';
 import { UserDto } from '../../logic/dtos/user.dto';
+import { getUserAvatarUrl } from '../../../core/logic/utils/minio-url.util';
 
 @Component({
 	selector: 'app-navbar',
@@ -82,6 +83,8 @@ export class NavbarComponent implements OnInit {
 	private readonly otherAuth = inject(OtherAuth);
 	private readonly dialog = inject(MatDialog);
 	private readonly cd = inject(ChangeDetectorRef);
+
+	protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
 	public isDashboardRoute = false;
 
@@ -176,16 +179,6 @@ export class NavbarComponent implements OnInit {
 
 	selectUser(user: UserDto): void {
 		this.router.navigate(['/profile', user.id]);
-	}
-
-	getUserAvatarUrl(photoUrl: string | null): string | null {
-		if (!photoUrl) return null;
-
-		if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
-			return photoUrl.replace(/=s\d+(-c)?$/, '=s0');
-		}
-
-		return `http://localhost:9000/${photoUrl}`;
 	}
 
 	goToProfile(event: MatAutocompleteSelectedEvent): void {

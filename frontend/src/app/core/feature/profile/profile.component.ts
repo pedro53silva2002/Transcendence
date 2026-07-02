@@ -16,6 +16,7 @@ import { AsyncPipe } from '@angular/common';
 import { ProfileItineraryCardComponent } from './profile-itinerary-card/profile-itinerary-card.component';
 import { VisitedCountryCardComponent } from "./visited-country-card/visited-country-card.component";
 import { UserDto, UserOrderByFieldsDto, UserSearchFieldsDto } from '../../logic/dtos/user.dto';
+import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
 
 @Component({
 	selector: 'app-profile',
@@ -31,6 +32,8 @@ export default class ProfileComponent {
 	private userService = inject(UserService);
 	private readonly tripService = inject(TripService);
 
+	protected readonly getUserAvatarUrl = getUserAvatarUrl;
+
 	//logged username
 	protected readonly authUsername = computed(() => this.authService.user()?.username ?? null);
 	//profile username
@@ -40,20 +43,6 @@ export default class ProfileComponent {
 	//bool signal to check if the profile is from the logged user or not
 	protected readonly isOwnProfile = computed(() => this.authUsername() === this.profileUsername());
 
-	protected readonly finalAvatarUrl = computed(() => {
-		const photoUrl = this.visitedUser()?.profilePhotoUrl;
-
-		if (!photoUrl)
-			return null;
-
-		//if it begins with these its google auth picture
-		if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
-			return photoUrl.replace(/=s\d+(-c)?$/, '=s0');
-		}
-
-		//if not, we append the MINIO_ENDPOINT
-		return `http://localhost:9000/${photoUrl}`;
-	})
 
 	protected readonly itineraries$ = toObservable(this.visitedUser).pipe(
 		filter((user): user is UserDto => user !== null && user.id !== undefined),

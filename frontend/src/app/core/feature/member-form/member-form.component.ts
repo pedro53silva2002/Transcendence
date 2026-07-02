@@ -21,6 +21,7 @@ import { TripMemberDto } from '../../logic/dtos/member.dto';
 import { Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../logic/services/session.service';
 import { TripMemberService } from '../../logic/services/member.service';
+import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
 
 @Component({
 	selector: 'app-member-form',
@@ -44,6 +45,8 @@ export class MemberFormComponent {
 	private readonly tripState = inject(TripStateService);
 	private readonly route = inject(Router);
 	private readonly sessionService = inject(SessionService);
+
+	protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
 	readonly tripId = input<number | null>(null);
 	readonly columns = input(2);
@@ -148,17 +151,5 @@ export class MemberFormComponent {
 			return false;
 
 		return memberUserId !== this.tripCreatorUserId();
-	}
-
-	protected getAvatarUrl(photoUrl: string | null): string {
-		if (!photoUrl)
-			return 'images/default-avatar.png';
-
-		if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
-			return photoUrl.replace(/=s\d+(-c)?$/, '=s0');
-		}
-
-		// Se for o caminho relativo do teu MinIO local
-		return `http://localhost:9000/${photoUrl}`;
 	}
 }

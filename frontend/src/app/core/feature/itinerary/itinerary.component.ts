@@ -23,6 +23,7 @@ import { SessionService } from '../../logic/services/session.service';
 import { ItineraryDto } from '../../logic/dtos/itinerary.dto';
 import { TripDto } from '../../logic/dtos/trip.dto';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
 
 @Component({
 	selector: 'app-itinerary',
@@ -42,6 +43,8 @@ export default class ItineraryComponent {
 	private readonly tripService = inject(TripService);
 	private readonly formBuilder = inject(FormBuilder);
 	private readonly authService = inject(SessionService);
+
+	protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
 	protected totalPrice = signal<number>(0);
 	public totalPriceChanged = output<number>(); //the channel to send the totalPrice to the main component
@@ -201,17 +204,5 @@ export default class ItineraryComponent {
 
 	onKeyDown(event: KeyboardEvent): void {
 		if (event.key === 'Enter') this.saveItem();
-	}
-
-	protected getAvatarUrl(photoUrl: string | null): string {
-		if (!photoUrl)
-			return 'images/default-avatar.png';
-
-		if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) {
-			return photoUrl.replace(/=s\d+(-c)?$/, '=s0');
-		}
-
-		// Se for o caminho relativo do teu MinIO local
-		return `http://localhost:9000/${photoUrl}`;
 	}
 }
