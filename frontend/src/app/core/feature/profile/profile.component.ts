@@ -244,16 +244,7 @@ export default class ProfileComponent {
 
 	acceptFriendRequest(): void {
 
-		const authId = this.authService.me()?.id;
-		if (!authId)
-			return;
-
-		const dto: CreateFriendshipDto = {
-			userId1: authId,
-			userId2: this.visitedUser().id
-		}
-
-		this.friendshipService.create(dto).subscribe((success) => {
+		this.friendRequestService.accept(this.visitedUser().id).subscribe((success) => {
 			this.isPendingRequestReceived.set(false);
 			this.areFriends.set(true);
 		});
@@ -274,6 +265,5 @@ export default class ProfileComponent {
 			if (updatedUser)
 				this.visitedUser.set(updatedUser);
 		})
-
 	}
 }

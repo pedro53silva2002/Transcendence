@@ -127,11 +127,37 @@ public sealed class FriendRequestModel(AppDbContext db)
 		return FriendRequest.ToDto(friendRequest);
 	}
 
+	public async Task<FriendRequestDto?> GetFriendRequestbyFriendId(int otherId, int myId, CancellationToken ct = default)
+	{
+		var friendRequest = await db.FriendRequests
+			.AsNoTracking()
+			.Where(fr =>
+				(fr.SenderId == myId && fr.ReceiverId == otherId) ||
+				(fr.SenderId == otherId && fr.ReceiverId == myId))
+			.FirstOrDefaultAsync(ct);
+
+		if (friendRequest is null)
+			return null;
+
+		return FriendRequest.ToDto(friendRequest);
+	}
+
 	public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
 	{
 		var rows = await db.FriendRequests
 			.Where(fr => fr.Id == id).ExecuteDeleteAsync(ct);
 
+		return rows > 0;
+	}
+
+	public async Task<bool> DeleteByFriendIdAsync(int otherId, int myId, CancellationToken ct = default)
+	{
+		var rows = await db.FriendRequests
+			.Where(fr => 
+				fr.SenderId == myId && fr.ReceiverId == otherId ||
+				fr.SenderId == otherId && fr.ReceiverId == myId)
+			.ExecuteDeleteAsync(ct);
+		
 		return rows > 0;
 	}
 

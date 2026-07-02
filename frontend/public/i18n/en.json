@@ -79,6 +79,7 @@
     "remove-friend-btn": "Remove Friend",
     "edit-btn": "Edit Profile",
     "cancel-request-btn": "Cancel Request",
+    "accept-request-btn": "Accept Request",
     "delete-friend-request-message": "If you confirm this decision, the friend request will be canceled."
   },
   "trip-dashboard": {

@@ -76,22 +76,22 @@ public sealed class FriendRequestRouter(
 		return Ok(exists);
 	}
 
-	[HttpPost("{id}/accept")]
-	public async Task<ActionResult<FriendshipDto>> AcceptAsync(int id, CancellationToken ct = default)
+	[HttpPost("{otherId}/accept")]
+	public async Task<ActionResult<FriendshipDto>> AcceptAsync(int otherId, CancellationToken ct = default)
 	{
-		var callerId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
+		var myId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
 
-		var friendship = await friendRequestService.AcceptAsync(callerId, id, ct);
+		var friendship = await friendRequestService.AcceptAsync(myId, otherId, ct);
 
 		return Ok(friendship);
 	}
 
-	[HttpDelete("{id}")]
-	public async Task<ActionResult> CancelOrRejectAsync(int id, CancellationToken ct = default)
+	[HttpDelete("{otherId}")]
+	public async Task<ActionResult> CancelOrRejectAsync(int otherId, CancellationToken ct = default)
 	{
-		var callerId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
+		var myId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated.");
 
-		await friendRequestService.CancelOrRejectAsync(callerId, id, ct);
+		await friendRequestService.CancelOrRejectAsync(myId, otherId, ct);
 
 		return NoContent();
 	}
