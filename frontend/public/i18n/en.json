@@ -106,6 +106,14 @@
       }
     }
   },
+  "my-trips": {
+    "title": "My Trips",
+    "empty": "You have no trips yet. Start planning one!",
+    "loading": "Loading your trips…",
+    "upcoming-badge": "Upcoming trip",
+    "upcoming-badge-line1": "UPCOMING",
+    "upcoming-badge-line2": "TRIP"
+  },
   "itinerary": {
     "title": "Itinerary",
     "addItem": "Add itinerary item",
@@ -136,6 +144,26 @@
   "crew": {
     "addMember": "Add Member",
     "allFriendsAdded": "All your friends have been added to the crew."
+  },
+  "friends": {
+    "pageTitle": "My Friends",
+    "searchPlaceholder": "Friends",
+    "searchAriaLabel": "Search friends",
+    "showRequestsAriaLabel": "Show friend requests",
+    "requestsBtn": "Friend Requests",
+    "pendingAriaLabel": "{{ count }} pending friend requests",
+    "showListAriaLabel": "Show friends list",
+    "listBtn": "Friend's List",
+    "noPendingRequests": "No pending friend requests.",
+    "requestsListAriaLabel": "Friend requests",
+    "deny": "Deny",
+    "denyAriaLabel": "Deny friend request from {{ name }}",
+    "accept": "Accept",
+    "acceptAriaLabel": "Accept friend request from {{ name }}",
+    "loadingAriaLabel": "Loading friends",
+    "noFriendsFound": "No friends found.",
+    "remove": "Remove",
+    "removeAriaLabel": "Remove {{ name }} from friends"
   },
   "popup": {
     "cancel-btn": "Cancel",

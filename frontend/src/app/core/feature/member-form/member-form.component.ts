@@ -21,6 +21,7 @@ import { TripMemberDto } from '../itinerary/dtos/member.dto';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from '../../logic/services/loading.service';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { SessionService } from '../../logic/services/session.service';
 
 @Component({
 	selector: 'app-member-form',
@@ -43,6 +44,7 @@ export class MemberFormComponent {
 	private readonly memberService = inject(TripMemberService);
 	private readonly tripState = inject(TripStateService);
 	private readonly route = inject(Router);
+	private readonly sessionService = inject(SessionService);
 
 	readonly tripId = input<number | null>(null);
 	readonly columns = input(2);
@@ -86,9 +88,19 @@ export class MemberFormComponent {
 				});
 		}, { allowSignalWrites: true });
 
-		// For the create flow (no tripId yet), start with an empty list.
+		// For the create flow (no tripId yet), seed the list with the creator as Admin.
 		if (this.tripId() === null) {
-			this.tripState.setMembers([]);
+			const me = this.sessionService.me();
+			if (me) {
+				this.tripState.setMembers([{
+					userId: me.id,
+					displayName: me.displayName,
+					profilePicture: me.profilePhotoUrl,
+					role: 'Admin',
+				}]);
+			} else {
+				this.tripState.setMembers([]);
+			}
 		}
 	}
 

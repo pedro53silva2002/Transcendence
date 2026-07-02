@@ -14,8 +14,8 @@
 				<button mat-menu-item routerLink="/home">Home</button>
 				<button mat-menu-item routerLink="/profile">Profile</button>
 				<button mat-menu-item routerLink="/plan-a-trip">Plan A Trip</button>
-				<button mat-menu-item routerLink="/my-trip">My Trips</button>
-				<button mat-menu-item routerLink="/friends">Friends</button>
+				<button mat-menu-item routerLink="/my-friends">Friends</button>
+				<button mat-menu-item routerLink="/my-trips">My Trips</button>
 				<button mat-menu-item routerLink="/my-expenses">My Expenses</button>
 			</mat-menu>
 		</div>
@@ -35,11 +35,11 @@
 				 Trip</button>
 			 }
 			 @if (showMyTrips()) {
-			 <button routerLinkActive="active-link" routerLink="/my-trip" class="primary-btn" matButton="outlined">My
+			 <button routerLinkActive="active-link" routerLink="/my-trips" class="primary-btn" matButton="outlined">My
 				 Trips</button>
 			 }
 			 @if (showFriends()) {
-			 <button routerLinkActive="active-link" routerLink="/friends" class="primary-btn"
+			 <button routerLinkActive="active-link" routerLink="/my-friends" class="primary-btn"
 				 matButton="outlined">Friends</button>
 			 }
 			 @if (showMyExpenses()) {
@@ -52,10 +52,19 @@
 			<mat-icon matPrefix>search</mat-icon>
 			<input matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search users" />
 			<mat-autocomplete #auto="matAutocomplete" panelClass="custom-search-panel">
-				@for (user of filteredUsers | async; track user) {
+				@for (user of filteredUsers | async; track user.id) {
 				<mat-option [value]="user">
-					<div>
+					<div class="user-option">
 						<span>{{user.displayName}}</span>
+						@if (user.id !== currentUserId()) {
+						<button
+							mat-icon-button
+							class="add-friend-btn"
+							[attr.aria-label]="'Send friend request to ' + user.displayName"
+							(click)="sendFriendRequest(user, $event)">
+							<mat-icon>{{ sentRequests().has(user.id) ? 'check' : 'person_add' }}</mat-icon>
+						</button>
+						}
 					</div>
 				</mat-option>
 				}

@@ -26,15 +26,14 @@ h1 {
 }
 
 .crew-column {
-  height: 360px;
   flex: 1 1 650px;
   max-width: 650px;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
 
 .actions-row {
-  width: 100%;
   display: flex;
   justify-content: end;
 
