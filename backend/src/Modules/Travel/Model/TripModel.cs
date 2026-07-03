@@ -8,7 +8,6 @@ using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Social.Model;
-using Trippie.Common.Services.Authentication.Context;
 
 
 namespace Trippie.Modules.Travel.Model;
@@ -24,9 +23,9 @@ public sealed class Trip()
 	public required int Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required int CreatedBy { get; set; }
+	public required bool IsExpired { get; set; }
 	public DateTime? CreatedAt { get; set; }
 	public DateTime? UpdatedAt { get; set; }
-
 	public TripCountry? TripCountries { get; set; }
 	public ICollection<TripCity> TripCities { get; set; } = [];
 	public IReadOnlyList<TripMembersDto> Members { get; set; } = [];
@@ -43,6 +42,7 @@ public sealed class Trip()
 			Budget = t.Budget,
 			Visibility = t.Visibility,
 			CreatedBy = t.CreatedBy,
+			IsExpired = t.IsExpired,
 			CreatedAt = t.CreatedAt ?? DateTime.UtcNow,
 			UpdatedAt = t.UpdatedAt,
 			Country = t.TripCountries?.Country != null ? new CountryDto
@@ -133,35 +133,42 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 			Duration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1,
 			StartDate = dto.StartDate,
 			EndDate = dto.EndDate,
-			Budget = dto.Budget == 0 ? 0 : dto.Budget, // --- IGNORE ---
+			Budget = dto.Budget == 0 ? 0 : dto.Budget,
 			Visibility = dto.Visibility == 0 ? TripVisibility.Public : dto.Visibility,
 			CreatedBy = userId,
+			IsExpired = dto.EndDate < DateOnly.FromDateTime(DateTime.UtcNow),
 			CreatedAt = DateTime.UtcNow
 		};
 
-		db.Trips.Add(trip);
-		await db.SaveChangesAsync(ct);
+		try
+		{
+			db.Trips.Add(trip);
+			await db.SaveChangesAsync(ct);
 
-		db.TripCountries.Add(new TripCountry { TripId = trip.Id, CountryId = dto.Country.Id });
+			db.TripCountries.Add(new TripCountry { TripId = trip.Id, CountryId = dto.Country.Id });
 
-		await db.SaveChangesAsync(ct);
+			await db.SaveChangesAsync(ct);
 
-		foreach (var cityId in dto.City.Select(c => c.Id))
-			db.TripCities.Add(new TripCity { TripId = trip.Id, CityId = cityId });
+			foreach (var cityId in dto.City.Select(c => c.Id))
+				db.TripCities.Add(new TripCity { TripId = trip.Id, CityId = cityId });
 
-		await db.SaveChangesAsync(ct);
-
+			await db.SaveChangesAsync(ct);
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-		var createdTrip = await db.Trips
-			.Include(t => t.TripCountries)
-				.ThenInclude(tc => tc.Country)
-			.Include(t => t.TripCities)
-				.ThenInclude(tc => tc.City)
-			.FirstAsync(t => t.Id == trip.Id, ct);
+			var createdTrip = await db.Trips
+				.Include(t => t.TripCountries)
+					.ThenInclude(tc => tc.Country)
+				.Include(t => t.TripCities)
+					.ThenInclude(tc => tc.City)
+				.FirstAsync(t => t.Id == trip.Id, ct);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
-		return Trip.ToDto(createdTrip);
+			return Trip.ToDto(createdTrip);
+		}
+		catch
+		{
+			throw new Exception("An error occurred while creating the trip. Please try again.");
+		}
 	}
 
 	public async Task<CursorPage<TripDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
@@ -175,6 +182,7 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 		.WithKey("id", x => x.Id)
 		.AddFilters(payload.Filters, field => field.ToLowerInvariant() switch
 		{
+			"isexpired" => x => x.IsExpired,
 			"tripname" => x => x.TripName,
 			"createdat" => x => x.CreatedAt,
 			"id" => x => x.Id,
@@ -372,10 +380,11 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 
 	public async Task<TripDto?> UpdateAsync(int userId, int id, UpdateTripDto dto, CancellationToken ct = default)
 	{
-		var query = db.Trips
+		var trip =  await db.Trips
 			.Include(t => t.TripCountries)
-			.Include(t => t.TripCities);
-		var trip = await query.FirstOrDefaultAsync(t => t.Id == id, ct);
+			.Include(t => t.TripCities)
+			.FirstOrDefaultAsync(t => t.Id == id, ct);
+
 		if (trip is null) return null;
 
 		var isAdmin = await db.Set<TripMembers>().AnyAsync(tm => tm.TripId == trip.Id
@@ -383,9 +392,7 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 			&& tm.Role == TripMemberRole.Admin, ct);
 
 		if (!isAdmin)
-		{
-			throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
-		}
+		    throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
 
 		if (dto.TripName is not null) trip.TripName = dto.TripName;
 		if (dto.Visibility != trip.Visibility) trip.Visibility = dto.Visibility;
@@ -395,25 +402,28 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 		var calculatedDuration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
 		if (calculatedDuration != trip.Duration) trip.Duration = calculatedDuration;
 		if (dto.Budget is not 0) trip.Budget = dto.Budget;
+		trip.IsExpired = dto.EndDate < DateOnly.FromDateTime(DateTime.UtcNow);
 		trip.UpdatedAt = DateTime.UtcNow;
 
-		db.Trips.Update(trip);
+		try
+		{
+			db.Trips.Update(trip);
 
-		if (trip.TripCountries is not null)
-			db.TripCountries.Remove(trip.TripCountries);
-		if (trip.TripCities.Count > 0)
-			db.TripCities.RemoveRange(trip.TripCities);
+			if (trip.TripCountries is not null)
+				db.TripCountries.Remove(trip.TripCountries);
+			if (trip.TripCities.Count > 0)
+				db.TripCities.RemoveRange(trip.TripCities);
 
-		await db.SaveChangesAsync(ct);
+			await db.SaveChangesAsync(ct);
 
-		await db.TripCountries.AddAsync(new TripCountry { TripId = id, CountryId = dto.Country.Id }, ct);
+			await db.TripCountries.AddAsync(new TripCountry { TripId = id, CountryId = dto.Country.Id }, ct);
 
-		await db.SaveChangesAsync(ct);
+			await db.SaveChangesAsync(ct);
 
-		foreach (var cityId in dto.City.Select(c => c.Id))
-			db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
+			foreach (var cityId in dto.City.Select(c => c.Id))
+				db.TripCities.Add(new TripCity { TripId = id, CityId = cityId });
 
-		await db.SaveChangesAsync(ct);
+			await db.SaveChangesAsync(ct);
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 		var updatedTrip = await db.Trips
@@ -424,7 +434,12 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 			.FirstAsync(t => t.Id == id, ct);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
-		return Trip.ToDto(updatedTrip);
+			return Trip.ToDto(updatedTrip);
+		}
+		catch
+		{
+			throw new Exception("An error occurred while updating the trip. Please try again.");
+		}
 	}
 
 	public async Task<TripDto?> GetById(int id, CancellationToken ct = default)

@@ -16,6 +16,7 @@ import { StatCardsComponent } from "../../../shared/stat-cards/stat-cards.compon
   styleUrl: './user-dashboard.component.scss',
 })
 export class UserDashboardComponent implements OnInit {
+
   private readonly authService = inject(SessionService);
   public user = signal<MeDto | null>(null);
 

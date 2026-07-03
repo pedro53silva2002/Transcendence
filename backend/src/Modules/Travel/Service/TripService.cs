@@ -1,17 +1,15 @@
-using System.Drawing;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Trippie.Common.Database;
+
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
-using Trippie.Modules.Auth.Model;
+using Trippie.Modules.Auth.Service;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 
-
 namespace Trippie.Modules.Travel.Service;
 
-public sealed class TripService(TripModel tripModel, TripMembersModel tripMembersModel)
+public sealed class TripService(
+	TripModel tripModel,
+	TripMembersModel tripMembersModel)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
@@ -20,6 +18,7 @@ public sealed class TripService(TripModel tripModel, TripMembersModel tripMember
 		dto.Members.TripId = trip.Id;
 		var members = await new TripMembersService(tripMembersModel).CreateAsync(userId, dto.Members, ct);
 		trip.Members = [.. members];
+
 		return trip;
 	}
 

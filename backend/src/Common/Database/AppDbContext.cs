@@ -21,6 +21,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 	public DbSet<Friendship> Friendships => Set<Friendship>();
 	public DbSet<TripMembers> TripMembers => Set<TripMembers>();
 	public DbSet<Itinerary> Itineraries => Set<Itinerary>();
+	public DbSet<VisitedCountry> VisitedCountries => Set<VisitedCountry>();
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

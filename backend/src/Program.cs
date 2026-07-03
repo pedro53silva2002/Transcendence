@@ -7,6 +7,7 @@ using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
+using Trippie.Common.Services.Synchronization;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
 using System.Threading.RateLimiting;
@@ -151,8 +152,11 @@ try
 	builder.Services.AddScoped<FriendshipModel>();
 	builder.Services.AddScoped<FriendshipService>();
 	builder.Services.AddScoped<ItineraryModel>();
-	builder.Services.AddScoped<ItineraryService>();
+    builder.Services.AddScoped<ItineraryService>();
+	builder.Services.AddScoped<VisitedCountriesModel>();
+	builder.Services.AddScoped<VisitedCountriesService>();
 
+	builder.Services.AddHostedService<VisitedCountriesSyncBackgroundService>();
 
 	//Add Http request limiter
 	builder.Services.AddRateLimiter(options =>
