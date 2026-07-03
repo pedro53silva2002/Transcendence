@@ -157,6 +157,36 @@ public sealed class UserModel(AppDbContext db)
         return null;
     }
 
+	public async Task<TripStatCardsDto> GetTripStatus(int userId, CancellationToken ct = default)
+	{
+		var tripIds = await db.TripMembers
+		.Where(tm => tm.UserId == userId)
+		.Select(tm => tm.TripId)
+		.Distinct()
+		.ToListAsync(ct);
+		var today = DateOnly.FromDateTime(DateTime.Today);
+		var startOfYear = new DateOnly(today.Year, 1, 1);
+		var endOfYear = new DateOnly(today.Year, 12, 31);
+		var trips = await db.Trips
+			.Where(t => tripIds.Contains(t.Id) && t.StartDate >= startOfYear && t.StartDate <= endOfYear)
+			.ToListAsync(ct);
+		var nbTrips = trips.Count;
+		var closestTrip = await db.Trips
+			.Where(t => tripIds.Contains(t.Id) && t.StartDate >= today)
+			.OrderBy(t => t.StartDate)
+			.Select(t => t.StartDate)
+			.FirstOrDefaultAsync(ct);
+		var closestTripDays = closestTrip == default
+        ? -1
+        : closestTrip.DayNumber - today.DayNumber;
+
+		return new TripStatCardsDto
+		{
+			TripsLeftThisYear = nbTrips,
+			DaysUntilNextTrip = closestTripDays
+		};
+	}
+
     public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
     {
 

@@ -272,4 +272,12 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
             return res;
         return null;
     }
+
+	public async Task<TripStatCardsDto> GetTripStatus(int userId, CancellationToken ct = default)
+	{
+		var tripStatus = await userModel.GetTripStatus(userId, ct);
+		if (tripStatus is null)
+			return null;
+		return tripStatus;
+	}
 }

@@ -35,3 +35,9 @@ public sealed class UpdateUserDto
 	public string? ProfilePhotoPath { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
+
+public sealed class TripStatCardsDto
+{
+	public int TripsLeftThisYear { get; set; }
+	public int DaysUntilNextTrip { get; set; }
+}
