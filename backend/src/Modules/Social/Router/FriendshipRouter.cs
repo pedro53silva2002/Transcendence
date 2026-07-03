@@ -44,12 +44,12 @@ public sealed class FriendshipRouter(FriendshipService service, IUserContext use
 		return Ok(friendship);
 	}
 
-	[HttpDelete("{Id}")]
-	public async Task<ActionResult> UnfriendAsync(int id, CancellationToken ct = default)
+	[HttpDelete("{friendId}")]
+	public async Task<ActionResult> UnfriendAsync(int friendId, CancellationToken ct = default)
 	{
 		var userId = userContext.UserId ?? throw new UnauthorizedException("User not authenticated");
 	
-		await service.UnfriendAsync(id, userId, ct);
+		await service.UnfriendAsync(friendId, userId, ct);
 		return NoContent();
 	}
 

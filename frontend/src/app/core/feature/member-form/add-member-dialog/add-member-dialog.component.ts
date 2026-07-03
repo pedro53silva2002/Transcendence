@@ -12,6 +12,8 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { TripMemberService } from '../services/member.service';
+import { UserService } from '../../auth/services/user.service';
+import { UserDto } from '../../auth/dtos/user.dto';
 import { FriendDto } from '../../dtos/social/friendship.dto';
 import { TripMemberDto } from '../../itinerary/dtos/member.dto';
 import { CloseButtonComponent } from '../../../../shared/components/close-button/close-button.component';

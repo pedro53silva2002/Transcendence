@@ -42,6 +42,7 @@ public sealed class TripDto
 	public required CountryDto Country { get; set; }
 	public List<CityDto> City { get; set; } = [];
 	public List<TripMembersDto>? Members { get; set; }
+	public required bool IsExpired { get; set; }
 }
 
 public sealed class UpdateTripDto
