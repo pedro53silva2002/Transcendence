@@ -61,7 +61,7 @@ export class AddMemberDialogComponent implements OnInit {
     if (tripId === null) {
       const pending: TripMemberDto = {
         userId: friend.friendId,
-		username: friend.username,
+        username: friend.username,
         displayName: friend.username,
         profilePicture: friend.profilePhotoUrl,
         role: 'Member',
@@ -73,8 +73,16 @@ export class AddMemberDialogComponent implements OnInit {
     this.adding.set(true);
     this.memberService.create({ tripId, userIds: [friend.friendId] }, tripId).subscribe({
       next: (result) => {
-        if (result.data) 
-			this.dialogRef.close(result.data);
+        if (result.data) {
+          const addedMember: TripMemberDto = {
+            ...result.data,
+            username: friend.username,
+            displayName: friend.username,
+            profilePicture: friend.profilePhotoUrl,
+            role: 'Member',
+          };
+          this.dialogRef.close(addedMember);
+        }
       },
       complete: () => this.adding.set(false),
       error: () => this.adding.set(false),

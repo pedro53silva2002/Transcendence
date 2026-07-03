@@ -56,7 +56,7 @@
 							}
 						</div>
 						<span class="username">{{user.displayName}}</span>
-						@if (user.id !== currentUserId()) {
+						<!-- @if (user.id !== currentUserId()) {
 							<button
 								mat-icon-button
 								class="add-friend-btn"
@@ -64,7 +64,7 @@
 								(click)="sendFriendRequest(user, $event)">
 								<mat-icon>{{ sentRequests().has(user.id) ? 'check' : 'person_add' }}</mat-icon>
 							</button>
-							}
+							} -->
 					</div>
 				</mat-option>
 				}

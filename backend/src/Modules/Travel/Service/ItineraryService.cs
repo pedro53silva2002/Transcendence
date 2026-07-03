@@ -34,9 +34,9 @@ public sealed class ItineraryService(ItineraryModel itineraryModel, TripModel tr
 
     public async Task<TripTotalPriceDto?> GetTotalPriceAsync(int userId, int tripId, CancellationToken ct = default)
     {
-        var isMember = await tripMembersModel.IsMemberAsync(userId, tripId, ct);
-        if (!isMember)
-            throw new UnauthorizedAccessException("You are not a member of this trip.");
+        // var isMember = await tripMembersModel.IsMemberAsync(userId, tripId, ct);
+        // if (!isMember)
+        //     throw new UnauthorizedAccessException("You are not a member of this trip.");
 
         return await tripModel.GetTotalPriceAsync(tripId, ct);
     }
