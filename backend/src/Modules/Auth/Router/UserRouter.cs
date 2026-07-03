@@ -53,6 +53,14 @@ public sealed class UserRouter(UserService service, IUserContext userContext) : 
         }
     }
 
+	[HttpGet("status/{userID}")]
+	public async Task<ActionResult<TripStatCardsDto>> GetTripStatus(int userID, CancellationToken ct)
+	{
+		var trip = await service.GetTripStatus(userID, ct);
+		if (trip is null) return NotFound();
+		return Ok(trip);
+	}
+
     [HttpPut]
     public async Task<ActionResult<UserDto>> Update([FromForm] UpdateUserDto dto, CancellationToken ct)
     {

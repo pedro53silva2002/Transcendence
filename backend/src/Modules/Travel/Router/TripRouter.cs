@@ -63,14 +63,6 @@ public sealed class TripRouter(TripService service, IUserContext userContext) : 
 		return Ok(trip);
 	}
 
-	[HttpGet("status/{userID}")]
-	public async Task<ActionResult<TripStatCardsDto>> GetTripStatus(int userID, CancellationToken ct)
-	{
-		var trip = await service.GetTripStatus(userID, ct);
-		if (trip is null) return NotFound();
-		return Ok(trip);
-	}
-
 	[HttpPut("{id}")]
 	public async Task<ActionResult<TripDto>> Update(int id, [FromBody]UpdateTripDto dto, CancellationToken ct)
 	{
