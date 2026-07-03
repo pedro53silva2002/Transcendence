@@ -34,6 +34,11 @@ export interface AuthResponseDto {
   refreshTokenExpires: string;
 }
 
+export interface TripStatCardsDto {
+  tripsLeftThisYear: number;
+  daysUntilNextTrip: number;
+}
+
 export type UserSearchFieldsDto = {
   username: string;
   displayName: string;
@@ -41,5 +46,6 @@ export type UserSearchFieldsDto = {
   id: number;
   createdAt: number;
 };
+
 
 export type UserOrderByFieldsDto = 'username' | 'displayName' | 'createdAt' | 'id';

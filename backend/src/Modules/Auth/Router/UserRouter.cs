@@ -38,7 +38,7 @@ public sealed class UserRouter(UserService service, IUserContext userContext) : 
             var payload = JsonSerializer.Deserialize<SearchPayload>(json, SearchJsonOptions) ?? new SearchPayload();
 
             if (payload is null)
-                return BadRequest("Invalid pauload");
+                return BadRequest("Invalid payload");
 
             var page = await service.SearchAsync(payload, ct);
             return Ok(page);
@@ -53,7 +53,7 @@ public sealed class UserRouter(UserService service, IUserContext userContext) : 
         }
     }
 
-	[HttpGet("status/{userID}")]
+	[HttpGet("stats/{userID}")]
 	public async Task<ActionResult<TripStatCardsDto>> GetTripStatus(int userID, CancellationToken ct)
 	{
 		var trip = await service.GetTripStatus(userID, ct);

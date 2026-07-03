@@ -3,7 +3,7 @@ import { ApiResponse, BaseApiService } from './base-api.service';
 
 import { CursorPage, SearchParams, searchToQuery } from './search.service';
 import { Observable } from 'rxjs';
-import { CreateUserDto, UpdateUserDto, UserDto, UserOrderByFieldsDto, UserSearchFieldsDto } from '../dtos/user.dto';
+import { CreateUserDto, TripStatCardsDto, UpdateUserDto, UserDto, UserOrderByFieldsDto, UserSearchFieldsDto } from '../dtos/user.dto';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends BaseApiService {
@@ -39,6 +39,10 @@ export class UserService extends BaseApiService {
     }
 
     return this._put<UserDto>(`/users`, formData as any);
+  }
+
+  public getUserStats(userId: number): Observable<ApiResponse<TripStatCardsDto>> {
+    return this._get<TripStatCardsDto>(`/users/stats/${userId}`);
   }
 
   public delete(): Observable<ApiResponse<void>> {
