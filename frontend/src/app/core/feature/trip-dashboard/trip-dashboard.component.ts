@@ -66,11 +66,13 @@ export class TripDashboardComponent implements OnInit {
 
 		if (this.tripStateService.trip()?.id === id) {
 			this.totalBudget.set(this.tripStateService.trip()?.budget ?? 0);
+			console.log(this.tripStateService.trip());
 		} else {
 			this.tripService.getById(id).subscribe({
 				next: (response) => {
 					if (response.data) this.tripStateService.setTrip(response.data);
 					this.totalBudget.set(response.data?.budget ?? 0);
+					console.log(this.tripStateService.trip());
 				},
 			});
 		}
@@ -119,5 +121,6 @@ export class TripDashboardComponent implements OnInit {
 				this.route.navigate(['/home']);
 			}
 		});
+		
 	}
 }

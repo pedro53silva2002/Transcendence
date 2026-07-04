@@ -14,11 +14,10 @@ public sealed class VisitedCountriesRouter(
 	VisitedCountriesService visitedCountriesService,
 	IUserContext userContext) : ControllerBase
 {
-	[HttpGet]
-	public async Task<ActionResult<List<VisitedCountryDto>>> GetUniqueVisitedCountriesAsync(
+	[HttpGet("{userId}")]
+	public async Task<ActionResult<List<VisitedCountryDto>>> GetUniqueVisitedCountriesAsync(int userId,
 		CancellationToken ct = default)
 	{
-		var userId = RequireUserId();
 
 		var visitedCountries = await visitedCountriesService.GetUniqueVisitedCountriesAsync(userId, ct);
 
@@ -38,11 +37,9 @@ public sealed class VisitedCountriesRouter(
 		return Ok(dtos);
 	}
 
-	[HttpGet("count")]
-	public async Task<ActionResult<int>> GetNumberOfVisitedCountriesAsync(CancellationToken ct = default)
+	[HttpGet("{userId}/count")]
+	public async Task<ActionResult<int>> GetNumberOfVisitedCountriesAsync(int userId, CancellationToken ct = default)
 	{
-		var userId = RequireUserId();
-
 		var count = await visitedCountriesService.GetNumberOfVisitedCountriesAsync(userId, ct);
 
 		return Ok(count);

@@ -136,7 +136,8 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 			Budget = dto.Budget == 0 ? 0 : dto.Budget,
 			Visibility = dto.Visibility == 0 ? TripVisibility.Public : dto.Visibility,
 			CreatedBy = userId,
-			IsExpired = dto.EndDate < DateOnly.FromDateTime(DateTime.UtcNow),
+			IsExpired = false,
+			// IsExpired = dto.EndDate < DateOnly.FromDateTime(DateTime.UtcNow),
 			CreatedAt = DateTime.UtcNow
 		};
 
@@ -402,7 +403,8 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 		var calculatedDuration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
 		if (calculatedDuration != trip.Duration) trip.Duration = calculatedDuration;
 		if (dto.Budget is not 0) trip.Budget = dto.Budget;
-		trip.IsExpired = dto.EndDate < DateOnly.FromDateTime(DateTime.UtcNow);
+		trip.IsExpired = false;
+		// trip.IsExpired = dto.EndDate < DateOnly.FromDateTime(DateTime.UtcNow);
 		trip.UpdatedAt = DateTime.UtcNow;
 
 		try

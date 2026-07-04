@@ -21,6 +21,8 @@ export class UserDashboardComponent implements OnInit {
   public user = signal<MeDto | null>(null);
 
   ngOnInit(): void {
+
+	console.log(this.authService.me()?.trips);
 	
       const response = this.authService.me();
       if (response) {
