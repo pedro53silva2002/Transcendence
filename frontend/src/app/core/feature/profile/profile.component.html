@@ -4,8 +4,8 @@
 			@if (visitedUser(); as currentUser) {
 			<div class="avatar" [attr.aria-label]="currentUser.displayName" role="img">
 				@if (currentUser.profilePhotoUrl) {
-				<img [src]="getUserAvatarUrl(currentUser.profilePhotoUrl)" [alt]="currentUser.displayName" [width]="84" [height]="84"
-					class="avatar-img" referrerpolicy="no-referrer" />
+				<img [src]="getUserAvatarUrl(currentUser.profilePhotoUrl)" [alt]="currentUser.displayName" [width]="84"
+					[height]="84" class="avatar-img" referrerpolicy="no-referrer" />
 				} @else {
 				<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
 				}
@@ -22,25 +22,31 @@
 			<app-stat-cards [id]="visitedUser().id"></app-stat-cards>
 		</div>
 	</div>
+	@if (visitedCountries().length > 0) {
 	<div class="countries-section">
 		<h1>{{ 'profile.countries-section-title' | transloco }}</h1>
-		<!-- loop sobre todos os países que o user visitou -->
 		<div class="list-of-countries">
-			<app-visited-country-card [isOwnProfile]="isOwnProfile()"></app-visited-country-card>
+			@for (visitedCountry of visitedCountries(); track visitedCountry.id) {
+			<app-visited-country-card [country]="visitedCountry.country"
+				[isOwnProfile]="isOwnProfile()"></app-visited-country-card>
+			}
 		</div>
 	</div>
-	<!-- falta fazer o filtro de amigos/público/privado de acordo com a visibilidade -->
+	}
+	@if (itineraries().length > 0) {
 	<div class="my-itineraries-section">
-		@if (itineraries$ | async; as itinerariesList)
-		{
-		@if (itinerariesList.length > 0) {
 		<h1>{{ 'profile.itineraries-section-title' | transloco }}</h1>
 		<div class="list-of-itineraries">
-			@for (itinerary of itinerariesList; track itinerary.id) {
+			@for (itinerary of itineraries(); track itinerary.id) {
 			<app-profile-itinerary-card [itinerary]="itinerary"></app-profile-itinerary-card>
 			}
 		</div>
-		}
-		}
 	</div>
+	}
+	@if (visitedCountries().length === 0 && itineraries().length === 0) {
+		<div class="empty-state">
+			<p>{{ 'profile.empty-state' | transloco }}</p>
+		</div>
+	}
+
 </div>

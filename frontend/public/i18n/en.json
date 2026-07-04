@@ -80,8 +80,9 @@
     "edit-btn": "Edit Profile",
     "cancel-request-btn": "Cancel Request",
     "accept-request-btn": "Accept Request",
-    "delete-friend-request-message": "If you confirm this decision, the friend request will be canceled."
-  },
+    "delete-friend-request-message": "If you confirm this decision, the friend request will be canceled.",
+	"empty-state": "This user still hasn't been anywhere."
+},
   "trip-dashboard": {
     "delete-trip-title": "Are you sure?",
     "delete-trip-message": "If you confirm this decision, you will delete everything about this trip.",

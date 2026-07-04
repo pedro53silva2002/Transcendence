@@ -101,3 +101,12 @@ mat-icon.avatar-icon {
 		width: 80%;
 	}
 }
+
+.empty-state {
+	
+	p {
+		margin-top: 30px;
+		color: var(--mat-sys-on-primary);
+		opacity: 0.5;
+	}
+}

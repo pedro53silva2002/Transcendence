@@ -1,8 +1,6 @@
 <div class="country-card" [class.extra-space]="isOwnProfile()">
-	<!-- <div class="button-container"> -->
 	@if (isOwnProfile()) {
-	<mat-icon class="remove-btn">close</mat-icon>
+	<mat-icon (click)="removeCountry(country().id)" class="remove-btn">close</mat-icon>
 	}
-	<!-- </div> -->
-	<h2>ENGLAND</h2>
+	<h2>{{ country().name }}</h2>
 </div>

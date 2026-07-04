@@ -22,6 +22,8 @@ import { FriendRequestService } from '../../logic/services/friend-request.servic
 import { CreateFriendRequestDto, FriendRequestDto } from '../../logic/dtos/friend-request.dto';
 import { ConfirmationPopUpComponent } from '../../../shared/pop-up/confirmation-pop-up/confirmation-pop-up.component';
 import { CreateFriendshipDto } from '../../logic/dtos/friendship.dto';
+import { VisitedCountryService } from '../../logic/services/visited-country.service';
+import { VisitedCountryDto } from '../../logic/dtos/visited-countries.dto';
 
 type FriendshipState = 'own_profile' | 'not_friends' | 'pending_sent' | 'friends' | 'pending_received';
 
@@ -42,6 +44,7 @@ export default class ProfileComponent {
 	private readonly friendshipService = inject(FriendshipService);
 	private readonly friendRequestService = inject(FriendRequestService);
 	private readonly destroyRef = inject(DestroyRef);
+	private readonly visitedCountriesService = inject(VisitedCountryService);
 
 	protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
@@ -57,11 +60,21 @@ export default class ProfileComponent {
 	protected readonly isPendingRequestSent = signal<boolean>(false);
 	protected readonly isPendingRequestReceived = signal<boolean>(false);
 
-	protected readonly itineraries$ = toObservable(this.visitedUser).pipe(
+	protected readonly visitedCountries = toSignal(
+		toObservable(this.visitedUser).pipe(
+			filter((user): user is UserDto => user !== null && typeof user.id === 'number'),
+			switchMap((user) => this.visitedCountriesService.getVisitedCountries(user.id)),
+			map(response => response.data ?? []),
+		), { initialValue: [] }
+	);
+
+	protected readonly itineraries = toSignal(
+		toObservable(this.visitedUser).pipe(
 		filter((user): user is UserDto => user !== null && user.id !== undefined),
 		switchMap(user => this.tripService.searchTripsByUserId(user.id)),
-		map(response => response.data)
-	);
+		map(response => response.data ?? [])
+	), { initialValue: [] }
+);
 
 	//to evaluate the situation between the auth and the visited user
 	protected readonly currentRelationState = computed<FriendshipState>(() => {

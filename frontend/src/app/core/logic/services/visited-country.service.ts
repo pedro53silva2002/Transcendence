@@ -8,11 +8,15 @@ import { Observable } from 'rxjs';
 })
 export class VisitedCountryService extends BaseApiService{
 
-	public getVisitedCountries(userId: number): Observable<ApiResponse<VisitedCountryDto>> {
-		return this._get<VisitedCountryDto>(`/visited-countries/${userId}`);
+	public getVisitedCountries(userId: number): Observable<ApiResponse<VisitedCountryDto[]>> {
+		return this._get<VisitedCountryDto[]>(`/visited-countries/${userId}`);
 	}
 
 	public getCountVisitedCountries(userId: number): Observable<ApiResponse<number>> {
 		return this._get<number>(`/visited-countries/${userId}/count`);
+	}
+
+	public removeCountry(countryId: number): Observable<ApiResponse<void>> {
+		return this._delete<void>(`/visited-countries/${countryId}`);
 	}
 }
