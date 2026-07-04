@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { TranslocoModule } from '@jsverse/transloco';
 import { UserService } from '../../core/logic/services/user.service';
 import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { SessionService } from '../../core/logic/services/session.service';
 import { filter, map, of, switchMap } from 'rxjs';
 import { VisitedCountryService } from '../../core/logic/services/visited-country.service';
+import { VisitedCountryDto } from '../../core/logic/dtos/visited-countries.dto';
 
 @Component({
 	selector: 'app-stat-cards',
@@ -21,6 +22,8 @@ export class StatCardsComponent {
 
 	//to receive from the main component the userId
 	public readonly id = input<number>();
+	public readonly refreshTrigger = input<number>(0); //trigger to update the countries nr
+	protected readonly visitedCountries = signal<number>(0);
 
 	loggedUser = this.authService.me()?.id;
 
@@ -40,13 +43,18 @@ export class StatCardsComponent {
 		)
 	);
 
-	protected readonly visitedCountriesInfo = toSignal(
-		toObservable(this.targetId).pipe(
-			filter((id): id is number => id !== undefined && id !== null),
-			switchMap((id) => this.visitedCountriesService.getCountVisitedCountries(id)),
-			map(response => response.data),
-		)
-	)
+	constructor() {
+		effect(() => {
+			const userId = this.targetId();
+			const _ = this.refreshTrigger(); //listens to the refresh trigger and updates the countries without refreshing the page
+
+			if (userId) {
+				this.visitedCountriesService.getCountVisitedCountries(userId).subscribe(response => {
+					this.visitedCountries.set(response.data ?? 0);
+				})
+			}
+		})
+	}
 
 	//function to handle the >99 situation
 	private formatNumber(value: number | undefined | null): string {
@@ -55,7 +63,7 @@ export class StatCardsComponent {
 	}
 
 	//formats the signals
-	protected readonly countriesCount = computed(() => this.formatNumber(this.visitedCountriesInfo()));
+	protected readonly countriesCount = computed(() => this.formatNumber(this.visitedCountries()));
 	protected readonly tripsCount = computed(() => this.formatNumber(this.statCardsInfo()?.tripsLeftThisYear));
 	protected readonly daysCountdown = computed(() => {
 		const days = this.statCardsInfo()?.daysUntilNextTrip;

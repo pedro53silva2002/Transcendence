@@ -29,7 +29,7 @@ type FriendshipState = 'own_profile' | 'not_friends' | 'pending_sent' | 'friends
 
 @Component({
 	selector: 'app-profile',
-	imports: [MatIcon, TranslocoModule, StatCardsComponent, MatAnchor, AsyncPipe, ProfileItineraryCardComponent, VisitedCountryCardComponent],
+	imports: [MatIcon, TranslocoModule, StatCardsComponent, MatAnchor, ProfileItineraryCardComponent, VisitedCountryCardComponent],
 	templateUrl: './profile.component.html',
 	styleUrl: './profile.component.scss',
 })
@@ -60,14 +60,7 @@ export default class ProfileComponent {
 	protected readonly isPendingRequestSent = signal<boolean>(false);
 	protected readonly isPendingRequestReceived = signal<boolean>(false);
 	protected readonly visitedCountries = signal<VisitedCountryDto[]>([]);
-
-	// protected readonly visitedCountries = toSignal(
-	// 	toObservable(this.visitedUser).pipe(
-	// 		filter((user): user is UserDto => user !== null && typeof user.id === 'number'),
-	// 		switchMap((user) => this.visitedCountriesService.getVisitedCountries(user.id)),
-	// 		map(response => response.data ?? []),
-	// 	), { initialValue: [] }
-	// );
+	protected readonly statsRefresh = signal<number>(0); //signal to refresh stats in stats component
 
 	protected readonly itineraries = toSignal(
 		toObservable(this.visitedUser).pipe(
@@ -129,8 +122,10 @@ export default class ProfileComponent {
 
 	protected onCountryRemoved():void {
 		const userId = this.visitedUser().id;
-		if (userId)
+		if (userId) {
 			this.loadVisitedCountries(userId);
+			this.statsRefresh.update(n => n + 1); 
+		}
 	}
 
 	private loadProfileData(username: string | null): void {
