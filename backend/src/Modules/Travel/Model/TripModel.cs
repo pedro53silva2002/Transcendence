@@ -407,8 +407,6 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 			throw new ValidationException("budget", "Invalid budget");
 		trip.UpdatedAt = DateTime.UtcNow;
 
-		Console.WriteLine($"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBUDGET=${trip.Budget}");
-
 		try
 		{
 			db.Trips.Update(trip);

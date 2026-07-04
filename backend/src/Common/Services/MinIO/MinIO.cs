@@ -19,17 +19,17 @@ public interface IMinIOService
 	Task<bool> FileExistsAsync(string bucketName, string objectName);
 	Task CreateBucketAsync(string bucketName);
 	Task<string> GetObjectUrl(string bucketName, string objectName);
-	Task <IFormFile> GetObjectAsync(string bucketName, string objectName);
+	Task<IFormFile> GetObjectAsync(string bucketName, string objectName);
 }
 
 public class MinIOService : IMinIOService
 {
-    private readonly IMinioClient _minioClient;
+	private readonly IMinioClient _minioClient;
 
-    public MinIOService(IMinioClient minioClient)
-    {
-        _minioClient = minioClient;
-    }
+	public MinIOService(IMinioClient minioClient)
+	{
+		_minioClient = minioClient;
+	}
 
 	public async Task<IFormFile> GetObjectAsync(string bucketName, string objectName)
 	{
@@ -56,61 +56,61 @@ public class MinIOService : IMinIOService
 			.WithExpiry(60 * 60 * 24)); // 24 hours
 	}
 
-    public async Task<string> UploadFileAsync(string bucketName, string objectName, Stream fileStream, string contentType)
-    {
-        fileStream.Position = 0;
+	public async Task<string> UploadFileAsync(string bucketName, string objectName, Stream fileStream, string contentType)
+	{
+		fileStream.Position = 0;
 
-        await _minioClient.PutObjectAsync(new PutObjectArgs()
-            .WithBucket(bucketName)
-            .WithObject(objectName)
-            .WithStreamData(fileStream)
-            .WithObjectSize(fileStream.Length)
-            .WithContentType(contentType));
-	
+		await _minioClient.PutObjectAsync(new PutObjectArgs()
+			.WithBucket(bucketName)
+			.WithObject(objectName)
+			.WithStreamData(fileStream)
+			.WithObjectSize(fileStream.Length)
+			.WithContentType(contentType));
+
 		var profilePhotoPath = $"{bucketName}/{objectName}";
 		return profilePhotoPath;
-    }
+	}
 
 
 
-    public async Task<Stream> DownloadFileAsync(string bucketName, string objectName)
-    {
-        var memoryStream = new MemoryStream();
+	public async Task<Stream> DownloadFileAsync(string bucketName, string objectName)
+	{
+		var memoryStream = new MemoryStream();
 
-        await _minioClient.GetObjectAsync(new GetObjectArgs()
-            .WithBucket(bucketName)
-            .WithObject(objectName)
-            .WithCallbackStream(stream =>
-            {
-                stream.CopyTo(memoryStream);
-            }));
+		await _minioClient.GetObjectAsync(new GetObjectArgs()
+			.WithBucket(bucketName)
+			.WithObject(objectName)
+			.WithCallbackStream(stream =>
+			{
+				stream.CopyTo(memoryStream);
+			}));
 
-        memoryStream.Position = 0;
-        return memoryStream;
-    }
+		memoryStream.Position = 0;
+		return memoryStream;
+	}
 
-  public async Task<bool> FileExistsAsync(string bucketName, string objectName)
-{
-    try
-    {
-        // Limpa o path se vier com barras (ex: profile-photos/mjbalouta_xxx)
-        var cleanObjectName = objectName.Contains('/') ? objectName.Split('/').Last() : objectName;
+	public async Task<bool> FileExistsAsync(string bucketName, string objectName)
+	{
+		try
+		{
+			// Limpa o path se vier com barras (ex: profile-photos/mjbalouta_xxx)
+			var cleanObjectName = objectName.Contains('/') ? objectName.Split('/').Last() : objectName;
 
-        await _minioClient.StatObjectAsync(new StatObjectArgs()
-            .WithBucket(bucketName)
-            .WithObject(cleanObjectName)); // 🌟 CORREÇÃO: Deixa apenas cleanObjectName (remove o .FileName daqui!)
+			await _minioClient.StatObjectAsync(new StatObjectArgs()
+				.WithBucket(bucketName)
+				.WithObject(cleanObjectName)); // 🌟 CORREÇÃO: Deixa apenas cleanObjectName (remove o .FileName daqui!)
 
-        return true;
-    }
-    catch
-    {
-        return false;
-    }
-}
+			return true;
+		}
+		catch
+		{
+			return false;
+		}
+	}
 
 	public async Task DeleteFileAsync(string bucketName, string objectName)
 	{
-        var cleanObjectName = objectName.Contains('/') ? objectName.Split('/').Last() : objectName;
+		var cleanObjectName = objectName.Contains('/') ? objectName.Split('/').Last() : objectName;
 
 		await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
 			.WithBucket(bucketName)
@@ -118,16 +118,16 @@ public class MinIOService : IMinIOService
 	}
 
 	public async Task CreateBucketAsync(string bucketName)
-{
-    bool found = await _minioClient.BucketExistsAsync(
-        new BucketExistsArgs().WithBucket(bucketName));
+	{
+		bool found = await _minioClient.BucketExistsAsync(
+			new BucketExistsArgs().WithBucket(bucketName));
 
-    if (!found)
-    {
-        await _minioClient.MakeBucketAsync(
-            new MakeBucketArgs().WithBucket(bucketName));
+		if (!found)
+		{
+			await _minioClient.MakeBucketAsync(
+				new MakeBucketArgs().WithBucket(bucketName));
 
-        var policy = $$"""
+			var policy = $$"""
 		{
 		"Version":"2012-10-17",
 		"Statement":[
@@ -141,10 +141,10 @@ public class MinIOService : IMinIOService
 		}
 		""";
 
-        await _minioClient.SetPolicyAsync(
-		new SetPolicyArgs()
-			.WithBucket(bucketName)
-			.WithPolicy(policy));
-    }
-}
+			await _minioClient.SetPolicyAsync(
+			new SetPolicyArgs()
+				.WithBucket(bucketName)
+				.WithPolicy(policy));
+		}
+	}
 }
