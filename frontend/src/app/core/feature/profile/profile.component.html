@@ -28,7 +28,7 @@
 		<div class="list-of-countries">
 			@for (visitedCountry of visitedCountries(); track visitedCountry.id) {
 			<app-visited-country-card [country]="visitedCountry.country"
-				[isOwnProfile]="isOwnProfile()"></app-visited-country-card>
+				[isOwnProfile]="isOwnProfile()" (countryRemoved)="onCountryRemoved()"></app-visited-country-card>
 			}
 		</div>
 	</div>

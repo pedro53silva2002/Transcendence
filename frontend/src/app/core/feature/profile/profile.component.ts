@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { MatIcon } from "@angular/material/icon";
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -59,14 +59,15 @@ export default class ProfileComponent {
 	protected readonly areFriends = signal<boolean>(false);
 	protected readonly isPendingRequestSent = signal<boolean>(false);
 	protected readonly isPendingRequestReceived = signal<boolean>(false);
+	protected readonly visitedCountries = signal<VisitedCountryDto[]>([]);
 
-	protected readonly visitedCountries = toSignal(
-		toObservable(this.visitedUser).pipe(
-			filter((user): user is UserDto => user !== null && typeof user.id === 'number'),
-			switchMap((user) => this.visitedCountriesService.getVisitedCountries(user.id)),
-			map(response => response.data ?? []),
-		), { initialValue: [] }
-	);
+	// protected readonly visitedCountries = toSignal(
+	// 	toObservable(this.visitedUser).pipe(
+	// 		filter((user): user is UserDto => user !== null && typeof user.id === 'number'),
+	// 		switchMap((user) => this.visitedCountriesService.getVisitedCountries(user.id)),
+	// 		map(response => response.data ?? []),
+	// 	), { initialValue: [] }
+	// );
 
 	protected readonly itineraries = toSignal(
 		toObservable(this.visitedUser).pipe(
@@ -120,6 +121,18 @@ export default class ProfileComponent {
 		});
 	}
 
+	private loadVisitedCountries(userId: number): void {
+		this.visitedCountriesService.getVisitedCountries(this.visitedUser().id).subscribe((response) => {
+			this.visitedCountries.set(response?.data ?? []);
+		});
+	}
+
+	protected onCountryRemoved():void {
+		const userId = this.visitedUser().id;
+		if (userId)
+			this.loadVisitedCountries(userId);
+	}
+
 	private loadProfileData(username: string | null): void {
 		if (!username)
 			return;
@@ -137,6 +150,8 @@ export default class ProfileComponent {
 
 				if (users.length > 0) {
 					this.visitedUser.set(users[0]);
+
+					this.loadVisitedCountries(this.visitedUser().id);
 
 					if (!this.isOwnProfile())
                         this.checkFriendshipStatus(username);

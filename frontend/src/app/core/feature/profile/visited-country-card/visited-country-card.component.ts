@@ -13,10 +13,15 @@ export class VisitedCountryCardComponent {
 
 	private readonly visitedCountryService = inject(VisitedCountryService);
 
-	isOwnProfile = input.required<boolean>();
-	country = input.required<CountryDto>();
+	public readonly isOwnProfile = input.required<boolean>();
+	public readonly country = input.required<CountryDto>();
+	public readonly countryRemoved = output<void>();
 
 	removeCountry(countryId: number): void {
-		this.visitedCountryService.removeCountry(countryId).subscribe();
+		this.visitedCountryService.removeCountry(countryId).subscribe({
+			next: () => {
+				this.countryRemoved.emit();
+			}
+		});
 	}
 }
