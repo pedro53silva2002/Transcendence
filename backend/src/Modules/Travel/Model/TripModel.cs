@@ -137,7 +137,6 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 			Visibility = dto.Visibility == 0 ? TripVisibility.Public : dto.Visibility,
 			CreatedBy = userId,
 			IsExpired = false,
-			// IsExpired = dto.EndDate < DateOnly.FromDateTime(DateTime.UtcNow),
 			CreatedAt = DateTime.UtcNow
 		};
 
@@ -404,7 +403,6 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 		if (calculatedDuration != trip.Duration) trip.Duration = calculatedDuration;
 		if (dto.Budget is not 0) trip.Budget = dto.Budget;
 		trip.IsExpired = false;
-		// trip.IsExpired = dto.EndDate < DateOnly.FromDateTime(DateTime.UtcNow);
 		trip.UpdatedAt = DateTime.UtcNow;
 
 		try

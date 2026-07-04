@@ -185,14 +185,6 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 			.Select(g => g.First())
 			.OrderByDescending(vc => vc.AddedAt)
 			.ToList();
-
-		// return await db.VisitedCountries
-		// 	.AsNoTracking()
-		// 	.Where(vc => vc.UserId == userId && vc.DeletedAt == null)
-		// 	.GroupBy(vc => vc.CountryId)
-		// 	.Select(g => g.First())
-		// 	.Include(vc => vc.Country)
-		// 	.ToListAsync(ct);
 	}
 
 	public async Task<int> GetNumberOfVisitedCountriesAsync(int userId, CancellationToken ct = default)
