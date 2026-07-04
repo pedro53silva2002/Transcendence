@@ -20,11 +20,13 @@ export class StatCardsComponent {
 	private readonly visitedCountriesService = inject(VisitedCountryService);
 
 	//to receive from the main component the userId
-	protected readonly id = input<number>();
+	public readonly id = input<number>();
 
-	private readonly targetId = computed(() => {
+	loggedUser = this.authService.me()?.id;
+
+	protected readonly targetId = computed(() => {
 		if (this.route.url.includes('home')) {
-			return this.authService.me()?.id;
+			return this.loggedUser;
 		}
 		return this.id();
 	})
