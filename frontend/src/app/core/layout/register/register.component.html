@@ -15,6 +15,7 @@
           type="text"
           formControlName="username"
           placeholder="{{ 'auth.username' | transloco }}"
+          maxlength="15"
         />
       </mat-form-field>
       @if (form.controls.username.hasError('usernameTaken')) {
@@ -25,11 +26,11 @@
       </mat-form-field>
       @if (form.controls.email.hasError('emailTaken')) {
         <span class="field-error">{{ 'auth.emailTaken' | transloco }}</span>
-      }
-      @if (form.controls.email.hasError('email')) {
+      } @else if (form.controls.email.hasError('email')) {
         <span class="field-error">{{ 'auth.invalidEmail' | transloco }}</span>
-      }
-      @if (form.controls.email.hasError('dot')) {
+      } @else if (form.controls.email.hasError('dot')) {
+        <span class="field-error">{{ 'auth.invalidEmail' | transloco }}</span>
+      } @else if (emailValidator()?.emailRegex === false) {
         <span class="field-error">{{ 'auth.invalidEmail' | transloco }}</span>
       }
       <mat-form-field appearance="outline" [hideRequiredMarker]="true">

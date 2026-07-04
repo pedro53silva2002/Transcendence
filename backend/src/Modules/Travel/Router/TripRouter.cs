@@ -16,15 +16,14 @@ namespace Trippie.Modules.Travel.Router;
 public sealed class TripRouter(TripService service, IUserContext userContext) : ControllerBase
 {
 	private static readonly JsonSerializerOptions SearchJsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        Converters = { new JsonStringEnumConverter() }
-    };
+	{
+		PropertyNameCaseInsensitive = true,
+		Converters = { new JsonStringEnumConverter() }
+	};
 
 	[HttpPost]
 	public async Task<ActionResult<TripDto>> Create([FromBody] CreateTripDto dto, CancellationToken ct)
 	{
-		
 		var userId = userContext.Require().UserId;
 		var trip = await service.CreateAsync(dto, userId, ct);
 		return CreatedAtAction(nameof(Create), trip);
@@ -64,7 +63,7 @@ public sealed class TripRouter(TripService service, IUserContext userContext) : 
 	}
 
 	[HttpPut("{id}")]
-	public async Task<ActionResult<TripDto>> Update(int id, [FromBody]UpdateTripDto dto, CancellationToken ct)
+	public async Task<ActionResult<TripDto>> Update(int id, [FromBody] UpdateTripDto dto, CancellationToken ct)
 	{
 		var userId = userContext.Require().UserId;
 		var trip = await service.UpdateAsync(userId, id, dto, ct);

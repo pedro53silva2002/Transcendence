@@ -1,4 +1,6 @@
+using System.Numerics;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore.Storage.Json;
 using NpgsqlTypes;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Auth.Dtos;
@@ -19,7 +21,7 @@ public sealed class CreateTripDto
 	public string? Description { get; set; }
 	public required DateOnly StartDate { get; set; }
 	public required DateOnly EndDate { get; set; }
-	public required int Budget { get; set; }
+	public required long Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required CountryDto Country { get; set; }
 	public List<CityDto> City { get; set; } = [];
@@ -52,7 +54,7 @@ public sealed class UpdateTripDto
 	public string? Description { get; set; }
 	public required DateOnly StartDate { get; set; }
 	public required DateOnly EndDate { get; set; }
-	public required int Budget { get; set; }
+	public required long Budget { get; set; }
 	public required TripVisibility Visibility { get; set; }
 	public required CountryDto Country { get; set; }
 	public List<CityDto> City { get; set; } = [];
@@ -60,8 +62,8 @@ public sealed class UpdateTripDto
 
 public sealed class TripTotalPriceDto
 {
-    public required int TripId { get; set; }
-    public required int TotalPrice { get; set; }
+	public required int TripId { get; set; }
+	public required int TotalPrice { get; set; }
 }
 
 public sealed class ProfileTripsDto

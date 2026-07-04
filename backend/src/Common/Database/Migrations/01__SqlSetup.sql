@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS "travel"."trips" (
     "duration" INT NOT NULL,
     "start_date" DATE NOT NULL,
     "end_date" DATE NOT NULL,
-    "budget" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    "budget" INT NOT NULL DEFAULT 0,
     "visibility" trip_visibility NOT NULL DEFAULT 'private',
     "created_by" INT,
 	"is_expired" BOOLEAN NOT NULL DEFAULT FALSE,

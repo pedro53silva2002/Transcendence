@@ -8,7 +8,7 @@ using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Social.Model;
-
+using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 
 namespace Trippie.Modules.Travel.Model;
 
@@ -82,7 +82,7 @@ public sealed class TripProfile()
 	public required TripVisibility Visibility { get; set; }
 	public TripCountry? TripCountries { get; set; }
 	public ICollection<TripCity> TripCities { get; set; } = [];
-	public  ICollection<Itinerary>? Itinerary { get; set; }
+	public ICollection<Itinerary>? Itinerary { get; set; }
 
 	public static ProfileTripsDto ToDto(Trip t)
 	{
@@ -133,7 +133,7 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 			Duration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1,
 			StartDate = dto.StartDate,
 			EndDate = dto.EndDate,
-			Budget = dto.Budget == 0 ? 0 : dto.Budget,
+			Budget = dto.Budget == 0 ? 0 : (int)dto.Budget,
 			Visibility = dto.Visibility == 0 ? TripVisibility.Public : dto.Visibility,
 			CreatedBy = userId,
 			IsExpired = false,
@@ -311,7 +311,7 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 		var currentUser = userContext.Require().UserId;
 		visibilityOptions.Add(TripVisibility.Public);
 		if (userId == currentUser || (userId != currentUser && await friendshipModel.FriendshipExistsAsync(currentUser, userId, ct)))
-				visibilityOptions.Add(TripVisibility.Friends);
+			visibilityOptions.Add(TripVisibility.Friends);
 		// Get trip ids where the user is a member
 		var tripIds = await db.TripMembers
 			.Where(tm => tm.UserId == userId)
@@ -380,7 +380,7 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 
 	public async Task<TripDto?> UpdateAsync(int userId, int id, UpdateTripDto dto, CancellationToken ct = default)
 	{
-		var trip =  await db.Trips
+		var trip = await db.Trips
 			.Include(t => t.TripCountries)
 			.Include(t => t.TripCities)
 			.FirstOrDefaultAsync(t => t.Id == id, ct);
@@ -392,7 +392,7 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 			&& tm.Role == TripMemberRole.Admin, ct);
 
 		if (!isAdmin)
-		    throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
+			throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
 
 		if (dto.TripName is not null) trip.TripName = dto.TripName;
 		if (dto.Visibility != trip.Visibility) trip.Visibility = dto.Visibility;
@@ -401,9 +401,13 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 		if (dto.EndDate != trip.EndDate) trip.EndDate = dto.EndDate;
 		var calculatedDuration = dto.EndDate.DayNumber - dto.StartDate.DayNumber + 1;
 		if (calculatedDuration != trip.Duration) trip.Duration = calculatedDuration;
-		if (dto.Budget is not 0) trip.Budget = dto.Budget;
-		trip.IsExpired = false;
+		if (dto.Budget > 0 && dto.Budget < int.MaxValue)
+			trip.Budget = (int)dto.Budget;
+		else
+			throw new ValidationException("budget", "Invalid budget");
 		trip.UpdatedAt = DateTime.UtcNow;
+
+		Console.WriteLine($"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBUDGET=${trip.Budget}");
 
 		try
 		{
@@ -426,15 +430,16 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 			await db.SaveChangesAsync(ct);
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-		var updatedTrip = await db.Trips
-			.Include(t => t.TripCountries)
-				.ThenInclude(tc => tc.Country)
-			.Include(t => t.TripCities)
-				.ThenInclude(tc => tc.City)
-			.FirstAsync(t => t.Id == id, ct);
+			var updatedTrip = await db.Trips
+				.Include(t => t.TripCountries)
+					.ThenInclude(tc => tc.Country)
+				.Include(t => t.TripCities)
+					.ThenInclude(tc => tc.City)
+				.FirstAsync(t => t.Id == id, ct);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 			return Trip.ToDto(updatedTrip);
+
 		}
 		catch
 		{
