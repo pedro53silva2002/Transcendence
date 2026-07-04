@@ -21,7 +21,7 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 	{
 		var alreadyVisted = await db.VisitedCountries
 			.AsNoTracking()
-			.AnyAsync(vc => vc.UserId == userId && 
+			.AnyAsync(vc => vc.UserId == userId &&
 				vc.SourceTripId == tripId, ct);
 
 		if (alreadyVisted)
@@ -47,17 +47,17 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 		=> await SyncCoreAsync(userId, ct);
 
 	private async Task<List<int>> SyncCoreAsync(int? userId, CancellationToken ct = default)
-    {
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+	{
+		var today = DateOnly.FromDateTime(DateTime.UtcNow);
 		var newlyAddedCountryIds = new List<int>();
 
-        // SyncA option: Getting new completed trips
+		// SyncA option: Getting new completed trips
 		var toExpireQuery = db.Trips.Where(t => t.EndDate < today && !t.IsExpired);
 
 		if (userId is not null)
-					toExpireQuery = toExpireQuery.Where(t =>
-						db.TripMembers.Any(tm => tm.TripId == t.Id && tm.UserId == userId));
-        
+			toExpireQuery = toExpireQuery.Where(t =>
+				db.TripMembers.Any(tm => tm.TripId == t.Id && tm.UserId == userId));
+
 		var newlyExpiredTripIds = await toExpireQuery.Select(t => t.Id).ToListAsync(ct);
 
 		if (newlyExpiredTripIds.Count > 0)
@@ -115,7 +115,7 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 		if (userId is not null)
 			toUnexpireQuery = toUnexpireQuery.Where(t =>
 				db.TripMembers.Any(tm => tm.TripId == t.Id && tm.UserId == userId));
-		
+
 		var unexpiringTripIds = await toUnexpireQuery.Select(t => t.Id).ToListAsync(ct);
 
 		if (unexpiringTripIds.Count > 0)
@@ -160,7 +160,7 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 		}
 
 		return newlyAddedCountryIds;
-    }
+	}
 
 	public async Task<List<VisitedCountry>> GetVisitedCountriesAsync(int userId, CancellationToken ct = default)
 	{
@@ -174,13 +174,25 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 
 	public async Task<List<VisitedCountry>> GetUniqueVisitedCountriesAsync(int userId, CancellationToken ct = default)
 	{
-		return await db.VisitedCountries
+		var countries = await db.VisitedCountries
 			.AsNoTracking()
+			.Include(vc => vc.Country)
 			.Where(vc => vc.UserId == userId && vc.DeletedAt == null)
+			.ToListAsync(ct);
+
+		return countries
 			.GroupBy(vc => vc.CountryId)
 			.Select(g => g.First())
-			.Include(vc => vc.Country)
-			.ToListAsync(ct);
+			.OrderByDescending(vc => vc.AddedAt)
+			.ToList();
+
+		// return await db.VisitedCountries
+		// 	.AsNoTracking()
+		// 	.Where(vc => vc.UserId == userId && vc.DeletedAt == null)
+		// 	.GroupBy(vc => vc.CountryId)
+		// 	.Select(g => g.First())
+		// 	.Include(vc => vc.Country)
+		// 	.ToListAsync(ct);
 	}
 
 	public async Task<int> GetNumberOfVisitedCountriesAsync(int userId, CancellationToken ct = default)
@@ -197,8 +209,8 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 		var deletedAt = DateTime.UtcNow;
 
 		var affectedRows = await db.VisitedCountries
-			.Where(vc => vc.UserId == userId && 
-				vc.CountryId == countryId && 
+			.Where(vc => vc.UserId == userId &&
+				vc.CountryId == countryId &&
 				vc.DeletedAt == null)
 			.ExecuteUpdateAsync(x => x.SetProperty(vc => vc.DeletedAt, deletedAt), ct);
 
@@ -208,12 +220,12 @@ public sealed class VisitedCountriesModel(AppDbContext db)
 	public async Task<bool> DeleteVisitedCountryAsync(int userId, int tripId, CancellationToken ct = default)
 	{
 		var affectedRows = await db.VisitedCountries
-        .Where(vc =>
-            vc.UserId == userId &&
-            vc.SourceTripId == tripId)
-        .ExecuteDeleteAsync(ct);
+		.Where(vc =>
+			vc.UserId == userId &&
+			vc.SourceTripId == tripId)
+		.ExecuteDeleteAsync(ct);
 
-    return affectedRows > 0;
+		return affectedRows > 0;
 	}
 
 	public async Task<bool> IsCountryVisitedAsync(int userId, int countryId, CancellationToken ct = default)
