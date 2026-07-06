@@ -4,7 +4,7 @@
 	margin: 0 auto;
 	padding: 30px 0 60px;
 	flex: 1;
-	min-height: 600px;
+	min-height: 645px;
 }
 
 .header-row {
@@ -243,10 +243,9 @@
 }
 
 .empty-state {
-	font-family: 'ADLaM Display', sans-serif;
-	font-size: 18px;
-	color: var(--mat-sys-on-primary);
-	text-align: center;
-	padding: 60px 0;
 	opacity: 0.7;
+	font-size: 14px;
+	margin-top: 30px;
+	color: var(--mat-sys-on-primary);
+	opacity: 0.5;
 }

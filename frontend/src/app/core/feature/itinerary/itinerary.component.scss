@@ -45,6 +45,7 @@ app-custom-scrollbar {
 	align-items: center;
 	justify-content: center;
 	gap: 12px;
+	margin-bottom: 15px;
 }
 
 .itin-title {
@@ -54,7 +55,6 @@ app-custom-scrollbar {
 	letter-spacing: 0.2px;
 	color: var(--mat-sys-on-primary);
 	margin: 0;
-	margin-bottom: 15px;
 }
 
 .add-btn {
