@@ -107,13 +107,11 @@ export class EditProfileComponent {
 				const isGooglePhoto = user.profilePhotoUrl.startsWith('http://') || user.profilePhotoUrl.startsWith('https://');
 			
 				if (isGooglePhoto) {
-					this.avatarPreview.set(user.profilePhotoUrl.replace(/=s\d+(-c)?$/, '=s0'));
+					this.avatarPreview.set(user.profilePhotoUrl.replace(/=s\d+(-c)?$/, '=s252'));
 				} else {
 					this.avatarPreview.set(`http://localhost:9000/${user.profilePhotoUrl}`);
 				}
 			}
-
-			console.log(user.oAuthProvider);
 
 			if (user.oAuthProvider === 'google')
 				this.isGoogleAccount.set(true);

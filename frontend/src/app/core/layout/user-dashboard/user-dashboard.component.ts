@@ -20,10 +20,7 @@ export class UserDashboardComponent implements OnInit {
   private readonly authService = inject(SessionService);
   public user = signal<MeDto | null>(null);
 
-  ngOnInit(): void {
-
-	console.log(this.authService.me()?.trips);
-	
+  ngOnInit(): void {	
       const response = this.authService.me();
       if (response) {
         this.user.set(response);
