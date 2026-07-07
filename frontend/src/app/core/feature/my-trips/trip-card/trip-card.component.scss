@@ -14,7 +14,8 @@
 	right: -80px;
 	z-index: 3;
 	transform: rotate(20deg);
-	font-family: 'BBH Bogle', sans-serif;
+	font-family: 'Tabloid', sans-serif;
+	font-weight: 800;
 	color: var(--mat-sys-on-primary-container);
 }
 
@@ -84,7 +85,7 @@
 }
 
 .trip-name {
-	font-family: 'BBH Hegarty', sans-serif;
+	font-family: 'Thicker Black', sans-serif;
 	font-size: 24px;
 	font-weight: 200;
 	color: var(--mat-sys-on-primary);
@@ -94,7 +95,7 @@
 }
 
 .destination {
-	font-family: 'BBH Bogle', sans-serif;
+	font-family: 'Tabloid', sans-serif;
 	font-size: 14px;
 	font-weight: 200;
 	color: var(--mat-sys-on-primary-container);
@@ -116,7 +117,7 @@
 	display: flex;
 	align-items: center;
 	gap: 3px;
-	font-family: 'BBH Bogle', sans-serif;
+	font-family: 'Tabloid', sans-serif;
 	font-size: 13px;
 	font-weight: 200;
 	color: var(--mat-sys-on-primary-container);
@@ -130,7 +131,7 @@
 }
 
 .dates {
-	font-family: 'BBH Bogle', sans-serif;
+	font-family: 'Tabloid', sans-serif;
 	font-size: 13px;
 	font-weight: 200;
 	color: var(--mat-sys-on-primary-container);
