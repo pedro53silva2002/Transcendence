@@ -16,7 +16,7 @@ public sealed class JwtOptions
     public string SecretKey { get; init; } = string.Empty;
 
     [Range(1, 1440)]
-    public int AccessTokenLifetimeMinutes { get; init; } = 1;
+    public int AccessTokenLifetimeMinutes { get; init; } = 15;
 
     [Range(0, 300)]
     public int ClockSkewSeconds { get; init; } = 0;
