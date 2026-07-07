@@ -133,7 +133,6 @@ export class TripFormComponent implements OnInit {
 			this.selectedCities.update(cities => {
 				const updated = [...cities, cityValue];
 				this.city.setValue(updated, { emitEvent: false });
-				console.log(this.city.value);
 				return updated;
 			})
 		}

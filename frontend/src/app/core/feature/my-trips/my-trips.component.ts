@@ -44,12 +44,8 @@ export class MyTripsComponent implements OnInit {
      their original (startDate ascending) order. */
 
   ngOnInit(): void {
-    const tripIds = this.sessionService.me()?.trips?.map((t) => t.tripId) ?? [];
 
-    if (tripIds.length === 0) {
-      this.isLoading.set(false);
-      return;
-    }
+	const tripIds = this.sessionService.me()?.trips?.map((t) => t.tripId) ?? [];
 
     forkJoin(tripIds.map((id) => this.tripService.getById(id))).subscribe((responses) => {
       const trips = responses

@@ -31,8 +31,7 @@ import {
 	of,
 	switchMap,
 } from 'rxjs';
-import { LoginComponent } from '../login/login.component';
-import { RegisterComponent } from '../register/register.component';
+import { LoginComponent } from '../../feature/auth/login/login.component';
 import { TranslocoModule } from '@jsverse/transloco';
 import { LanguageButtonComponent } from '../../../shared/language-button/language-button.component';
 import { UserService } from '../../logic/services/user.service';
@@ -42,6 +41,7 @@ import { AuthService as OtherAuth } from '../../logic/services/auth.service';
 import { FriendRequestService } from '../../logic/services/friend-request.service';
 import { UserDto } from '../../logic/dtos/user.dto';
 import { getUserAvatarUrl } from '../../../core/logic/utils/minio-url.util';
+import { RegisterComponent } from '../../feature/auth/register/register.component';
 
 @Component({
 	selector: 'app-navbar',

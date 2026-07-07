@@ -2,8 +2,8 @@ import { Component, inject, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
-import { AuthService } from '../../logic/services/auth.service';
-import { SessionService } from '../../logic/services/session.service';
+import { AuthService } from '../../../logic/services/auth.service';
+import { SessionService } from '../../../logic/services/session.service';
 
 @Component({
   selector: 'app-google-auth-button',

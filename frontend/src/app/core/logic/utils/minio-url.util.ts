@@ -3,7 +3,7 @@ export function getUserAvatarUrl(photoUrl: string | null): string {
         return "";
 
     if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://'))
-        return photoUrl.replace(/=s\d+(-c)?$/, '=s0');
+        return photoUrl.replace(/=s\d+(-c)?$/, '=s252');
         
     return `http://localhost:9000/${photoUrl}`;
 }

@@ -132,7 +132,6 @@ export default class ItineraryComponent {
 				),
 			)
 			.subscribe((res) => {
-				console.log(res.data?.content);
 				this.items.set(res.data?.content ?? []);
 			});
 

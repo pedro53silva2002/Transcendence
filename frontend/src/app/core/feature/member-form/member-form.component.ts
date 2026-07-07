@@ -109,7 +109,7 @@ export class MemberFormComponent {
 						error: () => this.loading.set(false),
 					});
 				}
-			}, { allowSignalWrites: true });
+			});
 	}
 
 	protected openAddMember(): void {
