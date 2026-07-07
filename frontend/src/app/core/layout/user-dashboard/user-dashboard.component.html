@@ -5,36 +5,21 @@
 		<div class="greet-text">
 			<h1> {{ 'dashboard.greet' | transloco }}
 				@if (user()) {
-					&nbsp;{{ user()?.username }}
+					&nbsp;{{ user()?.displayName }}
 				} @else {&nbsp;Guest}
 			</h1>
 			<p> {{ 'dashboard.intro' | transloco }} </p>
 		</div>
 
 		<div class="cards-section">
-			<app-dashboard-card routerLink="/plan-a-trip" title="navbar.trip" description="card.trip-description"
+			<app-dashboard-card routerLink="/plan-a-trip" title="navbar.plan-a-trip" description="card.trip-description"
 				imagePath="./images/trip.png"></app-dashboard-card>
 			<app-dashboard-card routerLink="/my-trips" title="navbar.my-trips" description="card.my-trips-description"
 				imagePath="./images/my_trips.png"></app-dashboard-card>
-			<app-dashboard-card routerLink="/my-friends" title="navbar.my-friends" description="card.my-friends-description"
+			<app-dashboard-card routerLink="/my-friends" title="navbar.friends" description="card.my-friends-description"
 				imagePath="./images/friends.png"></app-dashboard-card>
-			<app-dashboard-card title="navbar.my-expenses" description="card.my-expenses-description"
-				imagePath="./images/wallet.png"></app-dashboard-card>
 		</div>
 	</div>
-	<div class="stats">
-		<div class="circle">
-			<h1>14</h1> 
-			<p>{{ 'stats.countries' | transloco }} </p>
-		</div>
-		<div class="circle">
-			<h1>4</h1> 
-			<p>{{ 'stats.trips' | transloco }} </p>
-		</div>
-		<div class="circle">
-			<h1>2</h1> 
-			<p>{{ 'stats.countdown' | transloco }} </p>
-		</div>
-	</div>
+	<app-stat-cards></app-stat-cards>
 	<app-footer></app-footer>
 </div>

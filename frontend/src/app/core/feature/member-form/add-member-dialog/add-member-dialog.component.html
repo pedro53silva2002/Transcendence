@@ -5,13 +5,6 @@
   </div>
 
   <mat-dialog-content>
-    @if (loading()) {
-    <div class="friends-loading" role="status">
-      <mat-icon>hourglass_empty</mat-icon>
-    </div>
-    }
-
-    @if (!loading()) {
     <div class="friends-grid">
       @for (friend of friends(); track friend.friendId) {
       <button type="button" class="friend-card" [disabled]="adding()"
@@ -19,7 +12,7 @@
         <!-- Avatar -->
         <div class="avatar">
           @if (friend.profilePhotoUrl) {
-          <img [ngSrc]="friend.profilePhotoUrl" [alt]="friend.username" width="64" height="64" class="avatar-img" />
+          <img [ngSrc]="getUserAvatarUrl(friend.profilePhotoUrl)" [alt]="friend.username" width="64" height="64" class="avatar-img" />
           } @else {
           <mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
           }
@@ -31,6 +24,5 @@
       <p class="friends-empty">{{ 'crew.allFriendsAdded' | transloco }}</p>
       }
     </div>
-    }
   </mat-dialog-content>
 </div>

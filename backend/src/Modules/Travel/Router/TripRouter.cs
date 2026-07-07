@@ -46,6 +46,22 @@ public sealed class TripRouter(TripService service, IUserContext userContext) : 
 		return Ok(trip);
 	}
 
+	[HttpGet("user/{userID}")]
+	public async Task<ActionResult<List<TripDto>>> GetTripsForUser(int userID, CancellationToken ct)
+	{
+		var trip = await service.GetTripsForUser(userID, ct);
+		if (trip is null) return NotFound();
+		return Ok(trip);
+	}
+
+	[HttpGet("trip/{userID}")]
+	public async Task<ActionResult<List<ProfileTripsDto>>> GetTripsItinerariesForUser(int userID, CancellationToken ct)
+	{
+		var trip = await service.GetTripsItinerariesForUser(userID, ct);
+		if (trip is null) return NotFound();
+		return Ok(trip);
+	}
+
 	[HttpPut("{id}")]
 	public async Task<ActionResult<TripDto>> Update(int id, [FromBody] UpdateTripDto dto, CancellationToken ct)
 	{

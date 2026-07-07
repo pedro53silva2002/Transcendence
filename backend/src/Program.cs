@@ -1,21 +1,23 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Minio;
 using Serilog;
 using Trippie.Common.Database;
 using Trippie.Common.Services.Authentication.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.DependencyInjection;
 using Trippie.Common.Services.GlobalExceptionHandler.Logging;
+using Trippie.Common.Services.Synchronization;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Auth.Service;
 using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.RateLimiting;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 using Trippie.Modules.Travel.Service;
 using Trippie.Modules.Social.Config;
 using Trippie.Modules.Social.Model;
 using Trippie.Modules.Social.Service;
+using Trippie.Common.Services.MinIO;
 
 Env.TraversePath().Load();
 
@@ -88,6 +90,34 @@ try
 		});
 	});
 
+	//MinIO client configuration
+	/*var minioClient = new MinIOService()
+    .WithEndpoint(
+        Environment.GetEnvironmentVariable("MINIO_ENDPOINT")!)
+    .WithCredentials(
+        Environment.GetEnvironmentVariable("MINIO_ACCESS_KEY")!,
+        Environment.GetEnvironmentVariable("MINIO_SECRET_KEY")!)
+    .Build();
+
+	builder.Services.AddSingleton<IMinIOService>(minioClient);
+	builder.Services.AddScoped<IMinIOService, MinIOService>();*/
+	
+	// 1. Criar o IMinioClient da biblioteca Minio
+	var minioClient = new MinioClient()
+		.WithEndpoint(Environment.GetEnvironmentVariable("MINIO_ENDPOINT")!)
+		.WithCredentials(
+			Environment.GetEnvironmentVariable("MINIO_ACCESS_KEY")!,
+			Environment.GetEnvironmentVariable("MINIO_SECRET_KEY")!)
+		.WithSSL(false)
+		.Build();
+
+	// 2. Registar no DI
+	builder.Services.AddSingleton<IMinioClient>(minioClient);
+	builder.Services.AddSingleton<IMinIOService, MinIOService>();
+
+	//minioClient.CreateBucketAsync("profile-photos").GetAwaiter().GetResult();
+
+
 	// Google OAuth configuration from environment variables
 	var googleOAuthOptions = new GoogleOAuthOptions
 	{
@@ -122,8 +152,11 @@ try
 	builder.Services.AddScoped<FriendshipModel>();
 	builder.Services.AddScoped<FriendshipService>();
 	builder.Services.AddScoped<ItineraryModel>();
-	builder.Services.AddScoped<ItineraryService>();
+    builder.Services.AddScoped<ItineraryService>();
+	builder.Services.AddScoped<VisitedCountriesModel>();
+	builder.Services.AddScoped<VisitedCountriesService>();
 
+	builder.Services.AddHostedService<VisitedCountriesSyncBackgroundService>();
 
 	//Add Http request limiter
 	builder.Services.AddRateLimiter(options =>
@@ -143,6 +176,10 @@ try
 	});
 
 	var app = builder.Build();
+
+	//Create a bucket for profile photos if it doesn't exist
+	var minioService = app.Services.GetRequiredService<IMinIOService>();
+	await minioService.CreateBucketAsync("profile-photos");
 
 	// ── Handle --migrate argument to run database migrations ────────────────────
 	if (args.Contains("--migrate"))

@@ -1,23 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { NavbarComponent } from '../../layout/navbar/navbar.component';
-import { FooterComponent } from '../../layout/footer/footer.component';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
-import { FriendshipService } from '../service/social/friendship.service';
-import { FriendRequestService } from '../service/social/friend-request.service';
-import { FriendDto } from '../dtos/social/friendship.dto';
-import { FriendRequestDto } from '../dtos/social/friend-request.dto';
+import { FriendshipService } from '../../logic/services/friendship.service';
+import { FriendDto } from '../../logic/dtos/friendship.dto';
+import { FriendRequestDto } from '../../logic/dtos/friend-request.dto';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslocoModule } from '@jsverse/transloco';
+import { FriendRequestService } from '../../logic/services/friend-request.service';
+import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
 
 @Component({
   selector: 'app-friendship',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    NavbarComponent,
-    FooterComponent,
-    LoadingSpinnerComponent,
     ReactiveFormsModule,
     MatIconModule,
     MatButtonModule,
@@ -30,12 +25,13 @@ export default class FriendshipComponent implements OnInit {
   private readonly friendshipService = inject(FriendshipService);
   private readonly friendRequestService = inject(FriendRequestService);
 
-  readonly isLoading = signal(true);
   readonly friends = signal<FriendDto[]>([]);
   readonly pendingRequests = signal<FriendRequestDto[]>([]);
   readonly searchControl = new FormControl('');
   readonly searchTerm = signal('');
   readonly showRequests = signal(false);
+
+  protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
   readonly pendingRequests$ = computed(() =>
     this.pendingRequests().filter(r => r.status === 'Pending'),
@@ -54,9 +50,7 @@ export default class FriendshipComponent implements OnInit {
     this.friendshipService.getAll().subscribe({
       next: res => {
         this.friends.set(res.data ?? []);
-        this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false),
     });
 
     this.friendRequestService.getAll().subscribe({
@@ -67,15 +61,15 @@ export default class FriendshipComponent implements OnInit {
     this.searchControl.valueChanges.subscribe(v => this.searchTerm.set(v ?? ''));
   }
 
-  removeFriend(friendshipId: number): void {
-    this.friendshipService.delete(friendshipId).subscribe(() => {
-      this.friends.update(list => list.filter(f => f.id !== friendshipId));
+  removeFriend(friendId: number): void {
+    this.friendshipService.delete(friendId).subscribe(() => {
+      this.friends.update(list => list.filter(f => f.friendId !== friendId));
     });
   }
 
   acceptRequest(requestId: number): void {
     this.friendRequestService.accept(requestId).subscribe(() => {
-      this.pendingRequests.update(list => list.filter(r => r.id !== requestId));
+      this.pendingRequests.update(list => list.filter(r => r.senderId !== requestId));
       this.friendshipService.getAll().subscribe({
         next: res => this.friends.set(res.data ?? []),
       });
@@ -84,7 +78,7 @@ export default class FriendshipComponent implements OnInit {
 
   denyRequest(requestId: number): void {
     this.friendRequestService.delete(requestId).subscribe(() => {
-      this.pendingRequests.update(list => list.filter(r => r.id !== requestId));
+      this.pendingRequests.update(list => list.filter(r => r.senderId !== requestId));
     });
   }
 }

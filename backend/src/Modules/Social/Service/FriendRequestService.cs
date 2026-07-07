@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using Trippie.Common.Database;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
@@ -17,7 +16,6 @@ public sealed class FriendRequestService(
 	{
 		if (callerId == dto.ReceiverId)
 			throw new ValidationException("Self.Request", "Sender ID and Receiver ID cannot be the same.");
-
 
 		if (dto.ReceiverId <= 0)
 			throw new ValidationException("ReceiverID", "Receiver ID must be greater than zero.");
@@ -64,43 +62,50 @@ public sealed class FriendRequestService(
 	}
 
 	public Task<FriendshipDto> AcceptAsync(
-		int callerId, int requestId, CancellationToken ct = default)
-		=> AcceptCoreAsync(callerId, requestId, ct);
+		int myId, int otherId, CancellationToken ct = default)
+	{
+		if (myId == otherId)
+			throw new ValidationException("Self.Request", "Cannot accpet friend request with oneself.");
+		if (myId <= 0 || otherId <= 0)
+			throw new ValidationException("Invalid.UserId", "User IDs must be greater than zero.");
+
+		return AcceptCoreAsync(myId, otherId, ct);
+	}
 
 	public async Task CancelOrRejectAsync(
-		int callerId, int requestId, CancellationToken ct = default)
+		int myId, int otherId, CancellationToken ct = default)
 	{
-		var request = await friendRequestModel.GetByIdAsync(requestId, ct);
+		var request = await friendRequestModel.GetFriendRequestbyFriendId(otherId, myId, ct);
 
 		if (request is null)
-			throw new NotFoundException("FriendRequest.NotFound", $"Friend request {requestId} not found.");
+			throw new NotFoundException("FriendRequest.NotFound", $"Friend request for FriendId {otherId} not found.");
 		
-		if (request.SenderId != callerId && request.ReceiverId != callerId)
+		if (request.SenderId != myId && request.ReceiverId != myId)
 			throw new ValidationException("FriendRequest.Forbidden", "You are not a participant in this friend request.");
 		
-		await friendRequestModel.DeleteAsync(requestId, ct);
+		await friendRequestModel.DeleteByFriendIdAsync(otherId, myId, ct);
 	}
 
 	private async Task<FriendshipDto> AcceptCoreAsync(
-		int callerId, int requestId, CancellationToken ct = default)
+		int myId, int otherId, CancellationToken ct = default)
 	{
 		await using var transaction = await db.Database.BeginTransactionAsync(ct);
 
 		try
 		{
-			var request = await friendRequestModel.GetByIdAsync(requestId, ct);
+			var request = await friendRequestModel.GetFriendRequestbyFriendId(otherId, myId, ct);
 
 			if (request is null)
 				throw new NotFoundException("FriendRequest.NotFound", 
-					$"Friend request {requestId} not found or was already accepted/rejected.");
+					$"Friend request with UserId {otherId} not found or was already accepted/rejected.");
 			
-			if (request.ReceiverId != callerId)
+			if (request.ReceiverId != myId && request.SenderId != myId)
 				throw new ValidationException("FriendRequest.Forbidden",
 					"Only the receiver of a friend request can accept it.");
 			
 			var friendship = await friendshipModel.CreateAsync(request.SenderId, request.ReceiverId, ct);
 
-			await friendRequestModel.DeleteAsync(requestId, ct);
+			await friendRequestModel.DeleteByFriendIdAsync(otherId, myId, ct);
 			await transaction.CommitAsync(ct);
 			return friendship;
 		}
@@ -116,6 +121,17 @@ public sealed class FriendRequestService(
 			await transaction.RollbackAsync(ct);
 			throw;
 		}
+	}
+
+	public async Task<FriendRequestExistsDto?> FriendRequestExistsAsync(int myId, int otherId, CancellationToken ct = default)
+	{
+		if (myId == otherId)
+			throw new ValidationException("Self.Request", "Cannot check friend request existence with oneself.");
+		if (myId <= 0 || otherId <= 0)
+			throw new ValidationException("Invalid.UserId", "User IDs must be greater than zero.");
+		var request = await friendRequestModel.FriendRequestExistsAsync(myId, otherId, ct);
+
+		return request;
 	}
 
 	private static bool IsUniqueViolation(DbUpdateException ex) =>

@@ -6,17 +6,22 @@
     "google": "Entrar com o",
     "username": "nome de utilizador",
     "password-confirmation": "confirmar palavra-passe",
-    "email": "Email"
+    "email": "Email",
+    "usernameTaken": "Este nome de utilizador já está em uso.",
+    "invalidEmail": "E-mail inválido.",
+    "emailTaken": "Este e-mail já está registado.",
+    "passwordMismatch": "As palavras-passe não coincidem.",
+    "passwordRules": {
+      "length": "Entre 8 e 20 caracteres",
+      "lowercase": "1 carácter minúsculo",
+      "uppercase": "1 carácter maiúsculo",
+      "special": "1 carácter especial",
+      "digits": "1 dígito"
+    },
+    "error-login": "Nome de utilizador ou palavra-passe incorretos.",
+    "error-oauth": "A autenticação do Google falhou.",
+    "new-password": "nova palavra-passe"
   },
-
-  "navbar": {
-    "profile": "Perfil",
-    "trip": "Planear Viagem",
-    "my-trips": "Lista de Viagens",
-    "my-friends": "Amigos",
-    "my-expenses": "Despesas"
-  },
-
   "card": {
     "trip-description": "Carrega aqui para começares a planear a próxima viagem.",
     "my-trips-description": "Carrega aqui para veres as tuas viagens passadas, presentes e futuras.",
@@ -34,15 +39,88 @@
     "trips": "Viagens Este Ano",
     "countdown": "Dias Para Viagem"
   },
+  "plan-a-trip": {
+    "title": "Planeia a tua viagem",
+    "trip-name": "nome da viagem",
+    "trip-description": "descrição da viagem",
+    "start-date": "data de início",
+    "end-date": "data de fim",
+    "country": "país",
+    "city": "cidade",
+    "privacy-text": "Gostarias de permitir que amigos ou o público vejam a tua viagem?",
+    "private-option": "privado",
+    "friends-option": "amigos",
+    "public-option": "público",
+    "create-trip": "Criar Viagem",
+    "update-trip": "Atualizar Viagem",
+    "name-error": "O nome da viagem é obrigatório.",
+    "name-min-length-error": "O nome da viagem deve tener pelo menos 3 caracteres.",
+    "name-max-length-error": "O nome da viagem não pode ter mais de 25 caracteres.",
+    "date-error": "É obrigatório selecionar as datas de início e fim da tua viagem.",
+    "description-max-length-error": "A descrição da viagem não pode ter mais de 256 caracteres.",
+    "country-error": "É obrigatório selecionar um país.",
+    "country-string-error": "Por favor, seleciona um país válido.",
+    "city-string-error": "Por favor, seleciona uma cidade válida.",
+    "trip-budget": "orçamento (€)",
+    "budget-error": "O orçamento é obrigatório.",
+    "budget-numbers-error": "O orçamento apenas pode conter números."
+  },
+  "profile": {
+    "countries-section-title": "Por onde tenho andado a viajar",
+    "itineraries-section-title": "Meus Itinerarios",
+    "edit-title": "Editar Perfil",
+    "update-button": "Atualizar Perfil",
+    "description": "descrição",
+    "delete-button": "Eliminar Conta",
+    "delete-user-title": "Tens a certeza?",
+    "delete-user-message": "Se confirmares esta decisão, a tua conta será eliminada permanentemente.",
+    "description-error": "Não pode ter mais de 150 caracteres.",
+    "name-error": "Tens de definir um nome de perfil.",
+    "add-friend-btn": "Adicionar Amigo",
+    "edit-btn": "Editar Perfil"
+  },
+  "trip-dashboard": {
+    "delete-trip-title": "Tens a certeza?",
+    "delete-trip-message": "Se confirmares esta decisão, vais eliminar tudo o que está relacionado com esta viagem.",
+    "city": "cidade",
+    "privacy-text": "Gostarias de permitir que amigos ou o público vejam a tua viagem?",
+    "private-option": "privado",
+    "friends-option": "amigos",
+    "public-option": "público",
+    "create-trip": "Criar Viagem",
+    "update-trip": "Atualizar Viagem",
+    "name-error": "O nome da viagem é obrigatório.",
+    "name-min-length-error": "O nome da viagem deve ter pelo menos 3 caracteres.",
+    "name-max-length-error": "O nome da viagem não pode ter mais de 25 caracteres.",
+    "date-error": "É obrigatório selecionar as datas de início e fim da tua viagem.",
+    "description-max-length-error": "A descrição da viagem não pode ter mais de 256 caracteres.",
+    "country-error": "É obrigatório selecionar um país.",
+    "country-string-error": "Por favor, seleciona um país válido.",
+    "city-string-error": "Por favor, seleciona uma cidade válida.",
+    "trip-budget": "orçamento (€)",
+    "budget-error": "O orçamento é obrigatório.",
+    "budget-numbers-error": "O orçamento apenas pode conter números.",
+    "crew-title": "Equipa",
+    "delete-trip-btn": "Eliminar Viagem",
+    "edit-trip-btn": "Editar Detalhes da Viagem"
+  },
 
   "trips": {
     "members": {
       "title": "Escolhe a Tua Equipa",
-      "addMember": "Amigos"
+      "addMember": "Amigos",
+      "noMembers": "Ainda sem membros",
+      "role": {
+        "title": "Papel",
+        "admin": "Admin",
+        "member": "Membro"
+      }
     }
   },
 
   "crew": {
+    "addMember": "Adicionar Membro",
+    "allFriendsAdded": "Todos os teus amigos já foram adicionados à equipa.",
     "noMembers": "Ainda sem membros",
     "roleFor": "Papel de {{ name }}",
     "role": {
@@ -82,7 +160,7 @@
   },
 
   "itinerary": {
-    "title": "Itinerário",
+    "title": "Itinerario",
     "addItem": "Adicionar paragem",
     "closeForm": "Fechar formulário",
     "stops": "Paragens do itinerário",
@@ -99,7 +177,27 @@
       "cost": "custo (€)",
       "infoLabel": "Mais informação",
       "info": "mais info",
-      "save": "Guardar"
+      "save": "Guardar",
+      "errors": {
+        "titleRequired": "O título é obrigatório",
+        "titleMaxLength": "O título não pode exceder 20 caracteres",
+        "priceMin": "O preço deve ser igual ou superior a 0",
+        "descriptionMaxLength": "A descrição não pode exceder 30 caracteres"
+      }
     }
+  },
+  "popup": {
+    "cancel-btn": "Cancelar",
+    "confirm-btn": "Confirmar"
+  },
+  "navbar": {
+    "home": "Inicio",
+    "profile": "Perfil",
+    "plan-a-trip": "Planeia a Viagem",
+    "my-trips": "As Minhas Viagens",
+    "friends": "Amigos",
+    "my-expenses": "Despesas",
+    "search-users": "Pesquisa Utilizadores",
+    "logout": "Sair"
   }
 }

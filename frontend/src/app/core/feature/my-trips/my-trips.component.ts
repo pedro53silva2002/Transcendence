@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import { TranslocoModule } from '@jsverse/transloco';
 import { forkJoin } from 'rxjs';
-import { TripService } from '../plan-a-trip/services/trip.service';
-import { TripDto } from '../plan-a-trip/dtos/trip.dto';
-import { TripCardComponent } from './trip-card/trip-card.component';
+import { TripService } from '../../logic/services/trip.service';
+import { TripDto } from '../../logic/dtos/trip.dto';
 import { SessionService } from '../../logic/services/session.service';
+import { TripCardComponent } from './trip-card/trip-card.component';
 
 @Component({
   selector: 'app-my-trips',

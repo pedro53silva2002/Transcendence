@@ -1,0 +1,32 @@
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  pointer-events: auto;
+
+  img {
+    width: 120px;
+    height: 120px;
+    display: block;
+    animation: rotateGlobe 5s ease-in-out infinite;
+
+    // filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+  }
+}
+
+@keyframes rotateGlobe {
+  0% {
+    transform: translateZ(0) rotate(0deg);
+  }
+
+  100% {
+    transform: translateZ(0) rotate(-1440deg);
+  }
+}

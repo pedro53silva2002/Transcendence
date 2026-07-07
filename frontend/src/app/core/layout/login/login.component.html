@@ -9,9 +9,6 @@
 	<mat-dialog-content>
 		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
 			<input matInput type="username" formControlName="username" placeholder="{{ 'auth.username' | transloco }}" required>
-			<!-- @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
-				<mat-error>Formato de email inválido</mat-error>
-			} -->
 		</mat-form-field>
 		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic">
 			<input matInput type="password" [type]="passwordVisible() ? 'text' : 'password'" formControlName="password"

@@ -1,15 +1,8 @@
-// .page {
-//   display: flex;
-//   flex-direction: column;
-//   min-height: 100vh;
-// }
-
 .page-content {
 	flex: 1;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	//   padding: 32px;
 }
 
 .sr-only {
@@ -33,7 +26,7 @@ app-custom-scrollbar {
 }
 
 .itin-card {
-	width: 330px;
+	width: 360px;
 	background: var(--mat-sys-primary-container);
 	border: 2px solid var(--mat-sys-on-primary-container);
 	border-radius: 28px;
@@ -42,7 +35,8 @@ app-custom-scrollbar {
 	display: flex;
 	flex-direction: column;
 	gap: 18px;
-	min-height: 360px;
+	height: 360px;
+	overflow: hidden;
 }
 
 // ===== Header =====
@@ -51,6 +45,7 @@ app-custom-scrollbar {
 	align-items: center;
 	justify-content: center;
 	gap: 12px;
+	margin-bottom: 15px;
 }
 
 .itin-title {
@@ -118,16 +113,6 @@ app-custom-scrollbar {
 	}
 }
 
-.avatar {
-	width: 44px;
-	height: 44px;
-	border-radius: 50%;
-	background: var(--mat-sys-on-primary);
-	display: grid;
-	opacity: 70%;
-	place-items: center;
-	flex: 0 0 auto;
-}
 
 .person {
 	color: var(--mat-sys-primary-container);
@@ -357,4 +342,34 @@ app-custom-scrollbar {
 		cursor: not-allowed;
 		transform: none;
 	}
+}
+
+.avatar {
+	width: 54px;
+	height: 54px;
+	flex-shrink: 0;
+	border-radius: 50%;
+	background: var(--mat-sys-on-primary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	cursor: default;
+}
+
+.avatar-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+mat-icon.avatar-icon {
+	text-align: center;
+	font-size: 30px;
+	width: 54px;
+	height: 54px;
+	line-height: 54px;
+	overflow: visible;
+	color: var(--mat-sys-primary-container);
 }

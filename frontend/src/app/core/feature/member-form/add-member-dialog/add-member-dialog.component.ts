@@ -11,11 +11,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
-import { TripMemberService } from '../services/member.service';
-import { FriendDto } from '../../dtos/social/friendship.dto';
-import { TripMemberDto } from '../../itinerary/dtos/member.dto';
-import { CloseButtonComponent } from '../../../../shared/components/close-button/close-button.component';
-import { FriendshipService } from '../../service/social/friendship.service';
+import { FriendDto } from '../../../logic/dtos/friendship.dto';
+import { TripMemberDto } from '../../../logic/dtos/member.dto';
+import { CloseButtonComponent } from '../../../../shared/close-button/close-button.component';
+import { FriendshipService } from '../../../logic/services/friendship.service';
+import { TripMemberService } from '../../../logic/services/member.service';
+import { getUserAvatarUrl } from '../../../logic/utils/minio-url.util';
 
 @Component({
   selector: 'app-add-member-dialog',
@@ -34,14 +35,13 @@ export class AddMemberDialogComponent implements OnInit {
   private readonly friendshipService = inject(FriendshipService);
 
   protected readonly friends = signal<FriendDto[]>([]);
-  protected readonly loading = signal(false);
   protected readonly adding = signal(false);
+  protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
   readonly tripId = this.data.tripId;
   readonly alreadyAdded = this.data.alreadyAdded;
 
   ngOnInit(): void {
-    this.loading.set(true);
     this.friendshipService.getAll().subscribe({
       next: (result) => {
         if (result.data) {
@@ -50,8 +50,6 @@ export class AddMemberDialogComponent implements OnInit {
           );
         }
       },
-      complete: () => this.loading.set(false),
-      error: () => this.loading.set(false),
     });
   }
 
@@ -63,6 +61,7 @@ export class AddMemberDialogComponent implements OnInit {
     if (tripId === null) {
       const pending: TripMemberDto = {
         userId: friend.friendId,
+        username: friend.username,
         displayName: friend.username,
         profilePicture: friend.profilePhotoUrl,
         role: 'Member',
@@ -74,7 +73,16 @@ export class AddMemberDialogComponent implements OnInit {
     this.adding.set(true);
     this.memberService.create({ tripId, userIds: [friend.friendId] }, tripId).subscribe({
       next: (result) => {
-        if (result.data?.[0]) this.dialogRef.close(result.data[0]);
+        if (result.data) {
+          const addedMember: TripMemberDto = {
+            ...result.data,
+            username: friend.username,
+            displayName: friend.username,
+            profilePicture: friend.profilePhotoUrl,
+            role: 'Member',
+          };
+          this.dialogRef.close(addedMember);
+        }
       },
       complete: () => this.adding.set(false),
       error: () => this.adding.set(false),

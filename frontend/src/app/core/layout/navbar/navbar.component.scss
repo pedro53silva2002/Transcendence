@@ -6,7 +6,7 @@
 }
 
 nav {
-	width: 90%;
+	width: 70%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -23,6 +23,7 @@ nav {
 
 .logo-container h1.logo {
 	opacity: 1;
+	cursor: pointer;
 }
 
 .buttons, .full-screen-buttons{
@@ -127,7 +128,7 @@ nav {
 		opacity: 0.6 !important;
 	}
 
-	.mat-icon {
+	mat-icon.search-icon {
 		font-family: 'Material Icons' !important;
 		font-size: 20px;
 		width: 20px;
@@ -186,8 +187,20 @@ nav {
 
 @media (max-width: 1254px) {
 
+	nav {
+		width: 80%;
+	}
+
 	.full-screen-buttons {
-		display: none !important;
+		display: contents !important; //prevents gap from some invisible buttons to appear
+
+		> button {
+			display: none !important;
+		}
+
+		> button.keep-visible {
+			display: inline-flex !important;
+		}
 	}
 
 	.hamburger-btn {
@@ -248,4 +261,52 @@ h1 {
 		background-color: var(--mat-sys-on-primary-container) !important;
 		color: var(--mat-sys-primary-container) !important;
 	}
+}
+
+.user-option-container {
+    display: flex;
+    align-items: center;
+    gap: 12px; // Espaço entre a foto e o texto
+    padding: 4px 0;
+}
+
+.search-results {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.avatar {
+	width: 40px;
+	height: 40px;
+	flex-shrink: 0;
+	border-radius: 50%;
+	background-color: var(--mat-sys-on-primary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	flex-direction: row;
+}
+
+.avatar-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+mat-icon.avatar-icon {
+	text-align: center;
+	font-size: 20px;
+	width: 54px;
+	height: 54px;
+	line-height: 54px;
+	overflow: visible;
+	color: var(--mat-sys-primary-container) !important;
+}
+
+.username {
+	font-size: 15px;
+	color: var(--mat-sys-on-primary);
 }

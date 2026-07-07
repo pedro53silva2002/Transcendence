@@ -19,14 +19,8 @@
       "digits": "1 digit"
     },
     "error-login": "Invalid username or password.",
-    "error-oauth": "Google Authentication failed."
-  },
-  "navbar": {
-    "profile": "Profile",
-    "trip": "Plan a Trip",
-    "my-trips": "My Trips",
-    "my-friends": "My Friends",
-    "my-expenses": "My Expenses"
+    "error-oauth": "Google Authentication failed.",
+    "new-password": "new password"
   },
   "card": {
     "trip-description": "Click here to start planning your next trip.",
@@ -69,6 +63,26 @@
     "budget-error": "A budget is required.",
     "budget-numbers-error": "A budget can only contain numbers."
   },
+  "profile": {
+    "countries-section-title": "Where I've Been Wandering",
+    "itineraries-section-title": "My Itineraries",
+    "edit-title": "Edit Profile",
+    "update-button": "Update Profile",
+    "description": "description",
+    "delete-button": "Delete Account",
+    "delete-user-title": "Are you sure?",
+    "delete-user-message": "If you confirm this decision, your account will be deleted.",
+    "delete-friend-message": "If you confirm this decision, you won't be friends anymore.",
+    "description-error": "Can't be more than 150 characters long.",
+    "name-error": "You must define a display name.",
+    "add-friend-btn": "Add Friend",
+    "remove-friend-btn": "Remove Friend",
+    "edit-btn": "Edit Profile",
+    "cancel-request-btn": "Cancel Request",
+    "accept-request-btn": "Accept Request",
+    "delete-friend-request-message": "If you confirm this decision, the friend request will be canceled.",
+	"empty-state": "This user still hasn't been anywhere."
+},
   "trip-dashboard": {
     "delete-trip-title": "Are you sure?",
     "delete-trip-message": "If you confirm this decision, you will delete everything about this trip.",
@@ -168,5 +182,15 @@
   "popup": {
     "cancel-btn": "Cancel",
     "confirm-btn": "Confirm"
+  },
+  "navbar": {
+    "home": "Home",
+    "profile": "Profile",
+    "plan-a-trip": "Plan a Trip",
+    "my-trips": "My Trips",
+    "friends": "Friends",
+    "my-expenses": "My Expenses",
+    "search-users": "Search Users",
+    "logout": "Logout"
   }
 }

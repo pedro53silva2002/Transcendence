@@ -1,0 +1,37 @@
+.country-card {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 0px;
+	min-height: 55px;
+	width: fit-content;
+	background: var(--mat-sys-on-primary-container);
+	border-radius: 15px;
+	padding: 0px 18px 0px 18px;
+
+	h2 {
+		color: var(--mat-sys-primary);
+		font-family: "BBH Bogle";
+		font-weight: 200;
+		font-size: 20px;
+		margin: 0;
+	}
+}
+
+.extra-space {
+	padding: 0px 18px 0px 18px;
+	
+	h2 {
+		margin-bottom: 10px;
+	}
+}
+
+.remove-btn {
+	text-align: end;
+	font-size: 14px;
+	width: 138%;
+	height: 12px;
+	color: var(--mat-sys-primary) !important;
+	cursor: pointer;
+}

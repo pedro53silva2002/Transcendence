@@ -133,32 +133,31 @@
         }
       </mat-autocomplete>
 
-      @if (city.hasError('cityNotSelected') && city.touched) {
-        <mat-error>{{ 'plan-a-trip.city-string-error' | transloco }}</mat-error>
-      }
-    </mat-form-field>
-  </div>
+			<mat-autocomplete #autoCity="matAutocomplete" (optionSelected)="selectedCity($event)">
+				@for (city of listOfCities$ | async; track city.name) {
+				<mat-option [value]="city">
+					{{ city.name }}
+				</mat-option>
+				}
+			</mat-autocomplete>
 
-  <!-- select trip's privacy -->
-  <div class="privacy-container">
-    <p>{{ 'plan-a-trip.privacy-text' | transloco }}</p>
-    <mat-form-field
-      appearance="outline"
-      [hideRequiredMarker]="true"
-      subscriptSizing="dynamic"
-      class="custom-privacy-select"
-    >
-      <mat-select formControlName="visibility" panelClass="custom-privacy-panel">
-        <mat-option [value]="TripVisibility.Private">{{
-          'plan-a-trip.private-option' | transloco
-        }}</mat-option>
-        <mat-option [value]="TripVisibility.Public">{{
-          'plan-a-trip.public-option' | transloco
-        }}</mat-option>
-        <mat-option [value]="TripVisibility.FriendsOnly">{{
-          'plan-a-trip.friends-option' | transloco
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+			@if (city.hasError('cityNotSelected') && city.touched) {
+			<mat-error>{{ 'plan-a-trip.city-string-error' | transloco }}</mat-error>
+			}
+
+		</mat-form-field>
+	</div>
+
+	<!-- select trip's privacy -->
+	<div class="privacy-container">
+		<p> {{ 'plan-a-trip.privacy-text' | transloco }}</p>
+		<mat-form-field appearance="outline" [hideRequiredMarker]="true" subscriptSizing="dynamic"
+			class="custom-privacy-select">
+			<mat-select formControlName="visibility" [value]="visibility.value" panelClass="custom-privacy-panel">
+				<mat-option [value]="TripVisibility.Private">{{ 'plan-a-trip.private-option' | transloco }}</mat-option>
+				<mat-option [value]="TripVisibility.Public">{{ 'plan-a-trip.public-option' | transloco }}</mat-option>
+				<mat-option [value]="TripVisibility.FriendsOnly">{{ 'plan-a-trip.friends-option' | transloco }}</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</div>
 </div>

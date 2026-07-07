@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, signal, viewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, OnInit, signal, viewChild } from '@angular/core';
 import { TripFormComponent } from './trip-form/trip-form.component';
 import { TranslocoModule } from '@jsverse/transloco';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,13 +9,12 @@ import {
 	ValidationErrors,
 	Validators,
 } from '@angular/forms';
-import { TripService } from './services/trip.service';
-import { CreateTripDto, TripVisibility, UpdateTripDto } from './dtos/trip.dto';
+import { TripService } from '../../logic/services/trip.service';
+import { CreateTripDto, TripVisibility, UpdateTripDto } from '../../logic/dtos/trip.dto';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TripStateService } from './services/trip-state.service';
-import { CountryDto } from './dtos/country.dto';
-import { CityDto } from './dtos/city.dto';
-import { DateTime } from 'luxon';
+import { TripStateService } from '../../logic/services/trip-state.service';
+import { CountryDto } from '../../logic/dtos/country.dto';
+import { CityDto } from '../../logic/dtos/city.dto';
 import { MemberFormComponent } from '../member-form/member-form.component';
 import { SessionService } from '../../logic/services/session.service';
 import { concatMap, map } from 'rxjs';
@@ -104,6 +103,10 @@ export class PlanATripComponent implements OnInit {
 					},
 				});
 			}
+		}
+		else {
+			this.tripStateService.clearTrip();
+			this.planATripForm.controls.trip.reset();
 		}
 	}
 

@@ -1,12 +1,16 @@
 .main-container {
-	width: 85%;
+	width: 65%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
 	flex-wrap: wrap;
 	margin: 0 auto;
-	margin-bottom: 50px;
+	margin-bottom: 28px;
+
+	@media (max-width: 960px) {
+		width: 85%;
+	}
 }
 
 .trip-details {
@@ -19,7 +23,7 @@
 	h1 {
 		font-family: "BBH Hegarty";
 		font-weight: 400;
-		font-size: 68px;
+		font-size: 60px;
 		margin-bottom: 0;
 		text-transform: uppercase;
 
@@ -50,7 +54,7 @@
 .management-buttons {
 	display: flex;
 	gap: 12px;
-	width: 100%;
+	width: 95%;
 	justify-content: flex-end;
 	margin-top: 30px;
 
@@ -63,6 +67,7 @@
 
 .location-and-budget {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: 20px;
 }
@@ -70,7 +75,7 @@
 .budget-container {
 	position: relative;
 	display: grid !important;
-    grid-template-areas: "stack" !important;
+	grid-template-areas: "stack" !important;
 }
 
 .budget-base,
@@ -85,16 +90,17 @@
 	height: 30px;
 	background-color: color-mix(in srgb, var(--mat-sys-on-primary) 25%, transparent);
 	border-radius: 25px;
+	overflow: hidden;
 }
 
 .budget-bar {
-	width: 150px;
 	height: 30px;
 	background-color: var(--mat-sys-on-primary-container);
 	border-radius: 25px;
 }
 
 .budget-fullbar {
+	height: 30px;
 	background-color: var(--mat-sys-error);
 	border-radius: 25px;
 }
@@ -107,7 +113,6 @@
 	justify-content: flex-end;
 	margin-right: 15px;
 }
-
 
 .spent {
 	color: color-mix(in srgb, var(--mat-sys-on-primary) 80%, transparent) !important;
@@ -132,7 +137,8 @@
 .header {
 	display: flex;
 	justify-content: space-between;
-	width: 100%;
+	width: 95%;
+	gap: 20px;
 }
 
 .trip-dates {
@@ -144,7 +150,8 @@
 	margin-bottom: 50px;
 }
 
-.start-date, .end-date {
+.start-date,
+.end-date {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -170,14 +177,14 @@
 .double-arrow {
 	position: absolute;
 	width: 40px;
-	z-index: 1;	
+	z-index: 1;
 	margin-left: 60px;
 	margin-bottom: 30px;
 }
 
 .cards {
 	margin-top: 20px;
-	width: 100%;
+	width: 95%;
 	gap: 30px;
 	display: flex;
 	flex-wrap: wrap;
@@ -185,8 +192,10 @@
 	align-items: start;
 
 	app-member-form {
-		max-height: 468px;
+		max-height: 472px;
+	}
+
+	@media (max-width: 960px) {
+		width: 60%;
 	}
 }
-
-

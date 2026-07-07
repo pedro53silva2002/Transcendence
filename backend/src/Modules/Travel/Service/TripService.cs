@@ -1,17 +1,15 @@
-using System.Drawing;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Trippie.Common.Database;
+
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Common.Services.Search.Model;
-using Trippie.Modules.Auth.Model;
+using Trippie.Modules.Auth.Service;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
 
-
 namespace Trippie.Modules.Travel.Service;
 
-public sealed class TripService(TripModel tripModel, TripMembersModel tripMembersModel)
+public sealed class TripService(
+	TripModel tripModel,
+	TripMembersModel tripMembersModel)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
@@ -20,6 +18,7 @@ public sealed class TripService(TripModel tripModel, TripMembersModel tripMember
 		dto.Members.TripId = trip.Id;
 		var members = await new TripMembersService(tripMembersModel).CreateAsync(userId, dto.Members, ct);
 		trip.Members = [.. members];
+
 		return trip;
 	}
 
@@ -57,5 +56,21 @@ public sealed class TripService(TripModel tripModel, TripMembersModel tripMember
 		if (endDate < startDate) throw new ValidationException("endDate, startDate", "End date cannot be before start date.");
 		if (budget < 0 || budget > int.MaxValue) throw new ValidationException("budget", "Budget value invalid.");
 		if (description != null && description.Length > 250) throw new ValidationException("description", "Description cannot be longer than 250 characters.");
+	}
+
+	public async Task<List<TripDto>> GetTripsForUser(int userId, CancellationToken ct = default)
+	{
+		var trips = await tripModel.GetTripsForUser(userId, ct);
+		if (trips is null)
+			return new List<TripDto>();
+		return trips.Content.ToList();
+	}
+
+	public async Task<List<ProfileTripsDto>> GetTripsItinerariesForUser(int userId, CancellationToken ct = default)
+	{
+		var trips = await tripModel.GetTripsItinerariesForUser(userId, ct);
+		if (trips is null)
+			return new List<ProfileTripsDto>();
+		return trips.Content.ToList();
 	}
 }

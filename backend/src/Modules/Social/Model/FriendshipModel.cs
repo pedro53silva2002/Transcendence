@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Trippie.Common.Database;
-using Trippie.Modules.Social.Config;
 using Trippie.Modules.Social.Dtos;
 
 namespace Trippie.Modules.Social.Model;
@@ -100,19 +99,12 @@ public sealed class FriendshipModel(AppDbContext db)
 		return friendship is null ? null : Friendship.ToDto(friendship);
 	}
 
-	public async Task<bool> DeleteAsync(int id, int userId, CancellationToken ct = default)
+	public async Task<bool> DeleteAsync(int friendId, int userId, CancellationToken ct = default)
 	{
-		var friendship = await db.Friendships
-			.AsNoTracking()
-			.FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId, ct);
-
-		if (friendship is null)
-			return false;
-
 		var deleted = await db.Friendships
         	.Where(f =>
-        	    (f.UserId == userId && f.FriendId == friendship.FriendId) ||
-        	    (f.UserId == friendship.FriendId && f.FriendId == userId))
+        	    (f.UserId == userId && f.FriendId == friendId) ||
+        	    (f.UserId == friendId && f.FriendId == userId))
         	.ExecuteDeleteAsync(ct);
 
     	return deleted == 2;
