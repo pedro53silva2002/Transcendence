@@ -14,12 +14,13 @@ import { jwtInterceptor } from './core/logic/interceptors/jwt.interceptor';
 import { SessionService } from './core/logic/services/session.service';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
+import { loadingInterceptor } from './core/logic/interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([jwtInterceptor, errorInterceptor])),
+    provideHttpClient(withInterceptors([jwtInterceptor, loadingInterceptor, errorInterceptor])),
 
     provideAppInitializer(() => {
       const auth = inject(SessionService);

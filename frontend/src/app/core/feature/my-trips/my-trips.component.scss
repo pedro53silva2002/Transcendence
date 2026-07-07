@@ -1,5 +1,5 @@
 .main-container {
-  width: 82%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -8,7 +8,7 @@
   margin: 0 auto;
   margin-bottom: 50px;
   margin-top: 80px;
-  min-height: 650px;
+  min-height: 655px;
 }
 
 .page-title {
@@ -21,24 +21,15 @@
 }
 
 .trips-grid {
-  // justify-content: center;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  // display: grid;
-  // grid-template-columns: repeat(2, 1fr);
-  gap: 40px 36px;
+  gap: 40px 22px;
   width: 100%;
 
   app-trip-card {
-    width: 500px;
+    width: 428px;
   }
-}
-
-.loading-state {
-  display: flex;
-  justify-content: center;
-  padding: 60px 0;
 }
 
 .sr-only {
@@ -59,4 +50,7 @@
   color: var(--mat-sys-on-primary);
   text-align: center;
   opacity: 0.7;
+  margin-top: 30px;
+	color: var(--mat-sys-on-primary);
+	opacity: 0.5;
 }

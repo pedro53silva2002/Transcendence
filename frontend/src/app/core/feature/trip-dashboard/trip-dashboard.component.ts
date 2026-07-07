@@ -1,9 +1,9 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { TripStateService } from '../plan-a-trip/services/trip-state.service';
+import { TripStateService } from '../../logic/services/trip-state.service';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { DatePipe } from '@angular/common';
-import { TripService } from '../plan-a-trip/services/trip.service';
+import { TripService } from '../../logic/services/trip.service';
 import { ConfirmationPopUpComponent } from '../../../shared/pop-up/confirmation-pop-up/confirmation-pop-up.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
@@ -66,11 +66,13 @@ export class TripDashboardComponent implements OnInit {
 
 		if (this.tripStateService.trip()?.id === id) {
 			this.totalBudget.set(this.tripStateService.trip()?.budget ?? 0);
+			console.log(this.tripStateService.trip());
 		} else {
 			this.tripService.getById(id).subscribe({
 				next: (response) => {
 					if (response.data) this.tripStateService.setTrip(response.data);
 					this.totalBudget.set(response.data?.budget ?? 0);
+					console.log(this.tripStateService.trip());
 				},
 			});
 		}
@@ -119,5 +121,6 @@ export class TripDashboardComponent implements OnInit {
 				this.route.navigate(['/home']);
 			}
 		});
+		
 	}
 }

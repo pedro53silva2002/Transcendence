@@ -22,18 +22,14 @@
 	}
 
 	<app-custom-scrollbar>
-		@if (loading()) {
-		<app-loading-spinner></app-loading-spinner>
-		}
-
-		@if (!loading()) {
-		<div class="crew-grid" [style.grid-template-columns]="'repeat(' + columns() + ', 1fr)'">
+		<div class="crew-grid" [class.dashboard-crew-grid]="isDashboardRoute()" [style.grid-template-columns]="'repeat(' + columns() + ', 1fr)'">
 			@for (member of members(); track member.userId) {
 			<div class="crew-card">
-				<div class="avatar" [attr.aria-label]="member.displayName" role="img">
+				<div [routerLink]="['/profile', member.username]" class="avatar" [attr.aria-label]="member.displayName"
+					role="img">
 					@if (member.profilePicture) {
-					<img [ngSrc]="member.profilePicture" [alt]="member.displayName" [width]="84" [height]="84"
-						class="avatar-img" />
+					<img [ngSrc]="getUserAvatarUrl(member.profilePicture)" [alt]="member.displayName" [width]="84"
+						[height]="84" class="avatar-img" />
 					} @else {
 					<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
 					}
@@ -41,8 +37,8 @@
 
 				<div class="crew-info">
 					<div class="name-and-delete">
-						<span class="crew-username">{{ member.displayName }}</span>
-						@if (isAdmin() || !isDashboardRoute()) {
+						<span class="crew-username">{{ member.username }}</span>
+						@if (canDeleteMember(member.userId)) {
 						<button type="button" class="del-btn"
 							[attr.aria-label]="'trips.members.remove' | transloco: { name: member.displayName }"
 							(click)="removeMember(member.id, member.userId)">
@@ -50,6 +46,7 @@
 						</button>
 						}
 					</div>
+					@if (showRole()) {
 					@if (isAdmin() || !isDashboardRoute()) {
 					<mat-select class="role-select" [value]="member.role"
 						[attr.aria-label]="'crew.roleFor' | transloco: { name: member.displayName }"
@@ -62,12 +59,12 @@
 					} @else {
 					<p class="role">{{ member.role }}</p>
 					}
+					}
 				</div>
 			</div>
 			} @empty {
 			<p class="crew-empty">{{ 'trips.members.noMembers' | transloco }}</p>
 			}
 		</div>
-		}
 	</app-custom-scrollbar>
 </section>

@@ -2,24 +2,24 @@
   <h1 class="page-title">{{ 'plan-a-trip.title' | transloco }}</h1>
   <div class="full-form">
     <div class="form-column">
-      <app-trip-form [tripGroup]="planATripForm.controls['trip']"></app-trip-form>
+      <app-trip-form [tripGroup]="planATripForm.controls.trip"></app-trip-form>
     </div>
     <div class="crew-column">
       <app-member-form [tripId]="currentTripId()" [showRole]="false"></app-member-form>
+      <div class="actions-row">
+        <button
+          type="submit"
+          class="tertiary-btn create-btn"
+          matButton="filled"
+          [disabled]="planATripForm.invalid"
+        >
+          @if (!isEditMode) {
+            {{ 'plan-a-trip.create-trip' | transloco }}
+          } @else {
+            {{ 'plan-a-trip.update-trip' | transloco }}
+          }
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="actions-row">
-    <button
-      type="submit"
-      class="tertiary-btn create-btn"
-      matButton="filled"
-      [disabled]="planATripForm.invalid"
-    >
-      @if (!isEditMode) {
-        {{ 'plan-a-trip.create-trip' | transloco }}
-      } @else {
-        {{ 'plan-a-trip.update-trip' | transloco }}
-      }
-    </button>
   </div>
 </form>

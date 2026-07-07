@@ -6,15 +6,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { TranslocoModule } from '@jsverse/transloco';
-import { LocationsService } from '../services/locations.service';
+import { LocationsService } from '../../../logic/services/locations.service';
 import { Observable, debounceTime, delay, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
-import { TripVisibility } from '../dtos/trip.dto';
-import { CountryDto } from '../dtos/country.dto';
+import { TripVisibility } from '../../../logic/dtos/trip.dto';
+import { CountryDto } from '../../../logic/dtos/country.dto';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
-import { CityDto } from '../dtos/city.dto';
+import { CityDto } from '../../../logic/dtos/city.dto';
 import { DateTime } from 'luxon';
 
 //Defining the date format

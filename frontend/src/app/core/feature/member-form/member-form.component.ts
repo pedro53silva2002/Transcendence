@@ -2,6 +2,7 @@ import { NgOptimizedImage } from '@angular/common';
 import {
 	ChangeDetectionStrategy,
 	Component,
+	computed,
 	effect,
 	inject,
 	input,
@@ -13,14 +14,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslocoModule } from '@jsverse/transloco';
 import { MatDialog } from '@angular/material/dialog';
-import { TripMemberService } from './services/member.service';
 import { AddMemberDialogComponent } from './add-member-dialog/add-member-dialog.component';
-import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
-import { TripStateService } from '../plan-a-trip/services/trip-state.service';
-import { TripMemberDto } from '../itinerary/dtos/member.dto';
-import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingService } from '../../logic/services/loading.service';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { CustomScrollbarComponent } from '../../../shared/custom-scrollbar/custom-scrollbar.component';
+import { TripStateService } from '../../logic/services/trip-state.service';
+import { TripMemberDto } from '../../logic/dtos/member.dto';
+import { Router, RouterLink } from '@angular/router';
+import { SessionService } from '../../logic/services/session.service';
+import { TripMemberService } from '../../logic/services/member.service';
+import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
 
 @Component({
 	selector: 'app-member-form',
@@ -31,7 +32,7 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
 		NgOptimizedImage,
 		TranslocoModule,
 		CustomScrollbarComponent,
-		LoadingSpinnerComponent
+		RouterLink
 	],
 	templateUrl: './member-form.component.html',
 	styleUrl: './member-form.component.scss',
@@ -43,6 +44,9 @@ export class MemberFormComponent {
 	private readonly memberService = inject(TripMemberService);
 	private readonly tripState = inject(TripStateService);
 	private readonly route = inject(Router);
+	private readonly sessionService = inject(SessionService);
+
+	protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
 	readonly tripId = input<number | null>(null);
 	readonly columns = input(2);
@@ -50,9 +54,10 @@ export class MemberFormComponent {
 	readonly showRole = input(true);
 	readonly showAddButton = input(true);
 	readonly isDashboardRoute = signal(false);
+	public readonly tripCreatorUserId = signal<number>(-1);
 
 	// members are stored in TripStateService so the dashboard can read the same list
-	public readonly members = this.tripState.members;
+	public readonly members = computed(() => this.tripState.members());
 	protected readonly loading = signal(false);
 
 	public isAdmin = input<boolean>();
@@ -65,31 +70,46 @@ export class MemberFormComponent {
 		// Only fetch when tripId is a real id; skip null
 		effect(() => {
 			const id = this.tripId();
-			if (id === null) return;
 
-			this.loading.set(true);
-			this.memberService
-				.search(
-					{
-						search: { tripId: { op: 'EQUAL', value: id } },
-						orderBy: [{ field: 'userId', descending: false }],
-						pageSize: 10,
-					},
-					id,
-				)
-				.subscribe({
-					next: (result) => {
-						if (result.data) this.tripState.setMembers(result.data.content);
-					},
-					complete: () => this.loading.set(false),
-					error: () => this.loading.set(false),
-				});
-		}, { allowSignalWrites: true });
+			// For the create flow (no tripId yet), seed the list with the creator as Admin.
+			if (id === null) {
+				const me = this.sessionService.me();
+				if (me) {
+					this.tripState.setMembers([{
+						userId: me.id,
+						username: me.username,
+						displayName: me.displayName,
+						profilePicture: me.profilePhotoUrl,
+						role: 'Admin',
+					}]);
+					this.tripCreatorUserId.set(me.id);
+				} else {
+					this.tripState.setMembers([]);
+				}
+			}
+			else {
+				this.loading.set(true);
+				this.memberService
+					.search(
+						{
+							search: { tripId: { op: 'EQUAL', value: id } },
+							orderBy: [{ field: 'userId', descending: false }],
+							pageSize: 10,
+						},
+						id,
+					)
+					.subscribe({
+						next: (result) => {
+							if (result.data) this.tripState.setMembers(result.data.content);
 
-		// For the create flow (no tripId yet), start with an empty list.
-		if (this.tripId() === null) {
-			this.tripState.setMembers([]);
-		}
+							if (this.tripState.trip()?.createdBy)
+								this.tripCreatorUserId.set(this.tripState.trip()?.createdBy ?? -1);
+						},
+						complete: () => this.loading.set(false),
+						error: () => this.loading.set(false),
+					});
+				}
+			}, { allowSignalWrites: true });
 	}
 
 	protected openAddMember(): void {
@@ -124,5 +144,12 @@ export class MemberFormComponent {
 			this.memberService.delete(memberId, tripId).subscribe();
 		}
 		this.tripState.removeMember(userId);
+	}
+
+	protected canDeleteMember(memberUserId: number): boolean {
+		if (!this.isAdmin())
+			return false;
+
+		return memberUserId !== this.tripCreatorUserId();
 	}
 }

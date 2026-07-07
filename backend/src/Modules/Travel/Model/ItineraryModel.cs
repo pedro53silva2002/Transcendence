@@ -4,6 +4,7 @@ using Trippie.Common.Services.Search.Exception;
 using Trippie.Common.Services.Search.Linq;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Travel.Dtos;
+using Trippie.Modules.Auth.Model;
 
 namespace Trippie.Modules.Travel.Model;
 
@@ -17,10 +18,11 @@ public sealed class Itinerary
     public required int ExpectedPrice { get; set; }
     public required int Day { get; set; }
     public required int CreatedBy { get; set; }
+    public User? User { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
-    public static ItineraryDto ToDto(Itinerary i) => new()
+    public static ItineraryDto ToDto(Itinerary i, User? user = null) => new()
     {
         Id = i.Id,
         TripId = i.TripId,
@@ -29,6 +31,7 @@ public sealed class Itinerary
         ExpectedPrice = i.ExpectedPrice,
         Day = i.Day,
         CreatedBy = i.CreatedBy,
+        ProfilePicture = user != null ? user.ProfilePhotoUrl : null,
         CreatedAt = i.CreatedAt,
         UpdatedAt = i.UpdatedAt,
     };
@@ -54,10 +57,14 @@ public sealed class ItineraryModel(AppDbContext db, TripMembersModel tripMembers
             CreatedBy = userId,
         };
 
+        var user = db.Users
+			.Where(u => userId == u.Id)
+            .FirstOrDefault();
+
         db.Itineraries.Add(itinerary);
         await db.SaveChangesAsync(ct);
 
-        return Itinerary.ToDto(itinerary);
+        return Itinerary.ToDto(itinerary, user);
     }
 
     public async Task<CursorPage<ItineraryDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
@@ -85,7 +92,17 @@ public sealed class ItineraryModel(AppDbContext db, TripMembersModel tripMembers
                 _ => throw new SearchValidationException($"Invalid sort field '{field}'."),
             })
             .SetCursorPagination(payload.Page)
-            .RunAsync(x => Itinerary.ToDto(x), ct);
+            .RunAsync(x => new ItineraryDto
+            {
+                Id = x.Id,
+                TripId = x.TripId,
+                Title = x.Title,
+                Description = x.Description,
+                ExpectedPrice = x.ExpectedPrice,
+                Day = x.Day,
+                ProfilePicture = x.User!.ProfilePhotoUrl,
+                CreatedBy = x.User!.Id
+            }, ct);
 
         return res;
     }

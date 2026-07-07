@@ -5,14 +5,14 @@ app-member-form {
 }
 
 .crew-panel {
-	width: 400px;
+	width: 564px;
 	flex: 1;
 	box-sizing: border-box;
 	background-color: var(--mat-sys-primary-container);
 	border: 2px solid var(--mat-sys-on-primary-container);
 	border-radius: 25px;
 	padding: 40px;
-	min-height: 280px;
+	min-height: 360px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -66,24 +66,38 @@ app-member-form {
 }
 
 .crew-grid {
-	display: grid;
-	row-gap: 28px;
-	column-gap: 65px;
-	justify-content: space-between;
+	margin-top: 10px;
+	width: 90%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 65px;
+	justify-content: flex-start;
+	margin-left: 30px;
 }
 
 .crew-card {
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	flex-direction: row;
 	align-items: center;
 	gap: 12px;
+	margin-right: 0;
+}
+
+.dashboard-crew-grid{
+	margin-left: 110px;
+	gap: 30px;
+	margin-top: 10px;
+	width: 70%;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 }
 
 .name-and-delete {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 }
 
 .del-btn {
@@ -106,9 +120,10 @@ app-member-form {
 .crew-info {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
+	align-items: stretch;
 	justify-content: flex-start;
 	gap: 3px;
+	min-width: 0;
 }
 
 .avatar {
@@ -121,6 +136,7 @@ app-member-form {
 	align-items: center;
 	justify-content: center;
 	overflow: hidden;
+	cursor: pointer;
 }
 
 .avatar-img {

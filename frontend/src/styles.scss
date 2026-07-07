@@ -73,6 +73,15 @@
 	text-align: center;
 }
 
+.custom-search-panel .mat-mdc-option {
+	position: relative !important;
+	overflow: visible !important;
+}
+
+.custom-search-panel .add-friend-btn .mat-icon {
+	color: var(--mat-sys-on-primary) !important;
+}
+
 .mat-mdc-form-field {
 
 	mat-icon {
@@ -136,6 +145,27 @@
 	}
 }
 
+// Dropdown selection design
+.mat-mdc-select-panel {
+	background-color: var(--mat-sys-primary-container) !important;
+	border-radius: 0px 0px 25px 25px !important;
+
+	.mdc-list-item__primary-text {
+		color: var(--mat-sys-on-primary) !important;
+	}
+
+	.mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after {
+		color: var(--mat-sys-on-primary-container) !important;
+	}
+}
+
+.mat-mdc-select-value-text {
+	color: var(--mat-sys-on-primary) !important;
+}
+
+.mat-mdc-select-arrow svg {
+	fill: var(--mat-sys-on-primary-container) !important;
+}
 
 
 

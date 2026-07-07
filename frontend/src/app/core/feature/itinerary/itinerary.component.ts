@@ -13,15 +13,17 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CustomScrollbarComponent } from '../../layout/custom-scrollbar/custom-scrollbar.component';
-import { ItineraryService } from './services/itinerary.service';
-import { ItineraryDto } from './dtos/itinerary.dto';
-import { TripService } from '../plan-a-trip/services/trip.service';
+import { CustomScrollbarComponent } from '../../../shared/custom-scrollbar/custom-scrollbar.component';
+import { ItineraryService } from '../../logic/services/itinerary.service';
+import { TripService } from '../../logic/services/trip.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatError } from '@angular/material/form-field';
 import { TranslocoModule } from '@jsverse/transloco';
 import { SessionService } from '../../logic/services/session.service';
-import { MeDto } from '../auth/dtos/auth.dto';
+import { ItineraryDto } from '../../logic/dtos/itinerary.dto';
+import { TripDto } from '../../logic/dtos/trip.dto';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
 
 @Component({
 	selector: 'app-itinerary',
@@ -42,16 +44,23 @@ export default class ItineraryComponent {
 	private readonly formBuilder = inject(FormBuilder);
 	private readonly authService = inject(SessionService);
 
+	protected readonly getUserAvatarUrl = getUserAvatarUrl;
+
 	protected totalPrice = signal<number>(0);
 	public totalPriceChanged = output<number>(); //the channel to send the totalPrice to the main component
 
-	public isAdmin = input.required<boolean>();
+	public isAdmin = input<boolean>(false);
+
+	protected readonly dialogData = inject<{ itinerary: TripDto; showAddButton: boolean, profileRoute: boolean, showAvatar: boolean, showDeleteButton: boolean }>(
+		MAT_DIALOG_DATA,
+		{ optional: true }
+	);
 
 	protected loggedUserId = this.authService?.me()?.id;
 
-	readonly tripId = toSignal(
-		inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('id')))),
-		{ initialValue: 0 },
+	readonly tripId = this.dialogData ? signal<number>(this.dialogData.itinerary.id) : toSignal(
+		inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('id') || 0))),
+		{ initialValue: 0 }
 	);
 
 	// Signals can't do async work directly. toObservable() lets us pipe the signal
@@ -123,7 +132,8 @@ export default class ItineraryComponent {
 				),
 			)
 			.subscribe((res) => {
-				this.items.set(res.data?.content ?? [])
+				console.log(res.data?.content);
+				this.items.set(res.data?.content ?? []);
 			});
 
 		effect(() => {

@@ -52,10 +52,14 @@ public sealed class UserModel(AppDbContext db)
             DisplayName = dto.Username,
             PasswordHash = passwordHash,
             OauthProvider = dto.OAuthProvider ?? "none",
+			OauthId = dto.OAuthId,
+			ProfilePhotoUrl = dto.ProfilePhotoUrl
         };
-
+		
         db.Users.Add(user);
         await db.SaveChangesAsync(ct);
+
+		
         return User.ToDto(user);
     }
 
@@ -93,16 +97,25 @@ public sealed class UserModel(AppDbContext db)
 
         if (dto.Email is not null) user.Email = dto.Email;
         if (dto.Username is not null) user.Username = dto.Username;
+		if (dto.Password is not null) user.PasswordHash = new BCryptPasswordHasher().Hash(dto.Password);
         if (dto.DisplayName is not null) user.DisplayName = dto.DisplayName;
-        user.ProfilePhotoUrl = dto.ProfilePhotoUrl;
+		if (dto.ProfilePhotoPath is not null && dto.ProfilePhotoPath != user.ProfilePhotoUrl) user.ProfilePhotoUrl = dto.ProfilePhotoPath;
         user.Bio = dto.Bio;
         user.UpdatedAt = DateTime.UtcNow;
+
 
         db.Users.Update(user);
         await db.SaveChangesAsync(ct);
 
         return User.ToDto(user);
     }
+
+	public async Task UpdateProfilePhotoAsync(int id, string? profilePhotoUrl, CancellationToken ct = default)
+	{
+	    await db.Users
+	        .Where(u => u.Id == id)
+	        .ExecuteUpdateAsync(s => s.SetProperty(u => u.ProfilePhotoUrl, profilePhotoUrl), ct);
+	}
 
     public async Task<UserDto?> GetByEmail(string email, CancellationToken ct = default)
     {
@@ -144,8 +157,39 @@ public sealed class UserModel(AppDbContext db)
         return null;
     }
 
+	public async Task<TripStatCardsDto> GetTripStatus(int userId, CancellationToken ct = default)
+	{
+		var tripIds = await db.TripMembers
+		.Where(tm => tm.UserId == userId)
+		.Select(tm => tm.TripId)
+		.Distinct()
+		.ToListAsync(ct);
+		var today = DateOnly.FromDateTime(DateTime.Today);
+		var startOfYear = new DateOnly(today.Year, 1, 1);
+		var endOfYear = new DateOnly(today.Year, 12, 31);
+		var trips = await db.Trips
+			.Where(t => tripIds.Contains(t.Id) && t.StartDate >= startOfYear && t.StartDate <= endOfYear)
+			.ToListAsync(ct);
+		var nbTrips = trips.Count;
+		var closestTrip = await db.Trips
+			.Where(t => tripIds.Contains(t.Id) && t.StartDate >= today)
+			.OrderBy(t => t.StartDate)
+			.Select(t => t.StartDate)
+			.FirstOrDefaultAsync(ct);
+		var closestTripDays = closestTrip == default
+        ? -1
+        : closestTrip.DayNumber - today.DayNumber;
+
+		return new TripStatCardsDto
+		{
+			TripsLeftThisYear = nbTrips,
+			DaysUntilNextTrip = closestTripDays
+		};
+	}
+
     public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
     {
+
         var rows = await db.Users.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
         return rows > 0;
     }

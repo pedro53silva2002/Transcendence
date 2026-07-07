@@ -67,23 +67,24 @@
 		}
 	}
 
-    .mdc-evolution-chip__cell,
-    .mdc-evolution-chip__action,
-    .mat-mdc-chip-focus-overlay {      
-        &::before,
-        &::after {
-            border: none !important;
-        }
-    }
+	.mdc-evolution-chip__cell,
+	.mdc-evolution-chip__action,
+	.mat-mdc-chip-focus-overlay {
 
-    .mat-mdc-chip-row {
-        .mdc-evolution-chip__text-label {
-            color: var(--mat-sys-on-primary) !important;
-        }
-		
-        border: 2px solid color-mix(in srgb, var(--mat-sys-on-primary) 40%, transparent) !important;
-        border-radius: 20px !important;
-    }
+		&::before,
+		&::after {
+			border: none !important;
+		}
+	}
+
+	.mat-mdc-chip-row {
+		.mdc-evolution-chip__text-label {
+			color: var(--mat-sys-on-primary) !important;
+		}
+
+		border: 2px solid color-mix(in srgb, var(--mat-sys-on-primary) 40%, transparent) !important;
+		border-radius: 20px !important;
+	}
 }
 
 .privacy-container {
@@ -97,3 +98,4 @@
 		margin-left: 10px;
 	}
 }
+

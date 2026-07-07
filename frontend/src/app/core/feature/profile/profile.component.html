@@ -1,2 +1,52 @@
-<p>profile works!</p>
+<div class="main-container">
+	<div class="header">
+		<div class="left-details">
+			@if (visitedUser(); as currentUser) {
+			<div class="avatar" [attr.aria-label]="currentUser.displayName" role="img">
+				@if (currentUser.profilePhotoUrl) {
+				<img [src]="getUserAvatarUrl(currentUser.profilePhotoUrl)" [alt]="currentUser.displayName" [width]="84"
+					[height]="84" class="avatar-img" referrerpolicy="no-referrer" />
+				} @else {
+				<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
+				}
+			</div>
+			<div class="name-and-description">
+				<h2>{{ currentUser.displayName }}</h2>
+				<p>{{ currentUser.bio }}</p>
+				<button mat-button (click)="handleButtonFunction()" class="tertiary-btn profile-btn">{{ buttonLabel() |
+					transloco }}</button>
+			</div>
+			}
+		</div>
+		<div class="right-details">
+			<app-stat-cards [id]="visitedUser().id" [refreshTrigger]="statsRefresh()"></app-stat-cards>
+		</div>
+	</div>
+	@if (visitedCountries().length > 0) {
+	<div class="countries-section">
+		<h1>{{ 'profile.countries-section-title' | transloco }}</h1>
+		<div class="list-of-countries">
+			@for (visitedCountry of visitedCountries(); track visitedCountry.id) {
+			<app-visited-country-card [country]="visitedCountry.country"
+				[isOwnProfile]="isOwnProfile()" (countryRemoved)="onCountryRemoved()"></app-visited-country-card>
+			}
+		</div>
+	</div>
+	}
+	@if (itineraries().length > 0) {
+	<div class="my-itineraries-section">
+		<h1>{{ 'profile.itineraries-section-title' | transloco }}</h1>
+		<div class="list-of-itineraries">
+			@for (itinerary of itineraries(); track itinerary.id) {
+			<app-profile-itinerary-card [itinerary]="itinerary"></app-profile-itinerary-card>
+			}
+		</div>
+	</div>
+	}
+	@if (visitedCountries().length === 0 && itineraries().length === 0) {
+		<div class="empty-state">
+			<p>{{ 'profile.empty-state' | transloco }}</p>
+		</div>
+	}
 
+</div>
