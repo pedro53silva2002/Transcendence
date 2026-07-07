@@ -114,4 +114,9 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
             return NoContent();
         }
     }
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult<AuthResponseDto>> Refresh([FromBody] RefreshTokenRequestDto dto, CancellationToken ct)
+        => await service.Refresh(dto, ct);
+
 }
