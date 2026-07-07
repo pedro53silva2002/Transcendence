@@ -38,7 +38,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       const isLoginEndpoint = req.url.includes('/auth/login') || req.url.includes('/login');
       const isSessionCheck = req.url.includes('/auth/me') || req.url.includes('/me');
 
-      if ((err.status === 401 || err.status === 403) && !isLoginEndpoint && !isSessionCheck) {
+      // NOTE: 401s are owned by jwtInterceptor, which attempts a token refresh
+      // and only clears the session if that refresh fails. Handling 401 here too
+      // would tear down the session before the refresh gets a chance to run.
+      if (err.status === 403 && !isLoginEndpoint && !isSessionCheck) {
         sessionService.clearSession();
         router.navigate(['/']);
       }

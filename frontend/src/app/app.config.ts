@@ -20,7 +20,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([jwtInterceptor, loadingInterceptor, errorInterceptor])),
+    // Order matters: interceptors run top-down on the way out and the error
+    // propagates back bottom-up. jwtInterceptor must be innermost so its 401
+    // refresh handling runs BEFORE errorInterceptor can react to the 401.
+    provideHttpClient(withInterceptors([loadingInterceptor, errorInterceptor, jwtInterceptor])),
 
     provideAppInitializer(() => {
       const auth = inject(SessionService);
