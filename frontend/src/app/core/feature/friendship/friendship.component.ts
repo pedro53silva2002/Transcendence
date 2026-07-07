@@ -8,77 +8,68 @@ import { MatButtonModule } from '@angular/material/button';
 import { TranslocoModule } from '@jsverse/transloco';
 import { FriendRequestService } from '../../logic/services/friend-request.service';
 import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-friendship',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    ReactiveFormsModule,
-    MatIconModule,
-    MatButtonModule,
-    TranslocoModule,
-  ],
-  templateUrl: './friendship.component.html',
-  styleUrl: './friendship.component.scss',
+	selector: 'app-friendship',
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [
+		ReactiveFormsModule,
+		MatIconModule,
+		MatButtonModule,
+		TranslocoModule,
+		RouterLink
+	],
+	templateUrl: './friendship.component.html',
+	styleUrl: './friendship.component.scss',
 })
 export default class FriendshipComponent implements OnInit {
-  private readonly friendshipService = inject(FriendshipService);
-  private readonly friendRequestService = inject(FriendRequestService);
+	private readonly friendshipService = inject(FriendshipService);
+	private readonly friendRequestService = inject(FriendRequestService);
 
-  readonly friends = signal<FriendDto[]>([]);
-  readonly pendingRequests = signal<FriendRequestDto[]>([]);
-  readonly searchControl = new FormControl('');
-  readonly searchTerm = signal('');
-  readonly showRequests = signal(false);
+	readonly friends = signal<FriendDto[]>([]);
+	readonly pendingRequests = signal<FriendRequestDto[]>([]);
+	readonly showRequests = signal(false);
 
-  protected readonly getUserAvatarUrl = getUserAvatarUrl;
+	protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
-  readonly pendingRequests$ = computed(() =>
-    this.pendingRequests().filter(r => r.status === 'Pending'),
-  );
+	readonly pendingRequests$ = computed(() =>
+		this.pendingRequests().filter(r => r.status === 'Pending'),
+	);
 
-  readonly pendingCount = computed(() => this.pendingRequests$().length);
+	readonly pendingCount = computed(() => this.pendingRequests$().length);
 
-  readonly filteredFriends = computed<FriendDto[]>(() => {
-    const term = this.searchTerm().toLowerCase().trim();
-    return this.friends().filter(
-      f => !term || f.username.toLowerCase().includes(term),
-    );
-  });
+	ngOnInit(): void {
+		this.friendshipService.getAll().subscribe({
+			next: res => {
+				this.friends.set(res.data ?? []);
+			},
+		});
 
-  ngOnInit(): void {
-    this.friendshipService.getAll().subscribe({
-      next: res => {
-        this.friends.set(res.data ?? []);
-      },
-    });
+		this.friendRequestService.getAll().subscribe({
+			next: res => this.pendingRequests.set(res.data ?? []),
+			error: () => { },
+		});
+	}
 
-    this.friendRequestService.getAll().subscribe({
-      next: res => this.pendingRequests.set(res.data ?? []),
-      error: () => {},
-    });
+	removeFriend(friendId: number): void {
+		this.friendshipService.delete(friendId).subscribe(() => {
+			this.friends.update(list => list.filter(f => f.friendId !== friendId));
+		});
+	}
 
-    this.searchControl.valueChanges.subscribe(v => this.searchTerm.set(v ?? ''));
-  }
+	acceptRequest(requestId: number): void {
+		this.friendRequestService.accept(requestId).subscribe(() => {
+			this.pendingRequests.update(list => list.filter(r => r.senderId !== requestId));
+			this.friendshipService.getAll().subscribe({
+				next: res => this.friends.set(res.data ?? []),
+			});
+		});
+	}
 
-  removeFriend(friendId: number): void {
-    this.friendshipService.delete(friendId).subscribe(() => {
-      this.friends.update(list => list.filter(f => f.friendId !== friendId));
-    });
-  }
-
-  acceptRequest(requestId: number): void {
-    this.friendRequestService.accept(requestId).subscribe(() => {
-      this.pendingRequests.update(list => list.filter(r => r.senderId !== requestId));
-      this.friendshipService.getAll().subscribe({
-        next: res => this.friends.set(res.data ?? []),
-      });
-    });
-  }
-
-  denyRequest(requestId: number): void {
-    this.friendRequestService.delete(requestId).subscribe(() => {
-      this.pendingRequests.update(list => list.filter(r => r.senderId !== requestId));
-    });
-  }
+	denyRequest(requestId: number): void {
+		this.friendRequestService.delete(requestId).subscribe(() => {
+			this.pendingRequests.update(list => list.filter(r => r.senderId !== requestId));
+		});
+	}
 }
