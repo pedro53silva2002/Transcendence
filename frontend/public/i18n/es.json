@@ -1,6 +1,6 @@
 {
 	"auth": {
-		"register": "Registro",
+		"register": "Registrarse",
 		"login": "Acceso",
 		"password": "contraseña",
 		"google": "Iniciar Sesión con",
@@ -33,9 +33,9 @@
 		"intro": "¿Listo para tu aventura?"
 	},
 	"stats": {
-		"countries": "Paises Visitados",
-		"trips": "Viajes Este Ano",
-		"countdown": "Dias Para El Viaje"
+		"countries": "Países Visitados",
+		"trips": "Viajes Este Año",
+		"countdown": "Días Para El Viaje"
 	},
 	"plan-a-trip": {
 		"title": "Planifica tu viaje",
@@ -71,11 +71,17 @@
 		"description": "descripción",
 		"delete-button": "Eliminar Cuenta",
 		"delete-user-title": "¿Estás seguro?",
-		"delete-user-message": "If confirmas esta decisión, tu cuenta será eliminada permanentemente.",
+		"delete-user-message": "Si confirmas esta decisión, tu cuenta será eliminada permanentemente.",
+		"delete-friend-message": "Si confirmas esta decisión, ya no seréis amigos.",
 		"description-error": "No puede tener más de 150 caracteres.",
 		"name-error": "Debes definir un nombre de perfil.",
 		"add-friend-btn": "Añadir Amigo",
-		"edit-btn": "Editar Perfil"
+		"remove-friend-btn": "Eliminar amigo",
+		"edit-btn": "Editar Perfil",
+		"cancel-request-btn": "Cancelar petición",
+		"accept-request-btn": "Aceptar petición",
+		"delete-friend-request-message": "Si confirmas esta decisión, la solicitud de amistad será cancelada.",
+		"empty-state": "Este usuario todavía no ha estado en ningún lugar."
 	},
 	"trip-dashboard": {
 		"delete-trip-title": "¿Estás seguro?",
@@ -115,9 +121,9 @@
 		}
 	},
 	"crew": {
-		"addMember": "Añadir Miembro",
+		"addMember": "Añadir miembro",
 		"allFriendsAdded": "Todos tus amigos ya han sido añadidos al equipo.",
-		"noMembers": "Sin miembros todavía",
+		"noMembers": "Aún sin miembros",
 		"roleFor": "Rol de {{ name }}",
 		"role": {
 			"member": "Miembro",
@@ -159,7 +165,7 @@
 		"stops": "Paradas del itinerario",
 		"empty": "Sin paradas — toca + para agregar una.",
 		"remove": "Eliminar {{ title }}",
-		"day": "DIA",
+		"day": "DÍA",
 		"dayNav": "Navegación por día",
 		"prevDay": "Día anterior",
 		"nextDay": "Día siguiente",
