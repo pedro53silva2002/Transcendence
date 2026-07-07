@@ -1,4 +1,4 @@
-<section class="crew-panel" [attr.aria-label]="'trips.members.title' | transloco">
+<section class="crew-panel" [class.dashboard-crew-panel]="isDashboardRoute()" [attr.aria-label]="'trips.members.title' | transloco">
 	@if (!isDashboardRoute()) {
 	<div class="crew-header">
 		<h2 class="crew-title">{{ 'trips.members.title' | transloco }}</h2>
