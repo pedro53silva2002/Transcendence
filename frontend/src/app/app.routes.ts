@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { UserDashboardComponent } from './core/layout/user-dashboard/user-dashboard.component';
 import { LandingPageComponent } from './core/layout/landing-page/landing-page.component';
 import { guestGuard } from './core/logic/services/guestGuard.service';
 import { AuthCallbackComponent } from './core/feature/auth/auth-callback/auth-callback.component';
@@ -11,6 +10,7 @@ import { tripMemberGuard } from './core/logic/guards/trip-member-guard';
 import ProfileComponent from './core/feature/profile/profile.component';
 import FriendshipComponent from './core/feature/friendship/friendship.component';
 import { authGuard } from './core/logic/services/authGuard.service';
+import { UserDashboardComponent } from './core/feature/user-dashboard/user-dashboard.component';
 
 export const routes: Routes = [
   {
