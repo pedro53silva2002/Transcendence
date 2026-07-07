@@ -31,7 +31,7 @@ import {
 	of,
 	switchMap,
 } from 'rxjs';
-import { LoginComponent } from '../login/login.component';
+import { LoginComponent } from '../../feature/auth/login/login.component';
 import { RegisterComponent } from '../register/register.component';
 import { TranslocoModule } from '@jsverse/transloco';
 import { LanguageButtonComponent } from '../../../shared/language-button/language-button.component';

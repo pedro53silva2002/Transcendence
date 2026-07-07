@@ -2,12 +2,12 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { TranslocoModule } from '@jsverse/transloco';
 import { MatButtonModule } from '@angular/material/button';
 import { DashboardCardComponent } from '../../../shared/dashboard-card/dashboard-card.component';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { SessionService } from '../../logic/services/session.service';
 import { MeDto } from '../../logic/dtos/auth.dto';
-import { FooterComponent } from '../footer/footer.component';
 import { RouterModule } from '@angular/router';
 import { StatCardsComponent } from "../../../shared/stat-cards/stat-cards.component";
+import { NavbarComponent } from '../../layout/navbar/navbar.component';
+import { FooterComponent } from '../../layout/footer/footer.component';
 
 @Component({
   selector: 'app-user-dashboard',

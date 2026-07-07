@@ -40,13 +40,13 @@ import {
   timer,
 } from 'rxjs';
 import { TranslocoModule } from '@jsverse/transloco';
-import { AuthService as ApiAuthService } from '../../logic/services/auth.service';
-import { TokenStorageService } from '../../logic/services/token-storage.service';
-import { CloseButtonComponent } from '../../../shared/close-button/close-button.component';
-import { GoogleAuthButtonComponent } from '../../auth/google-auth-button/google-auth-button.component';
-import { UserService } from '../../logic/services/user.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SessionService } from '../../logic/services/session.service';
+import { CloseButtonComponent } from '../../../../shared/close-button/close-button.component';
+import { GoogleAuthButtonComponent } from '../google-auth-button/google-auth-button.component';
+import { SessionService } from '../../../logic/services/session.service';
+import { UserService } from '../../../logic/services/user.service';
+import { TokenStorageService } from '../../../logic/services/token-storage.service';
+import { AuthService } from '../../../logic/services/auth.service';
 
 @Component({
   standalone: true,
@@ -68,7 +68,7 @@ import { SessionService } from '../../logic/services/session.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent implements OnInit {
-  private readonly apiAuthService = inject(ApiAuthService);
+  private readonly apiAuthService = inject(AuthService);
   private readonly sessionService = inject(SessionService);
   private readonly tokenStorage = inject(TokenStorageService);
   private readonly router = inject(Router);
