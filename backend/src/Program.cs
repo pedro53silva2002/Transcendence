@@ -86,7 +86,8 @@ try
 			policy.WithOrigins(allowedOrigins)
 				  .AllowAnyHeader()
 				  .AllowAnyMethod()
-				  .AllowCredentials();
+				  .AllowCredentials()
+				  .WithExposedHeaders("Token-Expired");
 		});
 	});
 
