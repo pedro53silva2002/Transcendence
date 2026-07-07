@@ -27,7 +27,8 @@ app-member-form {
 }
 
 .crew-title {
-	font-family: 'BBH Bogle', sans-serif;
+	font-family: 'Tabloid', sans-serif;
+	// font-weight: 1000;
 	font-size: 1.1rem;
 	opacity: 0.8;
 	text-transform: uppercase;
@@ -210,7 +211,7 @@ mat-icon.avatar-icon {
 .crew-title-dashboard {
 	font-size: 26px;
 	font-weight: 400;
-	font-family: 'BBH Hegarty';
+	font-family: 'Thicker Black';
 	letter-spacing: 0.2px;
 	color: var(--mat-sys-on-primary);
 	margin: 0;

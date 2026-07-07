@@ -3,8 +3,20 @@
 @include mat.core();
 @import url('https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=BBH+Hegarty&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=BBH+Bogle&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
+
+@font-face {
+	font-family: 'Thicker Black';
+	src: url('/fonts/TT-Neoris-Trial-Black.ttf') format('truetype');
+	font-display: swap;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Tabloid';
+	src: url('/fonts/Tabloid Scuzzball.otf') format('truetype');
+	font-display: swap;
+	font-style: normal;
+}
 
 $my-theme: mat.define-theme((
   color: (

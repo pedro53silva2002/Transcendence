@@ -21,7 +21,7 @@
 	width: 100%;
 
 	h1 {
-		font-family: "BBH Hegarty";
+		font-family: "Thicker Black";
 		font-weight: 400;
 		font-size: 60px;
 		margin-bottom: 0;
@@ -30,7 +30,7 @@
 	}
 
 	h2 {
-		font-family: "BBH Bogle";
+		font-family: "Tabloid";
 		font-weight: 400;
 		font-size: 32px;
 		color: var(--mat-sys-on-primary);
@@ -106,7 +106,7 @@
 }
 
 .budget-numbers {
-	font-family: "BBH Bogle";
+	font-family: "Tabloid";
 	z-index: 2;
 	display: flex;
 	align-items: center;
@@ -145,7 +145,7 @@
 	display: flex;
 	align-items: flex-end;
 	color: var(--mat-sys-primary);
-	font-family: "BBH Bogle";
+	font-family: "Tabloid";
 	position: relative;
 	margin-bottom: 50px;
 }
