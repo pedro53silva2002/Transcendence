@@ -166,11 +166,4 @@ export class MemberFormComponent {
 		}
 		this.tripState.removeMember(userId);
 	}
-
-	protected canDeleteMember(memberUserId: number): boolean {
-		if (!this.isAdmin())
-			return false;
-
-		return memberUserId !== this.tripCreatorUserId();
-	}
 }

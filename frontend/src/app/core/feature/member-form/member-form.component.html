@@ -40,7 +40,7 @@
 				<div class="crew-info">
 					<div class="name-and-delete">
 						<span class="crew-username">{{ member.username }}</span>
-						@if (canDeleteMember(member.userId) && !isSoleAdmin(member)) {
+						@if (isAdmin() && !isSoleAdmin(member)) {
 						<button type="button" class="del-btn" (click)="removeMember(member.id, member.userId)">
 							<mat-icon class="delete-icon">close</mat-icon>
 						</button>
