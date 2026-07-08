@@ -176,7 +176,7 @@ export class EditProfileComponent {
 			email: user.email,
 			username: user.username,
 			displayName: this.editProfileForm.getRawValue().displayName ?? user.displayName,
-			password: this.editProfileForm.getRawValue().password ? this.editProfileForm.getRawValue().password : null,
+			password: this.editProfileForm.getRawValue().newPassword ? this.editProfileForm.getRawValue().newPassword : null,
 			bio: this.editProfileForm.getRawValue().description ?? user.bio,
 			profilePhotoUrl: avatarValue instanceof File ? avatarValue : null
 		}
