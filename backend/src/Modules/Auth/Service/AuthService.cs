@@ -122,7 +122,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
 		{
             string existingProfilePhotoUrl = existingOAuthUser.ProfilePhotoUrl;
 
-            if (existingProfilePhotoUrl != null && existingProfilePhotoUrl[0] != '/')
+            if (existingProfilePhotoUrl == null /*&& existingProfilePhotoUrl[0] != '/'*/)
 			    await userService.UpdateProfilePhotoAsync(existingOAuthUser.Id, dto.ProfilePhotoUrl, ct);
             return await BuildAuthResponse(existingOAuthUser, [], ct);
 		}
@@ -132,7 +132,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
 		{
             string existingProfilePhotoUrl = existingEmailUser.ProfilePhotoUrl;
 
-            if (existingProfilePhotoUrl != null && existingProfilePhotoUrl[0] != '/')
+            if (existingProfilePhotoUrl == null /*&& existingProfilePhotoUrl[0] != '/'*/)
 			    await userService.UpdateProfilePhotoAsync(existingEmailUser.Id, dto.ProfilePhotoUrl, ct);
             return await BuildAuthResponse(existingEmailUser, [], ct);
 		}
