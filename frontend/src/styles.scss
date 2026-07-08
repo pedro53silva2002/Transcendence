@@ -163,16 +163,5 @@
 	fill: var(--mat-sys-on-primary-container) !important;
 }
 
-//changing the tooltip design
-.mat-mdc-tooltip .mdc-tooltip__surface {
-	background-color: var(--mat-sys-error) !important;
-	opacity: 0.8 !important;
-	color: var(--mat-sys-primary-container) !important;
-	font-size: 10px !important;
-	border-radius: 20px !important;
-	padding: 6px 12px !important;
-}
-
-
 
 

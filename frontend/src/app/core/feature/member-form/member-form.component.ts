@@ -22,7 +22,6 @@ import { Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../logic/services/session.service';
 import { TripMemberService } from '../../logic/services/member.service';
 import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
 	selector: 'app-member-form',
@@ -34,7 +33,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 		TranslocoModule,
 		CustomScrollbarComponent,
 		RouterLink,
-		MatTooltipModule
 	],
 	templateUrl: './member-form.component.html',
 	styleUrl: './member-form.component.scss',

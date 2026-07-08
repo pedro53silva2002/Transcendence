@@ -40,16 +40,15 @@
 				<div class="crew-info">
 					<div class="name-and-delete">
 						<span class="crew-username">{{ member.username }}</span>
-						@if (canDeleteMember(member.userId)) {
+						@if (canDeleteMember(member.userId) && !isSoleAdmin(member)) {
 						<button type="button" class="del-btn" (click)="removeMember(member.id, member.userId)">
 							<mat-icon class="delete-icon">close</mat-icon>
 						</button>
 						}
 					</div>
 					@if (showRole()) {
-					@if (isAdmin() || !isDashboardRoute()) {
-					<mat-select class="role-select" [value]="member.role" [class.role-disabled]="isSoleAdmin(member)" [disabled]="isSoleAdmin(member)"
-						[matTooltip]="isSoleAdmin(member) ? ('crew.lastAdminTooltip' | transloco ) : ''"
+					@if ((isAdmin() && !isSoleAdmin(member)) || !isDashboardRoute()) {
+					<mat-select class="role-select" [value]="member.role"
 						(valueChange)="updateRole(member.id, member.userId, $event)">
 						<mat-option value="Member">{{
 							'trips.members.role.member' | transloco
