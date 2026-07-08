@@ -77,7 +77,7 @@ public sealed class TripMembersModel(AppDbContext db)
 
 		var remainingAdmins = await CountAdminsAsync(member.TripId, member.Id, ct);
 		if (remainingAdmins == 0)
-			throw new SearchValidationException("The trip must always have at least one admin.");
+			throw new ValidationException("oneMember", "The trip must always have at least one admin.");
 	}
 
 	private async Task<T> ExecuteInSerializableTransactionAsync<T>(Func<Task<T>> action, CancellationToken ct)
