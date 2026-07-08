@@ -22,6 +22,7 @@ import { Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../logic/services/session.service';
 import { TripMemberService } from '../../logic/services/member.service';
 import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
 	selector: 'app-member-form',
@@ -32,7 +33,8 @@ import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
 		NgOptimizedImage,
 		TranslocoModule,
 		CustomScrollbarComponent,
-		RouterLink
+		RouterLink,
+		MatTooltipModule
 	],
 	templateUrl: './member-form.component.html',
 	styleUrl: './member-form.component.scss',
@@ -58,9 +60,23 @@ export class MemberFormComponent {
 
 	// members are stored in TripStateService so the dashboard can read the same list
 	public readonly members = computed(() => this.tripState.members());
-	protected readonly loading = signal(false);
 
-	public isAdmin = input<boolean>();
+	protected readonly adminCount = computed(() => 
+		this.members().filter((m) => m.role === 'Admin').length);
+
+	protected isSoleAdmin(member: TripMemberDto): boolean {
+		return member.role === 'Admin' && this.adminCount() === 1;
+	}
+
+	protected readonly isAdmin = computed(() => {
+		const me = this.sessionService.me();
+		if (!me)
+			return false;
+
+		const myMembership = this.members().find((m) => m.userId === me.id);
+		return myMembership?.role === 'Admin';
+	})
+
 
 	constructor() {
 
@@ -88,7 +104,6 @@ export class MemberFormComponent {
 				}
 			}
 			else {
-				this.loading.set(true);
 				this.memberService
 					.search(
 						{
@@ -105,8 +120,6 @@ export class MemberFormComponent {
 							if (this.tripState.trip()?.createdBy)
 								this.tripCreatorUserId.set(this.tripState.trip()?.createdBy ?? -1);
 						},
-						complete: () => this.loading.set(false),
-						error: () => this.loading.set(false),
 					});
 				}
 			});
@@ -130,6 +143,16 @@ export class MemberFormComponent {
 		userId: number,
 		role: 'Admin' | 'Member',
 	): void {
+
+		if (!this.isAdmin())
+			return; //to prevent the recently changed from admin to member to change again to admin
+
+		if (role === 'Member') {
+			const member = this.members().find((m) => m.userId === userId);
+			if (member && this.isSoleAdmin(member))
+				return; //to prevent from demoting the only admin
+		}
+
 		this.tripState.updateMemberRole(userId, role);
 
 		const tripId = this.tripId();

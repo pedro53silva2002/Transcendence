@@ -24,6 +24,7 @@ import { ItineraryDto } from '../../logic/dtos/itinerary.dto';
 import { TripDto } from '../../logic/dtos/trip.dto';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
+import { TripStateService } from '../../logic/services/trip-state.service';
 
 @Component({
 	selector: 'app-itinerary',
@@ -43,20 +44,30 @@ export default class ItineraryComponent {
 	private readonly tripService = inject(TripService);
 	private readonly formBuilder = inject(FormBuilder);
 	private readonly authService = inject(SessionService);
+	private readonly tripState = inject(TripStateService);
 
 	protected readonly getUserAvatarUrl = getUserAvatarUrl;
 
 	protected totalPrice = signal<number>(0);
 	public totalPriceChanged = output<number>(); //the channel to send the totalPrice to the main component
 
-	public isAdmin = input<boolean>(false);
-
 	protected readonly dialogData = inject<{ itinerary: TripDto; showAddButton: boolean, profileRoute: boolean, showAvatar: boolean, showDeleteButton: boolean }>(
 		MAT_DIALOG_DATA,
 		{ optional: true }
 	);
 
+	public readonly members = computed(() => this.tripState.members());
+
 	protected loggedUserId = this.authService?.me()?.id;
+
+	protected readonly isAdmin = computed(() => {
+			const me = this.authService.me();
+			if (!me)
+				return false;
+	
+			const myMembership = this.members().find((m) => m.userId === me.id);
+			return myMembership?.role === 'Admin';
+		})
 
 	readonly tripId = this.dialogData ? signal<number>(this.dialogData.itinerary.id) : toSignal(
 		inject(ActivatedRoute).paramMap.pipe(map((p) => Number(p.get('id') || 0))),

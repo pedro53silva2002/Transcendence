@@ -128,7 +128,9 @@
 	  "role": {
 		"member": "Membro",
 		"admin": "Admin"
-	  }
+	  },
+	  "lastAdminTooltip": "A viagem precisa de pelo menos 1 administrador.",
+	  "noPermission": "Já não tem permissão para alterar o cargo."
 	},
 	"my-trips": {
 	  "title": "As Minhas Viagens",
