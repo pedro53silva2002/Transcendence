@@ -267,8 +267,10 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
 	public async Task<TripStatCardsDto> GetTripStatus(int userId, CancellationToken ct = default)
 	{
 		var tripStatus = await userModel.GetTripStatus(userId, ct);
+		#pragma warning disable CS8603
 		if (tripStatus is null)
 			return null;
+		#pragma warning restore CS8603
 		return tripStatus;
 	}
 }
