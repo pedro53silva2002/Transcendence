@@ -392,7 +392,7 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 			&& tm.Role == TripMemberRole.Admin, ct);
 
 		if (!isAdmin)
-			throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
+			throw new ForbiddenException("You are not authorized to update this itinerary.");
 
 		if (dto.TripName is not null) trip.TripName = dto.TripName;
 		if (dto.Visibility != trip.Visibility) trip.Visibility = dto.Visibility;
@@ -503,7 +503,7 @@ public sealed class TripModel(AppDbContext db, IUserContext userContext, Friends
 
 		if (!isAdmin)
 		{
-			throw new UnauthorizedAccessException("You are not authorized to delete this Trip.");
+			throw new ForbiddenException("You are not authorized to delete this Trip.");
 		}
 
 		var rows = await db.Trips.Where(u => u.Id == id).ExecuteDeleteAsync(ct);
