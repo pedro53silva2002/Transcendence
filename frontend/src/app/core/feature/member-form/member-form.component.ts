@@ -1,14 +1,4 @@
-import { NgOptimizedImage } from '@angular/common';
-import {
-	ChangeDetectionStrategy,
-	Component,
-	computed,
-	effect,
-	inject,
-	input,
-	signal,
-	ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -29,7 +19,6 @@ import { getUserAvatarUrl } from '../../logic/utils/minio-url.util';
 		MatButtonModule,
 		MatIconModule,
 		MatSelectModule,
-		NgOptimizedImage,
 		TranslocoModule,
 		CustomScrollbarComponent,
 		RouterLink,
