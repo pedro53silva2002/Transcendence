@@ -11,12 +11,19 @@ using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Model;
 using Trippie.Modules.Travel.Model;
 using Trippie.Common.Services.Search.Model;
+using Trippie.Common.Services.Caching;
 
 namespace Trippie.Modules.Auth.Service;
 
-public sealed class AuthService(UserService userService, IJwtTokenService jwt, AppDbContext db, IOptions<JwtOptions> jwtOptions, TripModel tripModel)
+public sealed class AuthService(UserService userService,
+	IJwtTokenService jwt,
+	AppDbContext db,
+	IOptions<JwtOptions> jwtOptions,
+	TripModel tripModel,
+	ICachingService cacheService)
 {
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
+	private static string GetMeCacheKey(int userId, CancellationToken ct = default) => $"user:me:{userId}";
     public async Task<AuthResponseDto> Register(RegisterDto dto, CancellationToken ct = default)
     {
         if (dto.Username is null) throw new ValidationException("username", "Username can not be empty.");
@@ -40,31 +47,38 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
     public async Task<MeDto> GetMe(ClaimsPrincipal principal, CancellationToken ct = default)
     {
         var userId = principal.GetUserId() ?? throw new UnauthorizedException("User not authenticated");
-		var user = await userService.GetById(userId, ct) ?? throw new NotFoundException($"User with id {userId} not found.", userId);
-        var payload = new SearchPayload();
-        var tripsPage = await tripModel.GetTripsForUser(userId, ct);
-
-        var tripMemberships = tripsPage.Content
-		.Select(t => t.Members?.FirstOrDefault(m => m.UserId == userId))
-		.Where(m => m is not null)
-		.Select(m => new TripMembershipDto
+		
+		string cacheKey = GetMeCacheKey(userId, ct);
+		
+		return await cacheService.GetOrCreateAsync(cacheKey, async (ct) =>
 		{
-			TripId = m!.TripId,
-			Role = m!.Role.ToString()
-		})
-		.ToList();
+			var user = await userService.GetById(userId, ct) ?? throw new NotFoundException($"User with id {userId} not found.", userId);
 
-        var me = new MeDto
-        {
-            Id = userId,
-            Username = user.Username,
-            DisplayName = user.DisplayName,
-            Email = user.Email,
-            ProfilePhotoUrl = user.ProfilePhotoUrl,
-            Trips = tripMemberships
-        };
+        	var payload = new SearchPayload();
+        	var tripsPage = await tripModel.GetTripsForUser(userId, ct);
 
-        return me;
+        	var tripMemberships = tripsPage.Content
+			.Select(t => t.Members?.FirstOrDefault(m => m.UserId == userId))
+			.Where(m => m is not null)
+			.Select(m => new TripMembershipDto
+			{
+				TripId = m!.TripId,
+				Role = m!.Role.ToString()
+			})
+			.ToList();
+
+        	var me = new MeDto
+        	{
+        	    Id = userId,
+        	    Username = user.Username,
+        	    DisplayName = user.DisplayName,
+        	    Email = user.Email,
+        	    ProfilePhotoUrl = user.ProfilePhotoUrl,
+        	    Trips = tripMemberships
+        	};
+
+        	return me;
+		}, TimeSpan.FromMinutes(15), ct); //Caches for 15 minutes to reduce database load.
     }
 
     public async Task<AuthResponseDto> Login(LoginDto dto, CancellationToken ct = default)
@@ -76,6 +90,19 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
 
         string passwordHash = await userService.GetPasswordByUsername(dto.Username, ct) ?? throw new UnauthorizedException("Password not found.");
         if (!new BCryptPasswordHasher().Verify(dto.Password, passwordHash)) throw new UnauthorizedException("Invalid username or password.");
+
+		await cacheService.RemoveAsync(GetMeCacheKey(user.Id), ct);
+
+		var memberships = await db.TripMembers
+            .Where(m => m.UserId == user.Id)
+            .Select(m => new { m.TripId, m.Role })
+            .ToListAsync(ct);
+
+        var activeTrips = memberships.Select(m => new JwtTripClaim
+        {
+            TripId = m.TripId,
+            Role = m.Role.ToString()
+        }).ToList();
 
         var response = await BuildAuthResponse(user, [], ct);
 
@@ -96,11 +123,26 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
         var user = await userService.GetById(stored.UserId, ct)
             ?? throw new UnauthorizedException("User not found");
 
+		await cacheService.RemoveAsync(GetMeCacheKey(user.Id), ct);
+
+        var memberships = await db.TripMembers
+            .Where(m => m.UserId == user.Id)
+            .Select(m => new { m.TripId, m.Role })
+            .ToListAsync(ct);
+
+        var activeTrips = memberships.Select(m => new JwtTripClaim
+            {
+                TripId = m.TripId,
+                Role = m.Role.ToString()
+            }).ToList();
+
         return await BuildAuthResponse(user, [], ct);
     }
 
     public async Task Logout(int userId, string token, CancellationToken ct = default)
     {
+		await cacheService.RemoveAsync(GetMeCacheKey(userId), ct);
+
         if (!string.IsNullOrWhiteSpace(token))
             jwt.InvalidateToken(token);
         await db.RefreshTokens
@@ -124,6 +166,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             string existingProfilePhotoUrl = existingOAuthUser.ProfilePhotoUrl;
 			#pragma warning restore CS8600
 
+			await cacheService.RemoveAsync(GetMeCacheKey(existingOAuthUser.Id, ct));
             if (existingProfilePhotoUrl == null)
 			    await userService.UpdateProfilePhotoAsync(existingOAuthUser.Id, dto.ProfilePhotoUrl, ct);
             return await BuildAuthResponse(existingOAuthUser, [], ct);
@@ -136,6 +179,7 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
             string existingProfilePhotoUrl = existingEmailUser.ProfilePhotoUrl;
 			#pragma warning restore CS8600
 
+			await cacheService.RemoveAsync(GetMeCacheKey(existingEmailUser.Id, ct));
             if (existingProfilePhotoUrl == null)
 			    await userService.UpdateProfilePhotoAsync(existingEmailUser.Id, dto.ProfilePhotoUrl, ct);
             return await BuildAuthResponse(existingEmailUser, [], ct);
