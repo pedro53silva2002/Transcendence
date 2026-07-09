@@ -1,8 +1,8 @@
 .main-container {
 	width: 70%;
 	margin: 0 auto;
-	margin-top: 100px;
-	min-height: 685px;
+	margin-top: 10vh;
+	min-height: 73vh;
 }
 
 .avatar {
@@ -39,11 +39,14 @@ mat-icon.avatar-icon {
 	align-items: center;
 	justify-content: space-between;
 	margin-bottom: 60px;
+	flex-wrap: wrap;
+	gap: 20px;
 }
 
 .left-details {
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 	gap: 26px;
 
 	.name-and-description {
@@ -52,7 +55,7 @@ mat-icon.avatar-icon {
 			font-family: "Thicker Black";
 			color: var(--mat-sys-on-primary);
 			font-weight: 200;
-			font-size: 26px;
+			font-size: 166%;
 			margin-bottom: 5px;
 			margin-top: 0;
 		}
@@ -73,12 +76,13 @@ mat-icon.avatar-icon {
 
 .countries-section,
 .my-itineraries-section {
-	margin-top: 55px;
+	margin-top: 2vh;
+	margin-bottom: 5%;
 
 	h1 {
 		font-family: "Tabloid";
 		font-weight: 200;
-		font-size: 25px;
+		font-size: 125%;
 		color: var(--mat-sys-on-primary);
 		opacity: 0.8;
 	}
@@ -93,7 +97,7 @@ mat-icon.avatar-icon {
 .list-of-itineraries {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 70px;
+	gap: 12px 82px;
 }
 
 @media (max-width: 1254px) {

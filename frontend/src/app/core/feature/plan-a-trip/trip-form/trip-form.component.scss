@@ -4,6 +4,7 @@
 	justify-content: center;
 	align-items: start;
 	gap: 25px;
+	width: 100%;
 
 	::placeholder {
 		color: var(--mat-sys-on-primary) !important;
@@ -44,7 +45,6 @@
 	}
 
 	.mat-date-range-input-wrapper {
-		// width: 100% !important;
 		flex-grow: 1;
 	}
 

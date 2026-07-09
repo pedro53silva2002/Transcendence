@@ -8,6 +8,7 @@
 nav {
 	width: 70%;
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-between;
 	margin: 0 auto; //to center the nav in the page
@@ -24,13 +25,15 @@ nav {
 .logo-container h1.logo {
 	opacity: 1;
 	cursor: pointer;
+	font-size: 190%;
 }
 
 .buttons, .full-screen-buttons{
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: flex-end;
-	gap: 16px;
+	gap: 10px 15px;
 }
 
 .mat-icon {

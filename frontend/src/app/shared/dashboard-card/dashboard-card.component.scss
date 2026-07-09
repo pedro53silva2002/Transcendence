@@ -1,9 +1,8 @@
 .card-wrapper {
 	position: relative; 
-    width: 385px; // O tamanho máximo passa para o pai
-    border-radius: 25px; // Mantemos o raio aqui para o corte funcionar
-    overflow: hidden; // Garante que a imagem sobreposta também respeita os cantos arredondados
-	height: 430px; //+8 because of the borders
+    width: 138%; 
+    border-radius: 25px; 
+    overflow: hidden;
 	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 	&:hover {
 		cursor: pointer;
