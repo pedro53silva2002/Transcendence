@@ -2,8 +2,6 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { ErrorService } from '../services/error.service';
-import { SessionService } from '../services/session.service';
-import { Router } from '@angular/router';
 
 /**
  * HTTP interceptor that automatically converts all failed HTTP calls
@@ -29,22 +27,17 @@ import { Router } from '@angular/router';
  */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const errorService = inject(ErrorService);
-  const sessionService = inject(SessionService);
-  const router = inject(Router);
 
   return next(req).pipe(
     catchError((err) => {
-
-      const isLoginEndpoint = req.url.includes('/auth/login') || req.url.includes('/login');
-      const isSessionCheck = req.url.includes('/auth/me') || req.url.includes('/me');
-
       // NOTE: 401s are owned by jwtInterceptor, which attempts a token refresh
       // and only clears the session if that refresh fails. Handling 401 here too
       // would tear down the session before the refresh gets a chance to run.
-      if (err.status === 403 && !isLoginEndpoint && !isSessionCheck) {
-        sessionService.clearSession();
-        router.navigate(['/']);
-      }
+      //
+      // 403s are NOT a session problem — they mean the (validly authenticated)
+      // user isn't allowed to perform this specific action (e.g. not a trip
+      // admin). They must not clear the session or redirect; just surface the
+      // error so the caller can show it.
 
       const apiError = errorService.handle(err);
       return throwError(() => apiError);
