@@ -5,6 +5,7 @@ using Trippie.Common.Services.Search.Linq;
 using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Auth.Model;
+using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 
 namespace Trippie.Modules.Travel.Model;
 
@@ -44,7 +45,7 @@ public sealed class ItineraryModel(AppDbContext db, TripMembersModel tripMembers
         var isMember = await tripMembersModel.IsMemberAsync(userId, dto.TripId, ct);
 
         if (!isMember)
-            throw new UnauthorizedAccessException("You are not authorized to create an itinerary for this trip.");
+            throw new ForbiddenException("You are not authorized to create an itinerary for this trip.");
 
         var itinerary = new Itinerary
         {
@@ -118,7 +119,7 @@ public sealed class ItineraryModel(AppDbContext db, TripMembersModel tripMembers
 
         if (itinerary.CreatedBy != userId && !isAdmin)
         {
-            throw new UnauthorizedAccessException("You are not authorized to update this itinerary.");
+            throw new ForbiddenException("You are not authorized to update this itinerary.");
         }
 
         itinerary.Title = dto.Title;
@@ -143,7 +144,7 @@ public sealed class ItineraryModel(AppDbContext db, TripMembersModel tripMembers
 
         if (itinerary.CreatedBy != userId && !isAdmin)
         {
-            throw new UnauthorizedAccessException("You are not authorized to delete this itinerary.");
+            throw new ForbiddenException("You are not authorized to delete this itinerary.");
         }
 
         var deleted = await db.Itineraries.Where(i => i.Id == id)

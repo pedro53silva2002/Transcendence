@@ -1,4 +1,5 @@
-<section class="crew-panel" [class.dashboard-crew-panel]="isDashboardRoute()" [attr.aria-label]="'trips.members.title' | transloco">
+<section class="crew-panel" [class.dashboard-crew-panel]="isDashboardRoute()"
+	[attr.aria-label]="'trips.members.title' | transloco">
 	@if (!isDashboardRoute()) {
 	<div class="crew-header">
 		<h2 class="crew-title">{{ 'trips.members.title' | transloco }}</h2>
@@ -22,13 +23,14 @@
 	}
 
 	<app-custom-scrollbar>
-		<div class="crew-grid" [class.dashboard-crew-grid]="isDashboardRoute()" [style.grid-template-columns]="'repeat(' + columns() + ', 1fr)'">
+		<div class="crew-grid" [class.dashboard-crew-grid]="isDashboardRoute()"
+			[style.grid-template-columns]="'repeat(' + columns() + ', 1fr)'">
 			@for (member of members(); track member.userId) {
 			<div class="crew-card">
 				<div [routerLink]="['/profile', member.username]" class="avatar" [attr.aria-label]="member.displayName"
 					role="img">
 					@if (member.profilePicture) {
-					<img [ngSrc]="getUserAvatarUrl(member.profilePicture)" [alt]="member.displayName" [width]="84"
+					<img [src]="getUserAvatarUrl(member.profilePicture)" [alt]="member.displayName" [width]="84"
 						[height]="84" class="avatar-img" />
 					} @else {
 					<mat-icon class="avatar-icon" aria-hidden="true">person</mat-icon>
@@ -38,15 +40,14 @@
 				<div class="crew-info">
 					<div class="name-and-delete">
 						<span class="crew-username">{{ member.username }}</span>
-						@if (canDeleteMember(member.userId)) {
-						<button type="button" class="del-btn"
-							(click)="removeMember(member.id, member.userId)">
+						@if (isAdmin() && !isSoleAdmin(member)) {
+						<button type="button" class="del-btn" (click)="removeMember(member.id, member.userId)">
 							<mat-icon class="delete-icon">close</mat-icon>
 						</button>
 						}
 					</div>
 					@if (showRole()) {
-					@if (isAdmin() || !isDashboardRoute()) {
+					@if ((isAdmin() && !isSoleAdmin(member)) || !isDashboardRoute()) {
 					<mat-select class="role-select" [value]="member.role"
 						(valueChange)="updateRole(member.id, member.userId, $event)">
 						<mat-option value="Member">{{

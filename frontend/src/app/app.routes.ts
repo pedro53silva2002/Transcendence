@@ -9,7 +9,7 @@ import { MyTripsComponent } from './core/feature/my-trips/my-trips.component';
 import { tripMemberGuard } from './core/logic/guards/trip-member-guard';
 import ProfileComponent from './core/feature/profile/profile.component';
 import FriendshipComponent from './core/feature/friendship/friendship.component';
-import { authGuard } from './core/logic/services/authGuard.service';
+import { authGuard } from './core/logic/guards/authGuard.service';
 import { UserDashboardComponent } from './core/feature/user-dashboard/user-dashboard.component';
 
 export const routes: Routes = [

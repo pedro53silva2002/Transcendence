@@ -18,6 +18,8 @@ using Trippie.Modules.Social.Config;
 using Trippie.Modules.Social.Model;
 using Trippie.Modules.Social.Service;
 using Trippie.Common.Services.MinIO;
+using Microsoft.Extensions.Caching;
+using Trippie.Common.Services.Caching;
 
 Env.TraversePath().Load();
 
@@ -175,6 +177,19 @@ try
 				});
 		});
 	});
+
+	var redisHost = Environment.GetEnvironmentVariable("REDIS_HOST") ?? "localhost";
+	var redisPort = Environment.GetEnvironmentVariable("REDIS_PORT") ?? "6379";
+
+	// Redis Service configuration
+	builder.Services.AddStackExchangeRedisCache(options =>
+	{
+    	options.Configuration = $"{redisHost}:{redisPort}";
+		options.InstanceName = "Trippie_";
+
+	});
+
+	builder.Services.AddTransient<ICachingService, CacheService>();
 
 	var app = builder.Build();
 
