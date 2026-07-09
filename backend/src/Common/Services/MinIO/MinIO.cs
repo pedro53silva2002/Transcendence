@@ -1,13 +1,6 @@
 using Minio;
 using Minio.DataModel.Args;
-using Minio.Exceptions;
-using System.Collections.ObjectModel;
-using System.Net;
-using System.Net.Security;
 using System.Reactive.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
-
 
 namespace Trippie.Common.Services.MinIO;
 
