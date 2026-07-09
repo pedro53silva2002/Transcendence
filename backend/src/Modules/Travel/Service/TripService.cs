@@ -21,11 +21,6 @@ public sealed class TripService(
 		var members = await tripMembersService.CreateAsync(userId, dto.Members, ct);
 		trip.Members = [.. members];
 
-		foreach (var id in dto.Members.UserIds)
-		{
-		    await cacheService.RemoveAsync($"user:me:{id}", ct);
-		}
-
 		return trip;
 	}
 
