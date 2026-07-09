@@ -13,6 +13,10 @@
 	@media (max-width: 960px) {
 		width: 90%;
 	}
+
+	@media (max-width: 480px) {
+		width: 80%;
+	}
 }
 
 .greet-text {
@@ -27,6 +31,11 @@
 		font-size: 250%;
 		margin-bottom: 12px;
 		font-weight: 100;
+
+		@media (max-width: 480px) {
+			font-size: 200%;
+			margin-top: 10%;
+		}
 	}
 	
 	p {
@@ -34,7 +43,17 @@
 		font-size: 150%;
 		margin-bottom: 0px;
 		margin-top: 0px;
+
+		@media (max-width: 480px) {
+			font-size: 110%;
+		}
 	}
+}
+
+.cards-container {
+	display: flex;
+	justify-content: center;
+	width: 100%;
 }
 
 .cards-section {
@@ -43,17 +62,15 @@
 	justify-content: space-between;
 	margin-top: 5vh;
 	flex-wrap: wrap;
-	width: 100%;
+	width: 80%;
 
 	@media (max-width: 1650px) {
 		width: 100%;
 		gap: 70px;
+		flex-flow: column wrap;
 	}
 }
 
-app-stat-cards {
-	margin-top: 35px;
-}
 
 
 

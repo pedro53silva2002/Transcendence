@@ -1,7 +1,15 @@
+.full-page {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
 .main-container {
 	position: relative;
-	height: 96vh;
 	display: flex;
+	flex: 1; //to take the space immediately after the navbar
 	flex-direction: column;
 	align-items: center;
 	margin: 0;
@@ -11,7 +19,7 @@
 h1 {
 	font-family: 'BBH Hegarty';
 	font-weight: 100;
-	font-size: 18vw;
+	font-size: clamp(24px, 18vw, 180px);
 	margin-top: 3vh;
 	padding-bottom: 0vh;
 	z-index: 2; //puts the text in front of the globe if they overlap
@@ -20,30 +28,41 @@ h1 {
 .half-globe {
 	width: 100%;
 	height: 50vh;
-
 	position: absolute;
 	bottom: 0;
 	left: 0;
-
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	z-index: 1;
 
 	.globe {
-		width: 200%;
+		width: 120%;
 		position: absolute;
-		top: -33%;
+		top: -10%;
 		animation: rotateGlobe 20s ease-in-out infinite;
 	}
 
 	.signatures {
-		width: 210%;
+		width: 130%;
 		position: absolute;
-		top: -38%;
+		top: -15%;
 		animation: rotateSignature 20s ease-in-out infinite;
 	}
 
+	@media (max-width: 1023px) {
+		height: 40vh; 
+	
+		.globe {
+		  width: 250%; 
+		  top: -60%;    
+		}
+	
+		.signatures {
+		  width: 260%; 
+		  top: -65%;
+		}
+	}
 }
 
 @keyframes rotateGlobe {
