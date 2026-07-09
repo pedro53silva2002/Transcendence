@@ -62,12 +62,16 @@
 	justify-content: space-between;
 	margin-top: 5vh;
 	flex-wrap: wrap;
-	width: 80%;
+	width: 100%;
 
 	@media (max-width: 1650px) {
 		width: 100%;
-		gap: 70px;
-		flex-flow: column wrap;
+		gap: 40px;
+		flex-direction: column;
+	}
+
+	@media (max-width: 480px) {
+		gap: 27px;
 	}
 }
 

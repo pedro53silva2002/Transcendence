@@ -19,8 +19,8 @@
 .page-title {
 	font-family: 'BBH Hegarty';
 	font-weight: 100;
-	font-size: clamp(24px, 18vw, 180px);
-	margin-top: 3vh;
+	font-size: clamp(24px, 15vw, 150px);
+	margin-top: 8vh;
 	padding-bottom: 0vh;
 	z-index: 2; //puts the text in front of the globe if they overlap
 }

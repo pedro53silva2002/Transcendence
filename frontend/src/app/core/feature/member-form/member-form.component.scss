@@ -26,6 +26,8 @@ app-member-form {
 
 .crew-header {
 	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
 	align-items: center;
 	justify-content: space-between;
 	margin-bottom: 15px;
@@ -40,20 +42,24 @@ app-member-form {
 	color: var(--mat-sys-on-primary-container);
 	margin: 0;
 	font-size: 22px;
+
+	@media (max-width: 480px) {
+		font-size: 20px;
+	}
 }
 
 .add-member-btn {
+	display: flex;
 	border-radius: 20px !important;
 	border: 2px solid var(--mat-sys-on-primary-container) !important;
-	font-size: 0.8rem;
-	height: 34px;
-	gap: 4px;
+	font-size: 10px;
 	opacity: 0.9;
+	align-items: center;
 
 	mat-icon {
-		font-size: 16px;
-		width: 16px;
-		height: 16px;
+		// font-size: 12px;
+		// width: 12px;
+		// height: 12px;
 		opacity: 0.8;
 	}
 
@@ -78,6 +84,10 @@ app-member-form {
 	gap: 65px;
 	justify-content: flex-start;
 	margin-left: 30px;
+
+	@media (max-width: 480px) {
+		gap: 25px;
+	}
 }
 
 .crew-card {
@@ -89,7 +99,7 @@ app-member-form {
 	margin-right: 0;
 }
 
-.dashboard-crew-grid{
+.dashboard-crew-grid {
 	margin-left: 110px;
 	gap: 30px;
 	margin-top: 10px;
@@ -142,6 +152,11 @@ app-member-form {
 	justify-content: center;
 	overflow: hidden;
 	cursor: pointer;
+
+	@media (max-width: 480px) {
+		width: 50px;
+		height: 50px;
+	}
 }
 
 .avatar-img {
@@ -158,6 +173,11 @@ mat-icon.avatar-icon {
 	line-height: 54px;
 	overflow: visible;
 	color: var(--mat-sys-primary-container);
+
+	@media (max-width: 480px) {
+		font-size: 25px;
+		text-align: center;
+	}
 }
 
 .crew-username {
@@ -165,6 +185,10 @@ mat-icon.avatar-icon {
 	font-size: 16px;
 	color: var(--mat-sys-on-primary);
 	margin-left: 3px;
+
+	@media (max-width: 480px) {
+		font-size: 14px;
+	}
 }
 
 .role-select {

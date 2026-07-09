@@ -43,6 +43,11 @@
   font-weight: 400;
   font-size: 64px;
   margin: 0;
+
+  @media (max-width: 480px) {
+	font-size: 32px;
+  }
+  
 }
 
 .full-form {
