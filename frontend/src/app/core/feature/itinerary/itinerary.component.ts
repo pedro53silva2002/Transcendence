@@ -1,17 +1,7 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	computed,
-	signal,
-	inject,
-	viewChild,
-	output,
-	effect,
-	input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, inject, viewChild, output, effect } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { filter, map, switchMap } from 'rxjs';
+import { catchError, filter, map, of, switchMap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomScrollbarComponent } from '../../../shared/custom-scrollbar/custom-scrollbar.component';
 import { ItineraryService } from '../../logic/services/itinerary.service';
@@ -50,6 +40,9 @@ export default class ItineraryComponent {
 
 	protected totalPrice = signal<number>(0);
 	public totalPriceChanged = output<number>(); //the channel to send the totalPrice to the main component
+	readonly showForm = signal(false);
+	readonly currentDay = signal(1);
+	protected loggedUserId = this.authService?.me()?.id;
 
 	protected readonly dialogData = inject<{ itinerary: TripDto; showAddButton: boolean, profileRoute: boolean, showAvatar: boolean, showDeleteButton: boolean }>(
 		MAT_DIALOG_DATA,
@@ -57,8 +50,6 @@ export default class ItineraryComponent {
 	);
 
 	public readonly members = computed(() => this.tripState.members());
-
-	protected loggedUserId = this.authService?.me()?.id;
 
 	protected readonly isAdmin = computed(() => {
 			const me = this.authService.me();
@@ -86,23 +77,13 @@ export default class ItineraryComponent {
 		{ initialValue: null },
 	);
 
-	readonly maxDays = computed(() => {
-		const trip = this.trip();
-		if (!trip) return 1;
-		const start = new Date(trip.startDate);
-		const end = new Date(trip.endDate);
-		return Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
-	});
+	readonly maxDays = computed (() => this.trip()?.duration ?? 1);
 
 	readonly itemForm = this.formBuilder.nonNullable.group({
 		title: ['', [Validators.required, Validators.required, Validators.maxLength(20)]],
 		description: ['', [Validators.maxLength(30)]],
 		expectedPrice: [null as unknown as number, [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]],
 	});
-
-	readonly showForm = signal(false);
-	readonly currentDay = signal(1);
-	readonly items = signal<ItineraryDto[]>([]);
 
 	readonly canSave = toSignal(this.itemForm.statusChanges.pipe(map((s) => s === 'VALID')), {
 		initialValue: this.itemForm.valid,
@@ -112,10 +93,12 @@ export default class ItineraryComponent {
 
 	readonly scrollbarRef = viewChild<CustomScrollbarComponent>('scrollbar');
 
-	private readonly queryParams = computed(() => ({
-		tripId: this.tripId(),
-		day: this.currentDay(),
-	}));
+	readonly allItems = signal<ItineraryDto[]>([]); //to store all itinerary items
+
+	//to filter allItems by selected day
+	readonly items = computed(() => 
+		this.allItems().filter((item) => item.day == this.currentDay())
+	);
 
 	private readonly initialTotalPrice = toSignal(
 		toObservable(this.tripId).pipe(
@@ -129,21 +112,26 @@ export default class ItineraryComponent {
 	// I needed to put this on constructor because if I do it onInit, it won't update.
 	// I tried to work with ngOnInit, but did not get lucky with that.
 	constructor() {
-		toObservable(this.queryParams)
+		toObservable(this.tripId)
 			.pipe(
-				filter(({ tripId }) => tripId > 0),
-				switchMap(({ tripId, day }) =>
+				filter((id) => id > 0),
+				switchMap((tripId) =>
 					this.itineraryService.search({
 						search: {
 							tripId: { op: 'EQUAL', value: tripId },
-							day: { op: 'EQUAL', value: day },
 						},
 						pageSize: 100,
-					}),
+					}).pipe(
+						catchError((err) => {
+							console.error('Failed to load itinerary: ', err);
+							return of(null); //to prevent the error from 'killing' the subscription
+						})
+					),
 				),
 			)
 			.subscribe((res) => {
-				this.items.set(res.data?.content ?? []);
+				if (res)
+					this.allItems.set(res.data?.content ?? []);
 			});
 
 		effect(() => {
@@ -172,7 +160,7 @@ export default class ItineraryComponent {
 			})
 			.subscribe((res) => {
 				if (res.data) {
-					this.items.update((list) => [...list, res.data!]);
+					this.allItems.update((list) => [...list, res.data!]);
 					this.itemForm.reset();
 					setTimeout(() => {
 						const vp = this.scrollbarRef()?.viewport().nativeElement;
@@ -193,7 +181,7 @@ export default class ItineraryComponent {
 			.delete(id)
 			.subscribe(() => {
 				//removes the item
-				this.items.update((list) => list.filter((it) => it.id !== id));
+				this.allItems.update((list) => list.filter((it) => it.id !== id));
 
 				//subtracts the removed item from the totalPrice
 				if (deletingItem?.expectedPrice) {
