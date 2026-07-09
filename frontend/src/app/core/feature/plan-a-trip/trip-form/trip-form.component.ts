@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, Injectable, input, OnInit, signal, viewChild } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, NativeDateAdapter, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -72,6 +72,8 @@ export class TripFormComponent implements OnInit {
 	selectedCountryId = signal<number | null>(null);
 	selectedCities = signal<CityDto[]>([]);
 
+	protected readonly cityQuery = new FormControl('');
+
 	ngOnInit(): void {
 
 		//check if country already exists in the form
@@ -100,7 +102,7 @@ export class TripFormComponent implements OnInit {
 			})
 		);
 
-		this.listOfCities$ = this.city.valueChanges.pipe(
+		this.listOfCities$ = this.cityQuery.valueChanges.pipe(
 			debounceTime(300),
 			distinctUntilChanged(),
 			switchMap((userInput: any) => {
@@ -135,6 +137,8 @@ export class TripFormComponent implements OnInit {
 				this.city.setValue(updated, { emitEvent: false });
 				return updated;
 			})
+
+			this.cityQuery.setValue('', { emitEvent: false });
 		}
 
 		//cleans the input text for next search

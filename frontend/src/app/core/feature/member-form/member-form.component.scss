@@ -128,7 +128,7 @@ app-member-form {
 	flex-direction: column;
 	align-items: stretch;
 	justify-content: flex-start;
-	gap: 3px;
+	gap: 8px;
 	min-width: 0;
 }
 
@@ -165,12 +165,11 @@ mat-icon.avatar-icon {
 	font-family: 'ADLaM Display';
 	font-size: 16px;
 	color: var(--mat-sys-on-primary);
-	margin-left: 5px;
+	margin-left: 3px;
 }
 
 .role-select {
-	width: fit-content;
-	min-width: 90px;
+	min-width: 120px;
 	font-size: 0.75rem;
 
 	.mat-mdc-select-trigger {
@@ -193,6 +192,13 @@ mat-icon.avatar-icon {
 
 	.mat-mdc-select-arrow {
 		color: var(--mat-sys-on-primary-container);
+	}
+}
+
+.role-disabled {
+
+	.mat-mdc-select-trigger {
+		cursor: not-allowed !important;
 	}
 }
 
