@@ -5,6 +5,7 @@ using Trippie.Modules.Travel.Model;
 
 namespace Trippie.Modules.Travel.Service;
 
+#pragma warning disable CS9113
 public sealed class ItineraryService(ItineraryModel itineraryModel, TripModel tripModel, TripMembersModel tripMembersModel)
 {
     public async Task<ItineraryDto?> GetById(int id, CancellationToken ct = default)
@@ -59,3 +60,4 @@ public sealed class ItineraryService(ItineraryModel itineraryModel, TripModel tr
            throw new ArgumentException("ExpectedPrice cannot be negative.");
     }
 }
+#pragma warning restore CS9113
