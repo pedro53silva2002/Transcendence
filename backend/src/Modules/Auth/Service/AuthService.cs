@@ -120,9 +120,11 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
         var existingOAuthUser = await userService.GetByOAuthIdAsync(dto.OAuthProvider, dto.OAuthId, ct);
         if (existingOAuthUser is not null)
 		{
+			#pragma warning disable CS8600
             string existingProfilePhotoUrl = existingOAuthUser.ProfilePhotoUrl;
+			#pragma warning restore CS8600
 
-            if (existingProfilePhotoUrl != null && existingProfilePhotoUrl[0] != '/')
+            if (existingProfilePhotoUrl == null)
 			    await userService.UpdateProfilePhotoAsync(existingOAuthUser.Id, dto.ProfilePhotoUrl, ct);
             return await BuildAuthResponse(existingOAuthUser, [], ct);
 		}
@@ -130,9 +132,11 @@ public sealed class AuthService(UserService userService, IJwtTokenService jwt, A
         var existingEmailUser = await userService.GetByEmail(dto.Email, ct);
         if (existingEmailUser is not null)
 		{
+			#pragma warning disable CS8600
             string existingProfilePhotoUrl = existingEmailUser.ProfilePhotoUrl;
+			#pragma warning restore CS8600
 
-            if (existingProfilePhotoUrl != null && existingProfilePhotoUrl[0] != '/')
+            if (existingProfilePhotoUrl == null)
 			    await userService.UpdateProfilePhotoAsync(existingEmailUser.Id, dto.ProfilePhotoUrl, ct);
             return await BuildAuthResponse(existingEmailUser, [], ct);
 		}

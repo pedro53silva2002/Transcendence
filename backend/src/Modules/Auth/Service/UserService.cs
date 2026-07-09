@@ -76,9 +76,6 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
 			if (clash is not null)
 				throw new ConflictException("Email or username already in use.");
 		}
-		Console.WriteLine($"Username: {dto.Username}");
-		Console.WriteLine($"ProfilePhotoUrl: {dto.ProfilePhotoUrl}");
-		Console.WriteLine($"ProfilePhotoPath: {dto.ProfilePhotoPath}");
 
 		if (dto.ProfilePhotoUrl != null)
 		{
@@ -267,8 +264,10 @@ public sealed class UserService(AppDbContext db, UserModel userModel, IMinIOServ
 	public async Task<TripStatCardsDto> GetTripStatus(int userId, CancellationToken ct = default)
 	{
 		var tripStatus = await userModel.GetTripStatus(userId, ct);
+		#pragma warning disable CS8603
 		if (tripStatus is null)
 			return null;
+		#pragma warning restore CS8603
 		return tripStatus;
 	}
 }
