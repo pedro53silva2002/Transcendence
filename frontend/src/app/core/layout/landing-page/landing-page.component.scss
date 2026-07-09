@@ -8,11 +8,11 @@
 	overflow: hidden;
 }
 
-h1 {
+.page-title {
 	font-family: 'BBH Hegarty';
 	font-weight: 100;
 	font-size: 150px;
-	margin-top: 70px;
+	margin: 70px 0 0 0;
 	padding-bottom: 0px;
 	z-index: 2; //puts the text in front of the globe if they overlap
 }

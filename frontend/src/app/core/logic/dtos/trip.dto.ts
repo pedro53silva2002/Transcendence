@@ -37,6 +37,7 @@ export interface TripDto {
   createdAt: string;
   updatedAt?: string;
   members?: TripMemberDto[];
+  duration: number;
 }
 
 export interface ProfileTripsDto {

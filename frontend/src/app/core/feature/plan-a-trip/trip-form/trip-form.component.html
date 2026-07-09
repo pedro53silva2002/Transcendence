@@ -118,7 +118,7 @@
         type="text"
         #cityInput
         matInput
-        formControlName="city"
+        [formControl]="cityQuery"
         [matChipInputFor]="chipGrid"
         [matAutocomplete]="autoCity"
         [disabled]="!selectedCountryId()"

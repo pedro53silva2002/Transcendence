@@ -15,6 +15,7 @@ import { SessionService } from './core/logic/services/session.service';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { loadingInterceptor } from './core/logic/interceptors/loading.interceptor';
+import { of } from 'rxjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,7 +34,6 @@ export const appConfig: ApplicationConfig = {
       config: {
         availableLangs: ['en', 'pt', 'es'],
         defaultLang: 'en',
-        // Remove this option if your application doesn't support changing language in runtime.
         reRenderOnLangChange: true,
         prodMode: !isDevMode(),
       },

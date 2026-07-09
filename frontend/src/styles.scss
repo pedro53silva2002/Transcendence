@@ -109,11 +109,10 @@
 
 //CALENDAR
 .mat-datepicker-popup .mat-calendar {
-	background-color: var(--mat-sys-primary-container) !important; /* Cor de fundo do painel */
-	border-radius: 16px; /* Opcional: dá um toque arredondado ao menu do calendário */
+	background-color: var(--mat-sys-primary-container) !important;
+	border-radius: 16px; 
 }
 
-/* Opcional: Altera a cor dos textos dos dias e cabeçalho para contrastar com o novo fundo */
 .mat-datepicker-popup {
 	.mat-calendar-body-cell-content, 
 	.mat-calendar-header,
@@ -121,24 +120,21 @@
 		color: var(--mat-sys-on-primary-container) !important;
 	}
 
-	/* Opcional: Altera a cor do dia atual/hoje */
 	.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
 		border-color: var(--mat-sys-on-primary-container) !important;
 	}
 }
 
 .mat-calendar-body-selected {
-	background-color: var(--mat-sys-on-primary) !important; /* Castanho escuro */
-	color: white !important; /* Texto branco para contrastar */
+	background-color: var(--mat-sys-on-primary) !important; 
+	color: white !important; 
 }
 
-/* 2. Cor do meio do intervalo (Os dias que ficam entre o início e o fim) */
 .mat-calendar-body-in-range::before {
-	background: var(--mat-sys-primary) !important; /* Castanho claro / Bege para o fundo do meio */
+	background: var(--mat-sys-primary) !important;
 }
 
 .mat-datepicker-popup, .mat-calendar {	
-	/* 3. Forçar o estilo do picotado*/
 	[class*="mat-calendar-body-in-preview"] {
 		border-color: var(--mat-sys-on-primary) !important;
 		color: var(--mat-sys-on-primary) !important;
@@ -166,7 +162,6 @@
 .mat-mdc-select-arrow svg {
 	fill: var(--mat-sys-on-primary-container) !important;
 }
-
 
 
 
