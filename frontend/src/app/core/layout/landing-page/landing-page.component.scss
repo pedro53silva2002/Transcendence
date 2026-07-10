@@ -4,6 +4,7 @@
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	position: relative;
 }
 
 .main-container {
@@ -66,43 +67,60 @@
 }
 
 @keyframes rotateGlobe {
-    /* ==== 1º PASSO ==== */
+    
     0%   { transform: rotate(0deg); }
-    10%  { transform: rotate(-360deg); } /* Move (Demorou 10%) */
-    22%  { transform: rotate(-360deg); } /* Pausa padrão (12%) */
+    10%  { transform: rotate(-360deg); } 
+    22%  { transform: rotate(-360deg); } 
 
-    /* ==== 2º PASSO ==== */
-    32%  { transform: rotate(-720deg); } /* Move (Demorou 10% - Velocidade igual!) */
-    44%  { transform: rotate(-720deg); } /* Pausa padrão (12%) */
 
-    /* ==== 3º PASSO: O LOGÓTIPO ==== */
-    54%  { transform: rotate(-1080deg); } /* Move (Demorou 10% - Velocidade igual!) */
-    78%  { transform: rotate(-1080deg); } /* PAUSA LONGA! (Fica parado 24% do tempo - o dobro das outras) */
+    32%  { transform: rotate(-720deg); } 
+    44%  { transform: rotate(-720deg); } 
 
-    /* ==== 4º PASSO: VOLTA AO INÍCIO ==== */
-    88%  { transform: rotate(-1440deg); } /* Move (Demorou 10% - Velocidade igual!) */
-    100% { transform: rotate(-1440deg); } /* Pausa final curta antes do loop (12%) */
+
+    54%  { transform: rotate(-1080deg); }
+    78%  { transform: rotate(-1080deg); } 
+
+
+    88%  { transform: rotate(-1440deg); } 
+    100% { transform: rotate(-1440deg); } 
 }
 
 @keyframes rotateSignature {
-    /* ==== 1º PASSO ==== */
+   
     0%   { transform: rotate(0deg); }
-    10%  { transform: rotate(-90deg); }  /* Move 1/4 (Demorou 10%) */
-    22%  { transform: rotate(-90deg); }  /* Pausa padrão (12%) */
+    10%  { transform: rotate(-90deg); } 
+    22%  { transform: rotate(-90deg); } 
 
-    /* ==== 2º PASSO ==== */
-    32%  { transform: rotate(-180deg); } /* Move 1/4 (Demorou 10%) */
-    44%  { transform: rotate(-180deg); } /* Pausa padrão (12%) */
+    
+    32%  { transform: rotate(-180deg); } 
+    44%  { transform: rotate(-180deg); }
 
-    /* ==== 3º PASSO: O LOGÓTIPO ==== */
-    54%  { transform: rotate(-270deg); } /* Move 1/4 (Demorou 10%) */
-    78%  { transform: rotate(-270deg); } /* PAUSA LONGA! (Igual ao globo) */
+   
+    54%  { transform: rotate(-270deg); } 
+    78%  { transform: rotate(-270deg); }
 
-    /* ==== 4º PASSO: VOLTA AO INÍCIO ==== */
-    88%  { transform: rotate(-360deg); } /* Move 1/4 (Demorou 10%) */
-    100% { transform: rotate(-360deg); } /* Pausa final curta antes do loop (12%) */
+   
+    88%  { transform: rotate(-360deg); } 
+    100% { transform: rotate(-360deg); }
 }
 
 .hidden-signatures {
     opacity: 0 !important;
+}
+
+.page-links {
+	display: flex;
+	flex-wrap: wrap;
+	position: absolute;
+	z-index: 2;
+	gap: 15px;
+	bottom: 2vh;
+	left: 50%;
+	transform: translateX(-50%);
+
+	a {
+		font-size: 10px;
+		color: var(--mat-sys-primary);
+		text-decoration: none;
+	}
 }

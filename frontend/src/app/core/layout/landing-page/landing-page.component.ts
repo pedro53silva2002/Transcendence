@@ -3,11 +3,13 @@ import { map, merge, startWith } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { RouterLink } from '@angular/router';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
 	selector: 'app-landing-page',
 	standalone: true,
-	imports: [NavbarComponent, CommonModule],
+	imports: [NavbarComponent, CommonModule, RouterLink, TranslocoModule],
 	templateUrl: './landing-page.component.html',
 	styleUrl: './landing-page.component.scss',
 })

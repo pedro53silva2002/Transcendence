@@ -1,0 +1,26 @@
+@if (isAuthenticated()) {
+<app-navbar [showHome]="true" [showProfile]="true" [showPlanATrip]="true" [showMyTrips]="true" [showFriends]="true"
+	[showSearch]="true" [showLanguageSelector]="true" [showLogout]="true"></app-navbar>
+} @else {
+<app-navbar [showLogin]="true" [showRegister]="true" [showLanguageSelector]="true"></app-navbar>
+}
+<div class="main-container">
+	<h1 class="page-title">{{ 'terms-of-service.title' | transloco }}</h1>
+	<div class="content">
+		<h2 class="subtitle">{{ 'terms-of-service.update-title' | transloco }}</h2>
+		<p class="page-content">{{ 'terms-of-service.paragraph' | transloco }}</p>
+		<h2 class="subtitle">{{ 'terms-of-service.subtitle1' | transloco }}</h2>
+		<p class="page-content">{{ 'terms-of-service.paragraph1' | transloco }}</p>
+		<h2 class="subtitle">{{ 'terms-of-service.subtitle2' | transloco }}</h2>
+		<p class="page-content">{{ 'terms-of-service.paragraph2' | transloco }}</p>
+		<h2 class="subtitle">{{ 'terms-of-service.subtitle3' | transloco }}</h2>
+		<p class="page-content">{{ 'terms-of-service.paragraph3' | transloco }}</p>
+		<h2 class="subtitle">{{ 'terms-of-service.subtitle4' | transloco }}</h2>
+		<p class="page-content">{{ 'terms-of-service.paragraph4' | transloco }}</p>
+		<h2 class="subtitle">{{ 'terms-of-service.subtitle5' | transloco }}</h2>
+		<p class="page-content">{{ 'terms-of-service.paragraph5' | transloco }}</p>
+		<h2 class="subtitle">{{ 'terms-of-service.subtitle6' | transloco }}</h2>
+		<p class="page-content">{{ 'terms-of-service.paragraph6' | transloco }}</p>	
+	</div>
+</div>
+<app-footer></app-footer>

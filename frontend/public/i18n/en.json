@@ -200,5 +200,39 @@
 		"my-expenses": "My Expenses",
 		"search-users": "Search Users",
 		"logout": "Logout"
-	}
+	},
+	"privacy-policy": {
+		"title": "Privacy Policy",
+		"update-title": "Last Updated: July 2026",
+		"paragraph": "Welcome to our Travel Planner App. We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regard to your personal information, please contact us.",
+		"subtitle1": "1. Information We Collect",
+		"paragraph1": "We collect personal information that you voluntarily provide to us when you register on the App, express an interest in obtaining information about us or our products, or otherwise when you use the App. Account Credentials & Profiles: We collect authentication data (via our secure Session Service or third-party OAuth providers), usernames, email addresses, and profile pictures (avatars). Trip & Itinerary Data: To provide our core services, we store the data you create, including trip names, descriptions, destinations (countries and cities), start/end dates, and specific itinerary stops. Financial & Budget Information: We process the expected prices and costs associated with your itineraries to calculate your total trip budget and progress bars. Group Management: We collect data regarding trip memberships to determine who can access, view, or modify specific group trips.",
+		"subtitle2": "2. How We Use Your Information",
+		"paragraph2": "We use personal information collected via our App for a variety of business purposes described below: To Facilitate Account Creation and Logon Process: If you choose to link your account with us to a third-party account (such as OAuth), we use the information you allowed us to collect from those third parties to facilitate account creation and logon process. To Manage User Accounts: We use your data to maintain our Session Service, keep you authenticated, and ensure you can securely access your personal dashboard. To Provide Core Travel Features: We process your trip data, itineraries, and budgets to display your financial progress meters and dynamic trip cards accurately. To Enforce Access Control: We use trip membership information to ensure that only authorized users can view or modify shared group itineraries.",
+		"subtitle3": "3. Will Your Information Be Shared With Anyone?",
+		"paragraph3": "We only share information with your consent, to comply with laws, to provide you with services, to protect your rights, or to fulfill business obligations. Group Members: Other users whom you explicitly invite or authorize to join your trip will be able to see your username, avatar, and any itinerary/budget items added to that shared trip. Third-Party Service Providers: We may share data with third-party vendors, service providers, contractors, or agents who perform services for us or on our behalf (e.g., cloud hosting or authentication services).",
+		"subtitle4": "4. Data Security",
+		"paragraph4": "We implement appropriate technical and organizational security measures designed to protect the security of any personal information we process. Your authentication tokens are handled securely (via our Token Storage Service) to prevent unauthorized access. However, please also remember that we cannot guarantee that the internet itself is one hundred percent secure.",
+		"subtitle5": "5. Your Privacy Rights",
+		"paragraph5": "Depending on your location, you may have certain rights under applicable data protection laws (such as the GDPR in Europe). These may include the right to: Request access and obtain a copy of your personal information. Request rectification (correction) or erasure (deletion) of your data (e.g., deleting a trip or clearing your session). Restrict or object to the processing of your data.",
+		"subtitle6": "6. Updates To This Notice",
+		"paragraph6": "We may update this privacy notice from time to time. The updated version will be indicated by an updated 'Revised' date and the updated version will be effective as soon as it is accessible."
+	},
+	"terms-of-service": {
+        "title": "Terms of Service",
+        "update-title": "Last Updated: July 2026",
+        "paragraph": "Welcome to our Travel Planner App. By accessing or using our application, you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, you may not use our services.",
+        "subtitle1": "1. User Accounts and Security",
+        "paragraph1": "To use certain features of the App, such as creating trips or managing budgets, you must register for an account. You are entirely responsible for maintaining the confidentiality of your session data and authentication tokens. You agree to notify us immediately of any unauthorized use of your account or any other breach of security.",
+        "subtitle2": "2. User-Generated Content and Group Trips",
+        "paragraph2": "Our App allows you to create, post, and share content, including trip names, itinerary stops, custom descriptions, and budget entries. You retain ownership of the content you create. However, by inviting other members to a joint trip, you grant those authorized users the right to view, modify, or add data to that specific shared itinerary.",
+        "subtitle3": "3. Acceptable Use and Restrictions",
+        "paragraph3": "You agree not to use the App for any unlawful purpose or any purpose prohibited under this clause. You may not use the App in any way that could damage, disable, overburden, or impair our infrastructure, or interfere with any other party's use and enjoyment of the App.",
+        "subtitle4": "4. Limitation of Liability",
+        "paragraph4": "The App is provided on an 'as-is' and 'as-available' basis. We make no warranties, expressed or implied, regarding the accuracy of calculated budgets, itinerary timings, or the continuous availability of the Session Service. We shall not be liable for any indirect, incidental, or consequential damages resulting from your use or inability to use the service.",
+        "subtitle5": "5. Termination of Service",
+        "paragraph5": "We reserve the right to terminate or suspend your access to the App immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms. Upon termination, your right to use the App will cease immediately.",
+        "subtitle6": "6. Changes to These Terms",
+        "paragraph6": "We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will indicate updates by changing the 'Last Updated' date at the top of this page. Your continued use of the App after any revisions become effective constitutes your agreement to the new terms."
+    }
 }
