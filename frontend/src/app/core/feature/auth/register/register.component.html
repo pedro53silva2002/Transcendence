@@ -45,7 +45,6 @@
           mat-icon-button
           matSuffix
           (click)="passwordVisible.set(!passwordVisible())"
-          [attr.aria-label]="passwordVisible() ? 'auth.hidePassword' : 'auth.showPassword'"
           [attr.aria-pressed]="passwordVisible()"
         >
           <mat-icon>{{ passwordVisible() ? 'visibility' : 'visibility_off' }}</mat-icon>
@@ -89,11 +88,6 @@
           mat-icon-button
           matSuffix
           (click)="confirmPasswordVisible.set(!confirmPasswordVisible())"
-          [attr.aria-label]="
-            confirmPasswordVisible()
-              ? ('auth.hidePassword' | transloco)
-              : ('auth.showPassword' | transloco)
-          "
           [attr.aria-pressed]="confirmPasswordVisible()"
         >
           <mat-icon>{{ confirmPasswordVisible() ? 'visibility' : 'visibility_off' }}</mat-icon>

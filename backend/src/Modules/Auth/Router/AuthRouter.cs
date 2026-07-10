@@ -103,7 +103,7 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
     {
         {
             var userId = User.GetUserId()
-                ?? throw new UnauthorizedException("User not authenticated.");
+                ?? throw new ForbiddenException("User not authenticated."); //tosee
 
             var rawToken = Request.Headers.Authorization
                 .FirstOrDefault()

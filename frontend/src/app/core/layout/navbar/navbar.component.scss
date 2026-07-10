@@ -8,29 +8,54 @@
 nav {
 	width: 70%;
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-between;
 	margin: 0 auto; //to center the nav in the page
 	margin-top: 25px;
 	margin-bottom: 20px;
+
+	@media (max-width: 1023px) {
+		width: 100%;
+		margin-bottom: 5px;
+		gap: 25px;
+	}
+
+	@media (max-width: 480px)
+	{
+		justify-content: center;
+		gap: 5px;
+	}
 }
 
 .logo-container h1 {
 	opacity: 0;
 	font-family: 'BBH Hegarty';
 	font-weight: 100;
+	font-size: 0%;
 }
 
 .logo-container h1.logo {
 	opacity: 1;
 	cursor: pointer;
+	font-size: 190%;
 }
 
 .buttons, .full-screen-buttons{
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: flex-end;
-	gap: 16px;
+	gap: 10px 15px;
+
+	@media (max-width: 1023px) {
+		justify-content: flex-start;
+		gap: 8px;
+	}
+
+	@media (max-width: 480px) {
+		gap: 8px 6px;
+	}
 }
 
 .mat-icon {
@@ -67,9 +92,12 @@ nav {
 	.mat-mdc-menu-panel.hamburguer-menu-panel {
 		margin-top: 10px !important;
 		border-radius: 20px !important;
-		border: 1px solid var(--mat-sys-primary);
 		background-color: var(--mat-sys-on-primary) !important;
 		min-width: 310px !important;
+
+		@media (max-width: 480px) {
+			min-width: 250px !important;
+		}
 	}
 }
 
@@ -138,6 +166,11 @@ nav {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		
+	}
+
+	@media (max-width: 480px) {
+		width: 100px;
 	}
 }
 
@@ -185,7 +218,7 @@ nav {
 	}
 }
 
-@media (max-width: 1254px) {
+@media (max-width: 1520px) {
 
 	nav {
 		width: 80%;

@@ -25,6 +25,13 @@ export class SessionService {
   });
 
   loadMe(): Observable<boolean> {
+    //to prevent loadMe() to work if there's no one authenticated, like in the landing page
+    const hasToken = !!this.tokenStorage.getAccessToken();
+    if (!hasToken) {
+      this._me.set(undefined);
+      this._loading.set(false);
+      return of(false);
+    }
     return this.http.get<MeDto>(`${this.apiURL}/auth/me`).pipe(
       tap((user) => {
         this._me.set(user);

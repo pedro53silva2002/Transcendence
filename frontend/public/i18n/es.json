@@ -128,7 +128,9 @@
 		"role": {
 			"member": "Miembro",
 			"admin": "Admin"
-		}
+		},
+		"lastAdminTooltip": "El viaje necesita al menos 1 administrador.",
+		"noPermission": "Ya no tienes permiso para cambiar el rol."
 	},
 	"my-trips": {
 		"title": "Mis Viajes",
@@ -163,7 +165,7 @@
 		"addItem": "Agregar parada",
 		"closeForm": "Cerrar formulario",
 		"stops": "Paradas del itinerario",
-		"empty": "Sin paradas — toca + para agregar una.",
+		"empty": "Sin paradas.",
 		"remove": "Eliminar {{ title }}",
 		"day": "DÍA",
 		"dayNav": "Navegación por día",
@@ -179,9 +181,9 @@
 			"save": "Guardar",
 			"errors": {
 				"titleRequired": "El título es obligatorio",
-				"titleMaxLength": "El título no puede superar los 20 caracteres",
+				"titleMaxLength": "El título no puede superar los 10 caracteres",
 				"priceMin": "El precio debe ser igual o mayor que 0",
-				"descriptionMaxLength": "La descripción no puede superar los 30 caracteres"
+				"descriptionMaxLength": "La descripción no puede superar los 15 caracteres"
 			}
 		}
 	},

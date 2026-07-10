@@ -1,13 +1,9 @@
-.card-wrapper {
-	position: relative; 
-    width: 385px; // O tamanho máximo passa para o pai
-    border-radius: 25px; // Mantemos o raio aqui para o corte funcionar
-    overflow: hidden; // Garante que a imagem sobreposta também respeita os cantos arredondados
-	height: 430px; //+8 because of the borders
-	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-	&:hover {
-		cursor: pointer;
-		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.55);
+:host {
+	display: block;
+	width: 370px;
+
+	@media (max-width: 480px) {
+		width: 300px;
 	}
 }
 
@@ -20,6 +16,10 @@
 	border: 4px solid var(--mat-sys-on-primary-container) !important;
 	border-radius: 25px;
 	background-color: var(--mat-sys-primary-container) !important;
+
+	@media (max-width: 480px) {
+		height: 400px;
+	}
 	
 	h1 {
 		color: var(--mat-sys-on-primary) !important;
@@ -27,6 +27,10 @@
 		font-weight: 100;
 		font-size: 24px;
 		margin-bottom: 4px;
+
+		@media (max-width: 480px) {
+			font-size: 18px;
+		}
 	}
 	
 	p {
@@ -35,6 +39,11 @@
 		width: 260px;
 		text-align: center;
 		font-size: 14px;
+
+		@media (max-width: 480px) {
+			font-size: 12px;
+			width: 200px;
+		}
 	}
 }
 
@@ -53,4 +62,16 @@
         opacity: 0.82;
 		margin-top: 310px;
     }
+}
+
+.card-wrapper {
+	position: relative; 
+	width: 100%; 
+    border-radius: 25px; 
+    overflow: hidden;
+	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+	&:hover {
+		cursor: pointer;
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.55);
+	}
 }

@@ -22,10 +22,21 @@ app-member-form {
 
 .dashboard-crew-panel {
 	max-height: 475px;
+	max-width: 548px;
+
+	@media (max-width: 1023px) {
+		width: 400px;
+	}
+
+	@media (max-width: 480px) {
+		width: 300px;
+	}
 }
 
 .crew-header {
 	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
 	align-items: center;
 	justify-content: space-between;
 	margin-bottom: 15px;
@@ -33,7 +44,6 @@ app-member-form {
 
 .crew-title {
 	font-family: 'Tabloid', sans-serif;
-	// font-weight: 1000;
 	font-size: 1.1rem;
 	opacity: 0.8;
 	text-transform: uppercase;
@@ -41,20 +51,21 @@ app-member-form {
 	color: var(--mat-sys-on-primary-container);
 	margin: 0;
 	font-size: 22px;
+
+	@media (max-width: 480px) {
+		font-size: 20px;
+	}
 }
 
 .add-member-btn {
+	display: flex;
 	border-radius: 20px !important;
 	border: 2px solid var(--mat-sys-on-primary-container) !important;
-	font-size: 0.8rem;
-	height: 34px;
-	gap: 4px;
+	font-size: 10px;
 	opacity: 0.9;
+	align-items: center;
 
 	mat-icon {
-		font-size: 16px;
-		width: 16px;
-		height: 16px;
 		opacity: 0.8;
 	}
 
@@ -79,6 +90,22 @@ app-member-form {
 	gap: 65px;
 	justify-content: flex-start;
 	margin-left: 30px;
+
+	@media (max-width: 480px) {
+		gap: 25px;
+	}
+}
+
+.dashboard-crew-grid {
+	gap: 30px;
+	margin-top: 10px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	margin-left: 0;
 }
 
 .crew-card {
@@ -90,15 +117,14 @@ app-member-form {
 	margin-right: 0;
 }
 
-.dashboard-crew-grid{
-	margin-left: 110px;
-	gap: 30px;
-	margin-top: 10px;
-	width: 70%;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
+.dashboard-crew-card {
+	width: 65%;
+
+	@media (max-width: 480px) {
+		width: 80%;
+	}
 }
+
 
 .name-and-delete {
 	display: flex;
@@ -128,7 +154,7 @@ app-member-form {
 	flex-direction: column;
 	align-items: stretch;
 	justify-content: flex-start;
-	gap: 3px;
+	gap: 8px;
 	min-width: 0;
 }
 
@@ -143,6 +169,11 @@ app-member-form {
 	justify-content: center;
 	overflow: hidden;
 	cursor: pointer;
+
+	@media (max-width: 480px) {
+		width: 50px;
+		height: 50px;
+	}
 }
 
 .avatar-img {
@@ -159,18 +190,26 @@ mat-icon.avatar-icon {
 	line-height: 54px;
 	overflow: visible;
 	color: var(--mat-sys-primary-container);
+
+	@media (max-width: 480px) {
+		font-size: 25px;
+		text-align: center;
+	}
 }
 
 .crew-username {
 	font-family: 'ADLaM Display';
 	font-size: 16px;
 	color: var(--mat-sys-on-primary);
-	margin-left: 5px;
+	margin-left: 3px;
+
+	@media (max-width: 480px) {
+		font-size: 14px;
+	}
 }
 
 .role-select {
-	width: fit-content;
-	min-width: 90px;
+	min-width: 120px;
 	font-size: 0.75rem;
 
 	.mat-mdc-select-trigger {
@@ -193,6 +232,13 @@ mat-icon.avatar-icon {
 
 	.mat-mdc-select-arrow {
 		color: var(--mat-sys-on-primary-container);
+	}
+}
+
+.role-disabled {
+
+	.mat-mdc-select-trigger {
+		cursor: not-allowed !important;
 	}
 }
 

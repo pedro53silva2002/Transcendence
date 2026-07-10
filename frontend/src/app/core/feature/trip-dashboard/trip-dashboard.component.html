@@ -43,8 +43,8 @@
 	</div>
 
 	<div class="cards">
-		<app-itinerary [isAdmin]="isAdmin()" (totalPriceChanged)="onPriceChange($event)"></app-itinerary>
-		<app-member-form [isAdmin]="isAdmin()" [columns]="1" [compact]="true"
+		<app-itinerary (totalPriceChanged)="onPriceChange($event)"></app-itinerary>
+		<app-member-form [columns]="1" [compact]="true"
 			[tripId]="tripStateService.trip()?.id ?? null" [showAddButton]="false"></app-member-form>
 	</div>
 
