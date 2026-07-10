@@ -204,11 +204,20 @@ try
 		using var scope = app.Services.CreateScope();
 		var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-		// Load and execute SQL files from Migrations folder
-		// AppContext.BaseDirectory is bin/Debug/net9.0, so go up 3 levels to reach src/
-		var sourceDir = Path.Combine(AppContext.BaseDirectory, "..", "..", "..");
-		var migrationsPath = Path.Combine(sourceDir, "Common", "Database", "Migrations");
-		var migrationsPathResolved = Path.GetFullPath(migrationsPath);
+		// Load and execute SQL files from the Migrations folder. The location
+		// differs between local runs and the container image, so probe both:
+		//   - Container: files sit next to the DLL at <base>/Common/Database/Migrations
+		//   - Local dev: base is bin/Debug/net9.0, so go up 3 levels to reach src/
+		var migrationsPathCandidates = new[]
+		{
+			Path.Combine(AppContext.BaseDirectory, "Common", "Database", "Migrations"),
+			Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Common", "Database", "Migrations"),
+		};
+
+		var migrationsPathResolved = migrationsPathCandidates
+			.Select(Path.GetFullPath)
+			.FirstOrDefault(Directory.Exists)
+			?? Path.GetFullPath(migrationsPathCandidates[0]);
 
 		if (!Directory.Exists(migrationsPathResolved))
 		{
