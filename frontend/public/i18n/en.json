@@ -181,9 +181,9 @@
 			"save": "Save",
 			"errors": {
 				"titleRequired": "Title is required",
-				"titleMaxLength": "Title cannot exceed 20 characters",
+				"titleMaxLength": "Title cannot exceed 10 characters",
 				"priceMin": "Price must be 0 or greater",
-				"descriptionMaxLength": "Description cannot exceed 30 characters"
+				"descriptionMaxLength": "Description cannot exceed 15 characters"
 			}
 		}
 	},

@@ -62,7 +62,7 @@
 						}}</label>
 					<input id="itin-cost" class="pill cost" formControlName="expectedPrice"
 						[placeholder]="'itinerary.form.cost' | transloco" (keydown)="onKeyDown($event)"
-						inputmode="decimal" />
+						inputmode="numeric" maxlength="8" />
 
 				</div>
 				<div class="form-errors">

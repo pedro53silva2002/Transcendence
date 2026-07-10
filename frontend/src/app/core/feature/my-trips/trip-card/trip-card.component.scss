@@ -4,19 +4,23 @@
 	cursor: pointer;
 	text-decoration: none;
 	color: inherit;
-	width: 100%;
+	max-width: 360px;
+
+	@media (max-width: 480px) {
+        max-width: 200px;
+    }
 }
 
 /* The bubble is pinned near the top-right of the card. */
 .bubble-anchor {
-	position: absolute;
-	top: -25px;
-	right: -80px;
-	z-index: 3;
-	transform: rotate(20deg);
-	font-family: 'Tabloid', sans-serif;
-	font-weight: 800;
-	color: var(--mat-sys-on-primary-container);
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 4;
+    transform: translate(125%, -40%) rotate(20deg); 
+    font-family: 'Tabloid', sans-serif;
+    font-weight: 800;
+    color: var(--mat-sys-on-primary-container);
 }
 
 .card {
@@ -30,7 +34,7 @@
 	border-radius: 25px;
 	padding: 18px 28px;
 	height: 120px;
-	max-width: 360px;
+	width: 100%;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 	transition:
 		box-shadow 0.2s ease,
