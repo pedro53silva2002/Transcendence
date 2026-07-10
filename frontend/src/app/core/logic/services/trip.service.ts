@@ -20,8 +20,12 @@ export class TripService extends BaseApiService {
     return this._get<CursorPage<TripDto>>(`/trips/search?q=${query}`);
   }
 
-  public searchTripsByUserId(userId: number): Observable<ApiResponse<ProfileTripsDto[]>> {
+  public searchProfileTripsByUserId(userId: number): Observable<ApiResponse<ProfileTripsDto[]>> {
 	return this._get<ProfileTripsDto[]>(`/trips/trip/${userId}`);
+  }
+
+  public searchTripsByUserId(userId: number): Observable<ApiResponse<TripDto[]>> {
+	return this._get<TripDto[]>(`/trips/user/${userId}`);
   }
 
   //Get trips by id (GET)
@@ -30,7 +34,7 @@ export class TripService extends BaseApiService {
   }
 
   //Update a trip (PUT)
-  public update (id: number, dto: UpdateTripDto): Observable<ApiResponse<TripDto>> {
+  public update(id: number, dto: UpdateTripDto): Observable<ApiResponse<TripDto>> {
     return this._put<TripDto>(`/trips/${id}`, dto);
   }
 

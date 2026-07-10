@@ -7,7 +7,6 @@ import {
   signal,
 } from '@angular/core';
 import { TranslocoModule } from '@jsverse/transloco';
-import { forkJoin } from 'rxjs';
 import { TripService } from '../../logic/services/trip.service';
 import { TripDto } from '../../logic/dtos/trip.dto';
 import { SessionService } from '../../logic/services/session.service';
@@ -45,16 +44,18 @@ export class MyTripsComponent implements OnInit {
 
   ngOnInit(): void {
 
-	const tripIds = this.sessionService.me()?.trips?.map((t) => t.tripId) ?? [];
+	const userId = this.sessionService.me()?.id;
+	if (!userId)
+		return;
 
-    forkJoin(tripIds.map((id) => this.tripService.getById(id))).subscribe((responses) => {
-      const trips = responses
-        .map((r) => r.data)
-        .filter((t): t is TripDto => t != null)
-        .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-      this.trips.set(trips);
-      this.isLoading.set(false);
-    });
+	this.tripService.searchTripsByUserId(userId).subscribe((response) => {
+		const trips = response.data
+		if (trips) {
+			trips.filter((t): t is TripDto => t != null)
+			.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+			this.trips.set(trips);
+		}
+	})
   }
   readonly displayTrips = computed(() => {
     const id = this.upcomingTripId();

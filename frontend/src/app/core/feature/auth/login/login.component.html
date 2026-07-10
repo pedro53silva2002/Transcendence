@@ -14,7 +14,6 @@
 			<input matInput type="password" [type]="passwordVisible() ? 'text' : 'password'" formControlName="password"
 				placeholder="{{ 'auth.password' | transloco }}" required>
 			<button type="button" mat-icon-button matSuffix (click)="passwordVisible.set(!passwordVisible())"
-				[attr.aria-label]="passwordVisible() ? 'auth.hidePassword' : 'auth.showPassword'"
 				[attr.aria-pressed]="passwordVisible()">
 				<mat-icon>{{ passwordVisible() ? 'visibility' : 'visibility_off' }}</mat-icon>
 			</button>

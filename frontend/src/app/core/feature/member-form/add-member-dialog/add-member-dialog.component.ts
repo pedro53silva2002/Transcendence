@@ -1,4 +1,3 @@
-import { NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,7 +19,7 @@ import { getUserAvatarUrl } from '../../../logic/utils/minio-url.util';
 
 @Component({
   selector: 'app-add-member-dialog',
-  imports: [MatDialogModule, MatButtonModule, MatIconModule, NgOptimizedImage, TranslocoModule, CloseButtonComponent],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, TranslocoModule, CloseButtonComponent],
   templateUrl: './add-member-dialog.component.html',
   styleUrl: './add-member-dialog.component.scss',
   encapsulation: ViewEncapsulation.None,
