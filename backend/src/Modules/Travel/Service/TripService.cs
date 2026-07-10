@@ -4,19 +4,21 @@ using Trippie.Common.Services.Search.Model;
 using Trippie.Modules.Auth.Service;
 using Trippie.Modules.Travel.Dtos;
 using Trippie.Modules.Travel.Model;
+using Trippie.Common.Services.Caching;
 
 namespace Trippie.Modules.Travel.Service;
 
 public sealed class TripService(
 	TripModel tripModel,
-	TripMembersModel tripMembersModel)
+	TripMembersService tripMembersService,
+	ICachingService cacheService)
 {
 	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
 	{
 		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
 		var trip = await tripModel.CreateAsync(dto, userId, ct);
 		dto.Members.TripId = trip.Id;
-		var members = await new TripMembersService(tripMembersModel).CreateAsync(userId, dto.Members, ct);
+		var members = await tripMembersService.CreateAsync(userId, dto.Members, ct);
 		trip.Members = [.. members];
 
 		return trip;
@@ -29,6 +31,11 @@ public sealed class TripService(
 	{
 		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
 		var trip = await tripModel.UpdateAsync(userId, id, dto, ct) ?? throw new NotFoundException($"Trip {id} not found.", id);
+
+		foreach (var member in trip.Members)
+    	{
+    	    await cacheService.RemoveAsync($"user:me:{member.UserId}", ct);
+    	}
 
 		return trip;
 	}
@@ -43,8 +50,18 @@ public sealed class TripService(
 
 	public async Task DeleteAsync(int userId, int id, CancellationToken ct = default)
 	{
-		var delete = await tripModel.DeleteAsync(userId, id, ct);
-		if (!delete) throw new NotFoundException($"Trip {id} not found.", id);
+		var trip = await tripModel.GetById(id, ct)
+        	?? throw new NotFoundException($"Trip {id} not found.", id);
+
+    	var deleted = await tripModel.DeleteAsync(userId, id, ct);
+
+    	if (!deleted)
+    	    throw new NotFoundException($"Trip {id} not found.", id);
+
+    	foreach (var member in trip.Members)
+    	{
+    	    await cacheService.RemoveAsync($"user:me:{member.UserId}", ct);
+    	}
 	}
 
 	private void ValidateTrip(string tripName, string? description, long budget, DateOnly startDate, DateOnly endDate)

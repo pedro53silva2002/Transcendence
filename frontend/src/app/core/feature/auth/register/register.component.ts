@@ -47,6 +47,7 @@ import { SessionService } from '../../../logic/services/session.service';
 import { UserService } from '../../../logic/services/user.service';
 import { TokenStorageService } from '../../../logic/services/token-storage.service';
 import { AuthService } from '../../../logic/services/auth.service';
+import { ApiError } from '../../../logic/model/api-error.model';
 
 @Component({
   standalone: true,
@@ -124,7 +125,10 @@ export class RegisterComponent implements OnInit {
               this.dialogRef.close();
               this.router.navigate([ok ? '/home' : '/login']);
             }),
-            catchError(() => EMPTY),
+            catchError((err) => {
+              this.applyRegisterError(err);
+              return EMPTY;
+            }),
             finalize(() => this.submitting.set(false)),
           ),
         ),
@@ -212,7 +216,7 @@ export class RegisterComponent implements OnInit {
     const v = this.emailValue();
     if (!v) return undefined;
     return {
-      emailRegex: /^[^@.]{2,}@[^@.]{2,}\.[^@.]{2,}$/.test(v),
+      emailRegex: /^[^@\s]+@[^@\s.]+(?:\.[^@\s.]+)+$/.test(v),
     };
   });
 
@@ -247,5 +251,28 @@ export class RegisterComponent implements OnInit {
     this.showOAuthErrorMessage = false;
     this.submitting.set(true);
     this.submitTrigger$.next();
+  }
+
+  /**
+   * Surfaces a failed register call on the relevant form field.
+   *
+   * The async validators (validateUsername / validateUniqueEmail) run on blur,
+   * so a fast submit — or another user registering the same value in the
+   * meantime — can reach the backend, which replies with a 409 Conflict whose
+   * message names the offending field. We map that onto the same
+   * emailTaken/usernameTaken errors the template already renders.
+   */
+  private applyRegisterError(err: unknown): void {
+    if (!(err instanceof ApiError) || err.statusCode !== 409) return;
+
+    const message = (err.message ?? '').toLowerCase();
+    const control = message.includes('email')
+      ? this.form.controls.email
+      : this.form.controls.username;
+    const errorKey = control === this.form.controls.email ? 'emailTaken' : 'usernameTaken';
+
+    control.setErrors({ ...control.errors, [errorKey]: true });
+    control.markAsTouched();
+    this.cdr.detectChanges();
   }
 }
