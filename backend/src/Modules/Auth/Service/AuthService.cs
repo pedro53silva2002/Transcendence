@@ -46,7 +46,7 @@ public sealed class AuthService(UserService userService,
 
     public async Task<MeDto> GetMe(ClaimsPrincipal principal, CancellationToken ct = default)
     {
-        var userId = principal.GetUserId() ?? throw new UnauthorizedException("User not authenticated");
+        var userId = principal.GetUserId() ?? throw new ForbiddenException("User not authenticated"); //tosee
 		
 		string cacheKey = GetMeCacheKey(userId, ct);
 		
@@ -86,10 +86,10 @@ public sealed class AuthService(UserService userService,
         if (dto.Username is null) throw new ValidationException("username", "Username can not be empty.");
         if (dto.Password is null) throw new ValidationException("password", "Password can not be null.");
 
-        var user = await userService.GetByUsername(dto.Username, ct) ?? throw new UnauthorizedException("User not found.");
+        var user = await userService.GetByUsername(dto.Username, ct) ?? throw new ForbiddenException("User not found."); //tosee
 
-        string passwordHash = await userService.GetPasswordByUsername(dto.Username, ct) ?? throw new UnauthorizedException("Password not found.");
-        if (!new BCryptPasswordHasher().Verify(dto.Password, passwordHash)) throw new UnauthorizedException("Invalid username or password.");
+        string passwordHash = await userService.GetPasswordByUsername(dto.Username, ct) ?? throw new ForbiddenException("Password not found."); //tosee
+        if (!new BCryptPasswordHasher().Verify(dto.Password, passwordHash)) throw new ForbiddenException("Invalid username or password."); //tosee
 
 		await cacheService.RemoveAsync(GetMeCacheKey(user.Id), ct);
 
@@ -112,16 +112,16 @@ public sealed class AuthService(UserService userService,
     public async Task<AuthResponseDto> Refresh(RefreshTokenRequestDto dto, CancellationToken ct = default)
     {
         var stored = await db.RefreshTokens.FirstOrDefaultAsync(r => r.Token == dto.RefreshToken, ct)
-            ?? throw new UnauthorizedException("Invalid refresh token");
+            ?? throw new ForbiddenException("Invalid refresh token"); //tosee
 
         if (!stored.IsActive)
-            throw new UnauthorizedException("Refresh token is expired or has been revoked.");
+            throw new ForbiddenException("Refresh token is expired or has been revoked."); //tosee
 
         stored.RevokedAt = DateTime.UtcNow;
         db.RefreshTokens.Update(stored);
 
         var user = await userService.GetById(stored.UserId, ct)
-            ?? throw new UnauthorizedException("User not found");
+            ?? throw new ForbiddenException("User not found"); //tosee
 
 		await cacheService.RemoveAsync(GetMeCacheKey(user.Id), ct);
 
