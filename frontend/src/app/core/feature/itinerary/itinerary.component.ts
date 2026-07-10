@@ -80,8 +80,8 @@ export default class ItineraryComponent {
 	readonly maxDays = computed (() => this.trip()?.duration ?? 1);
 
 	readonly itemForm = this.formBuilder.nonNullable.group({
-		title: ['', [Validators.required, Validators.required, Validators.maxLength(20)]],
-		description: ['', [Validators.maxLength(30)]],
+		title: ['', [Validators.required, Validators.required, Validators.maxLength(10)]],
+		description: ['', [Validators.maxLength(15)]],
 		expectedPrice: [null as unknown as number, [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]],
 	});
 

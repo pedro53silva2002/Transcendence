@@ -1,8 +1,8 @@
 .main-container {
 	width: 70%;
 	margin: 0 auto;
-	margin-top: 100px;
-	min-height: 685px;
+	margin-top: 10vh;
+	min-height: 73vh;
 }
 
 .avatar {
@@ -39,30 +39,57 @@ mat-icon.avatar-icon {
 	align-items: center;
 	justify-content: space-between;
 	margin-bottom: 60px;
+	flex-wrap: wrap;
+	gap: 20px;
+
+	@media (max-width: 480px) {
+        justify-content: center;
+    }
 }
 
 .left-details {
-	display: flex;
-	align-items: center;
-	gap: 26px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 26px;
+    width: 100%;
 
-	.name-and-description {
+	@media (max-width: 480px) {
+        justify-content: center;
+    }
 
-		h2 {
-			font-family: "Thicker Black";
-			color: var(--mat-sys-on-primary);
-			font-weight: 200;
-			font-size: 26px;
-			margin-bottom: 5px;
-			margin-top: 0;
-		}
+    .name-and-description {
+		width: 100%;
+    
+        @media (max-width: 480px) {
+            text-align: center;
+            width: 100%;
+            flex: none;
+        }
 
-		p {
-			margin-top: 0;
-			color: var(--mat-sys-on-primary);
-			opacity: 0.8;
-		}
-	}
+        h2 {
+            font-family: "Thicker Black";
+            color: var(--mat-sys-on-primary);
+            font-weight: 200;
+            font-size: 166%;
+            margin-bottom: 5px;
+            margin-top: 0;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+
+            @media (max-width: 480px) {
+                font-size: 140%;
+            }
+        }
+
+        p {
+            margin-top: 0;
+            color: var(--mat-sys-on-primary);
+            opacity: 0.8;
+            overflow-wrap: break-word;
+        }
+    }
 }
 
 .profile-btn {
@@ -73,12 +100,13 @@ mat-icon.avatar-icon {
 
 .countries-section,
 .my-itineraries-section {
-	margin-top: 55px;
+	margin-top: 2vh;
+	margin-bottom: 5%;
 
 	h1 {
 		font-family: "Tabloid";
 		font-weight: 200;
-		font-size: 25px;
+		font-size: 125%;
 		color: var(--mat-sys-on-primary);
 		opacity: 0.8;
 	}
@@ -93,7 +121,7 @@ mat-icon.avatar-icon {
 .list-of-itineraries {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 70px;
+	gap: 12px 82px;
 }
 
 @media (max-width: 1254px) {

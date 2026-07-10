@@ -23,7 +23,7 @@ export class ProfileItineraryCardComponent {
 	openItinerary(): void {
 
 		this.dialog.open(ItineraryComponent, {
-			width: '660px',
+			width: 'auto',
 			data: {
 				itinerary: this.itinerary(),
 				showAddButton: false,
@@ -33,7 +33,6 @@ export class ProfileItineraryCardComponent {
 			}
 		});
 	}
-
 }
 
 function getSeasonImage(startDate: string): string {

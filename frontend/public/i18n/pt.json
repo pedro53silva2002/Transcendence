@@ -165,7 +165,7 @@
 	  "addItem": "Adicionar paragem",
 	  "closeForm": "Fechar formulário",
 	  "stops": "Paragens do itinerário",
-	  "empty": "Sem paragens — toca em + para adicionar.",
+	  "empty": "Sem paragens.",
 	  "remove": "Remover {{ title }}",
 	  "day": "DIA",
 	  "dayNav": "Navegação por dia",
@@ -181,9 +181,9 @@
 		"save": "Guardar",
 		"errors": {
 		  "titleRequired": "O título é obrigatório",
-		  "titleMaxLength": "O título não pode exceder 20 caracteres",
+		  "titleMaxLength": "O título não pode exceder 10 caracteres",
 		  "priceMin": "O preço deve ser igual ou superior a 0",
-		  "descriptionMaxLength": "A descrição não pode exceder 30 caracteres"
+		  "descriptionMaxLength": "A descrição não pode exceder 15 caracteres"
 		}
 	  }
 	},
