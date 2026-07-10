@@ -78,7 +78,7 @@ Responsibilities: prioritizing work, defining product direction, implementing ba
 
 ## Maria João
 **Project Manager and Frontend Developer**   
-Responsibilities: organizing the team workflow, managing delivery planning, implementing frontend features and API integration, and and contributing to the UI, user experience, and web design.
+Responsibilities: organizing the team workflow, managing delivery planning, implementing frontend features and API integration, and contributing to the UI, user experience, and web design.
 
 ## Marco
 **Tech Lead and Backend Developer**   
@@ -136,6 +136,8 @@ We worked in sprints of approximately 2 to 3 weeks. Communication was kept activ
 - Redis was chosen to support fast temporary storage and demonstrate scalable service integration.
 - MinIO was chosen as an S3-compatible storage solution for uploaded files without relying on external cloud services.
 - Google OAuth was chosen to provide a secure and convenient authentication flow.
+- The backend and frontend chose to follow an Onion-inspired layered architecture, separating the application into DTOs, Models, Services, Routers, and Configuration. Each feature was implemented as a complete CRUD workflow, with routers exposing the endpoints, services containing the business logic, models handling data persistence, DTOs defining the data exchanged between layers, and EF Core configuration managing the database mappings. This separation of concerns made the project easier to maintain, test, and extend, while allowing multiple team members to work on different features with fewer merge conflicts and clearer responsibilities. The main drawback was the increased amount of boilerplate and the additional time required to implement new features across multiple layers.
+- All core features were implemented as complete CRUD (Create, Read, Update, Delete) workflows across both the frontend and backend. Users can consistently create, view, update, and delete application data through an intuitive interface.
 
 # Database Schema
 The database is structured around users, trips, and social relationships.
