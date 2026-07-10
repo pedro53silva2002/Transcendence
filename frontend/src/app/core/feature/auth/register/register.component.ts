@@ -137,44 +137,6 @@ export class RegisterComponent implements OnInit {
       .subscribe();
   }
 
-  private readonly validateUsername = (
-    control: AbstractControl,
-  ): Observable<ValidationErrors | null> => {
-    const value = (control.value ?? '').trim();
-    if (!value) return of(null);
-    return timer(400).pipe(
-      switchMap(() =>
-        from(
-          this.userService.search({
-            search: { username: { op: 'EQUAL', value } },
-            pageSize: 1,
-          }),
-        ),
-      ),
-      map((res) => ((res.data?.content.length ?? 0) > 0 ? { usernameTaken: true } : null)),
-      catchError(() => of(null)),
-    );
-  };
-
-  private readonly validateUniqueEmail = (
-    control: AbstractControl,
-  ): Observable<ValidationErrors | null> => {
-    const value = (control.value ?? '').trim();
-    if (!value) return of(null);
-    return timer(400).pipe(
-      switchMap(() =>
-        from(
-          this.userService.search({
-            search: { email: { op: 'EQUAL', value } },
-            pageSize: 1,
-          }),
-        ),
-      ),
-      map((res) => ((res.data?.content.length ?? 0) > 0 ? { emailTaken: true } : null)),
-      catchError(() => of(null)),
-    );
-  };
-
   validateUserEmail: ValidatorFn = (control) => {
     const email = control.value;
     if (!email) return null;
@@ -225,13 +187,11 @@ export class RegisterComponent implements OnInit {
       username: new FormControl('', {
         nonNullable: true,
         validators: [Validators.required],
-        asyncValidators: [this.validateUsername],
         updateOn: 'blur',
       }),
       email: new FormControl('', {
         nonNullable: true,
         validators: [Validators.required, Validators.email, this.validateUserEmail],
-        asyncValidators: [this.validateUniqueEmail],
         updateOn: 'blur',
       }),
       password: new FormControl('', {
