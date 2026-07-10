@@ -18,17 +18,15 @@ export const routes: Routes = [
   {
     path: '',
     component: LandingPageComponent,
-    canActivate: [guestGuard],
+    // canActivate: [guestGuard],
   },
   {
 	path:'privacy-policy',
 	component: PrivacyPolicyComponent,
-	canActivate: [guestGuard],
   },
   {
 	path:'terms-of-service',
 	component: TermsOfServiceComponent,
-	canActivate: [guestGuard],
   },
 
   //to verify if the google auth was successful and redirect to the home page
