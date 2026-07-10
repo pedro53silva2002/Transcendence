@@ -115,6 +115,7 @@ export class MemberFormComponent {
 	protected openAddMember(): void {
 		const alreadyAdded = this.members().map((m) => m.userId);
 		const ref = this.dialog.open(AddMemberDialogComponent, {
+			width: 'auto',
 			data: { tripId: this.tripId(), alreadyAdded },
 		});
 

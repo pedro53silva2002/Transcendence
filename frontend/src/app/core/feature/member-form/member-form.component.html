@@ -26,7 +26,7 @@
 		<div class="crew-grid" [class.dashboard-crew-grid]="isDashboardRoute()"
 			[style.grid-template-columns]="'repeat(' + columns() + ', 1fr)'">
 			@for (member of members(); track member.userId) {
-			<div class="crew-card">
+			<div class="crew-card" [class.dashboard-crew-card]="isDashboardRoute()">
 				<div [routerLink]="['/profile', member.username]" class="avatar" [attr.aria-label]="member.displayName"
 					role="img">
 					@if (member.profilePicture) {

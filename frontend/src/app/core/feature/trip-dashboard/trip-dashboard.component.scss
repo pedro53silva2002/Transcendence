@@ -17,8 +17,12 @@
 	margin-top: 0px;
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	gap: 10px;
 	width: 100%;
+
+	@media (max-width: 1023px) {
+		gap: 5px;
+	}
 
 	h1 {
 		font-family: "Thicker Black";
@@ -27,6 +31,10 @@
 		margin-bottom: 0;
 		text-transform: uppercase;
 
+		@media (max-width: 480px) {
+			font-size: 30px;
+			text-align: center;
+		}
 	}
 
 	h2 {
@@ -36,6 +44,12 @@
 		color: var(--mat-sys-on-primary);
 		margin-top: 0;
 		margin-bottom: 0;
+
+		@media (max-width: 480px) {
+			font-size: 18px;
+			text-align: center;
+			width: 100%;
+		}
 	}
 
 	p {
@@ -43,12 +57,22 @@
 		color: var(--mat-sys-on-primary);
 		font-size: 16px;
 		opacity: 0.7;
+
+		@media (max-width: 480px) {
+			font-size: 12px;
+		}
 	}
 }
 
 .description {
 	overflow: hidden;
 	width: 40%;
+
+	@media (max-width: 480px) {
+		width: 100%;
+		text-align: center;
+		margin-top: 15px;
+	}
 }
 
 .management-buttons {
@@ -63,6 +87,10 @@
 		height: 25px;
 		padding: 15px;
 	}
+
+	@media (max-width: 1023px) {
+		justify-content: center;
+	}
 }
 
 .location-and-budget {
@@ -76,6 +104,11 @@
 	position: relative;
 	display: grid !important;
 	grid-template-areas: "stack" !important;
+
+	@media (max-width: 480px) {
+		width: 100%;
+		justify-content: center;
+	}
 }
 
 .budget-base,
@@ -139,6 +172,12 @@
 	justify-content: space-between;
 	width: 95%;
 	gap: 20px;
+
+	@media (max-width: 480px) {
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-top: 10px;
+	}
 }
 
 .trip-dates {
@@ -161,16 +200,29 @@
 	border-radius: 50%;
 	background-color: var(--mat-sys-on-primary-container);
 
+	@media (max-width: 480px) {
+		width: 60px;
+		height: 60px;
+	}
+
 	.day {
 		text-align: center;
 		font-size: 28px;
 		margin: 0;
+
+		@media (max-width: 480px) {
+			font-size: 22px;
+		}
 	}
 
 	.month {
 		text-align: center;
 		font-size: 20px;
 		margin: 0;
+
+		@media (max-width: 480px) {
+			font-size: 14px;
+		}
 	}
 }
 
@@ -180,6 +232,12 @@
 	z-index: 1;
 	margin-left: 60px;
 	margin-bottom: 30px;
+
+	@media (max-width: 480px) {
+		width: 30px;
+		margin-left: 45px;
+		margin-bottom: 22px;
+	}
 }
 
 .cards {
@@ -195,7 +253,11 @@
 		max-height: 472px;
 	}
 
-	@media (max-width: 960px) {
-		width: 60%;
+	@media (max-width: 1023px) {
+		justify-content: center;
+	}
+
+	@media (max-width: 480px) {
+		margin-top: 0px;
 	}
 }

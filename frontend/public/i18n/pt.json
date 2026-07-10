@@ -165,7 +165,7 @@
 	  "addItem": "Adicionar paragem",
 	  "closeForm": "Fechar formulário",
 	  "stops": "Paragens do itinerário",
-	  "empty": "Sem paragens — toca em + para adicionar.",
+	  "empty": "Sem paragens.",
 	  "remove": "Remover {{ title }}",
 	  "day": "DIA",
 	  "dayNav": "Navegação por dia",

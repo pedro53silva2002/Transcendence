@@ -22,6 +22,15 @@ app-member-form {
 
 .dashboard-crew-panel {
 	max-height: 475px;
+	max-width: 548px;
+
+	@media (max-width: 1023px) {
+		width: 400px;
+	}
+
+	@media (max-width: 480px) {
+		width: 300px;
+	}
 }
 
 .crew-header {
@@ -57,9 +66,6 @@ app-member-form {
 	align-items: center;
 
 	mat-icon {
-		// font-size: 12px;
-		// width: 12px;
-		// height: 12px;
 		opacity: 0.8;
 	}
 
@@ -90,6 +96,18 @@ app-member-form {
 	}
 }
 
+.dashboard-crew-grid {
+	gap: 30px;
+	margin-top: 10px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	margin-left: 0;
+}
+
 .crew-card {
 	display: flex;
 	justify-content: flex-start;
@@ -99,15 +117,14 @@ app-member-form {
 	margin-right: 0;
 }
 
-.dashboard-crew-grid {
-	margin-left: 110px;
-	gap: 30px;
-	margin-top: 10px;
-	width: 70%;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
+.dashboard-crew-card {
+	width: 65%;
+
+	@media (max-width: 480px) {
+		width: 80%;
+	}
 }
+
 
 .name-and-delete {
 	display: flex;

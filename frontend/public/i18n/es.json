@@ -165,7 +165,7 @@
 		"addItem": "Agregar parada",
 		"closeForm": "Cerrar formulario",
 		"stops": "Paradas del itinerario",
-		"empty": "Sin paradas — toca + para agregar una.",
+		"empty": "Sin paradas.",
 		"remove": "Eliminar {{ title }}",
 		"day": "DÍA",
 		"dayNav": "Navegación por día",

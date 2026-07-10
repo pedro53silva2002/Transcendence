@@ -2,11 +2,13 @@
 	border: 2px solid var(--mat-sys-on-primary-container) !important;
 	border-radius: 29px !important;
 	background-color: var(--mat-sys-primary-container) !important;
+	max-width: 500px;
 	min-width: 400px;
 	min-height: 400px;
 
 	@media (max-width: 480px) {
 		max-width: 300px;
+		min-width: 200px;
 	}
 }
 
