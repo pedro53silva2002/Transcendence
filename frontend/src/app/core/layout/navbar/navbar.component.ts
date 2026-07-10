@@ -70,7 +70,6 @@ export class NavbarComponent implements OnInit {
 	showPlanATrip = input(false);
 	showMyTrips = input(false);
 	showFriends = input(false);
-	showMyExpenses = input(false);
 	showSearch = input(false);
 	showLanguageSelector = input(false);
 	showLogout = input(false);

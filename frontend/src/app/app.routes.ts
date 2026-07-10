@@ -11,12 +11,24 @@ import ProfileComponent from './core/feature/profile/profile.component';
 import FriendshipComponent from './core/feature/friendship/friendship.component';
 import { authGuard } from './core/logic/guards/authGuard.service';
 import { UserDashboardComponent } from './core/feature/user-dashboard/user-dashboard.component';
+import { PrivacyPolicyComponent } from './core/feature/privacy-policy/privacy-policy.component';
+import { TermsOfServiceComponent } from './core/feature/terms-of-service/terms-of-service.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: LandingPageComponent,
     canActivate: [guestGuard],
+  },
+  {
+	path:'privacy-policy',
+	component: PrivacyPolicyComponent,
+	canActivate: [guestGuard],
+  },
+  {
+	path:'terms-of-service',
+	component: TermsOfServiceComponent,
+	canActivate: [guestGuard],
   },
 
   //to verify if the google auth was successful and redirect to the home page
