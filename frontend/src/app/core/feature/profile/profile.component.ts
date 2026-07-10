@@ -65,7 +65,7 @@ export default class ProfileComponent {
 	protected readonly itineraries = toSignal(
 		toObservable(this.visitedUser).pipe(
 		filter((user): user is UserDto => user !== null && user.id !== undefined),
-		switchMap(user => this.tripService.searchTripsByUserId(user.id)),
+		switchMap(user => this.tripService.searchProfileTripsByUserId(user.id)),
 		map(response => response.data ?? [])
 	), { initialValue: [] }
 );
