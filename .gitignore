@@ -66,3 +66,6 @@ docker-compose.override.yml
 
 docs/*
 docs
+
+# Local TLS certificates (self-signed, do not commit)
+nginx/certs/

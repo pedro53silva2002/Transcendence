@@ -109,7 +109,7 @@ export class EditProfileComponent {
 				if (isGooglePhoto) {
 					this.avatarPreview.set(user.profilePhotoUrl.replace(/=s\d+(-c)?$/, '=s252'));
 				} else {
-					this.avatarPreview.set(`http://localhost:9000/${user.profilePhotoUrl}`);
+					this.avatarPreview.set(`/storage/${user.profilePhotoUrl}`);
 				}
 			}
 
