@@ -44,18 +44,21 @@ export class MyTripsComponent implements OnInit {
 
   ngOnInit(): void {
 
-	const userId = this.sessionService.me()?.id;
-	if (!userId)
-		return;
+    //update the session
+    this.sessionService.loadMe().subscribe();
 
-	this.tripService.searchTripsByUserId(userId).subscribe((response) => {
-		const trips = response.data
-		if (trips) {
-			trips.filter((t): t is TripDto => t != null)
-			.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-			this.trips.set(trips);
-		}
-	})
+    const userId = this.sessionService.me()?.id;
+    if (!userId)
+      return;
+
+    this.tripService.searchTripsByUserId(userId).subscribe((response) => {
+      const trips = response.data
+      if (trips) {
+        trips.filter((t): t is TripDto => t != null)
+          .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+        this.trips.set(trips);
+      }
+    })
   }
   readonly displayTrips = computed(() => {
     const id = this.upcomingTripId();
