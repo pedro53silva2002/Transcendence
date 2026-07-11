@@ -47,16 +47,15 @@ export class TripDashboardComponent implements OnInit {
 		return Math.min(percentage, 100); //prevents the bar from passing the 100%
 	});
 
-	public isAdmin = computed(() => {
-		const user = this.authService.me();
-		const id = this.tripStateService.trip()?.id;
-
-		if (!user || !id)
+	public readonly members = computed(() => this.tripStateService.members());
+	protected readonly isAdmin = computed(() => {
+		const me = this.authService.me();
+		if (!me)
 			return false;
 
-		const currentTrip = user.trips.find(trip => trip.tripId === id);
-		return currentTrip?.role.toUpperCase() === 'ADMIN';
-	});
+		const myMembership = this.members().find((m) => m.userId === me.id);
+		return myMembership?.role === 'Admin';
+	})
 
 	//Verify if state service is empty. If so, make the request to backend to fill the data.
 	ngOnInit(): void {
