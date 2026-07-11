@@ -1,0 +1,12 @@
+<div class="app-container">
+	<app-navbar [showHome]="true" [showProfile]="true" [showPlanATrip]="true" [showMyTrips]="true"
+				[showFriends]="true" [showSearch]="true" [showLanguageSelector]="true"
+				[showLogout]="true">
+	</app-navbar>
+	
+	<main class="main-container">
+		<router-outlet></router-outlet>
+	</main>
+	
+	<app-footer></app-footer>
+</div>

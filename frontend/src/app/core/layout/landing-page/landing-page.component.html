@@ -1,12 +1,17 @@
-<app-navbar [showLogin]="true" [showRegister]="true" [showLanguageSelector]="true"></app-navbar>
-
-<div class="main-container">
-	<h1>TRIPPIE</h1>
-	<div class="half-globe">
-		<img class="globe" src="./images/globe.png" alt="globe">
-		<img class="signatures" [class.hidden-signatures]="isDialogOpen$ | async" src="./images/signatures.png" alt="signatures">
+<div class="full-page">
+	<app-navbar [showLogin]="true" [showRegister]="true" [showLanguageSelector]="true"></app-navbar>
+	<div class="main-container">
+		<h1 class="page-title">TRIPPIE</h1>
+		<div class="half-globe">
+			<img class="globe" src="./images/globe.png" alt="globe">
+			<img class="signatures" [class.hidden-signatures]="isDialogOpen$ | async" src="./images/signatures.png"
+				alt="signatures">
+		</div>
+		<div class="half-signatures">
+		</div>
 	</div>
-	<div class="half-signatures">
+	<div class="page-links">
+		<a [routerLink]="['/privacy-policy']">{{ 'privacy-policy.title' | transloco }}</a>
+		<a [routerLink]="['/terms-of-service']">{{ 'terms-of-service.title' | transloco }}</a>
 	</div>
 </div>
-

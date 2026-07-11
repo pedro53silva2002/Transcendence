@@ -1,0 +1,32 @@
+.bubble {
+	width: 72px;
+	height: 72px;
+	border-radius: 50%;
+	background-color: var(--mat-sys-on-primary-container);
+	color: var(--mat-sys-primary);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Tabloid', sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+	text-align: center;
+	text-transform: uppercase;
+	box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+	pointer-events: none;
+	user-select: none;
+
+	@media (max-width: 480px) {
+		width: 50px;
+		height: 50px;
+		font-size: 10px;
+	}
+}
+
+.text {
+	font-weight: 200;
+	display: flex;
+	flex-direction: column;
+	margin-top: 6px;
+}

@@ -1,0 +1,26 @@
+@if (isAuthenticated()) {
+<app-navbar [showHome]="true" [showProfile]="true" [showPlanATrip]="true" [showMyTrips]="true" [showFriends]="true"
+	[showSearch]="true" [showLanguageSelector]="true" [showLogout]="true"></app-navbar>
+} @else {
+<app-navbar [showLogin]="true" [showRegister]="true" [showLanguageSelector]="true"></app-navbar>
+}
+<div class="main-container">
+	<h1 class="page-title">{{ 'privacy-policy.title' | transloco }}</h1>
+	<div class="content">
+		<h2 class="subtitle">{{ 'privacy-policy.update-title' | transloco }}</h2>
+		<p class="page-content">{{ 'privacy-policy.paragraph' | transloco }}</p>
+		<h2 class="subtitle">{{ 'privacy-policy.subtitle1' | transloco }}</h2>
+		<p class="page-content">{{ 'privacy-policy.paragraph1' | transloco }}</p>
+		<h2 class="subtitle">{{ 'privacy-policy.subtitle2' | transloco }}</h2>
+		<p class="page-content">{{ 'privacy-policy.paragraph2' | transloco }}</p>
+		<h2 class="subtitle">{{ 'privacy-policy.subtitle3' | transloco }}</h2>
+		<p class="page-content">{{ 'privacy-policy.paragraph3' | transloco }}</p>
+		<h2 class="subtitle">{{ 'privacy-policy.subtitle4' | transloco }}</h2>
+		<p class="page-content">{{ 'privacy-policy.paragraph4' | transloco }}</p>
+		<h2 class="subtitle">{{ 'privacy-policy.subtitle5' | transloco }}</h2>
+		<p class="page-content">{{ 'privacy-policy.paragraph5' | transloco }}</p>
+		<h2 class="subtitle">{{ 'privacy-policy.subtitle6' | transloco }}</h2>
+		<p class="page-content">{{ 'privacy-policy.paragraph6' | transloco }}</p>
+	</div>
+</div>
+<app-footer></app-footer>

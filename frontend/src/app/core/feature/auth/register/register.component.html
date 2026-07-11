@@ -1,0 +1,116 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="dialog-header">
+    <app-close-button color="var(--mat-sys-on-primary-container)"></app-close-button>
+  </div>
+  <div class="title">
+    <h2 mat-dialog-title>{{ 'auth.register' | transloco }}</h2>
+    <hr />
+  </div>
+
+  <mat-dialog-content>
+    <div class="register-form">
+      <mat-form-field appearance="outline" [hideRequiredMarker]="true">
+        <input
+          matInput
+          type="text"
+          formControlName="username"
+          placeholder="{{ 'auth.username' | transloco }}"
+          maxlength="15"
+        />
+      </mat-form-field>
+      @if (form.controls.username.hasError('usernameTaken')) {
+        <span class="field-error">{{ 'auth.usernameTaken' | transloco }}</span>
+      }
+      <mat-form-field appearance="outline" [hideRequiredMarker]="true">
+        <input matInput type="email" formControlName="email" placeholder="email" />
+      </mat-form-field>
+      @if (form.controls.email.hasError('emailTaken')) {
+        <span class="field-error">{{ 'auth.emailTaken' | transloco }}</span>
+      } @else if (form.controls.email.hasError('email')) {
+        <span class="field-error">{{ 'auth.invalidEmail' | transloco }}</span>
+      } @else if (form.controls.email.hasError('dot')) {
+        <span class="field-error">{{ 'auth.invalidEmail' | transloco }}</span>
+      } @else if (emailValidator()?.emailRegex === false) {
+        <span class="field-error">{{ 'auth.invalidEmail' | transloco }}</span>
+      }
+      <mat-form-field appearance="outline" [hideRequiredMarker]="true">
+        <input
+          matInput
+          [type]="passwordVisible() ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="{{ 'auth.password' | transloco }}"
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="passwordVisible.set(!passwordVisible())"
+          [attr.aria-pressed]="passwordVisible()"
+        >
+          <mat-icon>{{ passwordVisible() ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+      </mat-form-field>
+      @if (
+        (!passwordRules().digits ||
+          !passwordRules().length ||
+          !passwordRules().lowercase ||
+          !passwordRules().special ||
+          !passwordRules().uppercase) &&
+        form.controls.password.value
+      ) {
+        <ul class="password-checklist">
+          <li [class.ok]="passwordRules().length" [class.error]="!passwordRules().length">
+            {{ 'auth.passwordRules.length' | transloco }}
+          </li>
+          <li [class.ok]="passwordRules().lowercase" [class.error]="!passwordRules().lowercase">
+            {{ 'auth.passwordRules.lowercase' | transloco }}
+          </li>
+          <li [class.ok]="passwordRules().uppercase" [class.error]="!passwordRules().uppercase">
+            {{ 'auth.passwordRules.uppercase' | transloco }}
+          </li>
+          <li [class.ok]="passwordRules().digits" [class.error]="!passwordRules().digits">
+            {{ 'auth.passwordRules.digits' | transloco }}
+          </li>
+          <li [class.ok]="passwordRules().special" [class.error]="!passwordRules().special">
+            {{ 'auth.passwordRules.special' | transloco }}
+          </li>
+        </ul>
+      }
+      <mat-form-field appearance="outline" [hideRequiredMarker]="true">
+        <input
+          matInput
+          [type]="confirmPasswordVisible() ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          placeholder="{{ 'auth.password-confirmation' | transloco }}"
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="confirmPasswordVisible.set(!confirmPasswordVisible())"
+          [attr.aria-pressed]="confirmPasswordVisible()"
+        >
+          <mat-icon>{{ confirmPasswordVisible() ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+      </mat-form-field>
+      @if (form.hasError('passwordMismatch')) {
+        <span class="field-error">{{ 'auth.passwordMismatch' | transloco }}</span>
+      }
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button
+      type="submit"
+      mat-flat-button
+      class="register-btn"
+      [disabled]="form.invalid || submitting()"
+    >
+      {{ 'auth.register' | transloco }}
+    </button>
+    <app-google-auth-button></app-google-auth-button>
+    @if (showOAuthErrorMessage) {
+      <div class="error-message"><p>Google Authentication failed.</p></div>
+    }
+  </mat-dialog-actions>
+</form>

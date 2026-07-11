@@ -1,0 +1,27 @@
+<!-- DASHBOARD USER -->
+<div class="full-page">
+	<app-navbar [showSearch]="true" [showProfile]="true" [showLanguageSelector]="true" [showLogout]="true"></app-navbar>
+	<div class="main-container">
+		<div class="greet-text">
+			<h1> {{ 'dashboard.greet' | transloco }}
+				@if (user()) {
+					&nbsp;{{ user()?.displayName }}
+				} @else {&nbsp;Guest}
+			</h1>
+			<p> {{ 'dashboard.intro' | transloco }} </p>
+		</div>
+
+		<div class="cards-container">
+			<div class="cards-section">
+				<app-dashboard-card routerLink="/plan-a-trip" title="navbar.plan-a-trip" description="card.trip-description"
+					imagePath="./images/trip.png"></app-dashboard-card>
+				<app-dashboard-card routerLink="/my-trips" title="navbar.my-trips" description="card.my-trips-description"
+					imagePath="./images/my_trips.png"></app-dashboard-card>
+				<app-dashboard-card routerLink="/my-friends" title="navbar.friends" description="card.my-friends-description"
+					imagePath="./images/friends.png"></app-dashboard-card>
+			</div>
+		</div>
+	</div>
+	<app-stat-cards></app-stat-cards>
+	<app-footer></app-footer>
+</div>

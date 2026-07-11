@@ -1,0 +1,68 @@
+.footer-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    padding: 20px 0;
+    gap: 20px;
+
+    @media (max-width: 1023px) {
+        flex-direction: column-reverse;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+    }
+}
+
+.slogan-container {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    
+    @media (min-width: 1024px) {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+    
+    @media (max-width: 1023px) {
+        width: 100%;
+    }
+}
+
+.slogan {
+    font-family: "Tabloid";
+    color: var(--mat-sys-on-primary);
+    opacity: 0.7;
+    font-weight: 100;
+    font-size: 100%;
+    margin: 0;
+    text-align: center;
+}
+
+.page-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    z-index: 2;
+	margin-left: 200px;
+
+    @media (max-width: 1023px) {
+        justify-content: center;
+        width: 100%;
+		margin-left: 0;
+    }
+
+    a {
+        font-size: 10px;
+        color: var(--mat-sys-on-primary-container);
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}

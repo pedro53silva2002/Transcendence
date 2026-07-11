@@ -1,37 +1,238 @@
 {
-  "auth": {
-    "register": "Registro",
-    "login": "Acceso",
-    "password": "contraseña",
-    "google": "Iniciar Sesión con",
-    "username": "nombre de usuario",
-    "password-confirmation": "confirmar contraseña",
-    "email": "Email"
-  },
-
-  "navbar": {
-    "profile": "Perfil",
-    "trip": "Planear Viaje",
-    "my-trips": "Mis Viajes",
-    "my-friends": "Mis Amigos",
-    "my-expenses": "Mis Gastos"
-  },
-
-  "card": {
-    "trip-description": "Haz clic aquí para empezar a planificar tu próximo viaje.",
-    "my-trips-description": "Haz clic aquí para ver tus viajes pasados, presentes y futuros.",
-    "my-friends-description": "Haz clic aquí para ver tu lista de amigos.",
-    "my-expenses-description": "Haz clic aquí para ver en qué gastaste tu dinero."
-  },
-
+	"auth": {
+		"register": "Registrarse",
+		"login": "Acceso",
+		"password": "contraseña",
+		"google": "Iniciar Sesión con",
+		"username": "nombre de usuario",
+		"password-confirmation": "confirmar contraseña",
+		"email": "Email",
+		"usernameTaken": "Este nombre de usuario ya está en uso.",
+		"invalidEmail": "Correo electrónico no válido.",
+		"emailTaken": "Este correo electrónico ya está registrado.",
+		"passwordMismatch": "Las contraseñas no coinciden.",
+		"passwordRules": {
+			"length": "Entre 8 y 20 caracteres de longitud",
+			"lowercase": "1 carácter en minúscula",
+			"uppercase": "1 carácter en mayúscula",
+			"special": "1 carácter especial",
+			"digits": "1 dígito"
+		},
+		"error-login": "Nombre de usuario o contraseña incorrectos.",
+		"error-oauth": "La autenticación de Google ha fallado.",
+		"new-password": "nueva contraseña"
+	},
+	"card": {
+		"trip-description": "Haz clic aquí para empezar a planificar tu próximo viaje.",
+		"my-trips-description": "Haz clic aquí para ver tus viajes pasados, presentes y futuros.",
+		"my-friends-description": "Haz clic aquí para ver tu lista de amigos.",
+		"my-expenses-description": "Haz clic aquí para ver en qué gastaste tu dinero."
+	},
 	"dashboard": {
 		"greet": "Hola, ",
-		"intro": "¿Listo para tu aventura?" 
+		"intro": "¿Listo para tu aventura?"
 	},
-
 	"stats": {
-		"countries": "Paises Visitados",
-		"trips": "Viajes Este Ano",
-		"countdown": "Dias Para El Viaje"
-	}
+		"countries": "Países Visitados",
+		"trips": "Viajes Este Año",
+		"countdown": "Días Para El Viaje"
+	},
+	"plan-a-trip": {
+		"title": "Planifica tu viaje",
+		"trip-name": "nombre del viaje",
+		"trip-description": "descripción del viaje",
+		"start-date": "fecha de inicio",
+		"end-date": "fecha de finalización",
+		"country": "país",
+		"city": "ciudad",
+		"privacy-text": "¿Te gustaría permitir que tus amigos o el público vean tu viaje?",
+		"private-option": "privado",
+		"friends-option": "amigos",
+		"public-option": "público",
+		"create-trip": "Crear Viaje",
+		"update-trip": "Actualizar Viaje",
+		"name-error": "El nombre del viaje es obligatorio.",
+		"name-min-length-error": "El nombre del viaje debe tener al menos 3 caracteres.",
+		"name-max-length-error": "El nombre del viaje no puede tener más de 25 caracteres.",
+		"date-error": "Es obligatorio seleccionar las fechas de inicio y finalización de tu viaje.",
+		"description-max-length-error": "La descripción del viaje no puede tener más de 256 caracteres.",
+		"country-error": "Es obligatorio seleccionar un país.",
+		"country-string-error": "Por favor, selecciona un país válido.",
+		"city-string-error": "Por favor, selecciona una ciudad válida.",
+		"trip-budget": "presupuesto (€)",
+		"budget-error": "El presupuesto es obligatorio.",
+		"budget-numbers-error": "El presupuesto solo puede contener números."
+	},
+	"profile": {
+		"countries-section-title": "Por dónde he estado viajando",
+		"itineraries-section-title": "Mis Itinerarios",
+		"edit-title": "Editar Perfil",
+		"update-button": "Actualizar Perfil",
+		"description": "descripción",
+		"delete-button": "Eliminar Cuenta",
+		"delete-user-title": "¿Estás seguro?",
+		"delete-user-message": "Si confirmas esta decisión, tu cuenta será eliminada permanentemente.",
+		"delete-friend-message": "Si confirmas esta decisión, ya no seréis amigos.",
+		"description-error": "No puede tener más de 150 caracteres.",
+		"name-error": "Debes definir un nombre de perfil.",
+		"add-friend-btn": "Añadir Amigo",
+		"remove-friend-btn": "Eliminar amigo",
+		"edit-btn": "Editar Perfil",
+		"cancel-request-btn": "Cancelar petición",
+		"accept-request-btn": "Aceptar petición",
+		"delete-friend-request-message": "Si confirmas esta decisión, la solicitud de amistad será cancelada.",
+		"empty-state": "Este usuario todavía no ha estado en ningún lugar."
+	},
+	"trip-dashboard": {
+		"delete-trip-title": "¿Estás seguro?",
+		"delete-trip-message": "Si confirmas esta decisión, borrarás todo lo relacionado con este viaje.",
+		"city": "ciudad",
+		"privacy-text": "¿Te gustaría permitir que tus amigos o el público vean tu viaje?",
+		"private-option": "privado",
+		"friends-option": "amigos",
+		"public-option": "público",
+		"create-trip": "Crear Viaje",
+		"update-trip": "Actualizar Viaje",
+		"name-error": "El nombre del viaje es obligatorio.",
+		"name-min-length-error": "El nombre del viaje debe tener al menos 3 caracteres.",
+		"name-max-length-error": "El nombre del viaje no puede tener más de 25 caracteres.",
+		"date-error": "Es obligatorio seleccionar las fechas de inicio y finalización de tu viaje.",
+		"description-max-length-error": "La descripción del viaje no puede tener más de 256 caracteres.",
+		"country-error": "Es obligatorio seleccionar un país.",
+		"country-string-error": "Por favor, selecciona un país válido.",
+		"city-string-error": "Por favor, selecciona una ciudad válida.",
+		"trip-budget": "presupuesto (€)",
+		"budget-error": "El presupuesto es obligatorio.",
+		"budget-numbers-error": "El presupuesto solo puede contener números.",
+		"crew-title": "Equipo",
+		"delete-trip-btn": "Eliminar Viaje",
+		"edit-trip-btn": "Editar Detalles del Viaje"
+	},
+	"trips": {
+		"members": {
+			"title": "Elige Tu Equipo",
+			"addMember": "Amigos",
+			"noMembers": "Sin miembros todavía",
+			"role": {
+				"title": "Rol",
+				"admin": "Admin",
+				"member": "Miembro"
+			}
+		}
+	},
+	"crew": {
+		"addMember": "Añadir miembro",
+		"allFriendsAdded": "Todos tus amigos ya han sido añadidos al equipo.",
+		"noMembers": "Aún sin miembros",
+		"roleFor": "Rol de {{ name }}",
+		"role": {
+			"member": "Miembro",
+			"admin": "Admin"
+		},
+		"lastAdminTooltip": "El viaje necesita al menos 1 administrador.",
+		"noPermission": "Ya no tienes permiso para cambiar el rol."
+	},
+	"my-trips": {
+		"title": "Mis Viajes",
+		"empty": "Aún no tienes viajes. ¡Empieza a planear uno!",
+		"loading": "Cargando tus viajes…",
+		"upcoming-badge": "Viaje próximo",
+		"upcoming-badge-line1": "PRÓXIMO",
+		"upcoming-badge-line2": "VIAJE"
+	},
+	"friends": {
+		"pageTitle": "Mis Amigos",
+		"searchPlaceholder": "Amigos",
+		"searchAriaLabel": "Buscar amigos",
+		"showRequestsAriaLabel": "Mostrar solicitudes de amistad",
+		"requestsBtn": "Solicitudes de Amistad",
+		"pendingAriaLabel": "{{ count }} solicitudes de amistad pendientes",
+		"showListAriaLabel": "Mostrar lista de amigos",
+		"listBtn": "Lista de Amigos",
+		"noPendingRequests": "No hay solicitudes de amistad pendientes.",
+		"requestsListAriaLabel": "Solicitudes de amistad",
+		"deny": "Rechazar",
+		"denyAriaLabel": "Rechazar solicitud de amistad de {{ name }}",
+		"accept": "Aceptar",
+		"acceptAriaLabel": "Aceptar solicitud de amistad de {{ name }}",
+		"loadingAriaLabel": "Cargando amigos",
+		"noFriendsFound": "No se encontraron amigos.",
+		"remove": "Eliminar",
+		"removeAriaLabel": "Eliminar a {{ name }} de amigos"
+	},
+	"itinerary": {
+		"title": "Itinerario",
+		"addItem": "Agregar parada",
+		"closeForm": "Cerrar formulario",
+		"stops": "Paradas del itinerario",
+		"empty": "Sin paradas.",
+		"remove": "Eliminar {{ title }}",
+		"day": "DÍA",
+		"dayNav": "Navegación por día",
+		"prevDay": "Día anterior",
+		"nextDay": "Día siguiente",
+		"form": {
+			"titleLabel": "Título",
+			"title": "título",
+			"costLabel": "Coste en euros",
+			"cost": "coste (€)",
+			"infoLabel": "Más información",
+			"info": "más info",
+			"save": "Guardar",
+			"errors": {
+				"titleRequired": "El título es obligatorio",
+				"titleMaxLength": "El título no puede superar los 10 caracteres",
+				"priceMin": "El precio debe ser igual o mayor que 0",
+				"descriptionMaxLength": "La descripción no puede superar los 15 caracteres"
+			}
+		}
+	},
+	"popup": {
+		"cancel-btn": "Cancelar",
+		"confirm-btn": "Confirmar"
+	},
+	"navbar": {
+		"home": "Inicio",
+		"profile": "Perfil",
+		"plan-a-trip": "Planear Viaje",
+		"my-trips": "Mis Viajes",
+		"friends": "Amigos",
+		"my-expenses": "Mis Gastos",
+		"search-users": "Buscar Usuarios",
+		"logout": "Cerrar Sesión"
+	},
+	"privacy-policy": {
+        "title": "Política de Privacidad",
+        "update-title": "Última Actualización: Julio de 2026",
+        "paragraph": "Bienvenido a nuestra Aplicación de Planificación de Viajes. Estamos comprometidos a proteger su información personal y su derecho a la privacidad. Si tiene alguna pregunta o inquietud sobre este aviso de privacidad o nuestras prácticas con respecto a su información personal, por favor contáctenos.",
+        "subtitle1": "1. Información que Recopilamos",
+        "paragraph1": "Recopilamos información personal que usted nos proporciona voluntariamente cuando se registra en la Aplicación, expresa interés en obtener información sobre nosotros o nuestros productos, o cuando utiliza la Aplicación. Credenciales de Cuenta y Perfiles: Recopilamos datos de autenticación (a través de nuestro Session Service seguro o proveedores OAuth de terceros), nombres de usuario, direcciones de correo electrónico y fotos de perfil (avatares). Datos de Viaje e Itinerario: Para proporcionar nuestros servicios principales, almacenamos los datos que usted crea, incluidos los nombres de los viajes, descripciones, destinos (países y ciudades), fechas de inicio/fin y paradas específicas del itinerario. Información Financiera y de Presupuesto: Procesamos los precios y costos previstos asociados con sus itinerarios para calcular el presupuesto total de su viaje y las barras de progreso. Gestión de Grupos: Recopilamos datos sobre la membresía del viaje para determinar quién puede acceder, ver o modificar viajes grupales específicos.",
+        "subtitle2": "2. Cómo Utilizamos Su Información",
+        "paragraph2": "Utilizamos la información personal recopilada a través de nuestra Aplicación para una variedad de fines comerciales descritos a continuación: Para Facilitar el Proceso de Creación de Cuenta e Inició de Sesión: Si elige vincular su cuenta con nosotros a una cuenta de terceros (como OAuth), utilizamos la información que nos permitió recopilar de esos terceros para facilitar el proceso de creación de cuenta e inicio de sesión. Para Administrar Cuentas de Usuario: Utilizamos sus datos para mantener nuestro Session Service, mantenerlo autenticado y garantizar que pueda acceder de forma segura a su panel personal. Para Proporcionar Funciones Principales de Viaje: Procesamos los datos de su viaje, itinerarios y presupuestos para mostrar sus medidores de progreso financiero y tarjetas de viaje dinámicas con precisión. Para Aplicar el Control de Acceso: Utilizamos la información de membresía del viaje para garantizar que solo los usuarios autorizados puedan ver o modificar itinerarios grupales compartidos.",
+        "subtitle3": "3. ¿Se Compartirá Su Información con Alguien?",
+        "paragraph3": "Solo compartimos información con su consentimiento, para cumplir con las leyes, para brindarle servicios, para proteger sus derechos o para cumplir con obligaciones comerciales. Miembros del Grupo: Otros usuarios a quienes invite explícitamente o autorice a unirse a su viaje podrán ver su nombre de usuario, avatar y cualquier elemento de itinerario/presupuesto agregado a ese viaje compartido. Proveedores de Servicios de Terceros: Podemos compartir datos con proveedores externos, prestadores de servicios, contratistas o agentes que realicen servicios para nosotros o en nuestro nombre (por ejemplo, alojamiento en la nube o servicios de autenticación).",
+        "subtitle4": "4. Seguridad de los Datos",
+        "paragraph4": "Implementamos medidas de seguridad técnicas y organizativas adecuadas, diseñadas para proteger la seguridad de cualquier información personal que procesemos. Sus tokens de autenticación se manejan de forma segura (a través de nuestro Token Storage Service) para evitar el acceso no autorizado. Sin embargo, recuerde también que no podemos garantizar que el internet en sí sea cien por ciento seguro.",
+        "subtitle5": "5. Sus Derechos de Privacidad",
+        "paragraph5": "Dependiendo de su ubicación, es posible que tenga ciertos derechos según las leyes de protección de datos aplicables (como el RGPD en Europa). Estos pueden incluir el derecho a: Solicitar acceso y obtener una copia de su información personal. Solicitar la rectificación (corrección) o la eliminación (borrado) de sus datos (por ejemplo, eliminar un viaje o limpiar su sesión). Restringir u oponerse al procesamiento de sus datos.",
+        "subtitle6": "6. Actualizaciones de Este Aviso",
+        "paragraph6": "Podemos actualizar este aviso de privacidad de vez en cuando. La versión actualizada se indicará mediante una fecha de 'Revisión' actualizada y será efectiva tan pronto como sea accesible."
+    },
+	"terms-of-service": {
+        "title": "Términos de Servicio",
+        "update-title": "Última Actualización: Julio de 2026",
+        "paragraph": "Bienvenido a nuestra Aplicación de Planificación de Viajes. Al acceder o utilizar nuestra aplicación, usted acepta estar sujeto a estos Términos de Servicio. Si no está de acuerdo con alguna parte de estos términos, no podrá utilizar nuestros servicios.",
+        "subtitle1": "1. Cuentas de Usuario y Seguridad",
+        "paragraph1": "Para utilizar ciertas funciones de la Aplicación, como crear viajes o administrar presupuestos, debe registrar una cuenta. Usted es completamente responsable de mantener la confidencialidad de sus datos de sesión y tokens de autenticación. Acepta notificarnos de inmediato sobre cualquier uso no autorizado de su cuenta o cualquier otra violación de seguridad.",
+        "subtitle2": "2. Contenido Generado por el Usuario y Viajes Grupales",
+        "paragraph2": "Nuestra Aplicación le permite crear, publicar y compartir contenido, incluidos nombres de viajes, paradas de itinerario, descripciones personalizadas y entradas de presupuesto. Usted conserva la propiedad del contenido que crea. Sin embargo, al invitar a otros miembros a un viaje conjunto, otorga a esos usuarios autorizados el derecho de ver, modificar o agregar datos a ese itinerario compartido específico.",
+        "subtitle3": "3. Uso Aceptable y Restricciones",
+        "paragraph3": "Usted acepta no utilizar la Aplicación para ningún propósito ilegal o prohibido bajo esta cláusula. No puede utilizar la Aplicación de ninguna manera que pueda dañar, deshabilitar, sobrecargar o deteriorar nuestra infraestructura, o interferir con el uso y disfrute de la Aplicación por parte de terceros.",
+        "subtitle4": "4. Limitación de Responsabilidad",
+        "paragraph4": "La Aplicación se proporciona 'tal cual' y 'según disponibilidad'. No ofrecemos garantías, expresas o implícitas, con respecto a la precisión de los presupuestos calculados, los horarios de los itinerarios o la disponibilidad continua del Session Service. No seremos responsables de ningún daño indirecto, incidental o consecuente que resulte de su uso o incapacidad de usar el servicio.",
+        "subtitle5": "5. Cancelación del Servicio",
+        "paragraph5": "Nos reservamos el derecho de rescindir o suspender su acceso a la Aplicación de inmediato, sin previo aviso ni responsabilidad, por cualquier motivo, incluido, entre otros, si infringe los Términos. Tras la rescisión, su derecho a utilizar la Aplicación cesará de inmediato.",
+        "subtitle6": "6. Cambios en Estos Términos",
+        "paragraph6": "Nos reservamos el derecho, a nuestra entera discreción, de modificar o reemplazar estos Términos en cualquier momento. Indicaremos las actualizaciones cambiando la fecha de 'Última Actualización' en la parte superior de esta página. El uso continuo de la Aplicación después de que cualquier revisión entre en vigencia constituye su aceptación de los nuevos términos."
+    }
 }

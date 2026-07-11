@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import type { MeDto, TripMembershipDto } from '../../feature/auth/dtos/auth.dto';
+import type { MeDto, TripMembershipDto } from '../dtos/auth.dto';
 import { TokenStorageService } from './token-storage.service';
 
 @Injectable({ providedIn: 'root' })
@@ -25,6 +25,13 @@ export class SessionService {
   });
 
   loadMe(): Observable<boolean> {
+    //to prevent loadMe() to work if there's no one authenticated, like in the landing page
+    const hasToken = !!this.tokenStorage.getAccessToken();
+    if (!hasToken) {
+      this._me.set(undefined);
+      this._loading.set(false);
+      return of(false);
+    }
     return this.http.get<MeDto>(`${this.apiURL}/auth/me`).pipe(
       tap((user) => {
         this._me.set(user);

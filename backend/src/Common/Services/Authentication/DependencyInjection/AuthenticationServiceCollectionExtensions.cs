@@ -1,7 +1,5 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Trippie.Common.Services.Authentication.Context;
 using Trippie.Common.Services.Authentication.Jwt;

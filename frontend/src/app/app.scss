@@ -5,7 +5,7 @@
   @include mat.form-field-overrides(
     (
       outlined-outline-color: var(--mat-sys-on-primary),
-      outlined-focus-outline-color: var(--mat-sys-secondary),
+      outlined-focus-outline-color: var(--mat-sys-on-primary-container),
     )
   );
 }
@@ -15,7 +15,7 @@
   @include mat.form-field-overrides(
     (
       outlined-outline-color: var(--mat-sys-on-primary),
-      outlined-focus-outline-color: var(--mat-sys-secondary),
+      outlined-focus-outline-color: var(--mat-sys-on-primary-container),
     )
   );
 }
@@ -29,6 +29,13 @@
   );
 }
 .mat-mdc-dialog-panel {
-  opacity: 0.90 !important;
+  opacity: 0.93 !important;
+}
+
+.custom-profile-dialog, .custom-login-dialog {
+    .mat-mdc-dialog-surface {
+        border: 2px solid var(--mat-sys-on-primary) !important;
+        border-radius: 29px !important;
+    }
 }
 

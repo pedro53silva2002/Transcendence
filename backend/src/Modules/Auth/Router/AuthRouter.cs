@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -6,6 +5,7 @@ using Trippie.Common.Services.Authentication.Extensions;
 using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
 using Trippie.Modules.Auth.Dtos;
 using Trippie.Modules.Auth.Service;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Trippie.Modules.Auth.Router;
 
@@ -103,7 +103,7 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
     {
         {
             var userId = User.GetUserId()
-                ?? throw new UnauthorizedException("User not authenticated.");
+                ?? throw new ForbiddenException("User not authenticated."); //tosee
 
             var rawToken = Request.Headers.Authorization
                 .FirstOrDefault()
@@ -114,4 +114,9 @@ public sealed class AuthRouter(AuthService service, GoogleOAuthService googleOAu
             return NoContent();
         }
     }
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult<AuthResponseDto>> Refresh([FromBody] RefreshTokenRequestDto dto, CancellationToken ct)
+        => await service.Refresh(dto, ct);
+
 }

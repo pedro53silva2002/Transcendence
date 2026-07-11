@@ -1,51 +1,238 @@
 {
-  "auth": {
-    "register": "Register",
-    "login": "Login",
-    "password": "password",
-    "google": "Sign In with",
-    "username": "username",
-    "password-confirmation": "confirm password",
-    "email": "email",
-    "usernameTaken": "This username is already taken.",
-    "invalidEmail": "Invalid e-mail.",
-    "emailTaken": "This email is already used.",
-    "passwordMismatch": "The passwords does not match",
-    "passwordRules": {
-      "length": "8-20 characters long",
-      "lowercase": "1 lowercase character",
-      "uppercase": "1 uppercase character",
-      "special": "1 special character",
-      "digits": "1 digit"
-    },
-	"error-login": "Invalid username or password.",
-	"error-oauth": "Google Authentication failed."
-
-  },
-
-  "navbar": {
-    "profile": "Profile",
-    "trip": "Plan a Trip",
-    "my-trips": "My Trips",
-    "my-friends": "My Friends",
-    "my-expenses": "My Expenses"
-  },
-
-  "card": {
-    "trip-description": "Click here to start planning your next trip.",
-    "my-trips-description": "Click here to view your past, present and future trips.",
-    "my-friends-description": "Click here to view your list of friends.",
-    "my-expenses-description": "Click here to check where your money wandered."
-  },
-
-  "dashboard": {
-    "greet": "Hello, ",
-    "intro": "Ready for your next adventure?"
-  },
-
-  "stats": {
-    "countries": "Visited Countries",
-    "trips": "Trips Booked This Year",
-    "countdown": "Days Until Next Trip"
-  }
+	"auth": {
+		"register": "Register",
+		"login": "Login",
+		"password": "password",
+		"google": "Sign In with",
+		"username": "username",
+		"password-confirmation": "confirm password",
+		"email": "email",
+		"usernameTaken": "This username is already taken.",
+		"invalidEmail": "Invalid email.",
+		"emailTaken": "This email is already in use.",
+		"passwordMismatch": "Passwords do not match",
+		"passwordRules": {
+			"length": "8-20 characters long",
+			"lowercase": "1 lowercase character",
+			"uppercase": "1 uppercase character",
+			"special": "1 special character",
+			"digits": "1 digit"
+		},
+		"error-login": "Invalid username or password.",
+		"error-oauth": "Google Authentication failed.",
+		"new-password": "new password"
+	},
+	"card": {
+		"trip-description": "Click here to start planning your next trip.",
+		"my-trips-description": "Click here to view your past, present and future trips.",
+		"my-friends-description": "Click here to view your list of friends.",
+		"my-expenses-description": "Click here to check where your money wandered."
+	},
+	"dashboard": {
+		"greet": "Hello, ",
+		"intro": "Ready for your next adventure?"
+	},
+	"stats": {
+		"countries": "Visited Countries",
+		"trips": "Trips Booked This Year",
+		"countdown": "Days Until Next Trip"
+	},
+	"plan-a-trip": {
+		"title": "Plan your trip",
+		"trip-name": "trip name",
+		"trip-description": "trip description",
+		"start-date": "start date",
+		"end-date": "end date",
+		"country": "country",
+		"city": "city",
+		"privacy-text": "Who would you like to share this trip with?",
+		"private-option": "private",
+		"friends-option": "friends",
+		"public-option": "public",
+		"create-trip": "Create Trip",
+		"update-trip": "Update Trip",
+		"name-error": "The trip's name is required.",
+		"name-min-length-error": "The trip's name must be at least 3 characters long.",
+		"name-max-length-error": "The trip's name can't be more than 25 characters long.",
+		"date-error": "Please select a start and end date.",
+		"description-max-length-error": "The trip's description can't be more than 256 characters long.",
+		"country-error": "Please select a country.",
+		"country-string-error": "Please select a valid country.",
+		"city-string-error": "Please select a valid city.",
+		"trip-budget": "budget (€)",
+		"budget-error": "The budget is required.",
+		"budget-numbers-error": "The budget can only contain numbers."
+	},
+	"profile": {
+		"countries-section-title": "Where I've Been Wandering",
+		"itineraries-section-title": "My Itineraries",
+		"edit-title": "Edit Profile",
+		"update-button": "Update Profile",
+		"description": "description",
+		"delete-button": "Delete Account",
+		"delete-user-title": "Are you sure?",
+		"delete-user-message": "If you confirm this decision, your account will be deleted.",
+		"delete-friend-message": "If you confirm this decision, you won't be friends anymore.",
+		"description-error": "Can't be more than 150 characters long.",
+		"name-error": "You must define a display name.",
+		"add-friend-btn": "Add Friend",
+		"remove-friend-btn": "Remove Friend",
+		"edit-btn": "Edit Profile",
+		"cancel-request-btn": "Cancel Request",
+		"accept-request-btn": "Accept Request",
+		"delete-friend-request-message": "If you confirm this decision, the friend request will be canceled.",
+		"empty-state": "This user still hasn't been anywhere."
+	},
+	"trip-dashboard": {
+		"delete-trip-title": "Are you sure?",
+		"delete-trip-message": "If you confirm this decision, everything related to this trip will be deleted.",
+		"city": "city",
+		"privacy-text": "Would you like to allow friends/public to view your trip?",
+		"private-option": "private",
+		"friends-option": "friends",
+		"public-option": "public",
+		"create-trip": "Create Trip",
+		"update-trip": "Update Trip",
+		"name-error": "The trip's name is required.",
+		"name-min-length-error": "The trip's name must be at least 3 characters long.",
+		"name-max-length-error": "The trip's name can't be more than 25 characters long.",
+		"date-error": "Selecting the start and end dates for your trip is required.",
+		"description-max-length-error": "The trip's description can't be more than 256 characters long.",
+		"country-error": "A country's selection is required.",
+		"country-string-error": "Please select a valid country.",
+		"city-string-error": "Please select a valid city.",
+		"trip-budget": "budget (€)",
+		"budget-error": "A budget is required.",
+		"budget-numbers-error": "A budget can only contain numbers.",
+		"crew-title": "Crew",
+		"delete-trip-btn": "Delete Trip",
+		"edit-trip-btn": "Edit Trip Details"
+	},
+	"trips": {
+		"members": {
+			"title": "Choose Your Crew",
+			"addMember": "Add Member",
+			"noMembers": "No trip members",
+			"role": {
+				"title": "Role",
+				"admin": "Admin",
+				"member": "Member"
+			}
+		}
+	},
+	"crew": {
+		"addMember": "Add Member",
+		"allFriendsAdded": "All of your friends have already been added to the crew.",
+		"noMembers": "No members yet",
+		"roleFor": "Role for {{ name }}",
+		"role": {
+			"member": "Member",
+			"admin": "Admin"
+		},
+		"lastAdminTooltip": "The trip needs at least 1 admin.",
+		"noPermission": "You no longer have permission to change role."
+	},
+	"my-trips": {
+		"title": "My Trips",
+		"empty": "You have no trips yet. Start planning one!",
+		"loading": "Loading your trips…",
+		"upcoming-badge": "Upcoming trip",
+		"upcoming-badge-line1": "UPCOMING",
+		"upcoming-badge-line2": "TRIP"
+	},
+	"friends": {
+		"pageTitle": "My Friends",
+		"searchPlaceholder": "Friends",
+		"searchAriaLabel": "Search friends",
+		"showRequestsAriaLabel": "Show friend requests",
+		"requestsBtn": "Friend Requests",
+		"pendingAriaLabel": "{{ count }} pending friend requests",
+		"showListAriaLabel": "Show friends list",
+		"listBtn": "Friends List",
+		"noPendingRequests": "No pending friend requests.",
+		"requestsListAriaLabel": "Friend requests",
+		"deny": "Decline",
+		"denyAriaLabel": "Decline friend request from {{ name }}",
+		"accept": "Accept",
+		"acceptAriaLabel": "Accept friend request from {{ name }}",
+		"loadingAriaLabel": "Loading friends",
+		"noFriendsFound": "No friends found.",
+		"remove": "Remove",
+		"removeAriaLabel": "Remove {{ name }} from friends"
+	},
+	"itinerary": {
+		"title": "Itinerary",
+		"addItem": "Add itinerary item",
+		"closeForm": "Close add form",
+		"stops": "Itinerary stops",
+		"empty": "No stops yet.",
+		"remove": "Remove {{ title }}",
+		"day": "DAY",
+		"dayNav": "Day navigation",
+		"prevDay": "Previous day",
+		"nextDay": "Next day",
+		"form": {
+			"titleLabel": "Title",
+			"title": "title",
+			"costLabel": "Cost in euros",
+			"cost": "cost (€)",
+			"infoLabel": "More info",
+			"info": "more info",
+			"save": "Save",
+			"errors": {
+				"titleRequired": "Title is required",
+				"titleMaxLength": "Title cannot exceed 10 characters",
+				"priceMin": "Price must be 0 or greater",
+				"descriptionMaxLength": "Description cannot exceed 15 characters"
+			}
+		}
+	},
+	"popup": {
+		"cancel-btn": "Cancel",
+		"confirm-btn": "Confirm"
+	},
+	"navbar": {
+		"home": "Home",
+		"profile": "Profile",
+		"plan-a-trip": "Plan a Trip",
+		"my-trips": "My Trips",
+		"friends": "Friends",
+		"my-expenses": "My Expenses",
+		"search-users": "Search Users",
+		"logout": "Logout"
+	},
+	"privacy-policy": {
+		"title": "Privacy Policy",
+		"update-title": "Last Updated: July 2026",
+		"paragraph": "Welcome to our Travel Planner App. We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regard to your personal information, please contact us.",
+		"subtitle1": "1. Information We Collect",
+		"paragraph1": "We collect personal information that you voluntarily provide to us when you register on the App, express an interest in obtaining information about us or our products, or otherwise when you use the App. Account Credentials & Profiles: We collect authentication data (via our secure Session Service or third-party OAuth providers), usernames, email addresses, and profile pictures (avatars). Trip & Itinerary Data: To provide our core services, we store the data you create, including trip names, descriptions, destinations (countries and cities), start/end dates, and specific itinerary stops. Financial & Budget Information: We process the expected prices and costs associated with your itineraries to calculate your total trip budget and progress bars. Group Management: We collect data regarding trip memberships to determine who can access, view, or modify specific group trips.",
+		"subtitle2": "2. How We Use Your Information",
+		"paragraph2": "We use personal information collected via our App for a variety of business purposes described below: To Facilitate Account Creation and Logon Process: If you choose to link your account with us to a third-party account (such as OAuth), we use the information you allowed us to collect from those third parties to facilitate account creation and logon process. To Manage User Accounts: We use your data to maintain our Session Service, keep you authenticated, and ensure you can securely access your personal dashboard. To Provide Core Travel Features: We process your trip data, itineraries, and budgets to display your financial progress meters and dynamic trip cards accurately. To Enforce Access Control: We use trip membership information to ensure that only authorized users can view or modify shared group itineraries.",
+		"subtitle3": "3. Will Your Information Be Shared With Anyone?",
+		"paragraph3": "We only share information with your consent, to comply with laws, to provide you with services, to protect your rights, or to fulfill business obligations. Group Members: Other users whom you explicitly invite or authorize to join your trip will be able to see your username, avatar, and any itinerary/budget items added to that shared trip. Third-Party Service Providers: We may share data with third-party vendors, service providers, contractors, or agents who perform services for us or on our behalf (e.g., cloud hosting or authentication services).",
+		"subtitle4": "4. Data Security",
+		"paragraph4": "We implement appropriate technical and organizational security measures designed to protect the security of any personal information we process. Your authentication tokens are handled securely (via our Token Storage Service) to prevent unauthorized access. However, please also remember that we cannot guarantee that the internet itself is one hundred percent secure.",
+		"subtitle5": "5. Your Privacy Rights",
+		"paragraph5": "Depending on your location, you may have certain rights under applicable data protection laws (such as the GDPR in Europe). These may include the right to: Request access and obtain a copy of your personal information. Request rectification (correction) or erasure (deletion) of your data (e.g., deleting a trip or clearing your session). Restrict or object to the processing of your data.",
+		"subtitle6": "6. Updates To This Notice",
+		"paragraph6": "We may update this privacy notice from time to time. The updated version will be indicated by an updated 'Revised' date and the updated version will be effective as soon as it is accessible."
+	},
+	"terms-of-service": {
+        "title": "Terms of Service",
+        "update-title": "Last Updated: July 2026",
+        "paragraph": "Welcome to our Travel Planner App. By accessing or using our application, you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, you may not use our services.",
+        "subtitle1": "1. User Accounts and Security",
+        "paragraph1": "To use certain features of the App, such as creating trips or managing budgets, you must register for an account. You are entirely responsible for maintaining the confidentiality of your session data and authentication tokens. You agree to notify us immediately of any unauthorized use of your account or any other breach of security.",
+        "subtitle2": "2. User-Generated Content and Group Trips",
+        "paragraph2": "Our App allows you to create, post, and share content, including trip names, itinerary stops, custom descriptions, and budget entries. You retain ownership of the content you create. However, by inviting other members to a joint trip, you grant those authorized users the right to view, modify, or add data to that specific shared itinerary.",
+        "subtitle3": "3. Acceptable Use and Restrictions",
+        "paragraph3": "You agree not to use the App for any unlawful purpose or any purpose prohibited under this clause. You may not use the App in any way that could damage, disable, overburden, or impair our infrastructure, or interfere with any other party's use and enjoyment of the App.",
+        "subtitle4": "4. Limitation of Liability",
+        "paragraph4": "The App is provided on an 'as-is' and 'as-available' basis. We make no warranties, expressed or implied, regarding the accuracy of calculated budgets, itinerary timings, or the continuous availability of the Session Service. We shall not be liable for any indirect, incidental, or consequential damages resulting from your use or inability to use the service.",
+        "subtitle5": "5. Termination of Service",
+        "paragraph5": "We reserve the right to terminate or suspend your access to the App immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms. Upon termination, your right to use the App will cease immediately.",
+        "subtitle6": "6. Changes to These Terms",
+        "paragraph6": "We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will indicate updates by changing the 'Last Updated' date at the top of this page. Your continued use of the App after any revisions become effective constitutes your agreement to the new terms."
+    }
 }

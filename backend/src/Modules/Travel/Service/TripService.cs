@@ -1,0 +1,93 @@
+
+using Trippie.Common.Services.GlobalExceptionHandler.Exceptions;
+using Trippie.Common.Services.Search.Model;
+using Trippie.Modules.Auth.Service;
+using Trippie.Modules.Travel.Dtos;
+using Trippie.Modules.Travel.Model;
+using Trippie.Common.Services.Caching;
+
+namespace Trippie.Modules.Travel.Service;
+
+public sealed class TripService(
+	TripModel tripModel,
+	TripMembersService tripMembersService,
+	ICachingService cacheService)
+{
+	public async Task<TripDto> CreateAsync(CreateTripDto dto, int userId, CancellationToken ct = default)
+	{
+		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
+		var trip = await tripModel.CreateAsync(dto, userId, ct);
+		dto.Members.TripId = trip.Id;
+		var members = await tripMembersService.CreateAsync(userId, dto.Members, ct);
+		trip.Members = [.. members];
+
+		return trip;
+	}
+
+	public async Task<CursorPage<TripDto>> SearchAsync(SearchPayload payload, CancellationToken ct = default)
+	=> await tripModel.SearchAsync(payload, ct);
+
+	public async Task<TripDto> UpdateAsync(int userId, int id, UpdateTripDto dto, CancellationToken ct = default)
+	{
+		ValidateTrip(dto.TripName, dto.Description, dto.Budget, dto.StartDate, dto.EndDate);
+		var trip = await tripModel.UpdateAsync(userId, id, dto, ct) ?? throw new NotFoundException($"Trip {id} not found.", id);
+
+		foreach (var member in trip.Members)
+    	{
+    	    await cacheService.RemoveAsync($"user:me:{member.UserId}", ct);
+    	}
+
+		return trip;
+	}
+
+	public async Task<TripDto?> GetById(int id, CancellationToken ct = default)
+	{
+		var res = await tripModel.GetById(id, ct);
+		if (res is null)
+			return null;
+		return res;
+	}
+
+	public async Task DeleteAsync(int userId, int id, CancellationToken ct = default)
+	{
+		var trip = await tripModel.GetById(id, ct)
+        	?? throw new NotFoundException($"Trip {id} not found.", id);
+
+    	var deleted = await tripModel.DeleteAsync(userId, id, ct);
+
+    	if (!deleted)
+    	    throw new NotFoundException($"Trip {id} not found.", id);
+
+    	foreach (var member in trip.Members)
+    	{
+    	    await cacheService.RemoveAsync($"user:me:{member.UserId}", ct);
+    	}
+	}
+
+	private void ValidateTrip(string tripName, string? description, long budget, DateOnly startDate, DateOnly endDate)
+	{
+		if (string.IsNullOrWhiteSpace(tripName)) throw new ValidationException("tripname", "Trip name is required");
+		if (tripName.Length > 25 || tripName.Length < 3) throw new ValidationException("tripname", "Trip name must be between 3 and 25 characters.");
+		if (startDate == default(DateOnly)) throw new ValidationException("startdate", "Start date is required");
+		if (endDate == default(DateOnly)) throw new ValidationException("enddate", "End date is required");
+		if (endDate < startDate) throw new ValidationException("endDate, startDate", "End date cannot be before start date.");
+		if (budget < 0 || budget > int.MaxValue) throw new ValidationException("budget", "Budget value invalid.");
+		if (description != null && description.Length > 250) throw new ValidationException("description", "Description cannot be longer than 250 characters.");
+	}
+
+	public async Task<List<TripDto>> GetTripsForUser(int userId, CancellationToken ct = default)
+	{
+		var trips = await tripModel.GetTripsForUser(userId, ct);
+		if (trips is null)
+			return new List<TripDto>();
+		return trips.Content.ToList();
+	}
+
+	public async Task<List<ProfileTripsDto>> GetTripsItinerariesForUser(int userId, CancellationToken ct = default)
+	{
+		var trips = await tripModel.GetTripsItinerariesForUser(userId, ct);
+		if (trips is null)
+			return new List<ProfileTripsDto>();
+		return trips.Content.ToList();
+	}
+}

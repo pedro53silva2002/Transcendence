@@ -1,0 +1,128 @@
+.mat-mdc-dialog-container {
+	margin-top: 60px;
+	width: 335px;
+}
+
+.mat-mdc-dialog-content {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: center;
+	gap: 17px;
+	width: 87%;
+	padding-bottom: 6px !important;
+
+	.mat-mdc-form-field {
+		width: 100%;
+	}
+}
+
+.mat-mdc-dialog-actions {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 17px;
+	margin-bottom: 25px;
+
+	.btn-login {
+		transition: all 300ms ease-in-out;
+		background-color: var(--mat-sys-on-primary) !important;
+		color: var(--mat-sys-primary-container) !important;
+		width: 84.8%;
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+		display: block;
+
+		&:hover {
+			background-color: var(--mat-sys-on-primary-container) !important;
+			color: var(--mat-sys-primary-container) !important;
+		}
+
+		&:disabled {
+			opacity: 0.6 !important;
+			cursor: not-allowed;
+		}
+	}
+
+	app-google-auth-button {
+		width: 84.8%;
+	}
+}
+
+.title {
+	.mat-mdc-dialog-title {
+		text-align: center;
+		font-size: 24px;
+		color: var(--mat-sys-on-primary) !important;
+		margin-top: 4px;
+		padding-bottom: 1px;
+	}
+
+	hr {
+		margin-top: 0px;
+		width: 75px;
+		height: 3px;
+		background-color: var(--mat-sys-on-primary);
+		border: none;
+		border-radius: 3px;
+	}
+}
+
+.login-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	::placeholder {
+		color: var(--mat-sys-on-primary) !important;
+		opacity: 0.6 !important;
+	}
+}
+
+.mat-mdc-form-field {
+
+	mat-icon {
+		color: var(--mat-sys-on-primary);
+		font-size: 18px;
+		opacity: 0.6;
+		text-align: left;
+		height: 19px;
+	}
+
+	.mdc-text-field--outlined {
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+		border-radius: 25px;
+		display: block;
+	}
+}
+
+.mat-mdc-form-field-error {
+	color: var(--mat-sys-error) !important;
+	font-size: 11px;
+	margin-top: 2px;
+}
+
+.dialog-header {
+	display: flex;
+	align-items: center;
+	justify-content: end;
+	padding: 16px 16px 0;
+}
+
+.error-message {
+	p {
+		margin-top: 0;
+		margin-bottom: 0;
+		text-align: center;
+		font-size: 12px;
+		color: var(--mat-sys-error);
+	}
+}
+
+.credentials-error-message {
+	color: var(--mat-sys-error);
+	font-size: 12px;
+	margin-top: 6px;
+	width: 65%;
+	text-align: center;
+}

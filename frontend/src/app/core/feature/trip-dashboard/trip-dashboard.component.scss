@@ -1,0 +1,263 @@
+.main-container {
+	width: 65%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	margin: 0 auto;
+	margin-bottom: 28px;
+
+	@media (max-width: 960px) {
+		width: 85%;
+	}
+}
+
+.trip-details {
+	margin-top: 0px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: 100%;
+
+	@media (max-width: 1023px) {
+		gap: 5px;
+	}
+
+	h1 {
+		font-family: "Thicker Black";
+		font-weight: 400;
+		font-size: 60px;
+		margin-bottom: 0;
+		text-transform: uppercase;
+
+		@media (max-width: 480px) {
+			font-size: 30px;
+			text-align: center;
+		}
+	}
+
+	h2 {
+		font-family: "Tabloid";
+		font-weight: 400;
+		font-size: 32px;
+		color: var(--mat-sys-on-primary);
+		margin-top: 0;
+		margin-bottom: 0;
+
+		@media (max-width: 480px) {
+			font-size: 18px;
+			text-align: center;
+			width: 100%;
+		}
+	}
+
+	p {
+		margin-top: 0;
+		color: var(--mat-sys-on-primary);
+		font-size: 16px;
+		opacity: 0.7;
+
+		@media (max-width: 480px) {
+			font-size: 12px;
+		}
+	}
+}
+
+.description {
+	overflow: hidden;
+	width: 40%;
+
+	@media (max-width: 480px) {
+		width: 100%;
+		text-align: center;
+		margin-top: 15px;
+	}
+}
+
+.management-buttons {
+	display: flex;
+	gap: 12px;
+	width: 95%;
+	justify-content: flex-end;
+	margin-top: 30px;
+
+	button {
+		font-size: 11px;
+		height: 25px;
+		padding: 15px;
+	}
+
+	@media (max-width: 1023px) {
+		justify-content: center;
+	}
+}
+
+.location-and-budget {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 20px;
+}
+
+.budget-container {
+	position: relative;
+	display: grid !important;
+	grid-template-areas: "stack" !important;
+
+	@media (max-width: 480px) {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+.budget-base,
+.budget-bar,
+.budget-fullbar,
+.budget-numbers {
+	grid-area: stack;
+}
+
+.budget-base {
+	width: 200px;
+	height: 30px;
+	background-color: color-mix(in srgb, var(--mat-sys-on-primary) 25%, transparent);
+	border-radius: 25px;
+	overflow: hidden;
+}
+
+.budget-bar {
+	height: 30px;
+	background-color: var(--mat-sys-on-primary-container);
+	border-radius: 25px;
+}
+
+.budget-fullbar {
+	height: 30px;
+	background-color: var(--mat-sys-error);
+	border-radius: 25px;
+}
+
+.budget-numbers {
+	font-family: "Tabloid";
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	margin-right: 15px;
+}
+
+.spent {
+	color: color-mix(in srgb, var(--mat-sys-on-primary) 80%, transparent) !important;
+	margin-bottom: 0;
+	font-size: 20px !important;
+}
+
+.budget {
+	margin-left: 2px;
+	margin-bottom: 0;
+	font-size: 20px !important;
+	opacity: 1 !important;
+}
+
+.money-symbol {
+	margin-bottom: 0;
+	margin-left: 2px;
+	font-size: 18px !important;
+	opacity: 1 !important;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	width: 95%;
+	gap: 20px;
+
+	@media (max-width: 480px) {
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-top: 10px;
+	}
+}
+
+.trip-dates {
+	display: flex;
+	align-items: flex-end;
+	color: var(--mat-sys-primary);
+	font-family: "Tabloid";
+	position: relative;
+	margin-bottom: 50px;
+}
+
+.start-date,
+.end-date {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background-color: var(--mat-sys-on-primary-container);
+
+	@media (max-width: 480px) {
+		width: 60px;
+		height: 60px;
+	}
+
+	.day {
+		text-align: center;
+		font-size: 28px;
+		margin: 0;
+
+		@media (max-width: 480px) {
+			font-size: 22px;
+		}
+	}
+
+	.month {
+		text-align: center;
+		font-size: 20px;
+		margin: 0;
+
+		@media (max-width: 480px) {
+			font-size: 14px;
+		}
+	}
+}
+
+.double-arrow {
+	position: absolute;
+	width: 40px;
+	z-index: 1;
+	margin-left: 60px;
+	margin-bottom: 30px;
+
+	@media (max-width: 480px) {
+		width: 30px;
+		margin-left: 45px;
+		margin-bottom: 22px;
+	}
+}
+
+.cards {
+	margin-top: 20px;
+	width: 95%;
+	gap: 30px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: start;
+
+	app-member-form {
+		max-height: 472px;
+	}
+
+	@media (max-width: 1023px) {
+		justify-content: center;
+	}
+
+	@media (max-width: 480px) {
+		margin-top: 0px;
+	}
+}

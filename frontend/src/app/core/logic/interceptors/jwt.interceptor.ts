@@ -18,7 +18,7 @@ import {
 import { SessionService } from '../services/session.service';
 import { TokenStorageService } from '../services/token-storage.service';
 import { Router } from '@angular/router';
-import { AuthResponseDto } from '../../feature/auth/dtos/auth.dto';
+import { AuthResponseDto } from '../dtos/auth.dto';
 import { environment } from '../../../../environments/environment';
 
 let refreshInProgress: Observable<string> | null = null;

@@ -1,0 +1,174 @@
+.card-wrapper {
+	position: relative;
+	display: block;
+	cursor: pointer;
+	text-decoration: none;
+	color: inherit;
+	max-width: 360px;
+
+	@media (max-width: 480px) {
+        max-width: 200px;
+    }
+}
+
+/* The bubble is pinned near the top-right of the card. */
+.bubble-anchor {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 4;
+    transform: translate(125%, -40%) rotate(20deg); 
+    font-family: 'Tabloid', sans-serif;
+    font-weight: 800;
+    color: var(--mat-sys-on-primary-container);
+}
+
+.card {
+	position: relative;
+	display: flex;
+	align-items: center;
+	/* Clip the oversized image to the card's rounded shape. The border lives on
+     ::before (below the image) so the image paints over the border edge. */
+	overflow: hidden;
+	background-color: var(--mat-sys-primary-container) !important;
+	border-radius: 25px;
+	padding: 18px 28px;
+	height: 120px;
+	width: 100%;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+	transition:
+		box-shadow 0.2s ease,
+		transform 0.2s ease;
+
+	/* Border as an underlay: the overlay image (z-index: 2) paints over it. */
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		border: 4px solid var(--mat-sys-on-primary-container);
+		border-radius: 25px;
+		pointer-events: none;
+	}
+
+	.card-wrapper:hover & {
+		cursor: pointer;
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.55);
+	}
+
+	@media (max-width: 480px) {
+		width: 200px;
+		height: 80px;
+	}
+}
+
+/* Oversized season image overlaid on the card. The card's overflow:hidden +
+   rounded corners clip the off-edge portion. Same effect as the dashboard card. */
+.overlay-container {
+	position: absolute;
+	left: 0;
+	z-index: 2;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+
+	img {
+		width: 200px;
+		opacity: 0.82;
+		margin-left: -40px;
+
+		@media (max-width: 480px) {
+			margin-left: -50px;
+			width: 150px;
+		}
+	}
+}
+
+.card-content {
+	align-items: flex-end;
+	position: relative;
+	z-index: 3;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	text-align: right;
+	width: 100%;
+}
+
+.trip-name {
+	font-family: 'Thicker Black', sans-serif;
+	font-size: 24px;
+	font-weight: 200;
+	color: var(--mat-sys-on-primary);
+	margin: 0;
+	line-height: 1.1;
+	width: 100%;
+
+	@media (max-width: 480px) {
+		font-size: 14px;
+	}
+}
+
+.destination {
+	font-family: 'Tabloid', sans-serif;
+	font-size: 14px;
+	font-weight: 200;
+	color: var(--mat-sys-on-primary-container);
+	text-transform: uppercase;
+	margin: 2px 0 0;
+
+	@media (max-width: 480px) {
+		font-size: 10px;
+	}
+}
+
+/* Members on one line, dates on the line below. */
+.trip-meta {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 4px;
+	margin-top: 4px;
+	opacity: 0.6;
+}
+
+.members {
+	display: flex;
+	align-items: center;
+	gap: 3px;
+	font-family: 'Tabloid', sans-serif;
+	font-size: 13px;
+	font-weight: 200;
+	color: var(--mat-sys-on-primary-container);
+
+	@media (max-width: 480px) {
+		font-size: 11px;
+	}
+}
+
+.person-icon {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 16px;
+
+	@media (max-width: 480px) {
+		font-size: 11px;
+		height: 13px;
+		line-height: 13px;
+	}
+}
+
+.dates {
+	font-family: 'Tabloid', sans-serif;
+	font-size: 13px;
+	font-weight: 200;
+	color: var(--mat-sys-on-primary-container);
+
+	@media (max-width: 480px) {
+		font-size: 11px;
+	}
+}
