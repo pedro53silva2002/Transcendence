@@ -47,13 +47,13 @@ The backend supports SQL-based database setup and migrations from the Migrations
 
 ## Useful commands
 
-in the base directory run `make` - to build the entire project.
-in the base directory run `make fclean` - to clean the docker containers;
-in the base directory run `make dev` - to build the docker images for the containers in development mode;
-in backend/src run `dotnet run --migrate` - to seed the databases;
-in backend/src run `dotnet run` - to run the backend;
-open another terminal, in the frontend folder run `npm install` - to install frontend dependencies;
-in the frontend folder run `npm start` - to start the frontend.
+in the base directory run `make` - to build the entire project.   
+in the base directory run `make fclean` - to clean the docker containers;   
+in the base directory run `make dev` - to build the docker images for the containers in development mode;   
+in backend/src run `dotnet run --migrate` - to seed the databases;   
+in backend/src run `dotnet run` - to run the backend;   
+open another terminal, in the frontend folder run `npm install` - to install frontend dependencies;   
+in the frontend folder run `npm start` - to start the frontend.   
 
 # Resources
 
